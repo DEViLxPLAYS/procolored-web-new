@@ -1,0 +1,413 @@
+import { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Headphones, BookOpen, CreditCard, Shield } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
+
+const heroSlides = [
+  { id: 1, image: "/images/slide-1.webp" },
+  { id: 2, image: "/images/slide-2.webp" },
+  { id: 3, image: "/images/slide-3.webp" },
+  { id: 4, image: "/images/slide-4.webp" },
+  { id: 5, image: "/images/slide-5.webp" },
+  { id: 6, image: "/images/slide-6.webp" },
+  { id: 7, image: "/images/slide-7.webp" },
+  { id: 8, image: "/images/slide-8.webp" }
+];
+
+const stats = [
+  { value: "140+", label: "Global Reach" },
+  { value: "30K+", label: "Customer Base" },
+  { value: "50+", label: "Service Centers" },
+  { value: "45%", label: "R&D Personnel" },
+  { value: "300+", label: "Authorized Patents" },
+  { value: "10+", label: "Worldwide Logistics" }
+];
+
+const popularProducts = [
+  { id: "1", name: "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - Pink", price: "Rs.798,000.00 PKR", originalPrice: "Rs.1,140,200.00 PKR", image: "/images/product-k13-pink.jpg", badge: "Save Rs.342,200", badgeColor: "bg-red-500" },
+  { id: "2", name: "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - White", price: "Rs.798,000.00 PKR", originalPrice: "Rs.1,140,200.00 PKR", image: "/images/product-k13-white.jpg", badge: "Save Rs.342,200", badgeColor: "bg-red-500" },
+  { id: "3", name: "Procolored F13 Panda DTF Printer 13\" A3 L1800 & Oven", price: "Rs.855,000.00 PKR", originalPrice: "Rs.997,000.00 PKR", image: "/images/product-f13-panda.jpg", badge: "BEST SELLER", badgeColor: "bg-orange-500", link: "/f13" },
+  { id: "4", name: "Procolored P13 DTF Printer 13\" A3 XP600 & Oven", price: "Rs.1,140,100.00 PKR", originalPrice: "Rs.1,311,200.00 PKR", image: "/images/product-p13.jpg", badge: "NEW ARRIVAL", badgeColor: "bg-green-500" },
+  { id: "5", name: "Procolored VF13 Pro DTF Printer 13\" A3+", price: "Rs.1,967,000.00 PKR", image: "/images/product-vf13.jpg", badge: "NEW ARRIVAL", badgeColor: "bg-green-500" }
+];
+
+const categoryTabs = [
+  { id: "personal", label: "Personal Studio", products: [
+    { id: "p1", name: "Procolored K13 Lite", subtitle: "User-friendly", image: "/images/product-k13-white.jpg" },
+    { id: "p2", name: "Procolored P13", subtitle: "High-Performance Print Head", image: "/images/product-p13.jpg" },
+    { id: "p3", name: "Procolored F13", subtitle: "High-quality and Easy-to-use", image: "/images/product-f13-panda.jpg", link: "/f13" }
+  ]},
+  { id: "hobbyist", label: "Hobbyist Use", products: [
+    { id: "h1", name: "Procolored K13 Lite", subtitle: "Best Value Starter Printer", image: "/images/product-k13-pink.jpg" },
+    { id: "h2", name: "Procolored F8", subtitle: "Affordable Entry-level Model", image: "/images/product-f8.jpg" },
+    { id: "h3", name: "Procolored F13", subtitle: "Designed for Creative Makers", image: "/images/product-f13-panda.jpg", link: "/f13" }
+  ]},
+  { id: "factory", label: "Small-scale Factory", products: [
+    { id: "f1", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "/images/product-p13.jpg" },
+    { id: "f2", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "/images/product-f13-pro.jpg" },
+    { id: "f3", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "/images/product-vf13-pro.jpg" }
+  ]}
+];
+
+const categoryItems = [
+  { name: "UV DTF Printer", image: "/images/cat-uv-dtf.jpg", link: "#" },
+  { name: "UV Printer", image: "/images/cat-uv.jpg", link: "#" },
+  { name: "DTG Printer", image: "/images/cat-dtg.jpg", link: "#" },
+  { name: "Equipment", image: "/images/cat-equipment.jpg", link: "#" },
+  { name: "Consumables", image: "/images/cat-consumables.jpg", link: "#" },
+  { name: "Parts & Accessory", image: "/images/cat-parts.jpg", link: "#" }
+];
+
+const craftItemsRow1 = [
+  { name: "Apron", image: "/images/craft-apron.jpg" },
+  { name: "Metal Signs", image: "/images/craft-metal-signs.jpg" },
+  { name: "Thermos", image: "/images/craft-thermos.jpg" },
+  { name: "Fabric Posters", image: "/images/craft-posters.jpg" },
+  { name: "Jeans", image: "/images/craft-tshirts.jpg" },
+  { name: "Candle Mold", image: "/images/craft-mugs.jpg" },
+  { name: "Hoodie", image: "/images/craft-hoodie.jpg" },
+  { name: "Baby Clothes", image: "/images/craft-baby-clothes.jpg" },
+  { name: "Flashcards", image: "/images/craft-posters.jpg" }
+];
+
+const craftItemsRow2 = [
+  { name: "Polo Shirt", image: "/images/craft-tshirts.jpg" },
+  { name: "T-shirts", image: "/images/craft-tshirts.jpg" },
+  { name: "Caps", image: "/images/craft-caps.jpg" },
+  { name: "Phone Cases", image: "/images/craft-phone-cases.jpg" },
+  { name: "Coffee Mugs", image: "/images/craft-mugs.jpg" },
+  { name: "Bags", image: "/images/craft-bags.jpg" },
+  { name: "School Bags", image: "/images/craft-backpacks.jpg" },
+  { name: "Keychains", image: "/images/craft-keychains.jpg" }
+];
+
+const testimonials = [
+  { name: "Alyssa Boan", description: "Alyssa Boan is from Indiana and she is running a business of shirt designing. She focused on creating new things and exploring the unknown.", image: "/images/testimonial-alyssa.jpg" },
+  { name: "David DeGraaf", description: "David runs Ash Wood Shop, specializing in custom DTF printing. He chose Procolored's compact F13 DTF printer for its flexibility, low waste, and ease of use.", image: "/images/testimonial-david.jpg" },
+  { name: "Mr. Kyle", description: "Mr. Kyle is the owner of Lexi-Lium Design in New York. His business has been successfully using Procolored printers since 2022, starting with the dual-head DTF Pro printer.", image: "/images/testimonial-david.jpg" },
+  { name: "Laura Trevino", description: "She enjoys painting, photography and T-shirt designing. Laura continously seeks to exceed customer expectations through the artistry of clothing.", image: "/images/testimonial-roxana.jpg" },
+  { name: "Roxana Travieso", description: "Roxana Travieso is a creative YouTuber and social media content creator known for her DIY, crafting, and printing-related videos.", image: "/images/testimonial-roxana.jpg" }
+];
+
+const features = [
+  { icon: Headphones, title: "Customer Support", description: "The tech support team and in-person customer service will provide instant and attentive assistance" },
+  { icon: BookOpen, title: "Product Training", description: "Tutorials and Training are designed to equip you with the knowledge and skills necessary" },
+  { icon: CreditCard, title: "Pay with Ease", description: "Secure payment systems accept major credit/debit cards and offer flexible financing plans" },
+  { icon: Shield, title: "Warranty", description: "12-month warranty for most machine components assures every satisfying purchase and experience" }
+];
+
+const mediaReviews = [
+  { source: "Geeky Gadgets", logo: "Geeky Gadgets", quote: "Whether you are looking to create custom clothing for yourself, involve the family in a creative project, or explore the beginnings of a small T-shirt printing business, this setup delivers a complete and well thought out workflow. It feels capable, reliable, and surprisingly approachable." },
+  { source: "techradar", logo: "techradar", quote: "Printing from PC to textiles via transfer film is simplified by this dedicated DTF printer. It can print large eye-catching graphics onto any kind of cloth with an efficiency that will interest both hobbyists and established print shops." },
+  { source: "CNET", logo: "CNET", quote: "It works very well to make small batches of products, so using the Panda F8 to print unique clothing items for your Etsy store is better than using a Cricut or sublimation printer, especially for shirts that are not white." }
+];
+
+export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [activeCategoryTab, setActiveCategoryTab] = useState("personal");
+  const [productScrollPosition, setProductScrollPosition] = useState(0);
+  const [testimonialScrollPosition, setTestimonialScrollPosition] = useState(0);
+  const [reviewIndex, setReviewIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+
+  const scrollProducts = (direction: 'left' | 'right') => {
+    const container = document.getElementById('products-container');
+    if (container) {
+      const scrollAmount = 320;
+      const newPosition = direction === 'left' 
+        ? Math.max(0, productScrollPosition - scrollAmount)
+        : Math.min(container.scrollWidth - container.clientWidth, productScrollPosition + scrollAmount);
+      container.scrollTo({ left: newPosition, behavior: 'smooth' });
+      setProductScrollPosition(newPosition);
+    }
+  };
+
+  const scrollTestimonials = (direction: 'left' | 'right') => {
+    const container = document.getElementById('testimonials-container');
+    if (container) {
+      const scrollAmount = 400;
+      const newPosition = direction === 'left'
+        ? Math.max(0, testimonialScrollPosition - scrollAmount)
+        : Math.min(container.scrollWidth - container.clientWidth, testimonialScrollPosition + scrollAmount);
+      container.scrollTo({ left: newPosition, behavior: 'smooth' });
+      setTestimonialScrollPosition(newPosition);
+    }
+  };
+
+  return (
+    <>
+      <section className="relative w-full overflow-hidden flex-none" style={{height:'clamp(220px, 45vw, 600px)'}}>
+        {heroSlides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className={`absolute inset-0 transition-opacity duration-500 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+          >
+            <img 
+              src={slide.image} 
+              alt={`Slide ${slide.id}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+        
+        <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-colors">
+          <ChevronLeft className="w-6 h-6 text-white" />
+        </button>
+        <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-colors">
+          <ChevronRight className="w-6 h-6 text-white" />
+        </button>
+        
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+          {heroSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-2 h-2 rounded-full transition-all ${index === currentSlide ? 'bg-white w-6' : 'bg-white/50'}`}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="py-12 bg-white flex-none">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-10 px-2">
+            <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+              <span className="text-xl sm:text-2xl md:text-3xl font-bold text-black whitespace-nowrap">Global</span>
+              <img src="/images/feature-icon.png" alt="No.1" className="h-20 sm:h-24 md:h-32 lg:h-36 w-auto object-contain flex-shrink-0" />
+              <span className="text-xl sm:text-2xl md:text-3xl font-bold text-black whitespace-nowrap">Desktop DTF Printer Brand</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-black mb-1">{stat.value}</div>
+                <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-gray-50 flex-none">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-black">Most Popular</h2>
+            <Link to="/collections/all" className="text-sm text-red-600 hover:underline flex items-center gap-1 font-medium">
+              View All <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+          
+          <div className="relative overflow-hidden">
+            <div id="products-container" className="flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth pb-4" style={{WebkitOverflowScrolling:'touch'}}>
+              {popularProducts.map((product) => {
+                const Wrapper = product.link ? Link : 'div';
+                return (
+                  <Wrapper 
+                    to={product.link || ''}
+                    key={product.id} 
+                    className="flex-shrink-0 bg-white rounded-lg overflow-hidden shadow-card hover:shadow-hover transition-shadow block"
+                    style={{width:'clamp(220px, 75vw, 280px)'}}
+                  >
+                    <div className="relative">
+                      <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+                      {product.badge && (
+                        <Badge className={`absolute top-3 left-3 ${product.badgeColor} text-white`}>{product.badge}</Badge>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-medium text-sm mb-2 line-clamp-2 text-black">{product.name}</h3>
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-red-600 font-bold">{product.price}</span>
+                        {product.originalPrice && <span className="text-gray-400 text-sm line-through">{product.originalPrice}</span>}
+                      </div>
+                      <button className="w-full btn-buy-outline py-2 rounded text-sm font-medium">Buy Now</button>
+                    </div>
+                  </Wrapper>
+                )
+              })}
+            </div>
+            
+            <button onClick={() => scrollProducts('left')} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button onClick={() => scrollProducts('right')} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-white flex-none">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-black mb-8">Shop By Category</h2>
+          <div className="flex gap-4 mb-8 overflow-x-auto hide-scrollbar pb-1" style={{WebkitOverflowScrolling:'touch'}}>
+            {categoryTabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveCategoryTab(tab.id)}
+                className={`px-5 py-2 rounded text-sm font-medium transition-colors whitespace-nowrap ${
+                  activeCategoryTab === tab.id ? 'bg-black text-white rounded-sm' : 'text-black hover:text-[#E85A24]'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {categoryTabs.find(t => t.id === activeCategoryTab)?.products.map((product) => (
+              <div key={product.id} className="text-center">
+                <h3 className="font-bold text-lg mb-1 text-black">{product.name}</h3>
+                <p className="text-gray-600 text-sm mb-4 font-medium">{product.subtitle}</p>
+                <div className="bg-gray-50 rounded-lg p-6 mb-4">
+                  <img src={product.image} alt={product.name} className="w-full h-48 object-contain" />
+                </div>
+                <div className="flex gap-3 justify-center">
+                  <button className="flex-1 max-w-[120px] text-sm font-medium text-black hover:text-[#E85A24] transition-colors py-2">Learn More</button>
+                  <button className="flex-1 max-w-[120px] bg-[#E85A24] hover:bg-[#d44e1e] text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-200">Buy Now</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-8 bg-gray-50 flex-none">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+            {categoryItems.map((cat, index) => (
+              <a key={index} href={cat.link} className="flex flex-col items-center gap-3 group">
+                <div className="w-20 h-20 bg-white rounded-lg shadow-sm flex items-center justify-center group-hover:shadow-md transition-shadow overflow-hidden">
+                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="text-center">
+                  <span className="text-sm font-bold text-black block">{cat.name}</span>
+                  <span className="text-xs text-red-600 font-medium">Buy Now &gt;</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-white flex-none overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-black text-center">What You Can Craft with<br />Procolored Printers</h2>
+        </div>
+        <div className="relative mb-4">
+          <div className="marquee-container">
+            <div className="marquee-row-1">
+              {[...craftItemsRow1, ...craftItemsRow1, ...craftItemsRow1].map((item, index) => (
+                <div key={index} className="flex-shrink-0 w-[200px] mx-2">
+                  <div className="relative overflow-hidden rounded-lg">
+                    <img src={item.image} alt={item.name} className="w-full h-[200px] object-cover" />
+                  </div>
+                  <p className="text-center text-sm font-bold text-black mt-2">{item.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="relative">
+          <div className="marquee-container">
+            <div className="marquee-row-2">
+              {[...craftItemsRow2, ...craftItemsRow2, ...craftItemsRow2].map((item, index) => (
+                <div key={index} className="flex-shrink-0 w-[200px] mx-2">
+                  <div className="relative overflow-hidden rounded-lg">
+                    <img src={item.image} alt={item.name} className="w-full h-[200px] object-cover" />
+                  </div>
+                  <p className="text-center text-sm font-bold text-black mt-2">{item.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-gray-50 flex-none">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-black">Check Out What Our<br />Customers Are Saying</h2>
+            <div className="flex gap-2">
+              <button onClick={() => scrollTestimonials('left')} className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-white transition-colors">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button onClick={() => scrollTestimonials('right')} className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-white transition-colors">
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          <div id="testimonials-container" className="flex gap-5 overflow-x-auto hide-scrollbar scroll-smooth pb-4" style={{WebkitOverflowScrolling:'touch'}}>
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="flex-shrink-0 bg-white rounded-xl overflow-hidden shadow-card" style={{width:'clamp(280px, 75vw, 320px)'}}>
+                <div className="relative" style={{paddingBottom:'56.25%', height:0}}>
+                  <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover absolute inset-0" />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-base mb-1.5 text-black">{testimonial.name}</h3>
+                  <p className="text-sm text-gray-600 line-clamp-3">{testimonial.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-white flex-none">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-black text-center mb-10">Why Procolored Is Right for You</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <div key={index} className="bg-red-600 text-white rounded-xl p-6 text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <feature.icon className="w-8 h-8" />
+                </div>
+                <h3 className="font-bold text-lg mb-2">{feature.title}</h3>
+                <p className="text-sm text-white/90">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-gray-50 flex-none">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="relative">
+            <div className="text-center mb-8">
+              <h3 className="text-xl font-bold text-red-600 mb-4">{mediaReviews[reviewIndex].logo}</h3>
+              <p className="text-black text-lg leading-relaxed max-w-2xl mx-auto font-medium">"{mediaReviews[reviewIndex].quote}"</p>
+            </div>
+            <div className="flex justify-between items-center absolute top-1/2 -translate-y-1/2 w-full px-4">
+              <button onClick={() => setReviewIndex((prev) => (prev - 1 + mediaReviews.length) % mediaReviews.length)} className="w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button onClick={() => setReviewIndex((prev) => (prev + 1) % mediaReviews.length)} className="w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex justify-center gap-8 mt-8 pt-8 border-t border-gray-200">
+              {mediaReviews.map((review, index) => (
+                <button
+                  key={index}
+                  onClick={() => setReviewIndex(index)}
+                  className={`text-sm font-bold transition-colors ${index === reviewIndex ? 'text-red-600' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                  {review.logo}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
