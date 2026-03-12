@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { 
   Search, User, ShoppingCart, ChevronDown, Menu, X, 
   ChevronRight, MessageCircle, Headphones, Globe,
@@ -7,33 +7,23 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Outlet, Link } from 'react-router-dom';
+import { products } from '../data/products';
+import { useCart } from '../context/CartContext';
+import CartDrawer from './CartDrawer';
+import '../App.css';
 
-const productsDropdown = {
-  categories: [
-    { name: "Direct to Film Transfer (DTF) Printer", hasArrow: true },
-    { name: "UV DTF Printer", hasArrow: false },
-    { name: "UV Printer", hasArrow: false },
-    { name: "DTG Printer", hasArrow: false },
-    { name: "Equipment", hasArrow: false },
-    { name: "Consumables", hasArrow: false },
-    { name: "Parts & Accessory", hasArrow: false },
-    { name: "What's New", hasArrow: false },
-    { name: "Extended Warranty", hasArrow: false },
-  ],
-  series: [
-    { name: "K Series", products: [
-      { name: "Procolored K13 Lite", badge: "NEW ARRIVAL", image: "/images/product-k13-white.jpg" },
-    ]},
-    { name: "P Series", products: [
-      { name: "Procolored P13", badge: "NEW ARRIVAL", image: "/images/product-p13.jpg" },
-    ]},
-    { name: "F Series", products: [
-      { name: "Procolored F13 Pro", badge: null, image: "/images/product-f13-pro.jpg" },
-      { name: "Procolored F13", badge: "BEST SELLER", image: "/images/product-f13-panda.jpg" },
-      { name: "Procolored F8", badge: null, image: "/images/product-f8.jpg" },
-    ]}
-  ]
-};
+const navbarCategories = [
+  { id: 'dtf', name: "DTF Printer", path: "/collections/dtf-printer" },
+  { id: 'uv-dtf', name: "UV DTF Printer", path: "/collections/uv-dtf-printer" },
+  { id: 'uv', name: "UV Printer", path: "/collections/uv-printer" },
+  { id: 'dtg', name: "DTG Printer", path: "/collections/dtg-printer" },
+  { id: 'equipment', name: "Equipment", path: "/collections/equipment" },
+  { id: 'consumables', name: "Consumables", path: "/collections/consumables" },
+  { id: 'parts', name: "Parts & Accessory", path: "/collections/parts-accessory" },
+  { id: 'whats-new', name: "What's New", path: "/collections/whats-new" },
+  { id: 'warranty', name: "Extended Warranty", path: "/collections/extended-warranty" },
+  { id: 'all', name: "View All", path: "/collections/all" },
+];
 
 const supportLinks = [
   { name: "Showroom", path: "/showroom" },
@@ -45,9 +35,28 @@ const aboutUsLinks = ["Procolored Siphon Circulation", "Our Brand", "Contact US"
 export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const { cartCount, setIsCartOpen } = useCart();
   
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [hoveredCategory, setHoveredCategory] = useState("DTF Printer");
+  
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const getPreviewProducts = () => {
+    if (hoveredCategory === 'View All') {
+      return products.slice(0, 4);
+    }
+    return products
+      .filter(p => p.sections.includes(hoveredCategory))
+      .sort((a, b) => {
+        if (a.badge === 'BEST SELLER' && b.badge !== 'BEST SELLER') return -1;
+        if (b.badge === 'BEST SELLER' && a.badge !== 'BEST SELLER') return 1;
+        return 0;
+      })
+      .slice(0, 4);
+  };
+
+  const rightColumnProducts = useMemo(() => getPreviewProducts(), [hoveredCategory]);
 
   const handleDropdownEnter = (dropdown: string) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
@@ -89,16 +98,15 @@ export default function Layout() {
                   onMouseEnter={() => handleDropdownEnter('products')}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <button className={`flex items-center gap-1 text-[15px] font-medium text-black nav-link transition-colors ${activeDropdown === 'products' ? 'nav-link-active text-[#E85A24]' : ''}`}>
-                    Products <ChevronDown className="w-4 h-4" />
-                  </button>
-                  {/* Indicator for hovered state matched with CSS if needed */}
+                  <Link to="/collections/all" className={`flex items-center gap-1 text-[15px] font-semibold text-black nav-link ${activeDropdown === 'products' ? 'nav-link-active' : ''}`}>
+                    Products <ChevronDown className="w-4 h-4 ml-1" />
+                  </Link>
                   {activeDropdown === 'products' && (
                     <div className="absolute top-full left-0 h-3 w-56" />
                   )}
                 </div>
 
-                <Link to="/" className="flex items-center gap-1 text-[15px] font-medium text-black nav-link">
+                <Link to="/f13" className="flex items-center gap-1 text-[15px] font-semibold text-black nav-link">
                   <span className="text-yellow-500">🔔</span> F13 Appreciation Deals
                 </Link>
                 
@@ -107,8 +115,8 @@ export default function Layout() {
                   onMouseEnter={() => handleDropdownEnter('support')}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <button className={`flex items-center gap-1 text-[15px] font-medium text-black nav-link transition-colors ${activeDropdown === 'support' ? 'nav-link-active text-[#E85A24]' : ''}`}>
-                    Support <ChevronDown className="w-4 h-4" />
+                  <button className={`flex items-center gap-1 text-[15px] font-semibold text-black nav-link ${activeDropdown === 'support' ? 'nav-link-active' : ''}`}>
+                    Support <ChevronDown className="w-4 h-4 ml-1" />
                   </button>
                   {activeDropdown === 'support' && (
                     <div 
@@ -118,7 +126,7 @@ export default function Layout() {
                       onMouseLeave={handleDropdownLeave}
                     >
                       {supportLinks.map((link, idx) => (
-                        <Link key={idx} to={link.path} className="block px-5 py-2.5 text-sm text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
+                        <Link key={idx} to={link.path} className="block px-5 py-2.5 text-sm font-medium text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
                           {link.name}
                         </Link>
                       ))}
@@ -131,8 +139,8 @@ export default function Layout() {
                   onMouseEnter={() => handleDropdownEnter('about')}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <button className={`flex items-center gap-1 text-[15px] font-medium text-black nav-link transition-colors ${activeDropdown === 'about' ? 'nav-link-active text-[#E85A24]' : ''}`}>
-                    About Us <ChevronDown className="w-4 h-4" />
+                  <button className={`flex items-center gap-1 text-[15px] font-semibold text-black nav-link ${activeDropdown === 'about' ? 'nav-link-active' : ''}`}>
+                    About Us <ChevronDown className="w-4 h-4 ml-1" />
                   </button>
                   {activeDropdown === 'about' && (
                     <div 
@@ -142,7 +150,7 @@ export default function Layout() {
                       onMouseLeave={handleDropdownLeave}
                     >
                       {aboutUsLinks.map((link, idx) => (
-                        <a key={idx} href="#" className="block px-5 py-2.5 text-sm text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
+                        <a key={idx} href="#" className="block px-5 py-2.5 text-sm font-medium text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
                           {link}
                         </a>
                       ))}
@@ -159,9 +167,12 @@ export default function Layout() {
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                 <User className="w-5 h-5" />
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors relative"
+              >
                 <ShoppingCart className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-xs rounded-full flex items-center justify-center">0</span>
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-xs rounded-full flex items-center justify-center">{cartCount}</span>
               </button>
             </div>
           </div>
@@ -186,9 +197,12 @@ export default function Layout() {
             <div className="flex items-center gap-1">
               <button className="p-2 rounded-full transition-colors"><Search className="w-5 h-5" /></button>
               <button className="p-2 rounded-full transition-colors"><User className="w-5 h-5" /></button>
-              <button className="p-2 rounded-full transition-colors relative">
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className="p-2 rounded-full transition-colors relative"
+              >
                 <ShoppingCart className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-black text-white text-xs rounded-full flex items-center justify-center">0</span>
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-black text-white text-xs rounded-full flex items-center justify-center">{cartCount}</span>
               </button>
             </div>
           </div>
@@ -204,46 +218,45 @@ export default function Layout() {
             <div className="max-w-7xl mx-auto px-4 flex">
               <div className="w-64 py-6 pr-6 border-r border-gray-100">
                 <div className="space-y-1">
-                  {productsDropdown.categories.map((cat, idx) => (
-                    <a key={idx} href="#" className={`group flex items-center justify-between text-sm py-2 px-3 rounded transition-colors ${
-                      idx === 0 ? 'text-[#E85A24] font-medium' : 'text-black hover:text-[#E85A24]'
-                    }`}>
-                      {/* Smooth hover highlight simulation */}
+                  {navbarCategories.map((cat, idx) => (
+                    <Link 
+                      key={idx} 
+                      to={cat.path}
+                      onMouseEnter={() => setHoveredCategory(cat.name)}
+                      className={`group flex items-center justify-between text-[15px] font-medium py-2 px-3 rounded transition-colors ${
+                        hoveredCategory === cat.name ? 'text-[#E85A24] bg-gray-50 font-bold' : 'text-black hover:text-[#E85A24] hover:bg-gray-50'
+                      }`}
+                    >
                       <span className="relative z-10">{cat.name}</span>
-                      {cat.hasArrow && <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />}
-                      <div className="absolute inset-0 bg-gray-50 opacity-0 group-hover:opacity-100 rounded transition-opacity pointer-events-none -z-0"></div>
-                    </a>
+                      <ChevronRight className={`w-4 h-4 transition-transform ${hoveredCategory === cat.name ? 'text-[#E85A24]' : 'text-transparent group-hover:text-[#E85A24]'}`} />
+                    </Link>
                   ))}
                 </div>
               </div>
-              <div className="flex-1 p-6">
+              <div className="flex-1 p-6 relative flex flex-col">
                 <div className="grid grid-cols-4 gap-6">
-                  {productsDropdown.series.map((series, sIdx) => (
-                    <div key={sIdx}>
-                      <h4 className="text-sm font-semibold text-black mb-3 border-b pb-2">{series.name}</h4>
-                      <div className="space-y-4">
-                        {series.products.map((product, pIdx) => (
-                          <Link key={pIdx} to={product.name.includes("F13") && !product.name.includes("Pro") ? "/f13" : "#"} className="block text-center group">
-                            <div className="bg-gray-50 rounded-lg p-3 mb-2 group-hover:bg-gray-100 transition-colors group-hover:shadow-md">
-                              <img src={product.image} alt={product.name} className="w-full h-24 object-contain group-hover:scale-105 transition-transform" />
-                            </div>
-                            {product.badge && (
-                              <span className={`text-xs font-semibold uppercase tracking-wide ${
-                                product.badge === 'BEST SELLER' ? 'text-[#E85A24]' : 'text-red-500'
-                              }`}>
-                                {product.badge === 'BEST SELLER' ? '🔥 ' : ''}{product.badge}
-                              </span>
-                            )}
-                            <p className="text-xs text-black font-medium mt-1 group-hover:text-[#E85A24] transition-colors">{product.name}</p>
-                          </Link>
-                        ))}
+                  {rightColumnProducts.map((product, pIdx) => (
+                    <Link key={pIdx} to={`/products/${product.slug}`} className="block text-center group">
+                      <div className="bg-gray-50 rounded-lg p-4 mb-3 group-hover:bg-gray-100 transition-colors h-36 flex items-center justify-center relative overflow-hidden">
+                        <img src={product.image} alt={product.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+                        {product.badge && (
+                          <div className={`absolute top-2 left-2 px-1.5 py-0.5 text-[10px] uppercase font-bold text-white rounded-sm ${product.badge === 'NEW ARRIVAL' ? 'bg-[#98db51]' : 'bg-[#E85A24]'}`}>
+                            {product.badge}
+                          </div>
+                        )}
                       </div>
-                    </div>
+                      <p className="text-sm text-black font-semibold mt-1 group-hover:text-[#E85A24] transition-colors line-clamp-2">{product.name}</p>
+                    </Link>
                   ))}
+                  {rightColumnProducts.length === 0 && (
+                    <div className="col-span-4 text-center py-10 text-gray-500 text-sm">
+                      No matching products to preview.
+                    </div>
+                  )}
                 </div>
-                <div className="mt-4 text-right border-t pt-3">
-                  <Link to="/collections/all" className="inline-flex items-center gap-1 px-4 py-2 border border-gray-300 rounded-full text-sm text-black hover:text-[#E85A24] hover:border-[#E85A24] transition-colors">
-                    Collections <ChevronRight className="w-3 h-3" />
+                <div className="mt-8 text-right flex-1 flex items-end justify-end">
+                  <Link to="/collections/all" className="inline-flex items-center gap-1 text-[13px] font-bold text-black border border-gray-200 px-5 py-2.5 hover:bg-gray-50 transition-colors uppercase cursor-pointer">
+                    View All <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
@@ -255,16 +268,16 @@ export default function Layout() {
         {isMenuOpen && (
           <div className="lg:hidden fixed inset-0 top-14 bg-white z-50 overflow-y-auto animate-slide-in flex flex-col">
             <nav className="flex flex-col px-4 pt-4 pb-8 flex-1">
-              <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-medium text-black">
+              <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-semibold text-black">
                 <span>Products</span><ChevronRight className="w-4 h-4 text-gray-400" />
               </a>
-              <Link to="/" className="flex items-center py-4 border-b border-gray-100 text-base font-medium text-[#E85A24]">
+              <Link to="/f13" className="flex items-center py-4 border-b border-gray-100 text-base font-semibold text-[#E85A24]">
                 <span className="mr-2">🔔</span> F13 Appreciation Deals
               </Link>
-              <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-medium text-black">
+              <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-semibold text-black">
                 <span>Support</span><ChevronRight className="w-4 h-4 text-gray-400" />
               </a>
-              <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-medium text-black">
+              <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-semibold text-black">
                 <span>About Us</span><ChevronRight className="w-4 h-4 text-gray-400" />
               </a>
 
@@ -275,7 +288,7 @@ export default function Layout() {
                 <Youtube className="w-5 h-5 text-black" />
                 <Linkedin className="w-5 h-5 text-black" />
               </div>
-              <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-600">
+              <div className="flex items-center justify-center gap-2 mt-4 text-sm font-medium text-gray-600">
                 <Globe className="w-4 h-4" /> United States
               </div>
             </nav>
@@ -293,19 +306,19 @@ export default function Layout() {
             <div>
               <h3 className="font-bold mb-4 text-white">Buy on the Procolored store</h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-400">
                   <Headphones className="w-4 h-4" />
                   <span>22/6 Customer Support</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-400">
                   <MapPin className="w-4 h-4" />
                   <span>Local Engineers</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-400">
                   <Shield className="w-4 h-4" />
                   <span>6-Month Print Head Warranty</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-400">
                   <Award className="w-4 h-4" />
                   <span>Lifetime Customer Support</span>
                 </div>
@@ -317,7 +330,7 @@ export default function Layout() {
                 <input 
                   type="email" 
                   placeholder="Enter Your Email"
-                  className="flex-1 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-red-600"
+                  className="flex-1 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-red-600 font-medium"
                 />
                 <Button className="bg-red-600 hover:bg-red-700 text-white font-bold">
                   SUBSCRIBE
@@ -335,11 +348,10 @@ export default function Layout() {
         </div>
         
         <div className="max-w-7xl mx-auto px-4 py-12">
-          {/* Originally 5 columns, now 4 columns because Programs is removed */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
               <h4 className="font-bold mb-4 text-white">Product</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm font-medium text-gray-400">
                 <li><a href="#" className="hover:text-white transition-colors">DTF Printers</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">UV DTF Printers</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">UV Printers</a></li>
@@ -352,7 +364,7 @@ export default function Layout() {
             </div>
             <div>
               <h4 className="font-bold mb-4 text-white">Support</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm font-medium text-gray-400">
                 <li><a href="#" className="hover:text-white transition-colors">Resources</a></li>
                 <li><Link to="/warranty" className="hover:text-white transition-colors">Warranty</Link></li>
                 <li><Link to="/repair" className="hover:text-white transition-colors">Repair Appointment</Link></li>
@@ -361,7 +373,7 @@ export default function Layout() {
             </div>
             <div>
               <h4 className="font-bold mb-4 text-white">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm font-medium text-gray-400">
                 <li><a href="#" className="hover:text-white transition-colors">Procolored Siphon Circulation</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Our Brand</a></li>
@@ -370,16 +382,16 @@ export default function Layout() {
             </div>
             <div>
               <h4 className="font-bold mb-4 text-white">Contact Us</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li className="text-white font-medium">Before-sales:</li>
+              <ul className="space-y-2 text-sm font-medium text-gray-400">
+                <li className="text-white font-bold">Before-sales:</li>
                 <li><a href="mailto:test@procolored.com" className="hover:text-white">test@procolored.com</a></li>
-                <li className="text-white font-medium mt-3">After-sales:</li>
+                <li className="text-white font-bold mt-3">After-sales:</li>
                 <li><a href="mailto:test@procolored.com" className="hover:text-white">test@procolored.com</a></li>
                 <li className="mt-4 pt-2 border-t border-gray-800">
-                  <a href="#" className="text-red-600 hover:underline font-medium">Need Help?</a>
+                  <a href="#" className="text-red-600 hover:text-red-500 font-bold">Need Help?</a>
                 </li>
                 <li>
-                  <a href="#" className="text-red-600 hover:underline font-medium">Start Live Chat</a>
+                  <a href="#" className="text-red-600 hover:text-red-500 font-bold">Start Live Chat</a>
                 </li>
               </ul>
             </div>
@@ -387,7 +399,7 @@ export default function Layout() {
         </div>
         
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex flex-wrap justify-center gap-4 text-xs text-gray-400 mb-4">
+          <div className="flex flex-wrap justify-center gap-4 text-xs font-medium text-gray-400 mb-4">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Shipping Policy</a>
             <a href="#" className="hover:text-white transition-colors">Refund Policy</a>
@@ -396,11 +408,11 @@ export default function Layout() {
             <a href="#" className="hover:text-white transition-colors">INTELLECTUAL PROPERTY RIGHTS</a>
           </div>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-sm text-gray-400">
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-400">
               <Globe className="w-4 h-4" />
               <span>United States</span>
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs font-medium text-gray-500">
               © 2026 Procolored. All rights reserved.
             </div>
             <div className="flex gap-2">
@@ -426,6 +438,7 @@ export default function Layout() {
         </div>
       </footer>
 
+      {/* Chat Widget */}
       <div className="fixed bottom-6 right-6 z-50">
         {showChat && (
           <div className="absolute bottom-16 right-0 w-80 bg-white rounded-lg shadow-2xl overflow-hidden animate-slide-in">
@@ -435,8 +448,8 @@ export default function Layout() {
                   <MessageCircle className="w-4 h-4 text-red-600" />
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm">Hi there 👋</p>
-                  <p className="text-white/80 text-xs">We reply immediately</p>
+                  <p className="text-white font-bold text-sm">Hi there 👋</p>
+                  <p className="text-white/80 text-xs font-medium">We reply immediately</p>
                 </div>
               </div>
               <button onClick={() => setShowChat(false)} className="text-white/80 hover:text-white">
@@ -447,7 +460,7 @@ export default function Layout() {
               <input 
                 type="text" 
                 placeholder="Enter your message..."
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-red-600"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium focus:outline-none focus:border-red-600"
               />
             </div>
           </div>
@@ -459,6 +472,7 @@ export default function Layout() {
           <MessageCircle className="w-6 h-6 text-white" />
         </button>
       </div>
+      <CartDrawer />
     </div>
   );
 }

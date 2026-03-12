@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Headphones, BookOpen, CreditCard, Shield } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import '../App.css';
 import { Link } from 'react-router-dom';
 
 const heroSlides = [

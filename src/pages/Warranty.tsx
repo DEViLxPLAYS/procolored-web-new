@@ -1,62 +1,106 @@
-import { ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
-
 export default function Warranty() {
   return (
-    <div className="bg-white min-h-screen">
-      {/* Breadcrumbs */}
-      <div className="max-w-7xl mx-auto px-4 py-4 border-b border-gray-100">
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-black hover:underline transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-black">Warranty Policy</span>
+    <div className="bg-white min-h-screen font-sans">
+      {/* Hero Banner Section */}
+      <div className="relative w-full h-[300px] md:h-[400px]">
+        <img 
+          src="https://cdn.shopify.com/s/files/1/0509/3454/6613/files/banner-warranty.jpg?v=1696666486" 
+          alt="Warranty Banner" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 flex items-center justify-start px-8 md:px-16 lg:px-32 xl:px-48">
+          <div className="max-w-xl lg:max-w-2xl">
+            <h1 className="text-3xl md:text-4xl lg:text-[42px] font-semibold text-[#1a1a1a] mb-6 tracking-tight">
+              Warranty Registration
+            </h1>
+            <p className="text-[15px] font-medium text-[#1a1a1a] mb-2 leading-relaxed">
+              We are committed to providing you with the best products and services.
+            </p>
+            <p className="text-[15px] font-medium text-[#1a1a1a] mb-6 leading-relaxed">
+              For components not directly contact with ink, a warranty period of 12 months 
+              since printer shipment date is provided, unless damage is user-induced. 
+              Register warranty on our website to get warranty on some types of printhead 
+              limited to one replacement.
+            </p>
+            <p className="text-[16px] font-semibold text-[#1a1a1a] mb-2">Need Additional Help? Contact Us</p>
+            <p className="text-[15px] font-medium text-[#1a1a1a]">
+              Email: <a href="mailto:test@procolored.com" className="hover:text-red-600 transition-colors">test@procolored.com</a>
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-12 text-black">Procolored Warranty Policy</h1>
+      {/* Warranty Policy Content Section */}
+      <div className="max-w-[1000px] mx-auto px-6 py-20 text-[#1a1a1a]">
+        <h2 className="text-[28px] font-semibold mb-10 tracking-tight">Section One — Warranty Policy</h2>
         
-        <div className="prose prose-lg max-w-none prose-p:text-gray-600 prose-headings:text-black prose-li:text-gray-600">
-          <div className="bg-gray-50 p-6 rounded-lg mb-8 border border-gray-200">
-            <h2 className="text-xl font-bold mt-0 mb-4">Limited One-Year Warranty</h2>
-            <p className="mb-0">
-              Procolored warrants its products against defects in materials and workmanship under normal use for a period of ONE (1) YEAR from the date of retail purchase by the original end-user purchaser ("Warranty Period").
+        <div className="space-y-12 mb-16">
+          {/* 1. Warranty Coverage */}
+          <div>
+            <h3 className="text-[20px] font-semibold mb-6">1. Warranty Coverage</h3>
+            
+            <div className="space-y-8 pl-4 lg:pl-6">
+              <div>
+                <h4 className="text-[17px] font-semibold mb-3">1.1 Mainboard</h4>
+                <p className="text-[15px] leading-[1.7] font-medium mb-3">
+                  Mainboard for dual-head printer is not covered by warranty. Customers may send them in for repairs at their own expense.
+                </p>
+                <p className="text-[15px] leading-[1.7] font-medium">
+                  Mainboard for single-head printer is covered by a 6-month warranty period since printer shipment date. Within this warranty period, you are eligible for one replacement.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-[17px] font-semibold mb-3">1.2 Print Head and Related Components</h4>
+                <p className="text-[15px] leading-[1.7] font-medium">
+                  After warranty registration, the following printheads are covered by a 6-month warranty period since printer shipment date, limited to one replacement: (L1800, R1390, L800, L805, TX800, XP600). Other print heads or components that contact with ink are not covered by warranty.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-[17px] font-semibold mb-3">1.3 Warranty for Other Accessories</h4>
+                <p className="text-[15px] leading-[1.7] font-medium">
+                  Other accessories are covered by a 12-month warranty period since shipment date of the Procolored printer.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-[17px] font-semibold mb-3">1.4 Disclaimer</h4>
+                <ul className="list-disc pl-5 space-y-3">
+                  <li className="text-[15px] leading-[1.7] font-medium">
+                    The warranty for the ink-contact components requires the printer exclusively use Procolored inks. Warranty coverage does not include the printhead blockage resulting from the use of inks from other brands.
+                  </li>
+                  <li className="text-[15px] leading-[1.7] font-medium">
+                    The warranty for printer-related components is subject to the shipment date of a Procolored printer.
+                  </li>
+                  <li className="text-[15px] leading-[1.7] font-medium">
+                    The damage must not be caused by user negligence or misuse.
+                  </li>
+                  <li className="text-[15px] leading-[1.7] font-medium">
+                    The damage must be confirmed by our customer service team or engineers as non-user-induced.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. Warranty Costs */}
+          <div>
+            <h3 className="text-[20px] font-semibold mb-4">2. Warranty Costs</h3>
+            <p className="text-[15px] leading-[1.7] font-medium pl-4 lg:pl-6">
+              If the component within warranty period is damaged within one month of printer receiving, we will bear the cost of component and covering the shipping fees. For damage reported after one month of printer receipt, we will cover the cost of component but will not cover the shipping fees.
             </p>
           </div>
+        </div>
 
-          <h3 className="text-lg font-bold mt-8 mb-4">What is Covered?</h3>
-          <ul className="list-disc pl-6 space-y-2 mb-8">
-            <li>Mainboard and carriage board.</li>
-            <li>Motors (X/Y axis, ink pump motors).</li>
-            <li>Sensors and limit switches.</li>
-            <li>Power supply unit.</li>
-            <li>Control panels and display screens.</li>
-          </ul>
-
-          <h3 className="text-lg font-bold mt-8 mb-4">What is NOT Covered?</h3>
-          <p className="mb-4">
-            This warranty does not apply to any non-Procolored branded hardware products or any software, even if packaged or sold with Procolored hardware. Consumable parts and damage resulting from improper maintenance are excluded.
+        <h2 className="text-[28px] font-semibold mb-8 tracking-tight">Section Two — Return Policy</h2>
+        <div className="space-y-4 pl-4 lg:pl-6 pb-20 border-b border-gray-100">
+          <p className="text-[15px] leading-[1.7] font-medium">
+            If the printer is received within one week and no ink is added, it can be shipped back in its original packaging, and returns and exchanges are accepted. If any ink has been added into the printer, we cannot process returns or exchanges.
           </p>
-          <ul className="list-disc pl-6 space-y-2 mb-8">
-            <li><strong>Printheads:</strong> Excluded from the 1-year warranty. A separate 3-month limited warranty applies to manufacturing defects only. Clogging due to lack of maintenance is not covered.</li>
-            <li>Ink dampers, capping stations, and wiper blades (consumables).</li>
-            <li>Ink lines and reservoirs.</li>
-            <li>Damage caused by using third-party inks or films.</li>
-            <li>Damage caused by accident, abuse, misuse, liquid contact, fire, or earthquake.</li>
-            <li>Modifications or unauthorized repairs.</li>
-          </ul>
-
-          <h3 className="text-lg font-bold mt-8 mb-4">How to Obtain Warranty Service</h3>
-          <p className="mb-6">
-            If a defect arises during the Warranty Period, please contact Procolored Support with your order number, machine serial number, and a detailed description of the issue (including photos/videos if applicable).
+          <p className="text-[15px] leading-[1.7] font-medium">
+            Please note that this warranty policy is subject to change, and any modifications will be posted on our website. For any warranty claims or inquiries, please contact our customer service team. For all customers who have purchased Procolored printer equipment but are beyond the 12-month warranty period, we offer extended warranty services, which include two programs: Remote Expert Service and Extended Warranty.
           </p>
-          
-          <div className="bg-red-50 border border-red-100 p-6 rounded-lg flex flex-col items-center text-center">
-            <p className="text-red-800 font-medium mb-4">Need to file a warranty claim or request a repair?</p>
-            <Link to="/repair" className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded transition-colors inline-block">
-              Submit Repair Request
-            </Link>
-          </div>
         </div>
       </div>
     </div>
