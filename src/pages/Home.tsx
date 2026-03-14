@@ -33,20 +33,20 @@ const popularProducts = [
 ];
 
 const categoryTabs = [
+  { id: "factory", label: "Small-scale Factory", products: [
+    { id: "f1", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510" },
+    { id: "f2", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510" },
+    { id: "f3", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379" }
+  ]},
   { id: "personal", label: "Personal Studio", products: [
-    { id: "p1", name: "Procolored K13 Lite", subtitle: "User-friendly", image: "/images/product-k13-white.jpg" },
-    { id: "p2", name: "Procolored P13", subtitle: "High-Performance Print Head", image: "/images/product-p13.jpg" },
-    { id: "p3", name: "Procolored F13", subtitle: "High-quality and Easy-to-use", image: "/images/product-f13-panda.jpg", link: "/f13" }
+    { id: "p1", name: "Procolored K13 Lite", subtitle: "User-friendly", image: "https://www.procolored.com/cdn/shop/files/K13_lite_white_10.png?v=1772447536" },
+    { id: "p2", name: "Procolored F13", subtitle: "High-quality and Easy-to-use", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526" },
+    { id: "p3", name: "Procolored P13", subtitle: "High-Performance Print Head", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950" }
   ]},
   { id: "hobbyist", label: "Hobbyist Use", products: [
-    { id: "h1", name: "Procolored K13 Lite", subtitle: "Best Value Starter Printer", image: "/images/product-k13-pink.jpg" },
-    { id: "h2", name: "Procolored F8", subtitle: "Affordable Entry-level Model", image: "/images/product-f8.jpg" },
-    { id: "h3", name: "Procolored F13", subtitle: "Designed for Creative Makers", image: "/images/product-f13-panda.jpg", link: "/f13" }
-  ]},
-  { id: "factory", label: "Small-scale Factory", products: [
-    { id: "f1", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "/images/product-p13.jpg" },
-    { id: "f2", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "/images/product-f13-pro.jpg" },
-    { id: "f3", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "/images/product-vf13-pro.jpg" }
+    { id: "h1", name: "Procolored K13 Lite", subtitle: "Best Value Starter Printer", image: "https://www.procolored.com/cdn/shop/files/K13_lite_pink_10.png?v=1772447536" },
+    { id: "h2", name: "Procolored F13", subtitle: "Designed for Creative Makers", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526" },
+    { id: "h3", name: "Procolored F8", subtitle: "Affordable Entry-level Model", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_3.png?v=1766052998" }
   ]}
 ];
 
@@ -105,7 +105,7 @@ const mediaReviews = [
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [activeCategoryTab, setActiveCategoryTab] = useState("personal");
+  const [activeCategoryTab, setActiveCategoryTab] = useState("factory");
   const [productScrollPosition, setProductScrollPosition] = useState(0);
   const [testimonialScrollPosition, setTestimonialScrollPosition] = useState(0);
   const [reviewIndex, setReviewIndex] = useState(0);
