@@ -454,9 +454,9 @@ export default function Layout() {
               <h4 className="font-bold mb-4 text-white">Contact Us</h4>
               <ul className="space-y-2 text-sm font-medium text-gray-400">
                 <li className="text-white font-bold">Before-sales:</li>
-                <li><a href="mailto:test@procolored.com" className="hover:text-white">test@procolored.com</a></li>
+                <li><a href="mailto:support@procollored.com" className="hover:text-white">support@procollored.com</a></li>
                 <li className="text-white font-bold mt-3">After-sales:</li>
-                <li><a href="mailto:test@procolored.com" className="hover:text-white">test@procolored.com</a></li>
+                <li><a href="mailto:support@procollored.com" className="hover:text-white">support@procollored.com</a></li>
                 <li className="mt-4 pt-2 border-t border-gray-800">
                   <a href="#" className="text-red-600 hover:text-red-500 font-bold">Need Help?</a>
                 </li>

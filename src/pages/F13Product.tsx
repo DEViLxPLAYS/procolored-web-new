@@ -158,7 +158,7 @@ export default function F13Product() {
     { q: 'What are the differences between F13 and F13 Pro?', a: 'F13 Pro has 2 print heads, while F13 only has one, so F13 Pro prints at 2× the speed of F13.' },
     { q: 'Does the RIP software run on a MacBook?', a: 'No, the RIP software is designed exclusively for Windows OS. MacBook users must use virtualization software like Parallels or BootCamp.' },
     { q: 'Do I need to pay for the RIP software? Can I edit my design with it?', a: 'The Pro RIP software is included completely free with your printer purchase. It allows for basic image editing and layout, but for heavy design work we recommend Photoshop, Illustrator, or CorelDraw.' },
-    { q: 'What is your after-sales warranty policy, and where can I get tech support?', a: 'We provide a 12-month warranty on non-ink-contacting parts and a 6-month warranty on the printhead. Reach us anytime at test@procolored.com.' },
+    { q: 'What is your after-sales warranty policy, and where can I get tech support?', a: 'We provide a 12-month warranty on non-ink-contacting parts and a 6-month warranty on the printhead. Reach us anytime at support@procollored.com.' },
     { q: 'What is the printing cost per print?', a: 'It generally costs less than $0.50–$1.00 per A4/Letter size print, enabling high profit margins.' },
     { q: 'Can I pay with two cards? Do you have a financing option?', a: 'Yes! We support split payments and offer financing via Klarna, Shop Pay Installments, or Affirm.' },
     { q: 'What is the maximum length it can print with roll film?', a: 'With roll film the printing length is unlimited, constrained only by roll length (typically 328 ft / 100 m).' },

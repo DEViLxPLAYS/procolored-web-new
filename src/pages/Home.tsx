@@ -83,11 +83,11 @@ const craftItemsRow2 = [
 ];
 
 const testimonials = [
-  { name: "Alyssa Boan", description: "Alyssa Boan is from Indiana and she is running a business of shirt designing. She focused on creating new things and exploring the unknown.", image: "/images/testimonial-alyssa.jpg" },
-  { name: "David DeGraaf", description: "David runs Ash Wood Shop, specializing in custom DTF printing. He chose Procolored's compact F13 DTF printer for its flexibility, low waste, and ease of use.", image: "/images/testimonial-david.jpg" },
-  { name: "Mr. Kyle", description: "Mr. Kyle is the owner of Lexi-Lium Design in New York. His business has been successfully using Procolored printers since 2022, starting with the dual-head DTF Pro printer.", image: "/images/testimonial-david.jpg" },
-  { name: "Laura Trevino", description: "She enjoys painting, photography and T-shirt designing. Laura continously seeks to exceed customer expectations through the artistry of clothing.", image: "/images/testimonial-roxana.jpg" },
-  { name: "Roxana Travieso", description: "Roxana Travieso is a creative YouTuber and social media content creator known for her DIY, crafting, and printing-related videos.", image: "/images/testimonial-roxana.jpg" }
+  { name: "Alyssa Boan", description: "Alyssa Boan is from Indiana and she is running a business of shirt designing. She focused on creating new things and exploring the unknown.", youtubeId: "fUQd-CC7k1o" },
+  { name: "David DeGraaf", description: "David runs Ash Wood Shop, specializing in custom DTF printing. He chose Procolored's compact F13 DTF printer for its flexibility, low waste, and ease of use.", youtubeId: "mg3oWlQT4T0" },
+  { name: "Mr. Kyle", description: "Mr. Kyle is the owner of Lexi-Lium Design in New York. His business has been successfully using Procolored printers since 2022, starting with the dual-head DTF Pro printer.", youtubeId: "vTufzbJaIOo" },
+  { name: "Laura Trevino", description: "She enjoys painting, photography and T-shirt designing. Laura continously seeks to exceed customer expectations through the artistry of clothing.", youtubeId: "dlp96Zw6rjw" },
+  { name: "Roxana Travieso", description: "Roxana Travieso is a creative YouTuber and social media content creator known for her DIY, crafting, and printing-related videos.", youtubeId: "wNamqcXECFc" }
 ];
 
 const features = [
@@ -107,7 +107,6 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeCategoryTab, setActiveCategoryTab] = useState("factory");
   const [productScrollPosition, setProductScrollPosition] = useState(0);
-  const [testimonialScrollPosition, setTestimonialScrollPosition] = useState(0);
   const [reviewIndex, setReviewIndex] = useState(0);
 
   useEffect(() => {
@@ -129,18 +128,6 @@ export default function Home() {
         : Math.min(container.scrollWidth - container.clientWidth, productScrollPosition + scrollAmount);
       container.scrollTo({ left: newPosition, behavior: 'smooth' });
       setProductScrollPosition(newPosition);
-    }
-  };
-
-  const scrollTestimonials = (direction: 'left' | 'right') => {
-    const container = document.getElementById('testimonials-container');
-    if (container) {
-      const scrollAmount = 400;
-      const newPosition = direction === 'left'
-        ? Math.max(0, testimonialScrollPosition - scrollAmount)
-        : Math.min(container.scrollWidth - container.clientWidth, testimonialScrollPosition + scrollAmount);
-      container.scrollTo({ left: newPosition, behavior: 'smooth' });
-      setTestimonialScrollPosition(newPosition);
     }
   };
 
@@ -334,28 +321,47 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-12 bg-gray-50 flex-none">
+      <section className="py-16 bg-gray-50 flex-none">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-black">Check Out What Our<br />Customers Are Saying</h2>
-            <div className="flex gap-2">
-              <button onClick={() => scrollTestimonials('left')} className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-white transition-colors">
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button onClick={() => scrollTestimonials('right')} className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-white transition-colors">
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-          <div id="testimonials-container" className="flex gap-5 overflow-x-auto hide-scrollbar scroll-smooth pb-4" style={{WebkitOverflowScrolling:'touch'}}>
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="flex-shrink-0 bg-white rounded-xl overflow-hidden shadow-card" style={{width:'clamp(280px, 75vw, 320px)'}}>
-                <div className="relative" style={{paddingBottom:'56.25%', height:0}}>
-                  <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover absolute inset-0" />
+          <h2 className="text-2xl md:text-3xl font-bold text-black mb-10">Check Out What Our<br />Customers Are Saying</h2>
+
+          {/* Top row — 3 videos */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+            {testimonials.slice(0, 3).map((testimonial, index) => (
+              <div key={index} className="bg-white rounded-xl overflow-hidden shadow-card">
+                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src={`https://www.youtube.com/embed/${testimonial.youtubeId}?rel=0&modestbranding=1`}
+                    title={testimonial.name}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 </div>
                 <div className="p-4">
-                  <h3 className="font-bold text-base mb-1.5 text-black">{testimonial.name}</h3>
-                  <p className="text-sm text-gray-600 line-clamp-3">{testimonial.description}</p>
+                  <h3 className="font-bold text-base mb-1 text-black">{testimonial.name}</h3>
+                  <p className="text-sm text-gray-600 line-clamp-2">{testimonial.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom row — 2 videos centered */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+            {testimonials.slice(3).map((testimonial, index) => (
+              <div key={index} className="bg-white rounded-xl overflow-hidden shadow-card">
+                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src={`https://www.youtube.com/embed/${testimonial.youtubeId}?rel=0&modestbranding=1`}
+                    title={testimonial.name}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-base mb-1 text-black">{testimonial.name}</h3>
+                  <p className="text-sm text-gray-600 line-clamp-2">{testimonial.description}</p>
                 </div>
               </div>
             ))}

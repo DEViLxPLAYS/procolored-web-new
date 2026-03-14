@@ -24,7 +24,7 @@ export default function Warranty() {
             </p>
             <p className="text-[16px] font-semibold text-[#1a1a1a] mb-2">Need Additional Help? Contact Us</p>
             <p className="text-[15px] font-medium text-[#1a1a1a]">
-              Email: <a href="mailto:test@procolored.com" className="hover:text-red-600 transition-colors">test@procolored.com</a>
+              Email: <a href="mailto:support@procollored.com" className="hover:text-red-600 transition-colors">support@procollored.com</a>
             </p>
           </div>
         </div>

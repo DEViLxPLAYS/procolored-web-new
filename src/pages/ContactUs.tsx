@@ -28,10 +28,8 @@ export default function ContactUs() {
             <div className="mb-10">
               <h2 className="text-[#1a1a1a] font-bold text-base mb-3">Contact Info</h2>
               <div className="space-y-2 text-[#4a4a4a] text-[15px]">
-                <p><strong className="text-[#1a1a1a]">US Phone:</strong> +1 877 717 1666</p>
-                <p><strong className="text-[#1a1a1a]">Phone Service:</strong> Monday to Sunday 9:00AM - 5:00PM (PT)</p>
-                <p><strong className="text-[#1a1a1a]">After-sales Email:</strong> <a href="mailto:Support@procolored.com" className="text-[#0066cc] hover:underline">Support@procolored.com</a></p>
-                <p><strong className="text-[#1a1a1a]">Pre-sales Email:</strong> <a href="mailto:Sales@procolored.com" className="text-[#0066cc] hover:underline">Sales@procolored.com</a></p>
+                <p><strong className="text-[#1a1a1a]">After-sales Email:</strong> <a href="mailto:support@procollored.com" className="text-[#0066cc] hover:underline">support@procollored.com</a></p>
+                <p><strong className="text-[#1a1a1a]">Pre-sales Email:</strong> <a href="mailto:support@procollored.com" className="text-[#0066cc] hover:underline">support@procollored.com</a></p>
               </div>
             </div>
 
@@ -54,25 +52,14 @@ export default function ContactUs() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Country *</label>
-                  <select className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm appearance-none bg-white focus:outline-none focus:border-red-500 transition-colors">
-                    <option value="">Please select</option>
-                    <option value="us">United States</option>
-                    <option value="ca">Canada</option>
-                    <option value="uk">United Kingdom</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Phone</label>
-                  <div className="flex border border-gray-300 rounded-md overflow-hidden focus-within:border-red-500 transition-colors">
-                    <div className="bg-gray-50 flex items-center px-3 border-r border-gray-300 gap-1.5 shrink-0 text-sm font-medium">
-                      🇺🇸 +1
-                    </div>
-                    <input type="tel" placeholder="201-555-0123" className="w-full px-4 py-2.5 text-sm focus:outline-none" />
-                  </div>
-                </div>
+              <div>
+                <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Country *</label>
+                <select className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm appearance-none bg-white focus:outline-none focus:border-red-500 transition-colors">
+                  <option value="">Please select</option>
+                  <option value="us">United States</option>
+                  <option value="ca">Canada</option>
+                  <option value="uk">United Kingdom</option>
+                </select>
               </div>
 
               <div>
