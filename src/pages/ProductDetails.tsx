@@ -6,7 +6,7 @@ import { useCart } from '../context/CartContext';
 
 export default function ProductDetails() {
   const { slug } = useParams();
-  const product = products.find(p => p.slug === slug || p.id === slug);
+  const product = products.find(p => p.id === slug);
   const { addToCart } = useCart();
 
   const [activeImage, setActiveImage] = useState(0);
@@ -60,7 +60,7 @@ export default function ProductDetails() {
     }
     addToCart({
       id: product.id,
-      name: product.name,
+      name: product.title,
       price: product.price,
       image: product.image,
       quantity: quantity
@@ -69,9 +69,8 @@ export default function ProductDetails() {
 
   return (
     <div className="bg-white font-sans">
-      {/* Breadcrumb Navigation */}
       <div className="max-w-7xl mx-auto px-4 py-4 text-sm text-gray-500 font-medium border-b border-gray-100">
-        <Link to="/" className="hover:text-black hover:underline">Home</Link> &gt; {product.name}
+        <Link to="/" className="hover:text-black hover:underline">Home</Link> &gt; {product.title}
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -81,7 +80,7 @@ export default function ProductDetails() {
             <div className="relative border border-gray-200 rounded-xl overflow-hidden mb-4 bg-gray-50 flex items-center justify-center p-8 h-[500px]">
               <img 
                 src={images[activeImage]} 
-                alt={product.name} 
+                alt={product.title} 
                 className="w-full h-full object-contain"
               />
               <button 
@@ -112,7 +111,7 @@ export default function ProductDetails() {
             </div>
 
             {/* Supplied Items Box - Generic render if it's a printer */}
-            {product.sections.includes('DTF Printer') && (
+            {product.filters?.collection === 'DTF Printer' && (
               <div className="mt-8 bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100">
                 <h4 className="font-bold text-lg mb-4 text-[#1a1a1a]">Printer Supplies</h4>
                 <div className="grid grid-cols-2 gap-4 text-sm font-medium">
@@ -132,7 +131,7 @@ export default function ProductDetails() {
           {/* Right Column: Product Info */}
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold text-[#1a1a1a] mb-3 leading-tight">
-              {product.name}
+              {product.title}
             </h1>
             
             <div className="flex items-center gap-2 mb-6">
@@ -151,11 +150,13 @@ export default function ProductDetails() {
               )}
             </div>
             
-            {product.badge && product.savings && (
+            {product.badge && product.originalPrice && (
               <p className="text-sm font-semibold text-red-600 mb-6 flex items-center gap-1">
                 <span className="bg-red-100 text-red-600 px-1 py-0.5 rounded text-[10px] transform -translate-y-px">🔥</span>
                 {product.badge.replace('⭐ ', '').replace('🆕 ', '')}
-                <span className="text-gray-500 font-medium ml-1">(-{product.savings})</span>
+                <span className="text-gray-500 font-medium ml-1">
+                  (Save Rs.{(parseFloat(product.originalPrice.replace(/[^0-9.]/g, '')) - parseFloat(product.price.replace(/[^0-9.]/g, ''))).toLocaleString('en-IN', {minimumFractionDigits: 0})})
+                </span>
               </p>
             )}
 
@@ -187,7 +188,7 @@ export default function ProductDetails() {
             )}
 
              <p className="text-[#1a1a1a] mb-8 font-medium leading-relaxed">
-               Experience the pinnacle of printing technology with the {product.name}. Designed for 
+               Experience the pinnacle of printing technology with the {product.title}. Designed for 
                high-performance, consistency, and stunning output quality natively synced with the best consumables on the market.
              </p>
 
@@ -208,7 +209,7 @@ export default function ProductDetails() {
                 onClick={handleAddToCart}
                 className="flex-1 bg-[#1a1a1a] text-white rounded-lg h-14 font-bold text-lg hover:bg-[#E85A24] transition-colors shadow-lg active:scale-[0.98]"
               >
-                {product.name.includes('Option') ? 'Select Options' : 'Add to Cart'}
+                {product.buttonText || 'Add to Cart'}
               </button>
             </div>
           </div>

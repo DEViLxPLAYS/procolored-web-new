@@ -1,0 +1,10 @@
+
+> my-app@0.0.0 build
+> tsc -b && vite build
+
+src/components/Layout.tsx(50,22): error TS2339: Property 'sections' does not exist on type 'Product'.
+src/components/Layout.tsx(239,63): error TS2339: Property 'slug' does not exist on type 'Product'.
+src/components/Layout.tsx(241,63): error TS2339: Property 'name' does not exist on type 'Product'.
+src/components/Layout.tsx(248,143): error TS2339: Property 'name' does not exist on type 'Product'.
+src/data/products.ts(695,7): error TS2820: Type '"Width: 13\\\"(330mm)"' is not assignable to type '"Width: 8.2\"(210mm)" | "Width: 6.7\"(170mm)" | "Width: 11.3\"(287mm)" | "Width: 11.8\"(300mm)" | "Width: 13\"(330mm)" | null'. Did you mean '"Width: 13\"(330mm)"'?
+src/pages/Collections.tsx(2,69): error TS6133: 'X' is declared but its value is never read.

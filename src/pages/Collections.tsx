@@ -1,8 +1,10 @@
 import { useState, useMemo } from 'react';
-import { ChevronRight, ChevronLeft, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronRight, ChevronLeft, SlidersHorizontal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { products } from '../data/products';
+import { Switch } from '@/components/ui/switch';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 const categoryMap: Record<string, string> = {
   'all': 'All',
@@ -27,14 +29,14 @@ const filterGroups = [
   ] },
   { id: 'resolution', title: 'Resolution', options: ['1440*1400 DPI (8 Pass)', '720*1440 DPI (16 Pass)', '720*1440 DPI (16 PASS)'] },
   { id: 'printSpeed', title: 'Print Speed', options: [
-    'Letter/A4: 4.5min', 'Letter/A4: 7min', 'Letter/A4: 10min', 'Letter/A4: 12.5min',
-    'Letter/A4: 14min', 'Letter/A4: 23 min', 'Letter/A4: 6min', 'Letter/A4: 7.5min', 'Letter/A4: 8~9min'
+    'Letter/A4: 4.5min', 'Letter/A4: 6min', 'Letter/A4: 7min', 'Letter/A4: 7.5min', 
+    'Letter/A4: 8~9min', 'Letter/A4: 10min', 'Letter/A4: 12.5min', 'Letter/A4: 14min', 'Letter/A4: 23 min'
   ] },
   { id: 'printerHead', title: 'Printer Head', options: ['L800', 'L1800', 'LH-500', 'R1390', 'TX800', 'XP600'] },
   { id: 'substrateThickness', title: 'Substrate Thickness Allows', options: [
     '0-0.059" (0-15mm)', '0-4.33" (0-110mm)', '0-5.51" (0-140mm)'
   ] },
-  { id: 'consumables', title: 'Consumables', options: ['Ink', 'Film', 'Powder', 'Coatings', 'Other liquids'] },
+  { id: 'consumablesType', title: 'Consumables', options: ['Ink', 'Film', 'Powder', 'Coatings', 'Other liquids'] },
   { id: 'machineCategory', title: 'Machine Category', options: ['K13 Lite White', 'K13 Lite Pink', 'P13 Series', 'F13 Pro Series', 'F13 Series', 'F8 Series'] },
   { id: 'consumablesCategory', title: 'Consumables Category', options: ['DTF Consumables', 'UV DTF Consumables', 'UV Consumables', 'DTG Consumables'] }
 ];
@@ -54,13 +56,13 @@ export default function Collections() {
     printSpeed: true,
     printerHead: true,
     substrateThickness: true,
-    consumables: true,
+    consumablesType: true,
     machineCategory: true,
     consumablesCategory: true,
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 32;
+  const itemsPerPage = 21;
 
   const toggleSection = (id: string) => {
     setOpenSections(prev => ({ ...prev, [id]: !prev[id] }));
@@ -86,7 +88,7 @@ export default function Collections() {
   // Base list of products filtered by the route category (e.g. /collections/dtf-printer)
   const categoryProducts = useMemo(() => {
     if (currentCategoryName === 'All') return products;
-    return products.filter(p => p.sections.includes(currentCategoryName));
+    return products.filter(p => p.filters?.collection === currentCategoryName);
   }, [currentCategoryName]);
 
   // The filtered products array applying all checkbox dimensions
@@ -97,9 +99,11 @@ export default function Collections() {
         const activeValues = searchParams.getAll(group.id);
         if (activeValues.length > 0) {
           if (group.id === 'inStock') {
-             if (activeValues.includes('In stock') && !product.inStock) match = false;
+             if (activeValues.includes('In stock') && (!product.filters?.availability || product.filters.availability !== 'in-stock')) match = false;
           } else {
-             if (!activeValues.includes(product[group.id])) match = false;
+             // OR logic within section: Product must match AT LEAST ONE of the active values in this group
+             const productVal = product.filters?.[group.id];
+             if (!activeValues.includes(productVal)) match = false;
           }
         }
       }
@@ -109,12 +113,33 @@ export default function Collections() {
 
   // Compute exact counts for all checkboxes based on categoryProducts (unfiltered by other checkboxes as standard, or intersected? 
   // User says "Numbers must be accurate". We'll compute total matches across root category.
-  const getFilterCount = (filterId: string, option: string) => {
-    return categoryProducts.filter((product: any) => {
-       if (filterId === 'inStock') {
-         return option === 'In stock' ? product.inStock : !product.inStock;
+  // Compute exact counts for all checkboxes based on categoryProducts
+  // We compute cross-group AND logic, but ignore the current group to support OR logic counting
+  const getFilterCount = (groupId: string, option: string) => {
+    // 1. Filter by all OTHER active groups
+    const crossGroupFiltered = categoryProducts.filter((product: any) => {
+      let m = true;
+      for (const g of filterGroups) {
+        if (g.id === groupId) continue; // Ignore the group we are counting for
+        const activeValues = searchParams.getAll(g.id);
+        if (activeValues.length > 0) {
+          if (g.id === 'inStock') {
+            if (activeValues.includes('In stock') && (!product.filters?.availability || product.filters.availability !== 'in-stock')) m = false;
+          } else {
+            const productVal = product.filters?.[g.id];
+            if (!activeValues.includes(productVal)) m = false;
+          }
+        }
+      }
+      return m;
+    });
+
+    // 2. Count matches within the remaining products
+    return crossGroupFiltered.filter((product: any) => {
+       if (groupId === 'inStock') {
+         return option === 'In stock' ? product.filters?.availability === 'in-stock' : product.filters?.availability !== 'in-stock';
        }
-       return product[filterId] === option;
+       return product.filters?.[groupId] === option;
     }).length;
   };
 
@@ -126,95 +151,271 @@ export default function Collections() {
 
   return (
     <div className="max-w-[1440px] mx-auto px-4 md:px-8 py-8 font-sans">
-      <div className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-        <Link to="/" className="hover:text-black hover:underline transition-colors">Home</Link>
-        <span className="text-gray-300">/</span>
-        <span className="text-gray-500">Shop</span>
-        <span className="text-gray-300">/</span>
-        <span className="text-black">{currentCategoryName}</span>
+      <div className="flex items-center gap-2 text-sm mb-[30px] font-medium text-gray-500">
+        <Link to="/" className="hover:text-black hover:underline transition-colors decoration-gray-400 underline-offset-4 underline">Home</Link>
+        <span className="text-gray-300 font-light">/</span>
+        <Link to="/collections/all" className="hover:text-black hover:underline transition-colors decoration-gray-400 underline-offset-4 underline">Shop</Link>
+        <span className="text-gray-300 font-light">/</span>
+        <span className="text-black font-normal underline decoration-black underline-offset-4">{currentCategoryName}</span>
       </div>
 
-      <h1 className="text-[32px] font-bold text-black mb-10">{currentCategoryName}</h1>
+      <h1 className="text-[32px] font-bold text-black mb-[44px]">{currentCategoryName}</h1>
 
       <div className="flex flex-col lg:flex-row gap-10 items-start">
-        {/* Left Sidebar Filters */}
-        <div className="w-full lg:w-[300px] flex-shrink-0">
+        
+        {/* Mobile Filter Button and Drawer Layout */}
+        <div className="lg:hidden w-full flex items-center justify-between mb-4">
+           <Sheet>
+             <SheetTrigger className="flex items-center gap-2 border border-black rounded-full px-5 py-2 text-sm font-medium hover:bg-gray-50 transition-colors">
+               <SlidersHorizontal className="w-4 h-4" />
+               Filter and sort
+             </SheetTrigger>
+             <SheetContent side="bottom" className="h-[85vh] p-0 rounded-t-2xl flex flex-col bg-white overflow-hidden">
+               <SheetHeader className="p-4 border-b flex flex-row items-center justify-between">
+                 <SheetTitle>Filter and sort</SheetTitle>
+               </SheetHeader>
+               <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                  <div className="space-y-0">
+                    {/* Collection Mobile */}
+                    <div className="border-b border-gray-100 py-3">
+                      <button onClick={() => toggleSection('collection')} className="flex items-center justify-between w-full text-left font-bold text-[15px] text-black">
+                        Collection
+                        <ChevronDown className={`w-[18px] h-[18px] text-gray-400 transition-transform duration-200 ${openSections.collection ? 'rotate-180' : ''}`} />
+                      </button>
+                      <div 
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${openSections.collection ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}
+                      >
+                        <div className="space-y-[14px] text-[15px] pb-2">
+                          {Object.entries(categoryMap).filter(([k]) => k !== 'whats-new' && k !== 'extended-warranty').map(([k, v]) => {
+                            const isChecked = currentCategoryName === v;
+                            const targetUrl = isChecked || v === 'All'
+                              ? `/collections/all${searchParams.toString() ? '?' + searchParams.toString() : ''}`
+                              : `/collections/${k}${searchParams.toString() ? '?' + searchParams.toString() : ''}`;
+
+                            return (
+                              <Link 
+                                key={k} 
+                                to={targetUrl}
+                                className="flex items-center gap-3 group cursor-pointer"
+                              >
+                                <div className={`relative flex items-center justify-center w-[16px] h-[16px] rounded-[3px] border ${isChecked ? 'border-[#E85A24] bg-[#E85A24]' : 'border-gray-300 bg-white'}`}>
+                                  {isChecked && (
+                                    <svg className="w-[10px] h-[10px] text-white absolute" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg>
+                                  )}
+                                </div>
+                                <span className={`text-[14px] transition-colors flex-1 font-normal ${isChecked ? 'text-black' : 'text-[#333333] group-hover:text-black'}`}>
+                                  {v}
+                                </span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                    {/* Mobile Dynamic Filters Options */}
+                    {filterGroups.map(group => {
+                      // If the whole entire group has no matching products in the base category, hide it.
+                      // We don't hide individual options that are 0 anymore so they can show the unavailable cursor.
+                      const baseGroupCount = group.options.reduce((acc, opt) => acc + categoryProducts.filter((p:any) => {
+                        const productVal = p.filters?.[group.id];
+                        if (Array.isArray(productVal)) {
+                          return productVal.includes(opt);
+                        }
+                        return productVal === opt;
+                      }).length, 0);
+                      if (baseGroupCount === 0 && group.id !== 'inStock') return null;
+
+                      return (
+                        <div key={group.id} className="border-b border-gray-100 py-4">
+                          <button onClick={() => toggleSection(group.id)} className="flex items-center justify-between w-full text-left font-bold text-[15px] text-black">
+                            {group.title}
+                            <ChevronDown className={`w-[18px] h-[18px] text-gray-400 transition-transform duration-200 ${openSections[group.id] ? 'rotate-180' : ''}`} />
+                          </button>
+                          <div 
+                            className={`overflow-hidden transition-all duration-300 ease-in-out ${openSections[group.id] ? 'max-h-[800px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}
+                          >
+                            <div className="space-y-[14px] pb-2">
+                              {group.options.map((option, idx) => {
+                                const count = getFilterCount(group.id, option);
+                                const isChecked = searchParams.getAll(group.id).includes(option);
+                                
+                                if (group.id === 'inStock') {
+                                  return (
+                                    <label key={idx} className={`flex items-center gap-3 ${count === 0 && !isChecked ? 'opacity-50' : 'cursor-pointer'} group`}>
+                                      <Switch 
+                                        checked={isChecked}
+                                        onCheckedChange={() => handleCheckboxChange(group.id, option)}
+                                        className="data-[state=checked]:bg-[#4294ff]" 
+                                      />
+                                      <span className="text-[15px] text-[#333333] transition-colors flex-1">
+                                        {option}
+                                      </span>
+                                    </label>
+                                  )
+                                }
+
+                                return (
+                                  <label 
+                                    key={idx} 
+                                    onClick={(e) => { e.preventDefault(); handleCheckboxChange(group.id, option); }}
+                                    className={`flex items-center gap-3 ${count === 0 && !isChecked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer group'}`}
+                                  >
+                                    <div className={`relative flex items-center justify-center w-[16px] h-[16px] rounded-[3px] border ${isChecked ? 'border-[#E85A24] bg-[#E85A24]' : 'border-gray-300 bg-white'}`}>
+                                       {isChecked && (
+                                         <svg className="w-[10px] h-[10px] text-white absolute" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                           <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                         </svg>
+                                       )}
+                                    </div>
+                                    <span className="text-[14px] text-[#333333] transition-colors flex-1 font-normal">
+                                      {option}
+                                      <span className="ml-[6px] text-[#888888] text-[13px]">({count})</span>
+                                    </span>
+                                  </label>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+               </div>
+               <div className="p-4 border-t flex gap-4 bg-white mt-auto">
+                  <button onClick={clearFilters} className="flex-1 py-3 text-sm font-bold border border-gray-300 rounded hover:bg-gray-50 transition-colors">Clear</button>
+                  <button className="flex-1 py-3 text-sm font-bold bg-[#E85A24] hover:bg-[#d44e1e] text-white rounded transition-colors duration-200">Apply</button>
+               </div>
+             </SheetContent>
+           </Sheet>
+           <span className="text-sm text-gray-500">{filteredProducts.length} products</span>
+        </div>
+
+        {/* Left Sidebar Filters Desktop */}
+        <div className="hidden lg:block w-[240px] flex-shrink-0">
           
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="font-bold text-lg text-black">Filter</h2>
-            <span className="text-sm text-gray-500">{filteredProducts.length} products</span>
+          {/* Only show Desktop "Filter" header, hide on lg and above */}
+          <div className="hidden lg:flex items-center justify-between mb-2">
+            <h2 className="text-[32px] font-bold text-black opacity-0">...</h2> {/* Spacer for alignment */}
           </div>
 
           <div className="space-y-0">
             {/* Collection Navigation Filters */}
-            <div className="border-b border-gray-100 py-4">
-              <button onClick={() => toggleSection('collection')} className="flex items-center justify-between w-full text-left font-bold text-[15px] mb-3">
+            <div className="border-b border-gray-100 py-3">
+              <button onClick={() => toggleSection('collection')} className="flex items-center justify-between w-full text-left font-bold text-[15px] text-black">
                 Collection
-                {openSections.collection ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                <ChevronDown className={`w-[18px] h-[18px] text-gray-400 transition-transform duration-200 ${openSections.collection ? 'rotate-180' : ''}`} />
               </button>
-              {openSections.collection && (
-                <div className="space-y-3 mt-4 text-[14px]">
-                  {Object.entries(categoryMap).filter(([k]) => k !== 'all').map(([k, v]) => (
-                    <Link 
-                      key={k} 
-                      to={`/collections/${k}${searchParams.toString() ? '?' + searchParams.toString() : ''}`}
-                      className={`block ${currentCategoryName === v ? 'text-[#E85A24] font-medium' : 'text-gray-600 hover:text-black'} transition-colors pl-4 border-l-2 ${currentCategoryName === v ? 'border-[#E85A24]' : 'border-transparent'}`}
-                    >
-                      {v}
-                    </Link>
-                  ))}
+              <div 
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${openSections.collection ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}
+              >
+                <div className="space-y-[14px] text-[15px] pb-2">
+                  {Object.entries(categoryMap).filter(([k]) => k !== 'whats-new' && k !== 'extended-warranty').map(([k, v]) => {
+                    const isChecked = currentCategoryName === v;
+                    const targetUrl = isChecked || v === 'All'
+                      ? `/collections/all${searchParams.toString() ? '?' + searchParams.toString() : ''}`
+                      : `/collections/${k}${searchParams.toString() ? '?' + searchParams.toString() : ''}`;
+
+                    return (
+                      <Link 
+                        key={k} 
+                        to={targetUrl}
+                        className="flex items-center gap-3 group cursor-pointer"
+                      >
+                        <div className={`relative flex items-center justify-center w-[16px] h-[16px] rounded-[3px] border ${isChecked ? 'border-[#E85A24] bg-[#E85A24]' : 'border-gray-300 bg-white'}`}>
+                          {isChecked && (
+                            <svg className="w-[10px] h-[10px] text-white absolute" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
+                        </div>
+                        <span className={`text-[14px] transition-colors flex-1 font-normal ${isChecked ? 'text-black' : 'text-[#333333] group-hover:text-black'}`}>
+                          {v}
+                        </span>
+                      </Link>
+                    );
+                  })}
                 </div>
-              )}
+              </div>
             </div>
 
             {/* Dynamic Filters Options */}
             {filterGroups.map(group => {
-              const totalInGroup = group.options.reduce((acc, opt) => acc + getFilterCount(group.id, opt), 0);
-              // Hide group if no products in this category support these filters (optional, but cleaner)
-              if (totalInGroup === 0 && group.id !== 'inStock') return null;
+              // Hide group ONLY if no products in this entire base category support these filters
+              // E.g. in "Consumables" category, we shouldn't show "Printer Head".
+              const baseGroupCount = group.options.reduce((acc, opt) => acc + categoryProducts.filter((p:any) => p.filters?.[group.id] === opt).length, 0);
+              if (baseGroupCount === 0 && group.id !== 'inStock') return null;
 
               return (
                 <div key={group.id} className="border-b border-gray-100 py-4">
-                  <button onClick={() => toggleSection(group.id)} className="flex items-center justify-between w-full text-left font-bold text-[15px] mb-3">
+                  <button onClick={() => toggleSection(group.id)} className="flex items-center justify-between w-full text-left font-bold text-[15px] text-black">
                     {group.title}
-                    {openSections[group.id] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    <ChevronDown className={`w-[18px] h-[18px] text-gray-400 transition-transform duration-200 ${openSections[group.id] ? 'rotate-180' : ''}`} />
                   </button>
-                  {openSections[group.id] && (
-                    <div className="space-y-3 mt-4">
+                  <div 
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${openSections[group.id] ? 'max-h-[800px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}
+                  >
+                    <div className="space-y-[14px] pb-2">
                       {group.options.map((option, idx) => {
                         const count = getFilterCount(group.id, option);
-                        if (count === 0 && group.id !== 'inStock') return null;
                         const isChecked = searchParams.getAll(group.id).includes(option);
+                        
+                        // Treat Availability explicitly as a toggle switch
+                        if (group.id === 'inStock') {
+                          return (
+                            <label key={idx} className={`flex items-center gap-3 ${count === 0 && !isChecked ? 'opacity-50' : 'cursor-pointer'} group`}>
+                              <Switch 
+                                checked={isChecked}
+                                onCheckedChange={() => handleCheckboxChange(group.id, option)}
+                                className="data-[state=checked]:bg-[#4294ff]" 
+                              />
+                              <span className="text-[15px] text-[#333333] transition-colors flex-1">
+                                {option}
+                              </span>
+                            </label>
+                          )
+                        }
+
                         return (
-                          <label key={idx} className="flex items-center gap-3 cursor-pointer group">
-                            <input 
-                              type="checkbox" 
-                              checked={isChecked}
-                              onChange={() => handleCheckboxChange(group.id, option)}
-                              className="rounded-sm border-gray-300 w-[18px] h-[18px] text-[#E85A24] focus:ring-0 focus:ring-offset-0 transition-all cursor-pointer" 
-                            />
-                            <span className={`text-[14px] ${isChecked ? 'text-black' : 'text-gray-600'} group-hover:text-black transition-colors flex-1`}>
+                          <label 
+                            key={idx} 
+                            onClick={(e) => { e.preventDefault(); handleCheckboxChange(group.id, option); }}
+                            title={count === 0 && !isChecked ? 'This combination has zero results' : undefined}
+                            className={`flex items-center gap-3 ${count === 0 && !isChecked ? 'cursor-not-allowed opacity-50' : 'cursor-pointer group'}`}
+                          >
+                            {/* Custom exact square checkbox */}
+                            <div className={`relative flex items-center justify-center w-[16px] h-[16px] rounded-[3px] border ${isChecked ? 'border-[#E85A24] bg-[#E85A24]' : 'border-gray-300 bg-white'}`}>
+                               {isChecked && (
+                                 <svg className="w-[10px] h-[10px] text-white absolute" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                   <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                 </svg>
+                               )}
+                            </div>
+                            <span className="text-[14px] text-[#333333] transition-colors flex-1 font-normal">
                               {option}
-                              {group.id !== 'inStock' && <span className="ml-1 text-gray-400">({count})</span>}
+                              <span className="ml-[6px] text-[#888888] text-[13px]">({count})</span>
                             </span>
                           </label>
                         );
                       })}
                     </div>
-                  )}
+                  </div>
                 </div>
               );
             })}
           </div>
 
-          <div className="flex gap-4 mt-8">
-            <button onClick={clearFilters} className="flex-1 py-3 text-sm font-bold border border-gray-300 rounded hover:bg-gray-50 transition-colors">Clear</button>
-            <button className="flex-1 py-3 text-sm font-bold bg-[#E85A24] hover:bg-[#d44e1e] text-white rounded transition-colors duration-200">Apply</button>
+          <div className="flex flex-col gap-3 mt-8 pb-5">
+             {searchParams.toString().length > 0 ? (
+                // Only show clear if there are search filters applied
+               <button onClick={clearFilters} className="text-sm text-gray-600 underline font-medium hover:text-black self-start">Clear all</button>
+             ) : null}
           </div>
         </div>
 
         {/* Right Side Products Grid */}
-        <div className="flex-1 w-full mt-2">
+        <div className="flex-1 w-full m-0 min-w-0">
           <div className="flex justify-between items-center mb-6">
             <span className="text-sm text-gray-500 font-medium">Showing {startCount} - {endCount} of {filteredProducts.length} products</span>
             <div className="flex items-center gap-4">
@@ -235,38 +436,63 @@ export default function Collections() {
               <button onClick={clearFilters} className="mt-4 text-[#E85A24] hover:underline">Clear all filters</button>
             </div>
           ) : (
-             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 gap-y-10">
-               {currentProducts.map((product) => (
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 gap-y-10">
+               {currentProducts.map((product) => {
+                 // Calculate savings
+                 let savingsAmount = null;
+                 if (product.originalPrice && product.originalPrice !== '——') {
+                   const originalRaw = product.originalPrice.replace(/[^0-9.]/g, '');
+                   const priceRaw = product.price.replace(/[^0-9.]/g, '');
+                   const originalNum = parseFloat(originalRaw);
+                   const priceNum = parseFloat(priceRaw);
+                   if (!isNaN(originalNum) && !isNaN(priceNum) && originalNum > priceNum) {
+                     savingsAmount = 'Save Rs.' + (originalNum - priceNum).toLocaleString('en-IN', {minimumFractionDigits: 0});
+                   }
+                 }
+
+                 return (
                  <Link 
-                   to={`/products/${product.slug}`} 
+                   to={`/products/${product.id}`} 
                    key={product.id} 
-                   className="group block"
+                   className="group flex flex-col h-full bg-white relative"
                  >
-                   <div className="relative mb-3 aspect-[4/3] bg-gray-50 flex items-center justify-center p-4 overflow-hidden rounded-t-sm">
+                   <div className="relative mb-3 aspect-[4/3] bg-gray-50 flex items-center justify-center p-4 overflow-hidden rounded-sm">
                      <img 
                        src={product.image} 
-                       alt={product.name}
-                       className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                       alt={product.title}
+                       className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500 mix-blend-multiply"
                      />
                      {product.badge && (
-                       <Badge className={`absolute top-3 left-3 px-2 py-1 text-[11px] font-bold rounded-sm border-none shadow-none text-white ${product.badge === 'NEW ARRIVAL' ? 'bg-[#98db51]' : 'bg-[#E85A24]'}`}>
+                       <Badge className={`absolute top-2 left-2 px-2 py-1 text-[11px] font-bold rounded-sm border-none shadow-none text-white ${product.badge.includes('New') || product.badge.includes('Sale') ? 'bg-[#E85A24]' : 'bg-[#4294ff]'}`}>
                          {product.badge}
                        </Badge>
                      )}
                    </div>
-                   <div className="px-1">
+                   <div className="px-1 flex-1 flex flex-col">
                      <h3 className="font-medium text-[15px] leading-snug mb-2 line-clamp-2 text-black group-hover:text-[#E85A24] transition-colors">
-                       {product.name}
+                       {product.title}
                      </h3>
-                     <div className="flex items-end gap-2">
-                       <span className="text-[#E85A24] font-bold text-[16px]">{product.price}</span>
-                       {product.originalPrice && (
-                         <span className="text-gray-400 text-sm line-through pb-0.5">{product.originalPrice}</span>
-                       )}
+                     <div className="flex flex-col gap-1 mt-auto">
+                       <div className="flex items-end gap-2 flex-wrap">
+                         <span className="text-[#E85A24] font-bold text-[16px]">{product.price}</span>
+                         {product.originalPrice && (
+                           <span className="text-gray-400 text-[13px] line-through pb-0.5">{product.originalPrice}</span>
+                         )}
+                         {savingsAmount && (
+                           <span className="text-xs font-bold text-[#98db51] bg-[#f2faea] px-1.5 py-0.5 rounded-sm">{savingsAmount}</span>
+                         )}
+                       </div>
+                       <button className={`mt-3 w-full py-2.5 px-4 text-sm font-bold text-center rounded transition-colors duration-200 ${
+                         product.buttonStyle === 'outline' 
+                           ? 'border border-[#E85A24] text-[#E85A24] hover:bg-[#E85A24] hover:text-white' 
+                           : 'bg-[#E85A24] text-white hover:bg-[#d44e1e] border border-[#E85A24]'
+                       }`}>
+                         {product.buttonText}
+                       </button>
                      </div>
                    </div>
                  </Link>
-               ))}
+               )})}
              </div>
           )}
 

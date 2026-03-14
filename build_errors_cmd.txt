@@ -1,0 +1,12 @@
+src/pages/ContactUs.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/F13Product.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/F13Product.tsx(345,33): error TS2353: Object literal may only specify known properties, and 'file' does not exist in type 'Config'.
+src/pages/F13Product.tsx(386,87): error TS2353: Object literal may only specify known properties, and 'file' does not exist in type 'Config'.
+src/pages/F13Product.tsx(404,87): error TS2353: Object literal may only specify known properties, and 'file' does not exist in type 'Config'.
+src/pages/F13Product.tsx(442,83): error TS2353: Object literal may only specify known properties, and 'file' does not exist in type 'Config'.
+src/pages/OurBrand.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/PrivacyPolicy.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/RefundPolicy.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/ShippingPolicy.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/SiphonCirculation.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/TermsOfService.tsx(1,1): error TS6133: 'React' is declared but its value is never read.

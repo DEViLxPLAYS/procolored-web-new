@@ -1,0 +1,68 @@
+﻿
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\gen.cjs
+  231:18  error  Parsing error: Expecting Unicode escape sequence \uXXXX
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\gen.mjs
+  231:18  error  Parsing error: Expecting Unicode escape sequence \uXXXX
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\Layout.tsx
+   5:33  error    'Linkedin' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  81:39  error    Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `getPreviewProducts`, but the source dependencies were [hoveredCategory]. Inferred different dependency than source.
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\Layout.tsx:81:39
+  79 |   };
+  80 |
+> 81 |   const rightColumnProducts = useMemo(() => getPreviewProducts(), [hoveredCategory]);
+     |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not preserve existing manual memoization
+  82 |
+  83 |   const handleDropdownEnter = (dropdown: string) => {
+  84 |     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);  react-hooks/preserve-manual-memoization
+  81:67  warning  React Hook useMemo has a missing dependency: 'getPreviewProducts'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       react-hooks/exhaustive-deps
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\ui\badge.tsx
+  46:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\ui\button-group.tsx
+  82:3  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\ui\button.tsx
+  62:18  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\ui\form.tsx
+  159:3  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\ui\navigation-menu.tsx
+  167:3  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\ui\sidebar.tsx
+  611:26  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\ui\sidebar.tsx:611:26
+  609 |   // Random width between 50 to 90%.
+  610 |   const width = React.useMemo(() => {
+> 611 |     return `${Math.floor(Math.random() * 40) + 50}%`
+      |                          ^^^^^^^^^^^^^ Cannot call impure function
+  612 |   }, [])
+  613 |
+  614 |   return (  react-hooks/purity
+  725:3   error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react-refresh/only-export-components
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\components\ui\toggle.tsx
+  45:18  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\context\CartContext.tsx
+  95:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Administrator\Downloads\Compressed\procolored-web-main_2\procolored-web-main\src\pages\Collections.tsx
+   96:46   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  120:66   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  138:48   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  221:114  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  347:106  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Γ£û 19 problems (18 errors, 1 warning)
+

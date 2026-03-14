@@ -2,9 +2,27 @@ import { useState, useRef, useMemo } from 'react';
 import { 
   Search, User, ShoppingCart, ChevronDown, Menu, X, 
   ChevronRight, MessageCircle, Headphones, Globe,
-  Facebook, Twitter, Instagram, Youtube, Linkedin, 
+  Facebook, Instagram, Youtube, 
   MapPin, Award, Shield
 } from 'lucide-react';
+
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.04-.1z" />
+  </svg>
+);
+
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
+
+const PinterestIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.195 0 7.451 2.991 7.451 6.985 0 4.168-2.627 7.524-6.275 7.524-1.226 0-2.38-.638-2.774-1.391 0 0-.606 2.311-.753 2.877-.272 1.05-.884 2.179-1.375 2.981 1.08.334 2.227.514 3.415.514 6.621 0 11.988-5.368 11.988-11.988 0-6.62-5.367-11.987-11.988-11.987z" />
+  </svg>
+);
 import { Button } from '@/components/ui/button';
 import { Outlet, Link } from 'react-router-dom';
 import { products } from '../data/products';
@@ -30,7 +48,11 @@ const supportLinks = [
   { name: "Repair", path: "/repair" },
   { name: "Warranty", path: "/warranty" }
 ];
-const aboutUsLinks = ["Procolored Siphon Circulation", "Our Brand", "Contact US"];
+const aboutUsLinks = [
+  { name: "Procolored Siphon Circulation", path: "/pages/procolored-siphon-circulation" },
+  { name: "Our Brand", path: "/pages/our-brand" },
+  { name: "Contact US", path: "/pages/contact-us" }
+];
 
 export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,21 +64,19 @@ export default function Layout() {
   
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const getPreviewProducts = () => {
+  const rightColumnProducts = useMemo(() => {
     if (hoveredCategory === 'View All') {
       return products.slice(0, 4);
     }
     return products
-      .filter(p => p.sections.includes(hoveredCategory))
+      .filter(p => p.filters?.collection === hoveredCategory)
       .sort((a, b) => {
         if (a.badge === 'BEST SELLER' && b.badge !== 'BEST SELLER') return -1;
         if (b.badge === 'BEST SELLER' && a.badge !== 'BEST SELLER') return 1;
         return 0;
       })
       .slice(0, 4);
-  };
-
-  const rightColumnProducts = useMemo(() => getPreviewProducts(), [hoveredCategory]);
+  }, [hoveredCategory]);
 
   const handleDropdownEnter = (dropdown: string) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
@@ -78,6 +98,33 @@ export default function Layout() {
           className="w-full object-cover min-h-[90px] md:min-h-[110px]"
           style={{ display: 'block' }}
         />
+      </div>
+
+      {/* Top Utility Bar */}
+      <div className="hidden lg:flex justify-end items-center max-w-7xl mx-auto px-4 py-2 border-b border-gray-100 gap-6">
+        <div className="flex items-center gap-4">
+          <a href="https://www.facebook.com/Procolored" target="_blank" rel="noreferrer" className="text-gray-800 hover:text-red-600 transition-colors">
+            <Facebook className="w-[18px] h-[18px]" strokeWidth={2.5} />
+          </a>
+          <a href="https://x.com/Procoloredprint" target="_blank" rel="noreferrer" className="text-gray-800 hover:text-red-600 transition-colors">
+            <XIcon className="w-[16px] h-[16px]" />
+          </a>
+          <a href="https://www.instagram.com/procolored_printers" target="_blank" rel="noreferrer" className="text-gray-800 hover:text-red-600 transition-colors">
+            <Instagram className="w-[18px] h-[18px]" strokeWidth={2.5} />
+          </a>
+          <a href="https://www.youtube.com/c/Procoloredprofessionalprinter" target="_blank" rel="noreferrer" className="text-gray-800 hover:text-red-600 transition-colors">
+            <Youtube className="w-[20px] h-[20px]" strokeWidth={2.5} />
+          </a>
+          <a href="https://www.pinterest.com/procolored/" target="_blank" rel="noreferrer" className="text-gray-800 hover:text-red-600 transition-colors">
+            <PinterestIcon className="w-[18px] h-[18px]" />
+          </a>
+          <a href="https://www.tiktok.com/@procolored" target="_blank" rel="noreferrer" className="text-gray-800 hover:text-red-600 transition-colors">
+            <TikTokIcon className="w-[17px] h-[17px]" />
+          </a>
+        </div>
+        <div className="flex items-center gap-1.5 text-sm font-medium text-gray-800 border-l border-gray-200 pl-6 cursor-pointer hover:text-red-600 transition-colors">
+          <Globe className="w-4 h-4" /> United States
+        </div>
       </div>
 
       <header className="sticky top-0 z-[100] bg-white border-b border-gray-100 w-full" style={{position:'sticky', top:0}}>
@@ -150,9 +197,9 @@ export default function Layout() {
                       onMouseLeave={handleDropdownLeave}
                     >
                       {aboutUsLinks.map((link, idx) => (
-                        <a key={idx} href="#" className="block px-5 py-2.5 text-sm font-medium text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
-                          {link}
-                        </a>
+                        <Link key={idx} to={link.path} className="block px-5 py-2.5 text-sm font-medium text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
+                          {link.name}
+                        </Link>
                       ))}
                     </div>
                   )}
@@ -236,16 +283,16 @@ export default function Layout() {
               <div className="flex-1 p-6 relative flex flex-col">
                 <div className="grid grid-cols-4 gap-6">
                   {rightColumnProducts.map((product, pIdx) => (
-                    <Link key={pIdx} to={`/products/${product.slug}`} className="block text-center group">
+                    <Link key={pIdx} to={`/products/${product.id}`} className="block text-center group">
                       <div className="bg-gray-50 rounded-lg p-4 mb-3 group-hover:bg-gray-100 transition-colors h-36 flex items-center justify-center relative overflow-hidden">
-                        <img src={product.image} alt={product.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+                        <img src={product.image} alt={product.title} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                         {product.badge && (
                           <div className={`absolute top-2 left-2 px-1.5 py-0.5 text-[10px] uppercase font-bold text-white rounded-sm ${product.badge === 'NEW ARRIVAL' ? 'bg-[#98db51]' : 'bg-[#E85A24]'}`}>
                             {product.badge}
                           </div>
                         )}
                       </div>
-                      <p className="text-sm text-black font-semibold mt-1 group-hover:text-[#E85A24] transition-colors line-clamp-2">{product.name}</p>
+                      <p className="text-sm text-black font-semibold mt-1 group-hover:text-[#E85A24] transition-colors line-clamp-2">{product.title}</p>
                     </Link>
                   ))}
                   {rightColumnProducts.length === 0 && (
@@ -277,16 +324,26 @@ export default function Layout() {
               <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-semibold text-black">
                 <span>Support</span><ChevronRight className="w-4 h-4 text-gray-400" />
               </a>
-              <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-semibold text-black">
-                <span>About Us</span><ChevronRight className="w-4 h-4 text-gray-400" />
-              </a>
+              <div className="py-4 border-b border-gray-100">
+                <div className="flex items-center justify-between text-base font-semibold text-black mb-2">
+                  <span>About Us</span><ChevronDown className="w-4 h-4 text-gray-400" />
+                </div>
+                <div className="flex flex-col gap-2 pl-4 mt-2">
+                  {aboutUsLinks.map((link, idx) => (
+                    <Link key={idx} to={link.path} className="text-sm text-gray-600 hover:text-[#E85A24] py-1">
+                      {link.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
               <div className="flex items-center gap-5 mt-8 justify-center">
-                <Facebook className="w-5 h-5 text-black" />
-                <Globe className="w-5 h-5 text-black" />
-                <Instagram className="w-5 h-5 text-black" />
-                <Youtube className="w-5 h-5 text-black" />
-                <Linkedin className="w-5 h-5 text-black" />
+                <a href="https://www.facebook.com/Procolored" target="_blank" rel="noreferrer"><Facebook className="w-5 h-5 text-black hover:text-[#E85A24] transition-colors" /></a>
+                <a href="https://x.com/Procoloredprint" target="_blank" rel="noreferrer"><XIcon className="w-4 h-4 mt-0.5 text-black hover:text-[#E85A24] transition-colors" /></a>
+                <a href="https://www.instagram.com/procolored_printers" target="_blank" rel="noreferrer"><Instagram className="w-5 h-5 text-black hover:text-[#E85A24] transition-colors" /></a>
+                <a href="https://www.youtube.com/c/Procoloredprofessionalprinter" target="_blank" rel="noreferrer"><Youtube className="w-6 h-6 text-black hover:text-[#E85A24] transition-colors" /></a>
+                <a href="https://www.pinterest.com/procolored/" target="_blank" rel="noreferrer"><PinterestIcon className="w-5 h-5 text-black hover:text-[#E85A24] transition-colors" /></a>
+                <a href="https://www.tiktok.com/@procolored" target="_blank" rel="noreferrer"><TikTokIcon className="w-4 h-4 text-black hover:text-[#E85A24] transition-colors" /></a>
               </div>
               <div className="flex items-center justify-center gap-2 mt-4 text-sm font-medium text-gray-600">
                 <Globe className="w-4 h-4" /> United States
@@ -337,11 +394,24 @@ export default function Layout() {
                 </Button>
               </div>
               <div className="flex gap-4 mt-4">
-                <Facebook className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
-                <Twitter className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
-                <Instagram className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
-                <Youtube className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
-                <Linkedin className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
+                <a href="https://www.facebook.com/Procolored" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors">
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a href="https://x.com/Procoloredprint" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black">
+                  <XIcon className="w-3.5 h-3.5" />
+                </a>
+                <a href="https://www.instagram.com/procolored_printers" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black">
+                  <Instagram className="w-4 h-4" />
+                </a>
+                <a href="https://www.youtube.com/c/Procoloredprofessionalprinter" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black pb-0.5">
+                  <Youtube className="w-4 h-4" />
+                </a>
+                <a href="https://www.pinterest.com/procolored/" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black">
+                  <PinterestIcon className="w-3.5 h-3.5" />
+                </a>
+                <a href="https://www.tiktok.com/@procolored" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black">
+                  <TikTokIcon className="w-3.5 h-3.5" />
+                </a>
               </div>
             </div>
           </div>
@@ -374,10 +444,10 @@ export default function Layout() {
             <div>
               <h4 className="font-bold mb-4 text-white">Company</h4>
               <ul className="space-y-2 text-sm font-medium text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Procolored Siphon Circulation</a></li>
+                <li><Link to="/pages/procolored-siphon-circulation" className="hover:text-white transition-colors">Procolored Siphon Circulation</Link></li>
                 <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Our Brand</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact US</a></li>
+                <li><Link to="/pages/our-brand" className="hover:text-white transition-colors">Our Brand</Link></li>
+                <li><Link to="/pages/contact-us" className="hover:text-white transition-colors">Contact US</Link></li>
               </ul>
             </div>
             <div>
@@ -400,10 +470,10 @@ export default function Layout() {
         
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex flex-wrap justify-center gap-4 text-xs font-medium text-gray-400 mb-4">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Shipping Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Refund Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+            <Link to="/pages/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/pages/shipping-policy" className="hover:text-white transition-colors">Shipping Policy</Link>
+            <Link to="/pages/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link>
+            <Link to="/pages/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
             <a href="#" className="hover:text-white transition-colors">Payment Methods</a>
             <a href="#" className="hover:text-white transition-colors">INTELLECTUAL PROPERTY RIGHTS</a>
           </div>

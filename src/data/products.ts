@@ -1,1828 +1,2430 @@
 export interface ProductFilter {
-  [key: string]: string;
+  collection: 'DTF Printer' | 'UV Printer' | 'UV DTF Printer' | 'DTG Printer' | 'Consumables' | 'Equipment' | 'Parts & Accessory' | 'Extended Warranty' | null;
+  availability: 'in-stock' | 'out-of-stock' | null;
+  printType: 'DTF' | 'DTG' | 'UV' | 'UV DTF' | null;
+  printSize: 'Width: 8.2"(210mm)' | 'Width: 6.7"(170mm)' | 'Width: 11.3"(287mm)' | 'Width: 11.8"(300mm)' | 'Width: 13"(330mm)' | null;
+  resolution: '1440*1400 DPI (8 Pass)' | '720*1440 DPI (16 Pass)' | null;
+  printSpeed: 'Letter/A4: 4.5min' | 'Letter/A4: 7min' | 'Letter/A4: 10min' | 'Letter/A4: 12.5min' | 'Letter/A4: 14min' | 'Letter/A4: 23 min' | null;
+  printerHead: 'L800' | 'L1800' | 'LH-500' | 'R1390' | 'TX800' | 'XP600' | null;
+  substrateThickness: '0-0.059" (0-15mm)' | '0-4.33" (0-110mm)' | '0-5.51" (0-140mm)' | null;
+  consumablesType: 'Ink' | 'Film' | 'Powder' | 'Coatings' | 'Other liquids' | null;
+  machineCategory: 'K13 Lite White' | 'K13 Lite Pink' | 'P13 Series' | 'F13 Pro Series' | 'F13 Series' | 'F8 Series' | null;
+  consumablesCategory: 'DTF Consumables' | 'UV DTF Consumables' | 'UV Consumables' | 'DTG Consumables' | null;
 }
 
 export interface Product {
   id: string;
-  slug: string;
-  name: string;
+  title: string;
   price: string;
   originalPrice: string | null;
-  savings: string | null;
-  badge: string | null;
   image: string;
-  sections: string[];
+  hoverImage?: string;
+  badge: string | null;
+  buttonStyle: 'default' | 'outline';
+  buttonText: string;
+  link: string;
   filters: ProductFilter;
 }
 
 export const products: Product[] = [
   {
-    "id": "procolored-f8-panda-dtf-printer-8-2-a4-l800",
-    "name": "Procolored F8 Panda DTF Printer 8.2\" A4 L800",
-    "slug": "procolored-f8-panda-dtf-printer-8-2-a4-l800",
-    "price": "Rs.541,000.00 PKR",
-    "originalPrice": null,
-    "savings": null,
-    "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "8.2\" × 12.9\"",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 4.5min",
-      "Printer Head": "L800",
-      "Substrate Thickness Allows": "0-0.059\" (0-15mm)",
-      "Consumables": "Ink",
-      "Machine Category": "K13 Lite White",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f8-panda-dtf-printer-8-2-a4-l800-oven",
-    "name": "Procolored F8 Panda DTF Printer 8.2\" A4 L800 & Oven",
-    "slug": "procolored-f8-panda-dtf-printer-8-2-a4-l800-oven",
-    "price": "Rs.683,400.00 PKR",
-    "originalPrice": null,
-    "savings": null,
-    "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 6.7\"(170mm)",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 4.5min",
-      "Printer Head": "L800",
-      "Substrate Thickness Allows": "0-4.33\" (0-110mm)",
-      "Consumables": "Ink",
-      "Machine Category": "K13 Lite White",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-panda-dtf-printer-13-a3-l1800-oven",
-    "name": "Procolored F13 Panda DTF Printer 13\" A3 L1800 & Oven",
-    "slug": "procolored-f13-panda-dtf-printer-13-a3-l1800-oven",
-    "price": "Rs.854,300.00 PKR",
-    "originalPrice": "Rs.996,800.00 PKR",
-    "savings": "Rs.142,500.00 PKR",
-    "badge": "⭐ Best Seller — Fan Appreciation Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 6.7\"(170mm)",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 4.5min",
-      "Printer Head": "L800",
-      "Substrate Thickness Allows": "0-5.51\" (0-140mm)",
-      "Consumables": "Ink",
-      "Machine Category": "K13 Lite White",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-panda-dtf-printer-13-a3-l1800-oven-premium",
-    "name": "Procolored F13 Panda DTF Printer 13\" A3 L1800 & Oven Premium",
-    "slug": "procolored-f13-panda-dtf-printer-13-a3-l1800-oven-premium",
-    "price": "Rs.996,700.00 PKR",
-    "originalPrice": "Rs.1,139,200.00 PKR",
-    "savings": "Rs.142,500.00 PKR",
-    "badge": "⭐ Best Seller — Fan Appreciation Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 8.2\"(210mm)",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 4.5min",
-      "Printer Head": "L800",
-      "Substrate Thickness Allows": "0-5.51\" (0-140mm)",
-      "Consumables": "Ink",
-      "Machine Category": "K13 Lite Pink",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600",
-    "name": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600",
-    "slug": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600",
-    "price": "Rs.1,367,100.00 PKR",
-    "originalPrice": "Rs.1,481,100.00 PKR",
-    "savings": "Rs.114,000.00 PKR",
-    "badge": "F13 Pro Spring Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 8.2\"(210mm)",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 4.5min",
-      "Printer Head": "L800",
-      "Substrate Thickness Allows": "0-5.51\" (0-140mm)",
-      "Consumables": "Ink",
-      "Machine Category": "K13 Lite Pink",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-oven",
-    "name": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Oven",
-    "slug": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-oven",
-    "price": "Rs.1,481,000.00 PKR",
-    "originalPrice": "Rs.1,623,500.00 PKR",
-    "savings": "Rs.142,500.00 PKR",
-    "badge": "F13 Pro Spring Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 8.2\"(210mm)",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 4.5min",
-      "Printer Head": "L1800",
-      "Consumables": "Ink",
-      "Machine Category": "K13 Lite Pink",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-oven-premium",
-    "name": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Oven Premium",
-    "slug": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-oven-premium",
-    "price": "Rs.1,623,400.00 PKR",
-    "originalPrice": "Rs.1,765,900.00 PKR",
-    "savings": "Rs.142,500.00 PKR",
-    "badge": "F13 Pro Spring Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 8.3\"(210mm)",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 4.5min",
-      "Printer Head": "L1800",
-      "Consumables": "Ink",
-      "Machine Category": "P13 Series",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-dtf-shaker-bundle",
-    "name": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & DTF Shaker Bundle",
-    "slug": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-dtf-shaker-bundle",
-    "price": "Rs.1,822,800.00 PKR",
-    "originalPrice": "Rs.1,965,300.00 PKR",
-    "savings": "Rs.142,500.00 PKR",
-    "badge": "F13 Pro Spring Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 11.3\"(287mm)",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 4.5min",
-      "Printer Head": "LH-500",
-      "Consumables": "Ink",
-      "Machine Category": "P13 Series",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-bracket",
-    "name": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Bracket",
-    "slug": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-bracket",
-    "price": "Rs.1,481,000.00 PKR",
-    "originalPrice": "Rs.1,595,000.00 PKR",
-    "savings": "Rs.114,000.00 PKR",
-    "badge": "F13 Pro Spring Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 11.3\"(287mm)",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 6min",
-      "Printer Head": "LH-500",
-      "Consumables": "Ink",
-      "Machine Category": "P13 Series",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-pro-stand-oven",
-    "name": "Procolored F13 Pro + Stand + Oven",
-    "slug": "procolored-f13-pro-stand-oven",
-    "price": "Rs.1,595,000.00 PKR",
-    "originalPrice": "Rs.1,737,500.00 PKR",
-    "savings": "Rs.142,500.00 PKR",
-    "badge": "F13 Pro Spring Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 11.3\"(287mm)",
-      "Resolution": "1440*1400 DPI (8 Pass)",
-      "Print Speed": "Letter/A4: 7min",
-      "Printer Head": "LH-500",
-      "Consumables": "Film",
-      "Machine Category": "P13 Series",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-pro-stand-oven-premium",
-    "name": "Procolored F13 Pro + Stand + Oven Premium",
-    "slug": "procolored-f13-pro-stand-oven-premium",
-    "price": "Rs.1,708,900.00 PKR",
-    "originalPrice": "Rs.1,879,900.00 PKR",
-    "savings": "Rs.171,000.00 PKR",
-    "badge": "F13 Pro Spring Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 11.7\"(297mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 7min",
-      "Printer Head": "LH-500",
-      "Consumables": "Film",
-      "Machine Category": "P13 Series",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-f13-pro-stand-shaker-oven",
-    "name": "Procolored F13 Pro + Stand + Shaker Oven",
-    "slug": "procolored-f13-pro-stand-shaker-oven",
-    "price": "Rs.1,879,800.00 PKR",
-    "originalPrice": "Rs.2,079,300.00 PKR",
-    "savings": "Rs.199,500.00 PKR",
-    "badge": "F13 Pro Spring Sale",
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 11.8\"(300mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 7min",
-      "Printer Head": "LH-500",
-      "Consumables": "Film",
-      "Machine Category": "P13 Series",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-k13-lite-dtf-printer-13-a3-white",
-    "name": "Procolored K13 Lite DTF Printer 13\" A3 White",
-    "slug": "procolored-k13-lite-dtf-printer-13-a3-white",
-    "price": "Rs.569,500.00 PKR",
-    "originalPrice": "Rs.854,400.00 PKR",
-    "savings": "Rs.284,900.00 PKR",
+    "id": "1",
+    "title": "Procolored K13 Lite DTF Printer 13\" A3 - White",
+    "price": "Rs.569,300.00",
+    "originalPrice": "Rs.854,000.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/product-k13-white.jpg",
-    "sections": [
-      "DTF Printer",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 11.8\"(300mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 7min",
-      "Printer Head": "LH-500",
-      "Consumables": "Film",
-      "Machine Category": "P13 Series",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "LH-500",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "K13 Lite White",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-k13-lite-dtf-printer-13-a3-oven-white",
-    "name": "Procolored K13 Lite DTF Printer 13\" A3 & Oven White",
-    "slug": "procolored-k13-lite-dtf-printer-13-a3-oven-white",
-    "price": "Rs.711,900.00 PKR",
-    "originalPrice": "Rs.1,025,000.00 PKR",
-    "savings": "Rs.313,100.00 PKR",
+    "id": "2",
+    "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven - White",
+    "price": "Rs.711,600.00",
+    "originalPrice": "Rs.1,024,600.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/product-k13-white.jpg",
-    "sections": [
-      "DTF Printer",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 11.8\"(300mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 7min",
-      "Printer Head": "R1390",
-      "Consumables": "Film",
-      "Machine Category": "F13 Pro Series",
-      "Consumables Category": "DTF Consumables",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "LH-500",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "K13 Lite White",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-white",
-    "name": "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium White",
-    "slug": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-white",
-    "price": "Rs.797,400.00 PKR",
-    "originalPrice": "Rs.1,139,200.00 PKR",
-    "savings": "Rs.341,800.00 PKR",
+    "id": "3",
+    "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - White",
+    "price": "Rs.797,100.00",
+    "originalPrice": "Rs.1,138,800.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/product-k13-white.jpg",
-    "sections": [
-      "DTF Printer",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 11.8\"(300mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 7min",
-      "Printer Head": "TX800",
-      "Consumables": "Film",
-      "Machine Category": "F13 Pro Series",
-      "Consumables Category": "UV DTF Consumables",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "LH-500",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "K13 Lite White",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-k13-lite-dtf-printer-13-a3-pink",
-    "name": "Procolored K13 Lite DTF Printer 13\" A3 Pink",
-    "slug": "procolored-k13-lite-dtf-printer-13-a3-pink",
-    "price": "Rs.569,500.00 PKR",
-    "originalPrice": "Rs.854,400.00 PKR",
-    "savings": "Rs.284,900.00 PKR",
+    "id": "4",
+    "title": "Procolored K13 Lite DTF Printer 13\" A3 - Pink",
+    "price": "Rs.569,300.00",
+    "originalPrice": "Rs.854,000.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/product-k13-pink.jpg",
-    "sections": [
-      "DTF Printer",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 7min",
-      "Printer Head": "TX800",
-      "Consumables": "Film",
-      "Machine Category": "F13 Pro Series",
-      "Consumables Category": "UV DTF Consumables",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "LH-500",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "K13 Lite Pink",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-k13-lite-dtf-printer-13-a3-oven-pink",
-    "name": "Procolored K13 Lite DTF Printer 13\" A3 & Oven Pink",
-    "slug": "procolored-k13-lite-dtf-printer-13-a3-oven-pink",
-    "price": "Rs.711,900.00 PKR",
-    "originalPrice": "Rs.1,025,000.00 PKR",
-    "savings": "Rs.313,100.00 PKR",
+    "id": "5",
+    "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven - Pink",
+    "price": "Rs.711,600.00",
+    "originalPrice": "Rs.1,024,600.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/product-k13-pink.jpg",
-    "sections": [
-      "DTF Printer",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 7min",
-      "Printer Head": "TX800",
-      "Consumables": "Film",
-      "Machine Category": "F13 Pro Series",
-      "Consumables Category": "UV DTF Consumables",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "LH-500",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "K13 Lite Pink",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink",
-    "name": "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium Pink",
-    "slug": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink",
-    "price": "Rs.797,400.00 PKR",
-    "originalPrice": "Rs.1,139,200.00 PKR",
-    "savings": "Rs.341,800.00 PKR",
+    "id": "6",
+    "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - Pink",
+    "price": "Rs.797,100.00",
+    "originalPrice": "Rs.1,138,800.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/product-k13-pink.jpg",
-    "sections": [
-      "DTF Printer",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 7min",
-      "Printer Head": "XP600",
-      "Consumables": "Film",
-      "Machine Category": "F13 Pro Series",
-      "Consumables Category": "UV DTF Consumables",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "LH-500",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "K13 Lite Pink",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-k-series-dtf-printer",
-    "name": "Procolored K Series DTF Printer",
-    "slug": "procolored-k-series-dtf-printer",
-    "price": "Rs.569,500.00 PKR",
+    "id": "7",
+    "title": "Procolored F8 Panda DTF Printer 8.2\" A4 L800",
+    "price": "Rs.540,800.00",
     "originalPrice": null,
-    "savings": null,
-    "badge": "🆕 🔜 Coming Soon",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 7.5min",
-      "Printer Head": "XP600",
-      "Consumables": "Film",
-      "Machine Category": "F13 Pro Series",
-      "Consumables Category": "UV DTF Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-p13-dtf-printer-13-a3-xp600",
-    "name": "Procolored P13 DTF Printer 13\" A3 XP600",
-    "slug": "procolored-p13-dtf-printer-13-a3-xp600",
-    "price": "Rs.1,025,200.00 PKR",
-    "originalPrice": "Rs.1,224,700.00 PKR",
-    "savings": "Rs.199,500.00 PKR",
-    "badge": "🆕 P13 Exclusive Deal",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 8~9min",
-      "Printer Head": "XP600",
-      "Consumables": "Film",
-      "Machine Category": "F13 Pro Series",
-      "Consumables Category": "UV Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-p13-dtf-printer-13-a3-xp600-oven",
-    "name": "Procolored P13 DTF Printer 13\" A3 XP600 & Oven",
-    "slug": "procolored-p13-dtf-printer-13-a3-xp600-oven",
-    "price": "Rs.1,139,200.00 PKR",
-    "originalPrice": "Rs.1,310,200.00 PKR",
-    "savings": "Rs.171,000.00 PKR",
-    "badge": "🆕 P13 Exclusive Deal",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 8~9min",
-      "Printer Head": "XP600",
-      "Consumables": "Film",
-      "Machine Category": "F13 Pro Series",
-      "Consumables Category": "UV Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-p13-dtf-printer-13-a3-xp600-oven-premium",
-    "name": "Procolored P13 DTF Printer 13\" A3 XP600 & Oven Premium",
-    "slug": "procolored-p13-dtf-printer-13-a3-xp600-oven-premium",
-    "price": "Rs.1,224,600.00 PKR",
-    "originalPrice": "Rs.1,424,100.00 PKR",
-    "savings": "Rs.199,500.00 PKR",
-    "badge": "🆕 P13 Exclusive Deal",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 10min",
-      "Printer Head": "XP600",
-      "Consumables": "Powder",
-      "Machine Category": "F13 Series",
-      "Consumables Category": "UV Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-p13-dtf-printer-13-a3-xp600-dtf-shaker-bundle",
-    "name": "Procolored P13 DTF Printer 13\" A3 XP600 & DTF Shaker Bundle",
-    "slug": "procolored-p13-dtf-printer-13-a3-xp600-dtf-shaker-bundle",
-    "price": "Rs.1,481,000.00 PKR",
-    "originalPrice": "Rs.1,623,500.00 PKR",
-    "savings": "Rs.142,500.00 PKR",
-    "badge": "🆕 P13 Exclusive Deal",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 10min",
-      "Printer Head": "XP600",
-      "Consumables": "Coatings",
-      "Machine Category": "F13 Series",
-      "Consumables Category": "UV Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-p13-dtf-printer-13-a3-xp600-macos",
-    "name": "Procolored P13 DTF Printer 13\" A3 XP600 MacOS",
-    "slug": "procolored-p13-dtf-printer-13-a3-xp600-macos",
-    "price": "Rs.1,224,700.00 PKR",
-    "originalPrice": null,
-    "savings": null,
-    "badge": "🆕 🔜 Coming Soon",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 12.5min",
-      "Printer Head": "XP600",
-      "Consumables": "Other liquids",
-      "Machine Category": "F8 Series",
-      "Consumables Category": "UV Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-p13-dtf-printer-13-a3-xp600-oven-macos",
-    "name": "Procolored P13 DTF Printer 13\" A3 XP600 & Oven MacOS",
-    "slug": "procolored-p13-dtf-printer-13-a3-xp600-oven-macos",
-    "price": "Rs.1,310,200.00 PKR",
-    "originalPrice": null,
-    "savings": null,
-    "badge": "🆕 🔜 Coming Soon",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTG",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 Pass)",
-      "Print Speed": "Letter/A4: 12.5min",
-      "Printer Head": "XP600",
-      "Consumables": "Other liquids",
-      "Machine Category": "F8 Series",
-      "Consumables Category": "UV Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-p13-dtf-printer-13-a3-xp600-dtf-shaker-bundle-macos",
-    "name": "Procolored P13 DTF Printer 13\" A3 XP600 & DTF Shaker Bundle MacOS",
-    "slug": "procolored-p13-dtf-printer-13-a3-xp600-dtf-shaker-bundle-macos",
-    "price": "Rs.1,709,000.00 PKR",
-    "originalPrice": null,
-    "savings": null,
-    "badge": "🆕 🔜 Coming Soon",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTF Printer"
-    ],
-    "filters": {
-      "Print Type": "DTG",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 PASS)",
-      "Print Speed": "Letter/A4: 12.5min",
-      "Printer Head": "XP600",
-      "Consumables": "Other liquids",
-      "Consumables Category": "DTG Consumables",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1",
-    "name": "Procolored VF13 Pro Panda UV DTF Printer 13\" A3+ Dual XP600 2-in-1",
-    "slug": "procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1",
-    "price": "Rs.1,965,300.00 PKR",
-    "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/product-f13-panda.jpg",
-    "sections": [
-      "UV DTF Printer"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "DTG",
-      "Print Size": "Width: 13\"(330mm)",
-      "Resolution": "720*1440 DPI (16 PASS)",
-      "Print Speed": "Letter/A4: 12.5min",
-      "Printer Head": "XP600",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 8.2\"(210mm)",
+      "resolution": "1440*1400 DPI (8 Pass)",
+      "printSpeed": "Letter/A4: 12.5min",
+      "printerHead": "L800",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F8 Series",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-v4-uv-printer-4-7-a5-l800",
-    "name": "Procolored V4 UV Printer 4.7\" A5 L800",
-    "slug": "procolored-v4-uv-printer-4-7-a5-l800",
-    "price": "Rs.655,000.00 PKR",
+    "id": "8",
+    "title": "Procolored F8 Panda DTF Printer 8.2\" A4 L800 & Oven",
+    "price": "Rs.683,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "UV Printer"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Print Speed": "Letter/A4: 12.5min",
-      "Printer Head": "XP600",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 8.2\"(210mm)",
+      "resolution": "1440*1400 DPI (8 Pass)",
+      "printSpeed": "Letter/A4: 12.5min",
+      "printerHead": "L800",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F8 Series",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-v6-panda-uv-printer-6-7-a4-l800",
-    "name": "Procolored V6 Panda UV Printer 6.7\" A4 L800",
-    "slug": "procolored-v6-panda-uv-printer-6-7-a4-l800",
-    "price": "Rs.1,025,300.00 PKR",
+    "id": "9",
+    "title": "Procolored F13 Panda DTF Printer 13\" A3 L1800 & Oven",
+    "price": "Rs.854,000.00",
+    "originalPrice": "Rs.996,400.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "⭐ Best Seller — Fan Appreciation Sale (Rs.142,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 7min",
+      "printerHead": "L1800",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "10",
+    "title": "Procolored F13 Panda DTF Printer 13\" A3 L1800 & Oven Premium",
+    "price": "Rs.996,400.00",
+    "originalPrice": "Rs.1,138,800.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "⭐ Best Seller — Fan Appreciation Sale (Rs.142,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 7min",
+      "printerHead": "L1800",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "11",
+    "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600",
+    "price": "Rs.1,366,500.00",
+    "originalPrice": "Rs.1,480,500.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "F13 Pro Spring Sale (Rs.114,000.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Pro Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "12",
+    "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Oven",
+    "price": "Rs.1,480,500.00",
+    "originalPrice": "Rs.1,622,900.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "F13 Pro Spring Sale (Rs.142,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Pro Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "13",
+    "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & DTF Shaker Bundle",
+    "price": "Rs.1,822,200.00",
+    "originalPrice": "Rs.1,964,600.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "F13 Pro Spring Sale (Rs.142,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Pro Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "14",
+    "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Oven Premium",
+    "price": "Rs.1,622,800.00",
+    "originalPrice": "Rs.1,765,200.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "F13 Pro Spring Sale (Rs.142,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Pro Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "15",
+    "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Bracket",
+    "price": "Rs.1,480,400.00",
+    "originalPrice": "Rs.1,594,400.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "F13 Pro Spring Sale (Rs.114,000.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Pro Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "16",
+    "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 + Stand + Oven",
+    "price": "Rs.1,594,400.00",
+    "originalPrice": "Rs.1,736,800.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "F13 Pro Spring Sale (Rs.142,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Pro Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "17",
+    "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 + Stand + Shaker Oven",
+    "price": "Rs.1,879,100.00",
+    "originalPrice": "Rs.2,078,500.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "F13 Pro Spring Sale (Rs.199,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Pro Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "18",
+    "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 + Stand + Oven Premium",
+    "price": "Rs.1,708,200.00",
+    "originalPrice": "Rs.1,879,100.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "F13 Pro Spring Sale (Rs.170,900.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "F13 Pro Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "19",
+    "title": "Procolored P13 DTF Printer 13\" A3 XP600",
+    "price": "Rs.1,024,800.00",
+    "originalPrice": "Rs.1,224,200.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "🆕 New Arrival — P13 Exclusive Deal (Rs.199,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "P13 Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "20",
+    "title": "Procolored P13 DTF Printer 13\" A3 XP600 & Oven",
+    "price": "Rs.1,138,700.00",
+    "originalPrice": "Rs.1,309,600.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "🆕 New Arrival — P13 Exclusive Deal (Rs.170,900.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "P13 Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "21",
+    "title": "Procolored P13 DTF Printer 13\" A3 XP600 & DTF Shaker Bundle",
+    "price": "Rs.1,480,500.00",
+    "originalPrice": "Rs.1,622,900.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "🆕 New Arrival — P13 Exclusive Deal (Rs.142,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "P13 Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "22",
+    "title": "Procolored P13 DTF Printer 13\" A3 XP600 & Oven Premium",
+    "price": "Rs.1,224,100.00",
+    "originalPrice": "Rs.1,423,500.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "🆕 New Arrival — P13 Exclusive Deal (Rs.199,400.00)",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "DTF Printer",
+      "availability": "in-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "P13 Series",
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "23",
+    "title": "Procolored P13 DTF Printer 13\" A3 XP600 (MacOS)",
+    "price": "Rs.1,224,200.00",
     "originalPrice": null,
-    "savings": null,
-    "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "UV Printer"
-    ],
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "🆕 New Arrival 🔜 Coming Soon",
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Print Speed": "Letter/A4: 12.5min",
-      "Printer Head": "XP600",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "out-of-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "P13 Series",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-v11-uv-printer-11-4-a3-r1390",
-    "name": "Procolored V11 UV Printer 11.4\" A3 R1390",
-    "slug": "procolored-v11-uv-printer-11-4-a3-r1390",
-    "price": "Rs.1,481,100.00 PKR",
+    "id": "24",
+    "title": "Procolored P13 DTF Printer 13\" A3 XP600 & Oven (MacOS)",
+    "price": "Rs.1,309,600.00",
     "originalPrice": null,
-    "savings": null,
-    "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "UV Printer"
-    ],
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "🆕 New Arrival 🔜 Coming Soon",
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Print Speed": "Letter/A4: 14min",
-      "Printer Head": "XP600",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "out-of-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "P13 Series",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-v11-pro-uv-printer-11-4-a3-dual-tx800",
-    "name": "Procolored V11 Pro UV Printer 11.4\" A3 Dual TX800",
-    "slug": "procolored-v11-pro-uv-printer-11-4-a3-dual-tx800",
-    "price": "Rs.1,709,000.00 PKR",
+    "id": "25",
+    "title": "Procolored P13 DTF Printer 13\" A3 XP600 & DTF Shaker Bundle (MacOS)",
+    "price": "Rs.1,708,300.00",
     "originalPrice": null,
-    "savings": null,
-    "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "UV Printer"
-    ],
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "🆕 New Arrival 🔜 Coming Soon",
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Print Speed": "Letter/A4: 23 min",
-      "Printer Head": "XP600",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "out-of-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": "P13 Series",
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-v11-pro-uv-printer-11-4-a3-dual-tx800-jigs",
-    "name": "Procolored V11 Pro UV Printer 11.4\" A3 Dual TX800 & Jigs",
-    "slug": "procolored-v11-pro-uv-printer-11-4-a3-dual-tx800-jigs",
-    "price": "Rs.1,908,400.00 PKR",
-    "originalPrice": "Rs.1,948,300.00 PKR",
-    "savings": "Rs.39,900.00 PKR",
-    "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "UV Printer"
-    ],
-    "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Print Speed": "Letter/A4: 23 min",
-      "Printer Head": "XP600",
-      "Availability": "In stock"
-    }
-  },
-  {
-    "id": "procolored-t8-panda-dtg-printer-8-2-a4-l800",
-    "name": "Procolored T8 Panda DTG Printer 8.2\" A4 L800",
-    "slug": "procolored-t8-panda-dtg-printer-8-2-a4-l800",
-    "price": "Rs.1,025,300.00 PKR",
+    "id": "26",
+    "title": "Procolored K Series DTF Printer",
+    "price": "Rs.569,300.00",
     "originalPrice": null,
-    "savings": null,
-    "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTG Printer"
-    ],
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "🆕 New Arrival 🔜 Coming Soon",
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Print Speed": "Letter/A4: 23 min",
-      "Printer Head": "XP600",
-      "Availability": "In stock"
+      "collection": "DTF Printer",
+      "availability": "out-of-stock",
+      "printType": "DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": "LH-500",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-t11-pro-dtg-printer-11-8-a3-dual-tx800",
-    "name": "Procolored T11 Pro DTG Printer 11.8\" A3 Dual TX800",
-    "slug": "procolored-t11-pro-dtg-printer-11-8-a3-dual-tx800",
-    "price": "Rs.1,709,000.00 PKR",
+    "id": "27",
+    "title": "Procolored VF13 Pro Panda UV DTF Printer 13\" A3+ Dual XP600 2-in-1",
+    "price": "Rs.1,964,600.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "DTG Printer"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Availability": "In stock"
+      "collection": "UV DTF Printer",
+      "availability": "in-stock",
+      "printType": "UV DTF",
+      "printSize": "Width: 13\"(330mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "XP600",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-oven-for-dtf-printer-upgraded",
-    "name": "Procolored Oven For DTF Printer Upgraded",
-    "slug": "procolored-oven-for-dtf-printer-upgraded",
-    "price": "Rs.170,700.00 PKR",
+    "id": "28",
+    "title": "Procolored V4 UV Printer 4.7\" A5 L800",
+    "price": "Rs.654,700.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Availability": "In stock"
+      "collection": "UV Printer",
+      "availability": "in-stock",
+      "printType": "UV",
+      "printSize": "Width: 6.7\"(170mm)",
+      "resolution": "1440*1400 DPI (8 Pass)",
+      "printSpeed": "Letter/A4: 23 min",
+      "printerHead": "L800",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-smokeless-oven-for-dtf-printer-premium",
-    "name": "Procolored Smokeless Oven for DTF Printer Premium",
-    "slug": "procolored-smokeless-oven-for-dtf-printer-premium",
-    "price": "Rs.284,600.00 PKR",
+    "id": "29",
+    "title": "Procolored V6 Panda UV Printer 6.7\" A4 L800",
+    "price": "Rs.1,024,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": null,
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
+    "filters": {
+      "collection": "UV Printer",
+      "availability": "in-stock",
+      "printType": "UV",
+      "printSize": "Width: 6.7\"(170mm)",
+      "resolution": "1440*1400 DPI (8 Pass)",
+      "printSpeed": "Letter/A4: 14min",
+      "printerHead": "L800",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "30",
+    "title": "Procolored V11 UV Printer 11.4\" A3 R1390",
+    "price": "Rs.1,480,500.00",
+    "originalPrice": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": null,
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
+    "filters": {
+      "collection": "UV Printer",
+      "availability": "in-stock",
+      "printType": "UV",
+      "printSize": "Width: 11.3\"(287mm)",
+      "resolution": "1440*1400 DPI (8 Pass)",
+      "printSpeed": "Letter/A4: 10min",
+      "printerHead": "R1390",
+      "substrateThickness": "0-5.51\" (0-140mm)",
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "31",
+    "title": "Procolored V11 Pro UV Printer 11.4\" A3 Dual TX800",
+    "price": "Rs.1,708,300.00",
+    "originalPrice": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "UV Printer",
+      "availability": "in-stock",
+      "printType": "UV",
+      "printSize": "Width: 11.3\"(287mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "TX800",
+      "substrateThickness": "0-4.33\" (0-110mm)",
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "32",
+    "title": "Procolored V11 Pro UV Printer 11.4\" A3 Dual TX800 & Jigs",
+    "price": "Rs.1,907,600.00",
+    "originalPrice": "Rs.1,947,500.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "Save Rs.39,900",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "UV Printer",
+      "availability": "in-stock",
+      "printType": "UV",
+      "printSize": "Width: 11.3\"(287mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 4.5min",
+      "printerHead": "TX800",
+      "substrateThickness": "0-4.33\" (0-110mm)",
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "33",
+    "title": "Procolored T8 Panda DTG Printer 8.2\" A4 L800",
+    "price": "Rs.1,024,900.00",
+    "originalPrice": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": null,
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
+    "filters": {
+      "collection": "DTG Printer",
+      "availability": "in-stock",
+      "printType": "DTG",
+      "printSize": "Width: 8.2\"(210mm)",
+      "resolution": "1440*1400 DPI (8 Pass)",
+      "printSpeed": "Letter/A4: 12.5min",
+      "printerHead": "L800",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "34",
+    "title": "Procolored T11 Pro DTG Printer 11.8\" A3 Dual TX800",
+    "price": "Rs.1,708,300.00",
+    "originalPrice": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": null,
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
+    "filters": {
+      "collection": "DTG Printer",
+      "availability": "in-stock",
+      "printType": "DTG",
+      "printSize": "Width: 11.8\"(300mm)",
+      "resolution": "720*1440 DPI (16 Pass)",
+      "printSpeed": "Letter/A4: 7min",
+      "printerHead": "TX800",
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "35",
+    "title": "Procolored Smokeless Oven for DTF Printer - Premium",
+    "price": "Rs.284,500.00",
+    "originalPrice": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-powder-shaking-and-drying-all-in-one-machine",
-    "name": "Procolored Powder Shaking And Drying All-In-One Machine",
-    "slug": "procolored-powder-shaking-and-drying-all-in-one-machine",
-    "price": "Rs.512,500.00 PKR",
+    "id": "36",
+    "title": "Procolored Oven For DTF Printer - Upgraded",
+    "price": "Rs.170,600.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "UV",
-      "Print Size": "Width: 13\"(330mm)",
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-oven-heating-plate",
-    "name": "Procolored Oven Heating Plate",
-    "slug": "procolored-oven-heating-plate",
-    "price": "Rs.56,700.00 PKR",
+    "id": "37",
+    "title": "Procolored Powder Shaking And Drying All-In-One Machine For DTF Printer",
+    "price": "Rs.512,300.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
+    "filters": {
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
+    }
+  },
+  {
+    "id": "38",
+    "title": "Procolored Oven Heating Plate - Fit For Procolored Oven",
+    "price": "Rs.56,700.00",
+    "originalPrice": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "UV DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-oven-temperature-controller",
-    "name": "Procolored Oven Temperature Controller",
-    "slug": "procolored-oven-temperature-controller",
-    "price": "Rs.16,900.00 PKR",
+    "id": "39",
+    "title": "Procolored Oven Temperature Controller - Fit For Procolored Oven",
+    "price": "Rs.16,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "UV DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-oven-exhaust-gas-filter",
-    "name": "Procolored Oven Exhaust Gas Filter",
-    "slug": "procolored-oven-exhaust-gas-filter",
-    "price": "Rs.14,000.00 PKR",
+    "id": "40",
+    "title": "Procolored Oven Exhaust Gas Filter",
+    "price": "Rs.14,000.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Print Type": "UV DTF",
-      "Print Size": "Width: 13\"(330mm)",
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-dtf-cooling-block",
-    "name": "Procolored DTF Cooling Block",
-    "slug": "procolored-dtf-cooling-block",
-    "price": "Rs.14,000.00 PKR",
+    "id": "41",
+    "title": "Procolored DTF Cooling Block",
+    "price": "Rs.14,000.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Print Type": "UV DTF",
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "printer-bracket-for-procolored-dtf-pro-and-mini-uv-dtf-printers",
-    "name": "Printer Bracket For Procolored DTF Pro and Mini UV DTF Printers",
-    "slug": "printer-bracket-for-procolored-dtf-pro-and-mini-uv-dtf-printers",
-    "price": "Rs.142,200.00 PKR",
+    "id": "42",
+    "title": "Printer Bracket For Procolored DTF Pro and Mini UV DTF Printers",
+    "price": "Rs.142,100.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Printer%20Br...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Print Type": "UV DTF",
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-jigs-for-uv-printer",
-    "name": "Procolored Jigs For UV Printer",
-    "slug": "procolored-jigs-for-uv-printer",
-    "price": "Rs.227,700.00 PKR",
-    "originalPrice": "Rs.241,900.00 PKR",
-    "savings": "Rs.14,200.00 PKR",
-    "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment"
-    ],
+    "id": "43",
+    "title": "Procolored Jigs For UV Printer",
+    "price": "Rs.227,600.00",
+    "originalPrice": "Rs.241,800.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "Save Rs.14,200",
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Print Type": "UV DTF",
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-a3-a4-garment-jig-for-dtg-printer",
-    "name": "Procolored A3/A4 Garment Jig For DTG Printer",
-    "slug": "procolored-a3-a4-garment-jig-for-dtg-printer",
-    "price": "Rs.36,800.00 PKR",
+    "id": "44",
+    "title": "Procolored A3/A4 Garment Jig For DTG Printer",
+    "price": "Rs.36,800.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Print Type": "UV DTF",
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-film-holder-fit-for-13-dtf-roll-film",
-    "name": "Procolored Film Holder Fit For 13\" DTF Roll Film",
-    "slug": "procolored-film-holder-fit-for-13-dtf-roll-film",
-    "price": "Rs.33,900.00 PKR",
+    "id": "45",
+    "title": "Procolored Film Holder Fit For 13\" DTF Roll Film",
+    "price": "Rs.33,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-protective-printhead-moisturizing-device",
-    "name": "Procolored Printer Protective Printhead Moisturizing Device",
-    "slug": "procolored-printer-protective-printhead-moisturizing-device",
-    "price": "Rs.42,500.00 PKR",
+    "id": "46",
+    "title": "Procolored Printer Protective For Printhead Moisturizing Device",
+    "price": "Rs.42,500.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Equipment"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Equipment",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-white-ink-for-dtf-printing",
-    "name": "Procolored White Ink for DTF Printing",
-    "slug": "procolored-white-ink-for-dtf-printing",
-    "price": "Rs.14,000.00 PKR",
+    "id": "47",
+    "title": "Procolored Direct to Transfer Film Ink 500ml",
+    "price": "Rs.65,300.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-white-ink-for-uv-dtf-printing-500ml",
-    "name": "Procolored White Ink for UV DTF Printing 500ml",
-    "slug": "procolored-white-ink-for-uv-dtf-printing-500ml",
-    "price": "Rs.16,900.00 PKR",
+    "id": "48",
+    "title": "Procolored Direct to Transfer Film Ink 250ml",
+    "price": "Rs.36,800.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-white-ink-for-uv-printing-500ml",
-    "name": "Procolored White Ink for UV Printing 500ml",
-    "slug": "procolored-white-ink-for-uv-printing-500ml",
-    "price": "Rs.16,900.00 PKR",
+    "id": "49",
+    "title": "Procolored White Ink for DTF Printing",
+    "price": "Rs.14,000.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-ink-for-uv-dtf-printer-500ml",
-    "name": "Procolored Ink for UV DTF Printer 500ml",
-    "slug": "procolored-ink-for-uv-dtf-printer-500ml",
-    "price": "Rs.53,900.00 PKR",
+    "id": "50",
+    "title": "Procolored Direct to Transfer Film Powder",
+    "price": "Rs.10,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Powder",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-ink-for-uv-printer-500ml",
-    "name": "Procolored Ink for UV Printer 500ml",
-    "slug": "procolored-ink-for-uv-printer-500ml",
-    "price": "Rs.53,900.00 PKR",
+    "id": "51",
+    "title": "Procolored White Ink for UV Printing 500ml",
+    "price": "Rs.16,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "UV Consumables"
     }
   },
   {
-    "id": "procolored-direct-to-transfer-film-ink-250ml",
-    "name": "Procolored Direct to Transfer Film Ink 250ml",
-    "slug": "procolored-direct-to-transfer-film-ink-250ml",
-    "price": "Rs.36,800.00 PKR",
+    "id": "52",
+    "title": "Procolored White Ink for UV DTF Printing 500ml",
+    "price": "Rs.16,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "UV DTF Consumables"
     }
   },
   {
-    "id": "procolored-direct-to-transfer-film-ink-500ml",
-    "name": "Procolored Direct to Transfer Film Ink 500ml",
-    "slug": "procolored-direct-to-transfer-film-ink-500ml",
-    "price": "Rs.65,300.00 PKR",
+    "id": "53",
+    "title": "Procolored Ink for UV DTF Printer 500ml",
+    "price": "Rs.53,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "UV DTF Consumables"
     }
   },
   {
-    "id": "procolored-direct-to-garment-textile-ink-500ml",
-    "name": "Procolored Direct to Garment Textile Ink 500ml",
-    "slug": "procolored-direct-to-garment-textile-ink-500ml",
-    "price": "Rs.65,300.00 PKR",
+    "id": "54",
+    "title": "Procolored Nozzle Protection Moisturizing Liquid/Printhead Cleaning Fluid 500ml",
+    "price": "Rs.16,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Other liquids",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-uv-varnish-ink-500ml",
-    "name": "Procolored UV Varnish Ink 500ml",
-    "slug": "procolored-uv-varnish-ink-500ml",
-    "price": "Rs.16,900.00 PKR",
+    "id": "55",
+    "title": "Procolored Ink Cleaner (DTF) DTF Cleaner Ink 500ml",
+    "price": "Rs.19,700.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Other liquids",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-ink-cleaner-dtf-500ml",
-    "name": "Procolored Ink Cleaner DTF 500ml",
-    "slug": "procolored-ink-cleaner-dtf-500ml",
-    "price": "Rs.19,700.00 PKR",
+    "id": "56",
+    "title": "Procolored Ink Adhesion Promoter UV/DTG Pretreatment Liquid 500ml",
+    "price": "Rs.16,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Coatings",
+      "machineCategory": null,
+      "consumablesCategory": "UV Consumables"
     }
   },
   {
-    "id": "procolored-ink-cleaner-uv-500ml",
-    "name": "Procolored Ink Cleaner UV 500ml",
-    "slug": "procolored-ink-cleaner-uv-500ml",
-    "price": "Rs.19,700.00 PKR",
+    "id": "57",
+    "title": "Procolored Ink Cleaner (UV) UV Cleaner Ink 500ml",
+    "price": "Rs.19,700.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Other liquids",
+      "machineCategory": null,
+      "consumablesCategory": "UV Consumables"
     }
   },
   {
-    "id": "procolored-ink-adhesion-promoter-500ml",
-    "name": "Procolored Ink Adhesion Promoter 500ml",
-    "slug": "procolored-ink-adhesion-promoter-500ml",
-    "price": "Rs.16,900.00 PKR",
+    "id": "58",
+    "title": "Procolored UV Varnish Ink 500ml",
+    "price": "Rs.16,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "UV Consumables"
     }
   },
   {
-    "id": "procolored-nozzle-protection-moisturizing-liquid-500ml",
-    "name": "Procolored Nozzle Protection Moisturizing Liquid 500ml",
-    "slug": "procolored-nozzle-protection-moisturizing-liquid-500ml",
-    "price": "Rs.16,900.00 PKR",
+    "id": "59",
+    "title": "Procolored Ink for UV Printer 500ml",
+    "price": "Rs.53,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "UV Consumables"
     }
   },
   {
-    "id": "procolored-direct-to-transfer-film-powder",
-    "name": "Procolored Direct to Transfer Film Powder",
-    "slug": "procolored-direct-to-transfer-film-powder",
-    "price": "Rs.10,900.00 PKR",
+    "id": "60",
+    "title": "Procolored Direct to Garment Textile Ink 500ml",
+    "price": "Rs.65,300.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "DTG Consumables"
     }
   },
   {
-    "id": "procolored-dtf-pretreat-transfer-roll-film-8-2-x-328-ft",
-    "name": "Procolored DTF PreTreat Transfer Roll Film 8.2\" x 328 FT",
-    "slug": "procolored-dtf-pretreat-transfer-roll-film-8-2-x-328-ft",
-    "price": "Rs.25,400.00 PKR",
+    "id": "61",
+    "title": "Procolored DTF Gilt Veil Transfer Roll Film 11.8 Inch x 328 FT",
+    "price": "Rs.53,900.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-dtf-pretreat-transfer-roll-film-13-x-328-ft",
-    "name": "Procolored DTF PreTreat Transfer Roll Film 13\" x 328 FT",
-    "slug": "procolored-dtf-pretreat-transfer-roll-film-13-x-328-ft",
-    "price": "Rs.48,200.00 PKR",
+    "id": "62",
+    "title": "Procolored DTF Chameleon Transfer Roll Film 11.8 Inch x 328 FT",
+    "price": "Rs.48,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-dtf-pretreat-transfer-sheet-film-a3",
-    "name": "Procolored DTF PreTreat Transfer Sheet Film A3",
-    "slug": "procolored-dtf-pretreat-transfer-sheet-film-a3",
-    "price": "Rs.25,400.00 PKR",
+    "id": "63",
+    "title": "Procolored DTF Luminous Transfer Roll Film 11.8 Inch x 328 FT",
+    "price": "Rs.56,700.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-dtf-pretreat-transfer-sheet-film-a4",
-    "name": "Procolored DTF PreTreat Transfer Sheet Film A4",
-    "slug": "procolored-dtf-pretreat-transfer-sheet-film-a4",
-    "price": "Rs.19,700.00 PKR",
+    "id": "64",
+    "title": "Procolored DTF Glitter Transfer Roll Film 11.8 Inch x 328 FT",
+    "price": "Rs.48,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-dtf-gilt-veil-transfer-roll-film-11-8-x-328-ft",
-    "name": "Procolored DTF Gilt Veil Transfer Roll Film 11.8\" x 328 FT",
-    "slug": "procolored-dtf-gilt-veil-transfer-roll-film-11-8-x-328-ft",
-    "price": "Rs.53,900.00 PKR",
+    "id": "65",
+    "title": "Procolored UV DTF Transfer Hot Stamping Silver Film",
+    "price": "Rs.65,300.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "UV DTF Consumables"
     }
   },
   {
-    "id": "procolored-dtf-chameleon-transfer-roll-film-11-8-x-328-ft",
-    "name": "Procolored DTF Chameleon Transfer Roll Film 11.8\" x 328 FT",
-    "slug": "procolored-dtf-chameleon-transfer-roll-film-11-8-x-328-ft",
-    "price": "Rs.48,200.00 PKR",
+    "id": "66",
+    "title": "Procolored DTF PreTreat Transfer Roll Film 13 Inch x 328 FT",
+    "price": "Rs.48,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-dtf-luminous-transfer-roll-film-11-8-x-328-ft",
-    "name": "Procolored DTF Luminous Transfer Roll Film 11.8\" x 328 FT",
-    "slug": "procolored-dtf-luminous-transfer-roll-film-11-8-x-328-ft",
-    "price": "Rs.56,700.00 PKR",
+    "id": "67",
+    "title": "Procolored DTF PreTreat Transfer Sheet Film - fit for A4 DTF Printer",
+    "price": "Rs.19,700.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-dtf-glitter-transfer-roll-film-11-8-x-328-ft",
-    "name": "Procolored DTF Glitter Transfer Roll Film 11.8\" x 328 FT",
-    "slug": "procolored-dtf-glitter-transfer-roll-film-11-8-x-328-ft",
-    "price": "Rs.48,200.00 PKR",
+    "id": "68",
+    "title": "Procolored UV DTF Transfer Hot Stamping Gold Film",
+    "price": "Rs.56,700.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "UV DTF Consumables"
     }
   },
   {
-    "id": "procolored-uv-dtf-transfer-hot-stamping-gold-film",
-    "name": "Procolored UV DTF Transfer Hot Stamping Gold Film",
-    "slug": "procolored-uv-dtf-transfer-hot-stamping-gold-film",
-    "price": "Rs.56,700.00 PKR",
+    "id": "69",
+    "title": "Procolored UV DTF Transfer Clear AB Film",
+    "price": "Rs.45,300.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "UV DTF Consumables"
     }
   },
   {
-    "id": "procolored-uv-dtf-transfer-hot-stamping-silver-film",
-    "name": "Procolored UV DTF Transfer Hot Stamping Silver Film",
-    "slug": "procolored-uv-dtf-transfer-hot-stamping-silver-film",
-    "price": "Rs.65,300.00 PKR",
+    "id": "70",
+    "title": "Procolored Transfer AB Film - Only for UV Laminator",
+    "price": "Rs.56,700.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "UV Consumables"
     }
   },
   {
-    "id": "procolored-uv-dtf-transfer-clear-ab-film",
-    "name": "Procolored UV DTF Transfer Clear AB Film",
-    "slug": "procolored-uv-dtf-transfer-clear-ab-film",
-    "price": "Rs.45,300.00 PKR",
+    "id": "71",
+    "title": "Procolored DTF PreTreat Transfer Roll Film 8.2 Inch x 328 FT",
+    "price": "Rs.25,400.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-transfer-ab-film-uv-laminator",
-    "name": "Procolored Transfer AB Film UV Laminator",
-    "slug": "procolored-transfer-ab-film-uv-laminator",
-    "price": "Rs.56,700.00 PKR",
+    "id": "72",
+    "title": "Procolored DTF PreTreat Transfer Sheet Film - fit for A3 DTF Printer",
+    "price": "Rs.25,400.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "cleaning-kits",
-    "name": "Cleaning Kits",
-    "slug": "cleaning-kits",
-    "price": "Rs.14,000.00 PKR",
+    "id": "73",
+    "title": "Cleaning Kits",
+    "price": "Rs.14,000.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Cleaning%20K...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Consumables"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Other liquids",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
     }
   },
   {
-    "id": "procolored-printer-control-board",
-    "name": "Procolored Printer Control Board",
-    "slug": "procolored-printer-control-board",
-    "price": "Rs.51,000.00 PKR",
+    "id": "74",
+    "title": "Procolored Printer Control Board",
+    "price": "Rs.51,000.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-power-board",
-    "name": "Procolored Printer Power Board",
-    "slug": "procolored-printer-power-board",
-    "price": "Rs.28,300.00 PKR",
+    "id": "75",
+    "title": "Procolored Printer Power Board",
+    "price": "Rs.28,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printhead-driver-board",
-    "name": "Procolored Printhead Driver Board",
-    "slug": "procolored-printhead-driver-board",
-    "price": "Rs.170,700.00 PKR",
+    "id": "76",
+    "title": "Procolored Printhead Driver Board",
+    "price": "Rs.170,600.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-startup-button-board",
-    "name": "Procolored Printer Startup Button Board",
-    "slug": "procolored-printer-startup-button-board",
-    "price": "Rs.28,300.00 PKR",
+    "id": "77",
+    "title": "Procolored Printer Startup Button Board",
+    "price": "Rs.28,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-motherboard",
-    "name": "Procolored Printer Motherboard",
-    "slug": "procolored-printer-motherboard",
-    "price": "Rs.42,500.00 PKR",
+    "id": "78",
+    "title": "Procolored Printer Motherboard",
+    "price": "Rs.42,500.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-switching-power-supply-l1800-r1390",
-    "name": "Procolored Printer Switching Power Supply L1800/R1390",
-    "slug": "procolored-printer-switching-power-supply-l1800-r1390",
-    "price": "Rs.28,300.00 PKR",
+    "id": "79",
+    "title": "Procolored Printer Switching Power Supply - L1800/R1390",
+    "price": "Rs.28,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-original-print-head-brand-new-100",
-    "name": "Procolored Original Print Head Brand New 100%",
-    "slug": "procolored-original-print-head-brand-new-100",
-    "price": "Rs.91,200.00 PKR",
+    "id": "80",
+    "title": "Procolored Original Print Head Brand New 100%",
+    "price": "Rs.91,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printhead-capping-unit",
-    "name": "Procolored Printhead Capping Unit",
-    "slug": "procolored-printhead-capping-unit",
-    "price": "Rs.14,000.00 PKR",
+    "id": "81",
+    "title": "Procolored Printhead Capping Unit - Fit For Procolored Printer",
+    "price": "Rs.14,000.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory",
-      "What's New"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-white-ink-circulation-pump-ink-waste-pump-fit-for-procolored-printer",
-    "name": "Procolored White Ink Circulation Pump/Ink Waste Pump (Fit For Procolored Printer)",
-    "slug": "procolored-white-ink-circulation-pump-ink-waste-pump-fit-for-procolored-printer",
-    "price": "Rs.22,600.00 PKR",
+    "id": "82",
+    "title": "Procolored White Ink Circulation Pump/Ink Waste Pump - Fit For Procolored Printer",
+    "price": "Rs.22,500.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-white-ink-circulation-pump-ink-waste-pump",
-    "name": "Procolored White Ink Circulation Pump/Ink Waste Pump",
-    "slug": "procolored-white-ink-circulation-pump-ink-waste-pump",
-    "price": "Rs.19,700.00 PKR",
+    "id": "83",
+    "title": "Procolored White Ink Circulation Pump/Ink Waste Pump",
+    "price": "Rs.19,700.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-ink-carriage-for-dtf-printer",
-    "name": "Procolored Printer Ink Carriage for DTF Printer",
-    "slug": "procolored-printer-ink-carriage-for-dtf-printer",
-    "price": "Rs.28,300.00 PKR",
+    "id": "84",
+    "title": "Procolored Printer Ink Carriage for DTF Printer",
+    "price": "Rs.28,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-ink-tank",
-    "name": "Procolored Printer Ink Tank",
-    "slug": "procolored-printer-ink-tank",
-    "price": "Rs.14,000.00 PKR",
+    "id": "85",
+    "title": "Procolored Printer Ink Tank",
+    "price": "Rs.14,000.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory",
-      "What's New"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-ink-tank-with-agitator",
-    "name": "Procolored Printer Ink Tank with Agitator",
-    "slug": "procolored-printer-ink-tank-with-agitator",
-    "price": "Rs.22,600.00 PKR",
+    "id": "86",
+    "title": "Procolored Printer Ink Tank with Agitator",
+    "price": "Rs.22,500.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory",
-      "What's New"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-power-socket-with-switch",
-    "name": "Procolored Power Socket with Switch",
-    "slug": "procolored-power-socket-with-switch",
-    "price": "Rs.11,200.00 PKR",
+    "id": "87",
+    "title": "Procolored Power Socket with Switch - Fit For Procolored Printer",
+    "price": "Rs.11,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": "🆕 New Arrival",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory",
-      "What's New"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-cartridges-12pcs",
-    "name": "Procolored Printer Cartridges 12PCS",
-    "slug": "procolored-printer-cartridges-12pcs",
-    "price": "Rs.11,200.00 PKR",
+    "id": "88",
+    "title": "Procolored Printer Cartridges (12PCS)",
+    "price": "Rs.11,200.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-6x120cm-ink-sac-tubes-with-cartridges",
-    "name": "Procolored Printer 6x120cm Ink Sac Tubes With Cartridges",
-    "slug": "procolored-printer-6x120cm-ink-sac-tubes-with-cartridges",
-    "price": "Rs.25,400.00 PKR",
+    "id": "89",
+    "title": "Procolored Printer 6x120cm Ink Sac Tubes With Cartridges - Fit For DTF Printer",
+    "price": "Rs.25,400.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-printer-6x120cm-ink-sac-tubes-with-cartridges-variant",
-    "name": "Procolored Printer 6x120cm Ink Sac Tubes With Cartridges variant",
-    "slug": "procolored-printer-6x120cm-ink-sac-tubes-with-cartridges-variant",
-    "price": "Rs.19,700.00 PKR",
+    "id": "90",
+    "title": "Procolored Printer 6x120cm Ink Sac Tubes With Cartridges",
+    "price": "Rs.19,700.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "usb-dongle-for-procolored-rip-v2-3",
-    "name": "USB Dongle for Procolored RIP V2.3",
-    "slug": "usb-dongle-for-procolored-rip-v2-3",
-    "price": "Rs.39,600.00 PKR",
+    "id": "91",
+    "title": "USB Dongle for Procolored RIP V2.3 or later",
+    "price": "Rs.39,600.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=USB%20Dongle...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Parts & Accessory"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Parts & Accessory",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-extended-warranty-service",
-    "name": "Procolored Extended Warranty Service",
-    "slug": "procolored-extended-warranty-service",
-    "price": "Rs.199,200.00 PKR",
+    "id": "92",
+    "title": "Procolored Remote Expert Service",
+    "price": "Rs.14,300.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Extended Warranty"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Extended Warranty",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-remote-expert-service",
-    "name": "Procolored Remote Expert Service",
-    "slug": "procolored-remote-expert-service",
-    "price": "Rs.14,300.00 PKR",
+    "id": "93",
+    "title": "Procolored Extended Warranty Service",
+    "price": "Rs.199,100.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Extended Warranty"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Extended Warranty",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-gift-card",
-    "name": "Procolored Gift Card",
-    "slug": "procolored-gift-card",
-    "price": "Rs.28,486.00 PKR",
+    "id": "94",
+    "title": "Procolored Gift Card",
+    "price": "Rs.28,475.24",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Extended Warranty"
-    ],
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Extended Warranty",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "procolored-selected-material-10-discount-card",
-    "name": "Procolored Selected Material 10% Discount Card",
-    "slug": "procolored-selected-material-10-discount-card",
-    "price": "Rs.14,300.00 PKR",
-    "originalPrice": "Rs.22,800.00 PKR",
-    "savings": "Rs.8,500.00 PKR",
-    "badge": "🔜",
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Extended Warranty"
-    ],
+    "id": "95",
+    "title": "Procolored Selected Material 10% Discount Card",
+    "price": "Rs.14,300.00",
+    "originalPrice": "Rs.22,800.00",
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "badge": "🔜 Coming Soon",
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Extended Warranty",
+      "availability": "out-of-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   },
   {
-    "id": "shipping-cost-dhl-air-express",
-    "name": "Shipping Cost DHL Air Express",
-    "slug": "shipping-cost-dhl-air-express",
-    "price": "Rs.10,000.00 PKR",
+    "id": "96",
+    "title": "SHIPPING COST DHL Air Express",
+    "price": "Rs.10,000.00",
     "originalPrice": null,
-    "savings": null,
+    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=SHIPPING%20C...",
+    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
     "badge": null,
-    "image": "/images/placeholder.jpg",
-    "sections": [
-      "Extended Warranty"
-    ],
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "#",
     "filters": {
-      "Availability": "In stock"
+      "collection": "Extended Warranty",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
     }
   }
 ];
