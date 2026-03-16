@@ -257,7 +257,14 @@ export default function Home() {
                 <h3 className="font-bold text-lg mb-1 text-black">{product.name}</h3>
                 <p className="text-gray-600 text-sm mb-4 font-medium">{product.subtitle}</p>
                 <div className="bg-gray-50 rounded-lg p-6 mb-4">
-                  <img src={product.image} alt={product.name} className="w-full h-48 object-contain" />
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-48 object-contain"
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x300/f3f4f6/9ca3af?text=' + encodeURIComponent(product.name); }}
+                  />
                 </div>
                 <div className="flex gap-3 justify-center">
                   <button className="flex-1 max-w-[120px] text-sm font-medium text-black hover:text-[#E85A24] transition-colors py-2">Learn More</button>
