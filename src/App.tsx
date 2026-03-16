@@ -23,6 +23,14 @@ import OurBrand from './pages/OurBrand';
 import ContactUs from './pages/ContactUs';
 import NewsletterPopup from './components/NewsletterPopup';
 
+// K13 Lite Variant Pages
+import K13LiteWhite from './pages/K13LiteWhite';
+import K13LitePink from './pages/K13LitePink';
+import K13LiteOvenWhite from './pages/K13LiteOvenWhite';
+import K13LiteOvenPink from './pages/K13LiteOvenPink';
+import K13LiteOvenPremiumWhite from './pages/K13LiteOvenPremiumWhite';
+import K13LiteOvenPremiumPink from './pages/K13LiteOvenPremiumPink';
+
 function App() {
   return (
     <CartProvider>
@@ -34,6 +42,13 @@ function App() {
             <Route path="f13" element={<F13Product />} />
             <Route path="collections/:categoryId" element={<Collections />} />
             <Route path="products/47" element={<InkProduct />} />
+            {/* K13 Lite routes — must come before the generic :slug route */}
+            <Route path="products/procolored-k13-lite-dtf-printer-13-a3-white" element={<K13LiteWhite />} />
+            <Route path="products/procolored-k13-lite-dtf-printer-13-a3-pink" element={<K13LitePink />} />
+            <Route path="products/procolored-k13-lite-dtf-printer-13-a3-oven-white" element={<K13LiteOvenWhite />} />
+            <Route path="products/procolored-k13-lite-dtf-printer-13-a3-oven-pink" element={<K13LiteOvenPink />} />
+            <Route path="products/procolored-k13-lite-dtf-printer-13-a3-oven-premium-white" element={<K13LiteOvenPremiumWhite />} />
+            <Route path="products/procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink" element={<K13LiteOvenPremiumPink />} />
             <Route path="products/:slug" element={<ProductDetails />} />
             <Route path="showroom" element={<Showroom />} />
             <Route path="repair" element={<Repair />} />
