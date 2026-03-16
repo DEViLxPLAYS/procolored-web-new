@@ -21,10 +21,12 @@ import TermsOfService from './pages/TermsOfService';
 import SiphonCirculation from './pages/SiphonCirculation';
 import OurBrand from './pages/OurBrand';
 import ContactUs from './pages/ContactUs';
+import NewsletterPopup from './components/NewsletterPopup';
 
 function App() {
   return (
     <CartProvider>
+      <NewsletterPopup />
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
