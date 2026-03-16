@@ -165,25 +165,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-12 bg-white flex-none">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-10 px-2">
-            <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
-              <span className="text-xl sm:text-2xl md:text-3xl font-bold text-black whitespace-nowrap">Global</span>
-              <img src="/images/feature-icon.png" alt="No.1" className="h-20 sm:h-24 md:h-32 lg:h-36 w-auto object-contain flex-shrink-0" />
-              <span className="text-xl sm:text-2xl md:text-3xl font-bold text-black whitespace-nowrap">Desktop DTF Printer Brand</span>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-black mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       <section className="py-12 bg-gray-50 flex-none">
         <div className="max-w-7xl mx-auto px-4">
@@ -289,6 +271,29 @@ export default function Home() {
                   <span className="text-xs text-red-600 font-medium">Buy Now &gt;</span>
                 </div>
               </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-[#fffcf5] flex-none relative overflow-hidden">
+        {/* Subtle decorative radial gradient for the background aesthetic */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#fff0e6]/60 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-14">
+            <div className="flex flex-nowrap items-center justify-center gap-3 md:gap-5">
+              <span className="text-[26px] sm:text-[32px] md:text-[38px] font-black text-black tracking-tight whitespace-nowrap">Global</span>
+              <img src="https://i.postimg.cc/L6GbPfkf/Chat-GPT-Image-Mar-16-2026-11-58-53-A1M.png" alt="No.1" className="h-10 sm:h-12 md:h-16 w-auto object-contain flex-shrink-0" />
+              <span className="text-[26px] sm:text-[32px] md:text-[38px] font-black text-black tracking-tight whitespace-nowrap">Desktop DTF Printer Brand</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-left md:px-2">
+                <div className="text-2xl md:text-[28px] font-bold text-black mb-1.5">{stat.value}</div>
+                <div className="text-[13px] text-gray-500 font-medium">{stat.label}</div>
+              </div>
             ))}
           </div>
         </div>
