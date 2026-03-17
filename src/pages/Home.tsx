@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Headphones, BookOpen, CreditCard, Shield } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import '../App.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 const heroSlides = [
   { id: 1, image: "/images/slide-1.webp" },
@@ -25,11 +27,46 @@ const stats = [
 ];
 
 const popularProducts = [
-  { id: "1", name: "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - Pink", price: "Rs.798,000.00 PKR", originalPrice: "Rs.1,140,200.00 PKR", image: "/images/product-k13-pink.jpg", badge: "Save Rs.342,200", badgeColor: "bg-red-500" },
-  { id: "2", name: "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - White", price: "Rs.798,000.00 PKR", originalPrice: "Rs.1,140,200.00 PKR", image: "/images/product-k13-white.jpg", badge: "Save Rs.342,200", badgeColor: "bg-red-500" },
-  { id: "3", name: "Procolored F13 Panda DTF Printer 13\" A3 L1800 & Oven", price: "Rs.855,000.00 PKR", originalPrice: "Rs.997,000.00 PKR", image: "/images/product-f13-panda.jpg", badge: "BEST SELLER", badgeColor: "bg-orange-500", link: "/f13" },
-  { id: "4", name: "Procolored P13 DTF Printer 13\" A3 XP600 & Oven", price: "Rs.1,140,100.00 PKR", originalPrice: "Rs.1,311,200.00 PKR", image: "/images/product-p13.jpg", badge: "NEW ARRIVAL", badgeColor: "bg-green-500" },
-  { id: "5", name: "Procolored VF13 Pro DTF Printer 13\" A3+", price: "Rs.1,967,000.00 PKR", image: "/images/product-vf13.jpg", badge: "NEW ARRIVAL", badgeColor: "bg-green-500" }
+  { 
+    id: "procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink",
+    name: "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - Pink",
+    pricePKR: 798000, originalPricePKR: 1140200,
+    image: "https://www.procolored.com/cdn/shop/files/K13_lite_Pink__1_1220x_crop_center.jpg?v=1758869972",
+    badge: "Save Rs.342,200", badgeColor: "bg-red-500",
+    link: "/products/procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink"
+  },
+  { 
+    id: "procolored-k13-lite-dtf-printer-13-a3-oven-premium-white",
+    name: "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - White",
+    pricePKR: 798000, originalPricePKR: 1140200,
+    image: "https://www.procolored.com/cdn/shop/files/Procolored_DTF_printer_with_Smokeless_Oven_Bundle_10_1220x_crop_center.jpg?v=1772447536",
+    badge: "Save Rs.342,200", badgeColor: "bg-red-500",
+    link: "/products/procolored-k13-lite-dtf-printer-13-a3-oven-premium-white"
+  },
+  { 
+    id: "f13-panda",
+    name: "Procolored F13 Panda DTF Printer 13\" A3 L1800 & Oven",
+    pricePKR: 855000, originalPricePKR: 997000,
+    image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526",
+    badge: "BEST SELLER", badgeColor: "bg-orange-500",
+    link: "/f13"
+  },
+  { 
+    id: "p13-xp600",
+    name: "Procolored P13 DTF Printer 13\" A3 XP600 & Oven",
+    pricePKR: 1140100, originalPricePKR: 1311200,
+    image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950",
+    badge: "NEW ARRIVAL", badgeColor: "bg-green-500",
+    link: "/collections/dtf-printer"
+  },
+  { 
+    id: "vf13-pro",
+    name: "Procolored VF13 Pro DTF Printer 13\" A3+",
+    pricePKR: 1967000, originalPricePKR: 0,
+    image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379",
+    badge: "NEW ARRIVAL", badgeColor: "bg-green-500",
+    link: "/collections/dtf-printer"
+  }
 ];
 
 const categoryTabs = [
@@ -108,6 +145,9 @@ export default function Home() {
   const [activeCategoryTab, setActiveCategoryTab] = useState("factory");
   const [productScrollPosition, setProductScrollPosition] = useState(0);
   const [reviewIndex, setReviewIndex] = useState(0);
+  const { addToCart } = useCart();
+  const { formatPrice } = useCurrency();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -178,32 +218,53 @@ export default function Home() {
           
           <div className="relative overflow-hidden">
             <div id="products-container" className="flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth pb-4" style={{WebkitOverflowScrolling:'touch'}}>
-              {popularProducts.map((product) => {
-                const Wrapper = product.link ? Link : 'div';
-                return (
-                  <Wrapper 
-                    to={product.link || ''}
-                    key={product.id} 
-                    className="flex-shrink-0 bg-white rounded-lg overflow-hidden shadow-card hover:shadow-hover transition-shadow block"
-                    style={{width:'clamp(220px, 75vw, 280px)'}}
-                  >
-                    <div className="relative">
-                      <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
-                      {product.badge && (
-                        <Badge className={`absolute top-3 left-3 ${product.badgeColor} text-white`}>{product.badge}</Badge>
+              {popularProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="flex-shrink-0 bg-white rounded-lg overflow-hidden shadow-card hover:shadow-hover transition-shadow block cursor-pointer"
+                  style={{width:'clamp(220px, 75vw, 280px)'}}
+                  onClick={() => navigate(product.link)}
+                >
+                  <div className="relative">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-48 object-cover"
+                      referrerPolicy="no-referrer"
+                      onError={e => { (e.target as HTMLImageElement).src = '/images/product-f13-panda.jpg'; }}
+                    />
+                    {product.badge && (
+                      <Badge className={`absolute top-3 left-3 ${product.badgeColor} text-white`}>{product.badge}</Badge>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-medium text-sm mb-2 line-clamp-2 text-black">{product.name}</h3>
+                    <div className="flex items-center gap-2 mb-3 flex-wrap">
+                      <span className="text-red-600 font-bold text-sm">{formatPrice(product.pricePKR)}</span>
+                      {product.originalPricePKR > 0 && (
+                        <span className="text-gray-400 text-xs line-through">{formatPrice(product.originalPricePKR)}</span>
                       )}
                     </div>
-                    <div className="p-4">
-                      <h3 className="font-medium text-sm mb-2 line-clamp-2 text-black">{product.name}</h3>
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-red-600 font-bold">{product.price}</span>
-                        {product.originalPrice && <span className="text-gray-400 text-sm line-through">{product.originalPrice}</span>}
-                      </div>
-                      <button className="w-full btn-buy-outline py-2 rounded text-sm font-medium">Buy Now</button>
+                    <div className="flex gap-2">
+                      <button
+                        className="flex-1 border border-[#E85A24] text-[#E85A24] hover:bg-[#E85A24] hover:text-white py-1.5 rounded text-xs font-semibold transition-colors"
+                        onClick={e => {
+                          e.stopPropagation();
+                          addToCart({ id: product.id, name: product.name, price: `Rs.${product.pricePKR.toLocaleString()}.00 PKR`, image: product.image, quantity: 1 });
+                        }}
+                      >
+                        Add to Cart
+                      </button>
+                      <button
+                        className="flex-1 bg-[#E85A24] text-white hover:bg-[#d44e1e] py-1.5 rounded text-xs font-semibold transition-colors"
+                        onClick={e => { e.stopPropagation(); navigate(product.link); }}
+                      >
+                        Buy Now
+                      </button>
                     </div>
-                  </Wrapper>
-                )
-              })}
+                  </div>
+                </div>
+              ))}
             </div>
             
             <button onClick={() => scrollProducts('left')} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">

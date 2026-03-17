@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { 
   Search, User, ShoppingCart, ChevronDown, Menu, X, 
   ChevronRight, MessageCircle, Headphones, Globe,
@@ -27,6 +27,7 @@ import { Button } from '@/components/ui/button';
 import { Outlet, Link } from 'react-router-dom';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 import CartDrawer from './CartDrawer';
 import '../App.css';
 
@@ -58,11 +59,34 @@ export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const { cartCount, setIsCartOpen } = useCart();
-  
+  const { currency, setCurrency, allCurrencies } = useCurrency();
+
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState("DTF Printer");
-  
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
+  const [showCurrencyPicker, setShowCurrencyPicker] = useState(false);
+
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Lock body scroll when mobile nav is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [isMenuOpen]);
+
+  const closeMenu = () => { setIsMenuOpen(false); setMobileExpanded(null); };
 
   const rightColumnProducts = useMemo(() => {
     if (hoveredCategory === 'View All') {
@@ -122,8 +146,29 @@ export default function Layout() {
             <TikTokIcon className="w-[17px] h-[17px]" />
           </a>
         </div>
-        <div className="flex items-center gap-1.5 text-sm font-medium text-gray-800 border-l border-gray-200 pl-6 cursor-pointer hover:text-red-600 transition-colors">
-          <Globe className="w-4 h-4" /> United States
+        {/* Currency selector */}
+        <div className="relative border-l border-gray-200 pl-6">
+          <button
+            onClick={() => setShowCurrencyPicker(p => !p)}
+            className="flex items-center gap-1.5 text-sm font-medium text-gray-800 hover:text-red-600 transition-colors"
+          >
+            <Globe className="w-4 h-4" />
+            {currency.code} ({currency.symbol})
+            <ChevronDown className="w-3 h-3" />
+          </button>
+          {showCurrencyPicker && (
+            <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl z-[200] py-1 min-w-[160px]">
+              {allCurrencies.map(c => (
+                <button
+                  key={c.code}
+                  onClick={() => { setCurrency(c); setShowCurrencyPicker(false); }}
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${currency.code === c.code ? 'text-[#E85A24] font-semibold' : 'text-gray-700'}`}
+                >
+                  {c.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -311,45 +356,144 @@ export default function Layout() {
           </div>
         )}
 
-        {/* Mobile Slide-in Menu */}
+        {/* Mobile Slide-in Menu — FIXED POSITION, never scrolls away */}
         {isMenuOpen && (
-          <div className="lg:hidden fixed inset-0 top-14 bg-white z-50 overflow-y-auto animate-slide-in flex flex-col">
-            <nav className="flex flex-col px-4 pt-4 pb-8 flex-1">
-              <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-semibold text-black">
-                <span>Products</span><ChevronRight className="w-4 h-4 text-gray-400" />
-              </a>
-              <Link to="/f13" className="flex items-center py-4 border-b border-gray-100 text-base font-semibold text-[#E85A24]">
-                <span className="mr-2">🔔</span> F13 Appreciation Deals
-              </Link>
-              <a href="#" className="flex items-center justify-between py-4 border-b border-gray-100 text-base font-semibold text-black">
-                <span>Support</span><ChevronRight className="w-4 h-4 text-gray-400" />
-              </a>
-              <div className="py-4 border-b border-gray-100">
-                <div className="flex items-center justify-between text-base font-semibold text-black mb-2">
-                  <span>About Us</span><ChevronDown className="w-4 h-4 text-gray-400" />
-                </div>
-                <div className="flex flex-col gap-2 pl-4 mt-2">
-                  {aboutUsLinks.map((link, idx) => (
-                    <Link key={idx} to={link.path} className="text-sm text-gray-600 hover:text-[#E85A24] py-1">
-                      {link.name}
-                    </Link>
-                  ))}
-                </div>
+          <>
+            {/* Backdrop */}
+            <div
+              className="lg:hidden fixed inset-0 bg-black/40 z-[9998]"
+              onClick={closeMenu}
+            />
+            {/* Drawer */}
+            <div className="lg:hidden fixed top-0 left-0 w-full h-full bg-white z-[9999] flex flex-col overflow-hidden">
+              {/* Sticky header with close button */}
+              <div className="sticky top-0 z-10 bg-white border-b border-gray-100 flex items-center justify-between px-4 h-14 flex-shrink-0">
+                <Link to="/" onClick={closeMenu}>
+                  <img
+                    src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png"
+                    alt="Procolored"
+                    className="h-10 w-auto object-contain"
+                  />
+                </Link>
+                <button
+                  onClick={closeMenu}
+                  className="w-11 h-11 flex items-center justify-center text-gray-700 hover:text-black transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X className="w-6 h-6" />
+                </button>
               </div>
 
-              <div className="flex items-center gap-5 mt-8 justify-center">
-                <a href="https://www.facebook.com/Procolored" target="_blank" rel="noreferrer"><Facebook className="w-5 h-5 text-black hover:text-[#E85A24] transition-colors" /></a>
-                <a href="https://x.com/Procoloredprint" target="_blank" rel="noreferrer"><XIcon className="w-4 h-4 mt-0.5 text-black hover:text-[#E85A24] transition-colors" /></a>
-                <a href="https://www.instagram.com/procolored_printers" target="_blank" rel="noreferrer"><Instagram className="w-5 h-5 text-black hover:text-[#E85A24] transition-colors" /></a>
-                <a href="https://www.youtube.com/c/Procoloredprofessionalprinter" target="_blank" rel="noreferrer"><Youtube className="w-6 h-6 text-black hover:text-[#E85A24] transition-colors" /></a>
-                <a href="https://www.pinterest.com/procolored/" target="_blank" rel="noreferrer"><PinterestIcon className="w-5 h-5 text-black hover:text-[#E85A24] transition-colors" /></a>
-                <a href="https://www.tiktok.com/@procolored" target="_blank" rel="noreferrer"><TikTokIcon className="w-4 h-4 text-black hover:text-[#E85A24] transition-colors" /></a>
-              </div>
-              <div className="flex items-center justify-center gap-2 mt-4 text-sm font-medium text-gray-600">
-                <Globe className="w-4 h-4" /> United States
-              </div>
-            </nav>
-          </div>
+              {/* Scrollable nav body */}
+              <nav className="flex-1 overflow-y-auto px-4 pb-8">
+
+                {/* Products — expandable */}
+                <div className="border-b border-gray-100">
+                  <button
+                    onClick={() => setMobileExpanded(p => p === 'products' ? null : 'products')}
+                    className="w-full flex items-center justify-between py-4 text-base font-semibold text-black"
+                  >
+                    <span>Products</span>
+                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${mobileExpanded === 'products' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {mobileExpanded === 'products' && (
+                    <div className="flex flex-col pb-3 pl-4 gap-1">
+                      <Link to="/collections/all" onClick={closeMenu} className="py-2 text-sm font-semibold text-[#E85A24]">
+                        View All Products
+                      </Link>
+                      {navbarCategories.filter(c => c.id !== 'all').map((cat, idx) => (
+                        <Link key={idx} to={cat.path} onClick={closeMenu} className="py-2 text-sm text-gray-700 hover:text-[#E85A24] transition-colors">
+                          {cat.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* F13 Deals */}
+                <Link
+                  to="/f13"
+                  onClick={closeMenu}
+                  className="flex items-center py-4 border-b border-gray-100 text-base font-semibold text-[#E85A24]"
+                >
+                  <span className="mr-2">🔔</span> F13 Appreciation Deals
+                </Link>
+
+                {/* Support — expandable */}
+                <div className="border-b border-gray-100">
+                  <button
+                    onClick={() => setMobileExpanded(p => p === 'support' ? null : 'support')}
+                    className="w-full flex items-center justify-between py-4 text-base font-semibold text-black"
+                  >
+                    <span>Support</span>
+                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${mobileExpanded === 'support' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {mobileExpanded === 'support' && (
+                    <div className="flex flex-col pb-3 pl-4 gap-1">
+                      {supportLinks.map((link, idx) => (
+                        <Link key={idx} to={link.path} onClick={closeMenu} className="py-2 text-sm text-gray-700 hover:text-[#E85A24] transition-colors">
+                          {link.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* About Us — expandable */}
+                <div className="border-b border-gray-100">
+                  <button
+                    onClick={() => setMobileExpanded(p => p === 'about' ? null : 'about')}
+                    className="w-full flex items-center justify-between py-4 text-base font-semibold text-black"
+                  >
+                    <span>About Us</span>
+                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${mobileExpanded === 'about' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {mobileExpanded === 'about' && (
+                    <div className="flex flex-col pb-3 pl-4 gap-1">
+                      {aboutUsLinks.map((link, idx) => (
+                        <Link key={idx} to={link.path} onClick={closeMenu} className="py-2 text-sm text-gray-700 hover:text-[#E85A24] transition-colors">
+                          {link.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Currency Picker */}
+                <div className="border-b border-gray-100">
+                  <button
+                    onClick={() => setMobileExpanded(p => p === 'currency' ? null : 'currency')}
+                    className="w-full flex items-center justify-between py-4 text-base font-semibold text-black"
+                  >
+                    <span className="flex items-center gap-2"><Globe className="w-4 h-4" /> {currency.code} ({currency.symbol})</span>
+                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${mobileExpanded === 'currency' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {mobileExpanded === 'currency' && (
+                    <div className="flex flex-col pb-3 pl-4 gap-1">
+                      {allCurrencies.map(c => (
+                        <button
+                          key={c.code}
+                          onClick={() => { setCurrency(c); setMobileExpanded(null); }}
+                          className={`py-2 text-left text-sm transition-colors ${currency.code === c.code ? 'text-[#E85A24] font-semibold' : 'text-gray-700 hover:text-[#E85A24]'}`}
+                        >
+                          {c.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-5 mt-8 justify-center">
+                  <a href="https://www.facebook.com/Procolored" target="_blank" rel="noreferrer"><Facebook className="w-5 h-5 text-black" /></a>
+                  <a href="https://x.com/Procoloredprint" target="_blank" rel="noreferrer"><XIcon className="w-4 h-4 text-black" /></a>
+                  <a href="https://www.instagram.com/procolored_printers" target="_blank" rel="noreferrer"><Instagram className="w-5 h-5 text-black" /></a>
+                  <a href="https://www.youtube.com/c/Procoloredprofessionalprinter" target="_blank" rel="noreferrer"><Youtube className="w-6 h-6 text-black" /></a>
+                  <a href="https://www.pinterest.com/procolored/" target="_blank" rel="noreferrer"><PinterestIcon className="w-5 h-5 text-black" /></a>
+                  <a href="https://www.tiktok.com/@procolored" target="_blank" rel="noreferrer"><TikTokIcon className="w-4 h-4 text-black" /></a>
+                </div>
+              </nav>
+            </div>
+          </>
         )}
       </header>
 

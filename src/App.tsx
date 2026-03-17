@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import { CartProvider } from './context/CartContext';
+import { CurrencyProvider } from './context/CurrencyContext';
 
 // Placeholder pages
 import F13Product from './pages/F13Product';
@@ -33,9 +34,10 @@ import K13LiteOvenPremiumPink from './pages/K13LiteOvenPremiumPink';
 
 function App() {
   return (
-    <CartProvider>
-      <NewsletterPopup />
-      <Router>
+    <CurrencyProvider>
+      <CartProvider>
+        <NewsletterPopup />
+        <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -63,8 +65,9 @@ function App() {
             <Route path="pages/contact-us" element={<ContactUs />} />
           </Route>
         </Routes>
-      </Router>
-    </CartProvider>
+        </Router>
+      </CartProvider>
+    </CurrencyProvider>
   );
 }
 
