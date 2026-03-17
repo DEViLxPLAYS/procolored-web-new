@@ -342,12 +342,10 @@ export default function Home() {
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#fff0e6]/60 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-14">
-            <div className="flex flex-nowrap items-center justify-center gap-3 md:gap-5">
-              <span className="text-[26px] sm:text-[32px] md:text-[38px] font-black text-black tracking-tight whitespace-nowrap">Global</span>
-              <img src="https://i.postimg.cc/L6GbPfkf/Chat-GPT-Image-Mar-16-2026-11-58-53-A1M.png" alt="No.1" className="h-10 sm:h-12 md:h-16 w-auto object-contain flex-shrink-0" />
-              <span className="text-[26px] sm:text-[32px] md:text-[38px] font-black text-black tracking-tight whitespace-nowrap">Desktop DTF Printer Brand</span>
-            </div>
+          <div className="text-center mb-10 md:mb-14">
+            <h2 className="text-[24px] sm:text-[32px] md:text-[38px] font-black text-black tracking-tight leading-[1.3] md:leading-tight">
+              Global <img src="https://i.postimg.cc/L6GbPfkf/Chat-GPT-Image-Mar-16-2026-11-58-53-A1M.png" alt="No.1" className="inline-block h-8 sm:h-11 md:h-16 w-auto object-contain mx-1 md:mx-3 align-middle -mt-1 md:-mt-2 flex-shrink-0" /> Desktop DTF Printer Brand
+            </h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
             {stats.map((stat, index) => (
