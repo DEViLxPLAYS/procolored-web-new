@@ -28,16 +28,16 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    "id": "1",
+    "id": "procolored-k13-lite-dtf-printer-13-a3-white",
     "title": "Procolored K13 Lite DTF Printer 13\" A3 - White",
     "price": "Rs.569,300.00",
     "originalPrice": "Rs.854,000.00",
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "image": "https://www.procolored.com/cdn/shop/files/K13_lite_white_1_9a953385-6db6-491d-84f6-45f45196871d_1220x_crop_center.jpg?v=1758869975",
+    "hoverImage": "https://www.procolored.com/cdn/shop/files/K13_lite_white_m_1220x_crop_center.jpg?v=1772447536",
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "#",
+    "link": "procolored-k13-lite-dtf-printer-13-a3-white",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -53,16 +53,16 @@ export const products: Product[] = [
     }
   },
   {
-    "id": "2",
+    "id": "procolored-k13-lite-dtf-printer-13-a3-oven-white",
     "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven - White",
     "price": "Rs.711,600.00",
     "originalPrice": "Rs.1,024,600.00",
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "image": "https://www.procolored.com/cdn/shop/files/K13_lite_white_5_3bceb5a3-46a0-4a3c-9144-63f9a71f88dc_1220x_crop_center.jpg?v=1758869975",
+    "hoverImage": "https://www.procolored.com/cdn/shop/files/K13_lite_white_m_1220x_crop_center.jpg?v=1772447536",
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "#",
+    "link": "procolored-k13-lite-dtf-printer-13-a3-oven-white",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -78,16 +78,16 @@ export const products: Product[] = [
     }
   },
   {
-    "id": "3",
+    "id": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-white",
     "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - White",
     "price": "Rs.797,100.00",
     "originalPrice": "Rs.1,138,800.00",
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "image": "https://www.procolored.com/cdn/shop/files/Procolored_DTF_printer_with_Smokeless_Oven_Bundle_10_1220x_crop_center.jpg?v=1772447536",
+    "hoverImage": "https://www.procolored.com/cdn/shop/files/K13_lite_white_m_1220x_crop_center.jpg?v=1772447536",
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "#",
+    "link": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-white",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -103,16 +103,16 @@ export const products: Product[] = [
     }
   },
   {
-    "id": "4",
+    "id": "procolored-k13-lite-dtf-printer-13-a3-pink",
     "title": "Procolored K13 Lite DTF Printer 13\" A3 - Pink",
     "price": "Rs.569,300.00",
     "originalPrice": "Rs.854,000.00",
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "image": "https://www.procolored.com/cdn/shop/files/K13_lite_Pink__1_1220x_crop_center.jpg?v=1758869972",
+    "hoverImage": "https://www.procolored.com/cdn/shop/files/1_11199f37-ce34-49c7-8720-a8afaac4a3c1_1220x_crop_center.png?v=1772447536",
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "#",
+    "link": "procolored-k13-lite-dtf-printer-13-a3-pink",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -128,16 +128,16 @@ export const products: Product[] = [
     }
   },
   {
-    "id": "5",
+    "id": "procolored-k13-lite-dtf-printer-13-a3-oven-pink",
     "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven - Pink",
     "price": "Rs.711,600.00",
     "originalPrice": "Rs.1,024,600.00",
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "image": "https://www.procolored.com/cdn/shop/files/K13_lite_Pink__5_1220x_crop_center.jpg?v=1758869970",
+    "hoverImage": "https://www.procolored.com/cdn/shop/files/1_11199f37-ce34-49c7-8720-a8afaac4a3c1_1220x_crop_center.png?v=1772447536",
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "#",
+    "link": "procolored-k13-lite-dtf-printer-13-a3-oven-pink",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -153,16 +153,16 @@ export const products: Product[] = [
     }
   },
   {
-    "id": "6",
+    "id": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink",
     "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - Pink",
     "price": "Rs.797,100.00",
     "originalPrice": "Rs.1,138,800.00",
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "image": "https://www.procolored.com/cdn/shop/files/K13_lite_Pink__1_1220x_crop_center.jpg?v=1758869972",
+    "hoverImage": "https://www.procolored.com/cdn/shop/files/1_11199f37-ce34-49c7-8720-a8afaac4a3c1_1220x_crop_center.png?v=1772447536",
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "#",
+    "link": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",

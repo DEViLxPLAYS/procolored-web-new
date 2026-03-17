@@ -452,7 +452,7 @@ export default function Collections() {
 
                  return (
                  <Link 
-                   to={`/products/${product.id}`} 
+                   to={product.link && product.link !== '#' ? `/products/${product.link}` : `/products/${product.id}`} 
                    key={product.id} 
                    className="group flex flex-col h-full bg-white relative"
                  >
@@ -460,6 +460,9 @@ export default function Collections() {
                      <img 
                        src={product.image} 
                        alt={product.title}
+                       referrerPolicy="no-referrer"
+                       loading="lazy"
+                       onError={e => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Image'; }}
                        className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500 mix-blend-multiply"
                      />
                      {product.badge && (
