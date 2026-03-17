@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, ChevronDown, Shield, Headphones, BookOpen, AlertCircle, Tag, Check, ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react';
+import { Star, ChevronDown, Shield, Headphones, BookOpen, AlertCircle, Tag, Check, ChevronLeft, ChevronRight, X, ZoomIn, Truck } from 'lucide-react';
+import { useCurrency } from '../context/CurrencyContext';
 
 export type K13Variant = {
   color: 'White' | 'Pink';
@@ -105,7 +106,7 @@ function ImageStrip() {
   );
 }
 
-function fmt(n: number) { return 'Rs. ' + n.toLocaleString('en-PK'); }
+// formatting removed in favor of useCurrency hook context
 
 const FEATURES = [
   { label: 'Pro Color Precision', sub: 'Accurate & Vivid Output', img: 'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/PC_2.jpg?v=1756537360' },
@@ -178,6 +179,7 @@ const VARIANT_OPPOSITES: Record<string, string> = {
 
 export default function K13LiteProduct({ variant }: { variant: K13Variant }) {
   const navigate = useNavigate();
+  const { formatPrice: fmt } = useCurrency();
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);
   const [couponCode, setCouponCode] = useState('');
@@ -257,6 +259,9 @@ export default function K13LiteProduct({ variant }: { variant: K13Variant }) {
                 <button className="flex-1 bg-[#E85A24] hover:bg-[#d44e1e] text-white font-bold py-3 px-4 rounded-lg transition-colors text-sm sm:text-base">Add to Cart</button>
               </div>
               <button className="w-full border-2 border-[#E85A24] text-[#E85A24] hover:bg-[#E85A24] hover:text-white font-bold py-3 rounded-lg transition-colors text-sm sm:text-base">Buy It Now</button>
+              <div className="flex items-center justify-center gap-1.5 mt-1 mb-2 text-sm font-medium text-gray-700">
+                <Truck className="w-4 h-4 text-green-600" /> 15-17 Business Days Delivery
+              </div>
               <div className="flex flex-wrap gap-2">
                 {[{ icon: Shield, text: '12-Month Warranty' }, { icon: Headphones, text: '24/6 Tech Support' }, { icon: BookOpen, text: 'Free Training' }].map(({ icon: Icon, text }) => (
                   <div key={text} className="flex items-center gap-1.5 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded px-2 py-1">

@@ -6,7 +6,7 @@ export default function ShippingPolicy() {
       
       <div className="space-y-6 text-[#4a4a4a] text-[15px] leading-relaxed font-medium">
         <h2 className="text-xl md:text-[28px] font-extrabold text-[#1a1a1a] mt-12 mb-6 tracking-tight">Shipping Time</h2>
-        <p>Usually it takes 7 to 14 business days to arrive.<br/>Our default shipment method is air shipment by DHL Express or Fedex Express.<br/>If you purchase ink, powder and other consumables together with the machine, the machine will be transported separately from the liquid and powder according to the transportation policy, so the delivery time is not exactly the same.</p>
+        <p>Usually it takes 15 to 17 business days to arrive.<br/>Our default shipment method is air shipment by DHL Express or Fedex Express.<br/>If you purchase ink, powder and other consumables together with the machine, the machine will be transported separately from the liquid and powder according to the transportation policy, so the delivery time is not exactly the same.</p>
         
         <h2 className="text-xl md:text-[28px] font-extrabold text-[#1a1a1a] mt-12 mb-6 tracking-tight">Shipping Fee</h2>
         <p>FREE Shipping on all items for most countries.<br/>Some remote countries and regions such as Africa and Latin America need to make up part of the freight. The specific standard is subject to the shipping fee displayed at checkout.</p>

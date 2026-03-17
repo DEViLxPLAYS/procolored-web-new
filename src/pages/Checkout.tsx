@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -12,13 +13,14 @@ const parsePrice = (priceStr: string) => {
 
 export default function Checkout() {
   const { items, cartSubtotal, clearCart } = useCart();
+  const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const [discountCode, setDiscountCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const formatPrice = (val: number) => {
-    return `Rs.${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PKR`;
+  const formatPriceLocal = (val: number) => {
+    return formatPrice(val);
   };
 
   const discountAmount = discountApplied ? cartSubtotal * 0.05 : 0;
@@ -190,7 +192,7 @@ export default function Checkout() {
                     <h4 className="text-sm font-semibold text-gray-800 line-clamp-2 pr-4">{item.name}</h4>
                   </div>
                   <div className="text-sm font-bold text-black whitespace-nowrap">
-                    {parsePrice(item.price) && formatPrice(parsePrice(item.price) * item.quantity)}
+                    <span className="font-medium text-gray-900">{formatPriceLocal(parsePrice(item.price) * item.quantity)}</span>
                   </div>
                 </div>
               ))}
@@ -225,14 +227,14 @@ export default function Checkout() {
             <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
               <div className="flex justify-between items-center text-sm">
                 <span className="text-gray-600 font-medium">Subtotal</span>
-                <span className="font-semibold">{formatPrice(cartSubtotal)}</span>
+                <span className="font-medium text-gray-900">{formatPriceLocal(cartSubtotal)}</span>
               </div>
               {discountApplied && (
                 <div className="flex justify-between items-center text-sm font-medium">
                   <span className="text-gray-600 flex items-center gap-2">
                     Order discount <span className="text-xs text-gray-400 font-bold">&#x21B3; PROCOLORED5</span>
                   </span>
-                  <span className="font-semibold text-black">- {formatPrice(discountAmount)}</span>
+                    <span className="font-medium text-green-600">-{formatPriceLocal(discountAmount)}</span>
                 </div>
               )}
               <div className="flex justify-between items-center text-sm">
@@ -243,7 +245,7 @@ export default function Checkout() {
 
             <div className="mt-6 pt-6 border-t border-gray-200">
               <div className="flex justify-between items-end">
-                <span className="text-base font-medium text-gray-800">Total</span>
+                <span className="text-xl font-bold text-gray-900">{formatPriceLocal(total)}</span>
                 <div className="flex items-center gap-2 text-2xl font-bold text-black">
                   <span className="text-xs font-normal text-gray-500 uppercase tracking-wider">PKR</span>
                   {formatPrice(total).replace(' PKR', '')}

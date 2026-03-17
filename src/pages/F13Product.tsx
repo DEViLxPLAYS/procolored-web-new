@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Hls from 'hls.js';
 import { Star, ChevronLeft, ChevronRight, ChevronDown, Headphones, BookOpen, Video, HelpCircle, Check, Tag, AlertCircle, Gift, Truck, Shield, Zap } from 'lucide-react';
+import { useCurrency } from '../context/CurrencyContext';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HlsVideo – auto-plays HLS or MP4, fully muted and looping
@@ -188,7 +189,7 @@ export default function F13Product() {
     ['Product Size', '33"*15"*11.8" (84*38*30cm)', 'Standard Supplies', 'DTF Ink Set(5×250ml:CMYKW)\nNozzle Protection Fluid(1×250ml)\nAdhesive Powder (500g)\nPET Roll Film (13in × 328ft / 33cm×100m)'],
   ];
 
-  const fmt = (n: number) => n.toLocaleString('en-PK');
+  const { formatPrice: fmt } = useCurrency();
 
   return (
     <div className="bg-white font-sans overflow-hidden">
@@ -252,8 +253,8 @@ export default function F13Product() {
             {/* Price row */}
             <div>
               <div className="flex items-baseline gap-3 flex-wrap">
-                <span className="text-3xl font-bold text-[#E07000]">Rs.{fmt(finalPrice)} PKR</span>
-                <span className="text-lg text-gray-400 line-through">Rs.{fmt(currentOption.originalPKR)} PKR</span>
+                    <span className="text-3xl font-bold">{fmt(finalPrice)}</span>
+                    <span className="text-lg text-gray-400 line-through">{fmt(options[selectedOption].originalPKR)}</span>
               </div>
               <p className="text-sm text-[#E07000] flex items-center gap-1 mt-1">
                 <Zap className="w-4 h-4" /> Fan Appreciation Sale (Rs.{fmt(currentOption.originalPKR - currentOption.salePKR)} PKR)
@@ -313,8 +314,8 @@ export default function F13Product() {
                     <div className="flex-1">
                       <span className={`text-xs font-bold px-2 py-0.5 rounded-full mb-1 inline-block ${i === 1 ? 'bg-[#E07000] text-white' : 'bg-orange-100 text-[#E07000]'}`}>{opt.badge}</span>
                       <p className="font-bold text-gray-900">{opt.label}</p>
-                      <p className="text-sm text-gray-400 line-through">Rs.{fmt(opt.originalPKR)} PKR</p>
-                      <p className="text-sm text-[#E07000] font-bold">Rs.{fmt(opt.originalPKR - opt.salePKR)} Off → Rs.{fmt(couponApplied && selectedOption === i ? finalPrice : opt.salePKR)} PKR</p>
+                      <p className="text-sm text-gray-400 line-through">{fmt(opt.originalPKR)}</p>
+                      <p className="text-sm text-[#E07000] font-bold">{fmt(opt.originalPKR - opt.salePKR)} Off → {fmt(couponApplied && selectedOption === i ? finalPrice : opt.salePKR)}</p>
                     </div>
                   </button>
                 ))}
@@ -334,7 +335,7 @@ export default function F13Product() {
             <div className="flex items-center gap-4 flex-wrap text-sm font-medium text-gray-700">
               <span className="flex items-center gap-1"><Truck className="w-4 h-4 text-green-600" /> Free Shipping</span>
               <span className="flex items-center gap-1"><Shield className="w-4 h-4 text-blue-600" /> 1 Year Printhead Warranty</span>
-              <span className="flex items-center gap-1"><Gift className="w-4 h-4 text-orange-500" /> 3–5 Days Fast Delivery</span>
+              <span className="flex items-center gap-1"><Gift className="w-4 h-4 text-orange-500" /> 15-17 Business Days Delivery</span>
             </div>
 
             {/* Quantity + cart */}

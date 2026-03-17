@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react';
 import { ChevronDown, ChevronRight, ChevronLeft, SlidersHorizontal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, Link, useSearchParams } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+import { useCurrency, parsePKR } from '../context/CurrencyContext';
 import { products } from '../data/products';
 import { Switch } from '@/components/ui/switch';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -42,8 +44,11 @@ const filterGroups = [
 ];
 
 export default function Collections() {
-  const { categoryId = 'all' } = useParams();
+  const { pathname } = useLocation();
+  const categoryId = pathname.split('/').pop() || 'all';
   const [searchParams, setSearchParams] = useSearchParams();
+  const { addToCart } = useCart();
+  const { formatPrice } = useCurrency();
   
   const currentCategoryName = categoryMap[categoryId] || 'All';
   
@@ -441,12 +446,10 @@ export default function Collections() {
                  // Calculate savings
                  let savingsAmount = null;
                  if (product.originalPrice && product.originalPrice !== '——') {
-                   const originalRaw = product.originalPrice.replace(/[^0-9.]/g, '');
-                   const priceRaw = product.price.replace(/[^0-9.]/g, '');
-                   const originalNum = parseFloat(originalRaw);
-                   const priceNum = parseFloat(priceRaw);
-                   if (!isNaN(originalNum) && !isNaN(priceNum) && originalNum > priceNum) {
-                     savingsAmount = 'Save Rs.' + (originalNum - priceNum).toLocaleString('en-IN', {minimumFractionDigits: 0});
+                   const originalPriceNum = parsePKR(product.originalPrice);
+                   const priceNum = parsePKR(product.price);
+                   if (originalPriceNum > priceNum) {
+                     savingsAmount = 'Save ' + formatPrice(originalPriceNum - priceNum);
                    }
                  }
 
@@ -476,22 +479,38 @@ export default function Collections() {
                        {product.title}
                      </h3>
                      <div className="flex flex-col gap-1 mt-auto">
-                       <div className="flex items-end gap-2 flex-wrap">
-                         <span className="text-[#E85A24] font-bold text-[16px]">{product.price}</span>
-                         {product.originalPrice && (
-                           <span className="text-gray-400 text-[13px] line-through pb-0.5">{product.originalPrice}</span>
-                         )}
-                         {savingsAmount && (
-                           <span className="text-xs font-bold text-[#98db51] bg-[#f2faea] px-1.5 py-0.5 rounded-sm">{savingsAmount}</span>
-                         )}
-                       </div>
-                       <button className={`mt-3 w-full py-2.5 px-4 text-sm font-bold text-center rounded transition-colors duration-200 ${
-                         product.buttonStyle === 'outline' 
-                           ? 'border border-[#E85A24] text-[#E85A24] hover:bg-[#E85A24] hover:text-white' 
-                           : 'bg-[#E85A24] text-white hover:bg-[#d44e1e] border border-[#E85A24]'
-                       }`}>
-                         {product.buttonText}
-                       </button>
+                        <div className="flex items-end gap-2 flex-wrap">
+                          <span className="text-[#E85A24] font-bold text-[16px]">{product.price ? formatPrice(parsePKR(product.price)) : '-'}</span>
+                          {product.originalPrice && (
+                            <span className="text-gray-400 text-[13px] line-through pb-0.5">{formatPrice(parsePKR(product.originalPrice))}</span>
+                          )}
+                          {savingsAmount && (
+                            <span className="text-xs font-bold text-[#98db51] bg-[#f2faea] px-1.5 py-0.5 rounded-sm">{savingsAmount}</span>
+                          )}
+                        </div>
+                        <button 
+                          onClick={(e) => {
+                            if (product.buttonText.toLowerCase() === 'add to cart') {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              if(product.price) {
+                                addToCart({
+                                  id: product.id,
+                                  name: product.title,
+                                  price: product.price,
+                                  image: product.image,
+                                  quantity: 1
+                                });
+                              }
+                            }
+                          }}
+                          className={`mt-3 w-full py-2.5 px-4 text-sm font-bold text-center rounded transition-colors duration-200 ${
+                          product.buttonStyle === 'outline' 
+                            ? 'border border-[#E85A24] text-[#E85A24] hover:bg-[#E85A24] hover:text-white' 
+                            : 'bg-[#E85A24] text-white hover:bg-[#d44e1e] border border-[#E85A24]'
+                        }`}>
+                          {product.buttonText}
+                        </button>
                      </div>
                    </div>
                  </Link>

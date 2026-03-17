@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Truck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 const variants = [
   { name: 'CMYKWW', price: 65300, image: 'https://www.procolored.com/cdn/shop/files/CMYKWW_16_1220x_crop_center.png?v=1762338853' },
@@ -49,6 +50,7 @@ export default function InkProduct() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [reviewPage, setReviewPage] = useState(1);
   const { addToCart } = useCart();
+  const { formatPrice: fmt } = useCurrency();
   
   const activeImage = variants[activeVariantIdx].image;
   const currentReviews = reviews.slice((reviewPage - 1) * 5, reviewPage * 5);
@@ -57,7 +59,7 @@ export default function InkProduct() {
     addToCart({
       id: "47",
       name: `Procolored Direct to Transfer Film Ink 500ml - ${variants[activeVariantIdx].name}`,
-      price: `Rs.${variants[activeVariantIdx].price.toLocaleString()}.00`,
+      price: fmt(variants[activeVariantIdx].price),
       image: activeImage,
       quantity: quantity
     });
@@ -118,7 +120,7 @@ export default function InkProduct() {
             </div>
 
             <div className="mb-6">
-              <span className="text-3xl font-bold text-red-600">Rs.{variants[activeVariantIdx].price.toLocaleString()}.00 PKR</span>
+              <span className="text-3xl font-bold text-red-600">{fmt(variants[activeVariantIdx].price)}</span>
             </div>
             
             <p className="text-sm text-gray-700 font-medium leading-relaxed mb-6">
@@ -186,6 +188,11 @@ export default function InkProduct() {
             
             <div className="flex items-center justify-center gap-2 text-sm font-medium text-blue-600 hover:underline cursor-pointer mb-6">
               More payment options
+            </div>
+            
+            {/* Delivery badge */}
+            <div className="flex items-center gap-1 justify-center text-sm font-bold text-gray-700 mb-6 mt-[-12px]">
+              <Truck className="w-4 h-4 text-green-600" /> 15-17 Business Days Delivery
             </div>
             
             {/* Shop Confidence Badges */}

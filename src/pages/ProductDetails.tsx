@@ -3,11 +3,13 @@ import { Star, ChevronLeft, ChevronRight, ChevronDown, Headphones, BookOpen, Vid
 import { useParams, Link } from 'react-router-dom';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
+import { useCurrency, parsePKR } from '../context/CurrencyContext';
 
 export default function ProductDetails() {
   const { slug } = useParams();
   const product = products.find(p => p.id === slug);
   const { addToCart } = useCart();
+  const { formatPrice } = useCurrency();
 
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -144,9 +146,9 @@ export default function ProductDetails() {
             </div>
 
             <div className="flex items-end gap-3 mb-2">
-              <span className="text-3xl font-bold text-red-600">{product.price || '-'}</span>
+              <span className="text-3xl font-bold text-red-600">{product.price ? formatPrice(parsePKR(product.price)) : '-'}</span>
               {product.originalPrice && (
-                 <span className="text-lg font-medium text-gray-400 line-through mb-1">{product.originalPrice}</span>
+                 <span className="text-lg font-medium text-gray-400 line-through mb-1">{formatPrice(parsePKR(product.originalPrice))}</span>
               )}
             </div>
             
@@ -155,7 +157,7 @@ export default function ProductDetails() {
                 <span className="bg-red-100 text-red-600 px-1 py-0.5 rounded text-[10px] transform -translate-y-px">🔥</span>
                 {product.badge.replace('⭐ ', '').replace('🆕 ', '')}
                 <span className="text-gray-500 font-medium ml-1">
-                  (Save Rs.{(parseFloat(product.originalPrice.replace(/[^0-9.]/g, '')) - parseFloat(product.price.replace(/[^0-9.]/g, ''))).toLocaleString('en-IN', {minimumFractionDigits: 0})})
+                  (Save {formatPrice(parsePKR(product.originalPrice) - parsePKR(product.price))})
                 </span>
               </p>
             )}
