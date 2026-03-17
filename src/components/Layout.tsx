@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { 
   Search, User, ShoppingCart, ChevronDown, Menu, X, 
-  ChevronRight, MessageCircle, Headphones, Globe,
+  ChevronRight, ChevronLeft, MessageCircle, Headphones, Globe,
   Facebook, Instagram, Youtube, 
   MapPin, Award, Shield
 } from 'lucide-react';
@@ -57,13 +57,16 @@ const aboutUsLinks = [
 
 export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeMobileMenu, setActiveMobileMenu] = useState<'main' | 'products' | 'support' | 'about'>('main');
+  const [expandedProductCategory, setExpandedProductCategory] = useState<string | null>(null);
+  
   const [showChat, setShowChat] = useState(false);
   const { cartCount, setIsCartOpen } = useCart();
   const { currency, setCurrency, allCurrencies } = useCurrency();
 
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState("DTF Printer");
-  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
+  
   const [showCurrencyPicker, setShowCurrencyPicker] = useState(false);
 
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -78,6 +81,11 @@ export default function Layout() {
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.width = '';
+      // Reset menus when closed
+      setTimeout(() => {
+        setActiveMobileMenu('main');
+        setExpandedProductCategory(null);
+      }, 300);
     }
     return () => {
       document.body.style.overflow = '';
@@ -86,7 +94,7 @@ export default function Layout() {
     };
   }, [isMenuOpen]);
 
-  const closeMenu = () => { setIsMenuOpen(false); setMobileExpanded(null); };
+  const closeMenu = () => { setIsMenuOpen(false); };
 
   const rightColumnProducts = useMemo(() => {
     if (hoveredCategory === 'View All') {
@@ -384,114 +392,162 @@ export default function Layout() {
                 </button>
               </div>
 
-              {/* Scrollable nav body */}
-              <nav className="flex-1 overflow-y-auto px-4 pb-8">
+              {/* Main Nav Wrapper for sliding */}
+              <div className="flex-1 relative overflow-hidden">
+                
+                {/* --- MAIN LEVEL --- */}
+                <div className={`absolute inset-0 bg-white transition-transform duration-300 ease-in-out overflow-y-auto px-4 pb-8 ${activeMobileMenu === 'main' ? 'translate-x-0' : '-translate-x-full'}`}>
+                  
+                  {/* Products */}
+                  <div className="border-b border-gray-100">
+                    <button
+                      onClick={() => setActiveMobileMenu('products')}
+                      className="w-full flex items-center justify-between py-4 text-[15px] font-medium text-black"
+                    >
+                      <span>Products</span>
+                      <ChevronRight className="w-4 h-4 text-gray-400" />
+                    </button>
+                  </div>
 
-                {/* Products — expandable */}
-                <div className="border-b border-gray-100">
-                  <button
-                    onClick={() => setMobileExpanded(p => p === 'products' ? null : 'products')}
-                    className="w-full flex items-center justify-between py-4 text-base font-semibold text-black"
+                  {/* F13 Deals */}
+                  <Link
+                    to="/f13"
+                    onClick={closeMenu}
+                    className="flex items-center py-4 border-b border-gray-100 text-[15px] font-medium text-black" // Text color changed from #E85A24 to match reference, bell kept
                   >
-                    <span>Products</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${mobileExpanded === 'products' ? 'rotate-180' : ''}`} />
+                    <span className="mr-2">🔔</span> F13 Appreciation Deals
+                  </Link>
+
+                  {/* Support */}
+                  <div className="border-b border-gray-100">
+                    <button
+                      onClick={() => setActiveMobileMenu('support')}
+                      className="w-full flex items-center justify-between py-4 text-[15px] font-medium text-black"
+                    >
+                      <span>Support</span>
+                      <ChevronRight className="w-4 h-4 text-gray-400" />
+                    </button>
+                  </div>
+
+                  {/* About Us */}
+                  <div className="border-b border-gray-100">
+                    <button
+                      onClick={() => setActiveMobileMenu('about')}
+                      className="w-full flex items-center justify-between py-4 text-[15px] font-medium text-black"
+                    >
+                      <span>About Us</span>
+                      <ChevronRight className="w-4 h-4 text-gray-400" />
+                    </button>
+                  </div>
+
+                  {/* Social Icons row */}
+                  <div className="flex items-center gap-6 mt-8 justify-center">
+                    <a href="https://www.facebook.com/Procolored" target="_blank" rel="noreferrer"><Facebook className="w-[18px] h-[18px] text-black" /></a>
+                    <a href="https://x.com/Procoloredprint" target="_blank" rel="noreferrer"><XIcon className="w-4 h-4 text-black" /></a>
+                    <a href="https://www.instagram.com/procolored_printers" target="_blank" rel="noreferrer"><Instagram className="w-[18px] h-[18px] text-black" /></a>
+                    <a href="https://www.youtube.com/c/Procoloredprofessionalprinter" target="_blank" rel="noreferrer"><Youtube className="w-5 h-5 text-black" /></a>
+                    <a href="https://www.pinterest.com/procolored/" target="_blank" rel="noreferrer"><PinterestIcon className="w-[18px] h-[18px] text-black" /></a>
+                  </div>
+
+                  {/* Region Selector */}
+                  <div className="flex items-center justify-center gap-2 mt-6 text-sm text-black">
+                    <Globe className="w-4 h-4" /> United States and others
+                  </div>
+                </div>
+
+                {/* --- PRODUCTS SUBMENU --- */}
+                <div className={`absolute inset-0 bg-white transition-transform duration-300 ease-in-out overflow-y-auto px-4 pb-8 ${activeMobileMenu === 'products' ? 'translate-x-0' : 'translate-x-full'}`}>
+                  {/* Back button header */}
+                  <button 
+                    onClick={() => setActiveMobileMenu('main')}
+                    className="flex items-center gap-2 py-4 text-[15px] font-medium text-black border-b border-gray-100 w-full text-left"
+                  >
+                    <ChevronLeft className="w-5 h-5" /> Products
                   </button>
-                  {mobileExpanded === 'products' && (
-                    <div className="flex flex-col pb-3 pl-4 gap-1">
-                      <Link to="/collections/all" onClick={closeMenu} className="py-2 text-sm font-semibold text-[#E85A24]">
-                        View All Products
+                  
+                  {/* Products List matching reference exactly */}
+                  <div className="flex flex-col mt-2">
+                    {[
+                      { name: 'Direct to Film Transfer (DTF) Printer', path: '/collections/dtf-printer', hasSub: true },
+                      { name: 'UV DTF Printer', path: '/collections/uv-dtf-printer', hasSub: true },
+                      { name: 'UV Printer', path: '/collections/uv-printer', hasSub: true },
+                      { name: 'DTG Printer', path: '/collections/dtg-printer', hasSub: true },
+                      { name: 'Equipment', path: '/collections/equipment', hasSub: false },
+                      { name: 'Consumables', path: '/collections/consumables', hasSub: false },
+                      { name: 'Parts & Accessory', path: '/collections/parts-accessory', hasSub: false },
+                      { name: 'What\'s New', path: '/collections/whats-new', hasSub: true },
+                      { name: 'Extended Warranty', path: '/collections/extended-warranty', hasSub: true },
+                    ].map(cat => (
+                      <div key={cat.name}>
+                        {cat.hasSub ? (
+                          <>
+                            <button
+                              onClick={() => setExpandedProductCategory(p => p === cat.name ? null : cat.name)}
+                              className="w-full flex items-center justify-between py-3 text-[14px] text-black"
+                            >
+                              <span>{cat.name}</span>
+                              <ChevronDown className={`w-4 h-4 transition-transform ${expandedProductCategory === cat.name ? 'rotate-180' : ''}`} />
+                            </button>
+                            {expandedProductCategory === cat.name && (
+                              <div className="pl-4 pb-2 flex flex-col gap-2">
+                                <Link to={cat.path} onClick={closeMenu} className="text-[13px] text-gray-600 font-medium py-1">
+                                  View All
+                                </Link>
+                                {/* We can add real subcategories here later if they exist, for now just View All */}
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <Link
+                            to={cat.path}
+                            onClick={closeMenu}
+                            className="w-full flex items-center justify-between py-3 text-[14px] text-black"
+                          >
+                            <span>{cat.name}</span>
+                          </Link>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* --- SUPPORT SUBMENU --- */}
+                <div className={`absolute inset-0 bg-white transition-transform duration-300 ease-in-out overflow-y-auto px-4 pb-8 ${activeMobileMenu === 'support' ? 'translate-x-0' : 'translate-x-full'}`}>
+                  {/* Back button header */}
+                  <button 
+                    onClick={() => setActiveMobileMenu('main')}
+                    className="flex items-center gap-2 py-4 text-[15px] font-medium text-black border-b border-gray-100 w-full text-left"
+                  >
+                    <ChevronLeft className="w-5 h-5" /> Support
+                  </button>
+                  <div className="flex flex-col mt-2">
+                    {supportLinks.map((link, idx) => (
+                      <Link key={idx} to={link.path} onClick={closeMenu} className="w-full flex items-center justify-between py-3 text-[14px] text-black">
+                        {link.name}
                       </Link>
-                      {navbarCategories.filter(c => c.id !== 'all').map((cat, idx) => (
-                        <Link key={idx} to={cat.path} onClick={closeMenu} className="py-2 text-sm text-gray-700 hover:text-[#E85A24] transition-colors">
-                          {cat.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                    ))}
+                  </div>
                 </div>
 
-                {/* F13 Deals */}
-                <Link
-                  to="/f13"
-                  onClick={closeMenu}
-                  className="flex items-center py-4 border-b border-gray-100 text-base font-semibold text-[#E85A24]"
-                >
-                  <span className="mr-2">🔔</span> F13 Appreciation Deals
-                </Link>
-
-                {/* Support — expandable */}
-                <div className="border-b border-gray-100">
-                  <button
-                    onClick={() => setMobileExpanded(p => p === 'support' ? null : 'support')}
-                    className="w-full flex items-center justify-between py-4 text-base font-semibold text-black"
+                {/* --- ABOUT US SUBMENU --- */}
+                <div className={`absolute inset-0 bg-white transition-transform duration-300 ease-in-out overflow-y-auto px-4 pb-8 ${activeMobileMenu === 'about' ? 'translate-x-0' : 'translate-x-full'}`}>
+                  {/* Back button header */}
+                  <button 
+                    onClick={() => setActiveMobileMenu('main')}
+                    className="flex items-center gap-2 py-4 text-[15px] font-medium text-black border-b border-gray-100 w-full text-left"
                   >
-                    <span>Support</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${mobileExpanded === 'support' ? 'rotate-180' : ''}`} />
+                    <ChevronLeft className="w-5 h-5" /> About Us
                   </button>
-                  {mobileExpanded === 'support' && (
-                    <div className="flex flex-col pb-3 pl-4 gap-1">
-                      {supportLinks.map((link, idx) => (
-                        <Link key={idx} to={link.path} onClick={closeMenu} className="py-2 text-sm text-gray-700 hover:text-[#E85A24] transition-colors">
-                          {link.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <div className="flex flex-col mt-2">
+                    {aboutUsLinks.map((link, idx) => (
+                      <Link key={idx} to={link.path} onClick={closeMenu} className="w-full flex items-center justify-between py-3 text-[14px] text-black">
+                        {link.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
 
-                {/* About Us — expandable */}
-                <div className="border-b border-gray-100">
-                  <button
-                    onClick={() => setMobileExpanded(p => p === 'about' ? null : 'about')}
-                    className="w-full flex items-center justify-between py-4 text-base font-semibold text-black"
-                  >
-                    <span>About Us</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${mobileExpanded === 'about' ? 'rotate-180' : ''}`} />
-                  </button>
-                  {mobileExpanded === 'about' && (
-                    <div className="flex flex-col pb-3 pl-4 gap-1">
-                      {aboutUsLinks.map((link, idx) => (
-                        <Link key={idx} to={link.path} onClick={closeMenu} className="py-2 text-sm text-gray-700 hover:text-[#E85A24] transition-colors">
-                          {link.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Currency Picker */}
-                <div className="border-b border-gray-100">
-                  <button
-                    onClick={() => setMobileExpanded(p => p === 'currency' ? null : 'currency')}
-                    className="w-full flex items-center justify-between py-4 text-base font-semibold text-black"
-                  >
-                    <span className="flex items-center gap-2"><Globe className="w-4 h-4" /> {currency.code} ({currency.symbol})</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${mobileExpanded === 'currency' ? 'rotate-180' : ''}`} />
-                  </button>
-                  {mobileExpanded === 'currency' && (
-                    <div className="flex flex-col pb-3 pl-4 gap-1">
-                      {allCurrencies.map(c => (
-                        <button
-                          key={c.code}
-                          onClick={() => { setCurrency(c); setMobileExpanded(null); }}
-                          className={`py-2 text-left text-sm transition-colors ${currency.code === c.code ? 'text-[#E85A24] font-semibold' : 'text-gray-700 hover:text-[#E85A24]'}`}
-                        >
-                          {c.name}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-5 mt-8 justify-center">
-                  <a href="https://www.facebook.com/Procolored" target="_blank" rel="noreferrer"><Facebook className="w-5 h-5 text-black" /></a>
-                  <a href="https://x.com/Procoloredprint" target="_blank" rel="noreferrer"><XIcon className="w-4 h-4 text-black" /></a>
-                  <a href="https://www.instagram.com/procolored_printers" target="_blank" rel="noreferrer"><Instagram className="w-5 h-5 text-black" /></a>
-                  <a href="https://www.youtube.com/c/Procoloredprofessionalprinter" target="_blank" rel="noreferrer"><Youtube className="w-6 h-6 text-black" /></a>
-                  <a href="https://www.pinterest.com/procolored/" target="_blank" rel="noreferrer"><PinterestIcon className="w-5 h-5 text-black" /></a>
-                  <a href="https://www.tiktok.com/@procolored" target="_blank" rel="noreferrer"><TikTokIcon className="w-4 h-4 text-black" /></a>
-                </div>
-              </nav>
+              </div>
             </div>
           </>
         )}

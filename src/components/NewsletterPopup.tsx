@@ -52,13 +52,13 @@ export default function NewsletterPopup() {
           <X className="w-5 h-5" />
         </button>
 
-        {/* Left Side — Image (hidden on mobile) */}
-        <div className="hidden md:block md:w-[42%] flex-shrink-0">
+        {/* Left Side — Image */}
+        <div className="w-full md:w-[42%] flex-shrink-0">
           <img
             src="https://d3k81ch9hvuctc.cloudfront.net/company/UZTJ3d/images/59a7cde3-e39f-4ac9-92d5-5e2f54c3379c.jpeg"
             alt="Procolored DTF Printers"
-            className="w-full h-full object-cover"
-            style={{ minHeight: '400px' }}
+            className="w-full h-48 md:h-full object-cover"
+            style={{ minHeight: '192px' }}
           />
         </div>
 
