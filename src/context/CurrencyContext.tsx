@@ -71,11 +71,12 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     try { localStorage.setItem('procolored_currency', JSON.stringify(c)); } catch { /* ignore */ }
   }, []);
 
-  // Auto-detect on first visit
+  // Auto-detect on first visit — calls backend proxy, never ipapi.co directly
   useEffect(() => {
     const saved = localStorage.getItem('procolored_currency');
     if (saved) return; // user already has a saved preference
-    fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) })
+    const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    fetch(`${API_BASE}/api/analytics/geo`, { signal: AbortSignal.timeout(5000) })
       .then(r => r.json())
       .then((data: { country_code?: string }) => {
         if (data?.country_code) {

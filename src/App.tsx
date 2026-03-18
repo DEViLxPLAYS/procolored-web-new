@@ -23,6 +23,7 @@ import SiphonCirculation from './pages/SiphonCirculation';
 import OurBrand from './pages/OurBrand';
 import ContactUs from './pages/ContactUs';
 import NewsletterPopup from './components/NewsletterPopup';
+import AdminDashboard from './pages/AdminDashboard';
 
 // K13 Lite Variant Pages
 import K13LiteWhite from './pages/K13LiteWhite';
@@ -64,6 +65,8 @@ function App() {
             <Route path="pages/our-brand" element={<OurBrand />} />
             <Route path="pages/contact-us" element={<ContactUs />} />
           </Route>
+          {/* Admin panel — standalone, no public link, no layout wrapper */}
+          <Route path="/admin-panel" element={<AdminDashboard />} />
         </Routes>
         </Router>
       </CartProvider>

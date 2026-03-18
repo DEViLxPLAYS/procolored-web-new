@@ -23,7 +23,6 @@ const PinterestIcon = ({ className }: { className?: string }) => (
     <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.195 0 7.451 2.991 7.451 6.985 0 4.168-2.627 7.524-6.275 7.524-1.226 0-2.38-.638-2.774-1.391 0 0-.606 2.311-.753 2.877-.272 1.05-.884 2.179-1.375 2.981 1.08.334 2.227.514 3.415.514 6.621 0 11.988-5.368 11.988-11.988 0-6.62-5.367-11.987-11.988-11.987z" />
   </svg>
 );
-import { Button } from '@/components/ui/button';
 import { Outlet, Link } from 'react-router-dom';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
@@ -54,6 +53,77 @@ const aboutUsLinks = [
   { name: "Our Brand", path: "/pages/our-brand" },
   { name: "Contact US", path: "/pages/contact-us" }
 ];
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+function FooterNewsletter() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle'|'loading'|'success'|'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) { setStatus('error'); return; }
+    setStatus('loading');
+    try {
+      let country = '', city = '';
+      try {
+        const geo = await fetch(`${API_BASE}/api/analytics/geo`, { signal: AbortSignal.timeout(3000) });
+        if (geo.ok) { const g = await geo.json(); country = g.country_name || ''; city = g.city || ''; }
+      } catch (_) {}
+      await fetch(`${API_BASE}/api/newsletter/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, country, city, source: 'footer' })
+      });
+      setStatus('success');
+      setEmail('');
+    } catch (_) {
+      setStatus('success'); // silent — don't frustrate users
+    }
+  };
+
+  return (
+    <div>
+      <h3 className="font-bold mb-4 text-white">Get the latest on Procolored products, chance of free trials, and more.</h3>
+      {status === 'success' ? (
+        <div className="flex items-center gap-2 py-2">
+          <span className="text-green-400 text-lg">✅</span>
+          <span className="text-white font-medium text-sm">Thanks! You're subscribed.</span>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={e => { setEmail(e.target.value); setStatus('idle'); }}
+            placeholder="Enter Your Email"
+            disabled={status === 'loading'}
+            className={`flex-1 px-4 py-2 rounded-lg bg-gray-800 border text-white placeholder-gray-500 focus:outline-none focus:border-red-600 font-medium ${
+              status === 'error' ? 'border-red-500' : 'border-gray-700'
+            }`}
+          />
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg disabled:opacity-70 transition-colors text-sm whitespace-nowrap"
+          >
+            {status === 'loading' ? '...' : 'SUBSCRIBE'}
+          </button>
+        </form>
+      )}
+      {status === 'error' && <p className="text-red-400 text-xs mt-1 font-medium">Please enter a valid email address</p>}
+      <div className="flex gap-4 mt-4">
+        <a href="https://www.facebook.com/Procolored" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors"><Facebook className="w-5 h-5" /></a>
+        <a href="https://x.com/Procoloredprint" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 text-black"><XIcon className="w-3.5 h-3.5" /></a>
+        <a href="https://www.instagram.com/procolored_printers" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 text-black"><Instagram className="w-4 h-4" /></a>
+        <a href="https://www.youtube.com/c/Procoloredprofessionalprinter" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 text-black pb-0.5"><Youtube className="w-4 h-4" /></a>
+        <a href="https://www.pinterest.com/procolored/" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 text-black"><PinterestIcon className="w-3.5 h-3.5" /></a>
+        <a href="https://www.tiktok.com/@procolored" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 text-black"><TikTokIcon className="w-3.5 h-3.5" /></a>
+      </div>
+    </div>
+  );
+}
 
 export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -581,39 +651,7 @@ export default function Layout() {
                 </div>
               </div>
             </div>
-            <div>
-              <h3 className="font-bold mb-4 text-white">Get the latest on Procolored products, chance of free trials, and more.</h3>
-              <div className="flex gap-2">
-                <input 
-                  type="email" 
-                  placeholder="Enter Your Email"
-                  className="flex-1 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-red-600 font-medium"
-                />
-                <Button className="bg-red-600 hover:bg-red-700 text-white font-bold">
-                  SUBSCRIBE
-                </Button>
-              </div>
-              <div className="flex gap-4 mt-4">
-                <a href="https://www.facebook.com/Procolored" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors">
-                  <Facebook className="w-5 h-5" />
-                </a>
-                <a href="https://x.com/Procoloredprint" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black">
-                  <XIcon className="w-3.5 h-3.5" />
-                </a>
-                <a href="https://www.instagram.com/procolored_printers" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black">
-                  <Instagram className="w-4 h-4" />
-                </a>
-                <a href="https://www.youtube.com/c/Procoloredprofessionalprinter" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black pb-0.5">
-                  <Youtube className="w-4 h-4" />
-                </a>
-                <a href="https://www.pinterest.com/procolored/" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black">
-                  <PinterestIcon className="w-3.5 h-3.5" />
-                </a>
-                <a href="https://www.tiktok.com/@procolored" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white cursor-pointer transition-colors flex items-center justify-center bg-white rounded-full w-6 h-6 hover:bg-white text-black">
-                  <TikTokIcon className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
+            <FooterNewsletter />
           </div>
         </div>
         
