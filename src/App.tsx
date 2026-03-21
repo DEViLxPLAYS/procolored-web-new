@@ -66,7 +66,8 @@ function App() {
             <Route path="pages/contact-us" element={<ContactUs />} />
           </Route>
           {/* Admin panel — standalone, no public link, no layout wrapper */}
-          <Route path="/admin-panel" element={<AdminDashboard />} />
+          <Route path="/AdminDashboard" element={<AdminDashboard />} />
+          <Route path="/AdminDashboard/*" element={<AdminDashboard />} />
         </Routes>
         </Router>
       </CartProvider>
