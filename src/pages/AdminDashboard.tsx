@@ -297,7 +297,7 @@ const DashboardOverview = ({ admin }: { admin: AdminUser }) => {
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(170px,1fr))', gap:16, marginBottom:24 }}>
         <StatCard icon="📧" label="Newsletter Subscribers" value={stats.totalNewsletterSubscribers || 0} accent={C.red} />
         <StatCard icon="📦" label="Total Orders" value={stats.totalOrders || 0} sub={`${stats.pendingOrders || 0} pending`} accent={C.orange} />
-        <StatCard icon="💰" label="Total Revenue (PKR)" value={`₨${parseFloat(stats.totalRevenue||'0').toLocaleString()}`} accent="#10B981" />
+        <StatCard icon="💰" label="Total Revenue (USD)" value={`$${(parseFloat(stats.totalRevenue||'0') / 278).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`} accent="#10B981" />
         <StatCard icon="🚪" label="Checkout Abandonments" value={stats.checkoutAbandonments || 0} accent="#8B5CF6" />
       </div>
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20, marginBottom:20 }}>

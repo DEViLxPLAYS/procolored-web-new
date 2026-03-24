@@ -1,16 +1,14 @@
 import { useCart } from '../context/CartContext';
 import { X, Trash2, Minus, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useCurrency, parsePKR } from '../context/CurrencyContext';
 
 export default function CartDrawer() {
   const { isCartOpen, setIsCartOpen, items, updateQuantity, removeFromCart, cartCount, cartSubtotal } = useCart();
+  const { formatPrice } = useCurrency();
   const navigate = useNavigate();
 
   if (!isCartOpen) return null;
-
-  const formatPrice = (val: number) => {
-    return `Rs.${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PKR`;
-  };
 
   const handleCheckout = () => {
     setIsCartOpen(false);
@@ -59,7 +57,7 @@ export default function CartDrawer() {
                   <div className="flex-1">
                     <div className="flex justify-between gap-4">
                       <h4 className="text-sm font-medium text-black line-clamp-2">{item.name}</h4>
-                      <span className="text-sm font-semibold text-black whitespace-nowrap">{item.price}</span>
+                      <span className="text-sm font-semibold text-black whitespace-nowrap">{formatPrice(parsePKR(item.price))}</span>
                     </div>
                     <div className="mt-3 flex items-center gap-4">
                       <div className="flex items-center border border-gray-200 rounded">
