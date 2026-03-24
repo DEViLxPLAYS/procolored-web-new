@@ -193,11 +193,11 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden w-full">
-      <div className="w-full">
+      <div className="w-full bg-[#f8f5f0] overflow-hidden flex justify-center">
         <img 
-          src="/images/top-banner.png" 
-          alt="Announcement Banner"
-          className="w-full object-cover min-h-[90px] md:min-h-[110px]"
+          src="https://i.postimg.cc/KYnYhPVW/MAKE-THIS-IMAGE-202603241555.jpg" 
+          alt="Fan Appreciation Sale"
+          className="w-full h-[55px] sm:h-[75px] md:h-[90px] lg:h-[110px] xl:h-[120px] object-cover object-center"
           style={{ display: 'block' }}
         />
       </div>

@@ -1,28 +1,10 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Headphones, BookOpen, CreditCard, Shield } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import '../App.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useCurrency } from '../context/CurrencyContext';
-
-const craftItemsRow1 = [
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-  { image: '/images/gallery-item-3.png' },
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-  { image: '/images/gallery-item-3.png' },
-];
-
-const craftItemsRow2 = [
-  { image: '/images/gallery-item-3.png' },
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-  { image: '/images/gallery-item-3.png' },
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-];
 
 const heroSlides = [
   { id: 1, image: "/images/slide-1.webp" },
@@ -89,19 +71,19 @@ const popularProducts = [
 
 const categoryTabs = [
   { id: "factory", label: "Small-scale Factory", products: [
-    { id: "f1", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510", pricePKR: 1450000 },
-    { id: "f2", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510", pricePKR: 1140100 },
-    { id: "f3", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379", pricePKR: 1967000 }
+    { id: "f1", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510" },
+    { id: "f2", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510" },
+    { id: "f3", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379" }
   ]},
   { id: "personal", label: "Personal Studio", products: [
-    { id: "p1", name: "Procolored K13 Lite", subtitle: "User-friendly", image: "https://www.procolored.com/cdn/shop/files/K13_lite_white_10.png?v=1772447536", pricePKR: 798000 },
-    { id: "p2", name: "Procolored F13", subtitle: "High-quality and Easy-to-use", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526", pricePKR: 855000 },
-    { id: "p3", name: "Procolored P13", subtitle: "High-Performance Print Head", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950", pricePKR: 1140100 }
+    { id: "p1", name: "Procolored K13 Lite", subtitle: "User-friendly", image: "https://www.procolored.com/cdn/shop/files/K13_lite_white_10.png?v=1772447536" },
+    { id: "p2", name: "Procolored F13", subtitle: "High-quality and Easy-to-use", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526" },
+    { id: "p3", name: "Procolored P13", subtitle: "High-Performance Print Head", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950" }
   ]},
   { id: "hobbyist", label: "Hobbyist Use", products: [
-    { id: "h1", name: "Procolored K13 Lite", subtitle: "Best Value Starter Printer", image: "https://www.procolored.com/cdn/shop/files/K13_lite_pink_10.png?v=1772447536", pricePKR: 798000 },
-    { id: "h2", name: "Procolored F13", subtitle: "Designed for Creative Makers", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526", pricePKR: 855000 },
-    { id: "h3", name: "Procolored F8", subtitle: "Affordable Entry-level Model", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_3.png?v=1766052998", pricePKR: 599000 }
+    { id: "h1", name: "Procolored K13 Lite", subtitle: "Best Value Starter Printer", image: "https://www.procolored.com/cdn/shop/files/K13_lite_pink_10.png?v=1772447536" },
+    { id: "h2", name: "Procolored F13", subtitle: "Designed for Creative Makers", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526" },
+    { id: "h3", name: "Procolored F8", subtitle: "Affordable Entry-level Model", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_3.png?v=1766052998" }
   ]}
 ];
 
@@ -112,6 +94,29 @@ const categoryItems = [
   { name: "Equipment", image: "/images/cat-equipment.jpg", link: "#" },
   { name: "Consumables", image: "/images/cat-consumables.jpg", link: "#" },
   { name: "Parts & Accessory", image: "/images/cat-parts.jpg", link: "#" }
+];
+
+const craftItemsRow1 = [
+  { name: "Apron", image: "/images/craft-apron.jpg" },
+  { name: "Metal Signs", image: "/images/craft-metal-signs.jpg" },
+  { name: "Thermos", image: "/images/craft-thermos.jpg" },
+  { name: "Fabric Posters", image: "/images/craft-posters.jpg" },
+  { name: "Jeans", image: "/images/craft-tshirts.jpg" },
+  { name: "Candle Mold", image: "/images/craft-mugs.jpg" },
+  { name: "Hoodie", image: "/images/craft-hoodie.jpg" },
+  { name: "Baby Clothes", image: "/images/craft-baby-clothes.jpg" },
+  { name: "Flashcards", image: "/images/craft-posters.jpg" }
+];
+
+const craftItemsRow2 = [
+  { name: "Polo Shirt", image: "/images/craft-tshirts.jpg" },
+  { name: "T-shirts", image: "/images/craft-tshirts.jpg" },
+  { name: "Caps", image: "/images/craft-caps.jpg" },
+  { name: "Phone Cases", image: "/images/craft-phone-cases.jpg" },
+  { name: "Coffee Mugs", image: "/images/craft-mugs.jpg" },
+  { name: "Bags", image: "/images/craft-bags.jpg" },
+  { name: "School Bags", image: "/images/craft-backpacks.jpg" },
+  { name: "Keychains", image: "/images/craft-keychains.jpg" }
 ];
 
 const testimonials = [
@@ -305,20 +310,8 @@ export default function Home() {
                   />
                 </div>
                 <div className="flex gap-3 justify-center">
-                   <button 
-                     className="flex-1 max-w-[120px] text-sm font-medium text-black hover:text-[#E85A24] transition-colors py-2"
-                   >
-                     Learn More
-                   </button>
-                   <button 
-                     onClick={(e) => {
-                       e.stopPropagation();
-                       addToCart({ id: product.id, name: product.name, price: `Rs.${product.pricePKR.toLocaleString()}.00 PKR`, image: product.image, quantity: 1 });
-                     }}
-                     className="flex-1 max-w-[120px] bg-[#E85A24] hover:bg-[#d44e1e] text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-200"
-                   >
-                     Add to Cart
-                   </button>
+                  <button className="flex-1 max-w-[120px] text-sm font-medium text-black hover:text-[#E85A24] transition-colors py-2">Learn More</button>
+                  <button className="flex-1 max-w-[120px] bg-[#E85A24] hover:bg-[#d44e1e] text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-200">Buy Now</button>
                 </div>
               </div>
             ))}
@@ -365,28 +358,34 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-12 bg-white flex-none overflow-hidden border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 mb-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-black tracking-tight mb-4">Unlock Endless Possibilities</h2>
+      <section className="py-12 bg-white flex-none overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-black text-center">What You Can Craft with<br />Procolored Printers</h2>
         </div>
-        <div className="relative mb-6">
-          <div className="marquee-container justify-center flex">
-            <div className="marquee-row-1 flex px-2 space-x-4">
+        <div className="relative mb-4">
+          <div className="marquee-container">
+            <div className="marquee-row-1">
               {[...craftItemsRow1, ...craftItemsRow1, ...craftItemsRow1].map((item, index) => (
-                   <div key={`r1-${index}`} className="flex-shrink-0 w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-2xl overflow-hidden shadow-md border hover:border-gray-200 transition-colors bg-gray-50">
-                     <img src={item.image} alt="Craft Item" className="w-full h-full object-cover" />
-                   </div>
+                <div key={index} className="flex-shrink-0 w-[200px] mx-2">
+                  <div className="relative overflow-hidden rounded-lg">
+                    <img src={item.image} alt={item.name} className="w-full h-[200px] object-cover" />
+                  </div>
+                  <p className="text-center text-sm font-bold text-black mt-2">{item.name}</p>
+                </div>
               ))}
             </div>
           </div>
         </div>
         <div className="relative">
-          <div className="marquee-container justify-center flex">
-            <div className="marquee-row-2 flex px-2 space-x-4">
+          <div className="marquee-container">
+            <div className="marquee-row-2">
               {[...craftItemsRow2, ...craftItemsRow2, ...craftItemsRow2].map((item, index) => (
-                   <div key={`r2-${index}`} className="flex-shrink-0 w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-2xl overflow-hidden shadow-md border hover:border-gray-200 transition-colors bg-gray-50">
-                     <img src={item.image} alt="Craft Item" className="w-full h-full object-cover" />
-                   </div>
+                <div key={index} className="flex-shrink-0 w-[200px] mx-2">
+                  <div className="relative overflow-hidden rounded-lg">
+                    <img src={item.image} alt={item.name} className="w-full h-[200px] object-cover" />
+                  </div>
+                  <p className="text-center text-sm font-bold text-black mt-2">{item.name}</p>
+                </div>
               ))}
             </div>
           </div>
@@ -397,7 +396,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-10">Check Out What Our<br />Customers Are Saying</h2>
 
-          {/* Top row — 3 videos */}
+          {/* Top row ΓÇö 3 videos */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
             {testimonials.slice(0, 3).map((testimonial, index) => (
               <div key={index} className="bg-white rounded-xl overflow-hidden shadow-card">
@@ -418,7 +417,7 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Bottom row — 2 videos centered */}
+          {/* Bottom row ΓÇö 2 videos centered */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
             {testimonials.slice(3).map((testimonial, index) => (
               <div key={index} className="bg-white rounded-xl overflow-hidden shadow-card">

@@ -4,6 +4,23 @@ import { Star, ChevronLeft, ChevronRight, ChevronDown, Headphones, BookOpen, Vid
 import { useCurrency } from '../context/CurrencyContext';
 import { useCart } from '../context/CartContext';
 
+const craftItemsRow1 = [
+  { image: '/images/gallery-item-1.png' },
+  { image: '/images/gallery-item-2.png' },
+  { image: '/images/gallery-item-3.png' },
+  { image: '/images/gallery-item-1.png' },
+  { image: '/images/gallery-item-2.png' },
+  { image: '/images/gallery-item-3.png' },
+];
+
+const craftItemsRow2 = [
+  { image: '/images/gallery-item-3.png' },
+  { image: '/images/gallery-item-1.png' },
+  { image: '/images/gallery-item-2.png' },
+  { image: '/images/gallery-item-3.png' },
+  { image: '/images/gallery-item-1.png' },
+  { image: '/images/gallery-item-2.png' },
+];
 // ─────────────────────────────────────────────────────────────────────────────
 // HlsVideo – auto-plays HLS or MP4, fully muted and looping
 // ─────────────────────────────────────────────────────────────────────────────
@@ -331,9 +348,17 @@ export default function F13Product() {
             {/* What's in the box */}
             <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
               <p className="font-bold text-gray-900 mb-2">What's In The Box</p>
-              <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                <li>F13 Panda DTF Printer (L1800)</li>
+              <ul className="text-sm text-gray-600 space-y-1.5 list-disc list-inside">
+                <li>F13 Panda DTF Printer(L1800)</li>
                 <li>Oven For DTF Printer</li>
+                <li>Full Set of Initial Ink (CMYKW 5*250ml)</li>
+                <li>Adhesive Powder 500g</li>
+                <li>Printhead Moisturizing Device</li>
+                <li>Nozzle Protection Fluid 1*250ml</li>
+                <li>PET Roll Film(100m)</li>
+                <li>Procolored RIP Software(Windows OS only, C drive ≥ 50GB, RAM ≥ 8GB)</li>
+                <li>USB Dongle</li>
+                <li>Power Cable/USB Interface Cable</li>
               </ul>
             </div>
 
@@ -516,10 +541,10 @@ export default function F13Product() {
         {/* Steps row */}
         <div className="max-w-7xl mx-auto px-6 border-b border-gray-800 pb-20 mb-20">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 tracking-wide">Printing Steps</h2>
-          <div className="flex flex-col md:flex-row justify-between items-start relative">
+          <div className="flex overflow-x-auto md:overflow-visible hide-scrollbar items-start relative gap-8 md:gap-0 md:justify-between px-4 pb-6" style={{WebkitOverflowScrolling:'touch'}}>
             <div className="hidden md:block absolute top-[52px] left-[60px] right-[60px] border-t border-dashed border-gray-600" />
             {steps.map((s, i) => (
-              <div key={i} className="flex flex-col items-center text-center w-full md:w-auto mb-8 md:mb-0 relative z-10">
+              <div key={i} className="flex-shrink-0 flex flex-col items-center text-center relative z-10 w-[120px]">
                 <div className="w-[106px] h-[106px] rounded-full border-4 border-black bg-white overflow-hidden shadow-xl mb-4">
                   <img src={s.image} alt={s.title} className="w-full h-full object-cover" />
                 </div>
@@ -547,6 +572,37 @@ export default function F13Product() {
           </div>
         </div>
       </div>
+
+      {/* ══════════════════════════════════════════════════════════════
+          Marquee Section (Unlock Endless Possibilities)
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="py-24 bg-white flex-none overflow-hidden border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 mb-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-black tracking-tight mb-4">Unlock Endless Possibilities</h2>
+        </div>
+        <div className="relative mb-6">
+          <div className="marquee-container justify-center flex">
+            <div className="marquee-row-1 flex px-2 space-x-4">
+              {[...craftItemsRow1, ...craftItemsRow1, ...craftItemsRow1].map((item, index) => (
+                   <div key={`f13-r1-${index}`} className="flex-shrink-0 w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-2xl overflow-hidden shadow-md border hover:border-gray-200 transition-colors bg-gray-50">
+                     <img src={item.image} alt="Craft Item" className="w-full h-full object-cover" />
+                   </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="relative">
+          <div className="marquee-container justify-center flex">
+            <div className="marquee-row-2 flex px-2 space-x-4">
+              {[...craftItemsRow2, ...craftItemsRow2, ...craftItemsRow2].map((item, index) => (
+                   <div key={`f13-r2-${index}`} className="flex-shrink-0 w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-2xl overflow-hidden shadow-md border hover:border-gray-200 transition-colors bg-gray-50">
+                     <img src={item.image} alt="Craft Item" className="w-full h-full object-cover" />
+                   </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ══════════════════════════════════════════════════════════════
           Specifications
