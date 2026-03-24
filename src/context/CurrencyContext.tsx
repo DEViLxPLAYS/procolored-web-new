@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 
 export interface Currency {
   code: string;
@@ -20,16 +20,10 @@ const CURRENCIES: Record<string, Currency> = {
   PK:  { code: 'PKR', symbol: 'Rs.',   divisor: 1,     name: 'PKR (Rs.)' },
 };
 
-// EU countries
-const EU_COUNTRIES = ['DE','FR','IT','ES','NL','BE','AT','PT','FI','EL','IE','LU','MT','CY','SK','SI','EE','LV','LT','HR'];
 
 
 const EUR_CURRENCY: Currency = { code: 'EUR', symbol: '€',   divisor: 302, name: 'EUR (€)' };
 
-function getCurrencyForCountry(countryCode: string): Currency {
-  if (EU_COUNTRIES.includes(countryCode)) return EUR_CURRENCY;
-  return CURRENCIES[countryCode] ?? { code: 'USD', symbol: '$', divisor: 278, name: 'USD ($)' };
-}
 
 const ALL_CURRENCIES: Currency[] = [
   { code: 'PKR', symbol: 'Rs.', divisor: 1,   name: 'PKR (Rs.)' },
@@ -57,7 +51,7 @@ const CurrencyContext = createContext<CurrencyContextProps | undefined>(undefine
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrencyState] = useState<Currency>(() => {
     try {
-      const saved = localStorage.getItem('procolored_currency');
+      const saved = localStorage.getItem('procolored_user_currency');
       if (saved) {
         const parsed = JSON.parse(saved) as Currency;
         if (parsed?.code && parsed?.divisor) return parsed;
@@ -68,24 +62,10 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
 
   const setCurrency = useCallback((c: Currency) => {
     setCurrencyState(c);
-    try { localStorage.setItem('procolored_currency', JSON.stringify(c)); } catch { /* ignore */ }
+    try { localStorage.setItem('procolored_user_currency', JSON.stringify(c)); } catch { /* ignore */ }
   }, []);
 
-  // Auto-detect on first visit — calls backend proxy, never ipapi.co directly
-  useEffect(() => {
-    const saved = localStorage.getItem('procolored_currency');
-    if (saved) return; // user already has a saved preference
-    const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-    fetch(`${API_BASE}/api/analytics/geo`, { signal: AbortSignal.timeout(5000) })
-      .then(r => r.json())
-      .then((data: { country_code?: string }) => {
-        if (data?.country_code) {
-          const detected = getCurrencyForCountry(data.country_code);
-          setCurrency(detected);
-        }
-      })
-      .catch(() => { /* fallback to PKR (default) */ });
-  }, [setCurrency]);
+
 
   const formatPrice = useCallback((pkrAmount: number): string => {
     const converted = pkrAmount / currency.divisor;
