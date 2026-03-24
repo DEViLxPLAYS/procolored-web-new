@@ -282,8 +282,12 @@ const DashboardOverview = ({ admin }: { admin: AdminUser }) => {
   }, []);
 
   if (loading) return <Spinner />;
-  if (!data) return <div style={{ color:C.muted, textAlign:'center', padding:40 }}>Failed to load dashboard</div>;
-  const { stats, recentOrders, recentSubscribers, visitorsByCountry } = data;
+  if (!data || data.error) return <div style={{ color:C.muted, textAlign:'center', padding:40 }}>{data?.error || 'Failed to load dashboard'}</div>;
+
+  const stats = data.stats || {};
+  const recentOrders = data.recentOrders || [];
+  const recentSubscribers = data.recentSubscribers || [];
+  const visitorsByCountry = data.visitorsByCountry || [];
 
   return (
     <div>
@@ -291,19 +295,19 @@ const DashboardOverview = ({ admin }: { admin: AdminUser }) => {
         Good {new Date().getHours()<12?'morning':'afternoon'}, {admin.username} 👋
       </h1>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(170px,1fr))', gap:16, marginBottom:24 }}>
-        <StatCard icon="📧" label="Newsletter Subscribers" value={stats.totalNewsletterSubscribers} accent={C.red} />
-        <StatCard icon="📦" label="Total Orders" value={stats.totalOrders} sub={`${stats.pendingOrders} pending`} accent={C.orange} />
-        <StatCard icon="💰" label="Total Revenue (PKR)" value={`₨${parseFloat(stats.totalRevenue||0).toLocaleString()}`} accent="#10B981" />
-        <StatCard icon="🚪" label="Checkout Abandonments" value={stats.checkoutAbandonments} accent="#8B5CF6" />
+        <StatCard icon="📧" label="Newsletter Subscribers" value={stats.totalNewsletterSubscribers || 0} accent={C.red} />
+        <StatCard icon="📦" label="Total Orders" value={stats.totalOrders || 0} sub={`${stats.pendingOrders || 0} pending`} accent={C.orange} />
+        <StatCard icon="💰" label="Total Revenue (PKR)" value={`₨${parseFloat(stats.totalRevenue||'0').toLocaleString()}`} accent="#10B981" />
+        <StatCard icon="🚪" label="Checkout Abandonments" value={stats.checkoutAbandonments || 0} accent="#8B5CF6" />
       </div>
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20, marginBottom:20 }}>
         <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:10, padding:20 }}>
           <h3 style={{ fontSize:15, fontWeight:700, color:C.text, marginBottom:16 }}>🌍 Visitors by Country</h3>
-          <CountryChart data={visitorsByCountry||[]} />
+          <CountryChart data={visitorsByCountry} />
         </div>
         <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:10, padding:20 }}>
           <h3 style={{ fontSize:15, fontWeight:700, color:C.text, marginBottom:16 }}>📧 Recent Subscribers</h3>
-          {!recentSubscribers?.length ? <div style={{ color:C.muted, textAlign:'center', padding:20 }}>No subscribers yet</div>
+          {!recentSubscribers.length ? <div style={{ color:C.muted, textAlign:'center', padding:20 }}>No subscribers yet</div>
           : recentSubscribers.map((s: any, i: number) => (
             <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 0', borderBottom:`1px solid ${C.border}` }}>
               <span style={{ fontSize:13, color:C.text }}>{s.email}</span>
@@ -322,7 +326,7 @@ const DashboardOverview = ({ admin }: { admin: AdminUser }) => {
               ))}
             </tr></thead>
             <tbody>
-              {!recentOrders?.length ? <tr><td colSpan={5} style={{ textAlign:'center', padding:30, color:C.muted }}>No orders yet</td></tr>
+              {!recentOrders.length ? <tr><td colSpan={5} style={{ textAlign:'center', padding:30, color:C.muted }}>No orders yet</td></tr>
               : recentOrders.map((o: any) => (
                 <tr key={o.id} style={{ borderBottom:`1px solid ${C.border}` }}>
                   <td style={{ padding:'8px 12px' }}><code style={{ background:C.surface, padding:'2px 6px', borderRadius:4, fontSize:12 }}>{o.order_number}</code></td>
