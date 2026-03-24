@@ -6,7 +6,7 @@ import { useCart } from '../context/CartContext';
 import { useCurrency, parsePKR } from '../context/CurrencyContext';
 import { products } from '../data/products';
 import { Switch } from '@/components/ui/switch';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 
 const categoryMap: Record<string, string> = {
   'all': 'All',
@@ -290,7 +290,9 @@ export default function Collections() {
                </div>
                <div className="p-4 border-t flex gap-4 bg-white mt-auto">
                   <button onClick={clearFilters} className="flex-1 py-3 text-sm font-bold border border-gray-300 rounded hover:bg-gray-50 transition-colors">Clear</button>
-                  <button className="flex-1 py-3 text-sm font-bold bg-[#E85A24] hover:bg-[#d44e1e] text-white rounded transition-colors duration-200">Apply</button>
+                  <SheetClose asChild>
+                    <button className="flex-1 py-3 text-sm font-bold bg-[#E85A24] hover:bg-[#d44e1e] text-white rounded transition-colors duration-200">Apply</button>
+                  </SheetClose>
                </div>
              </SheetContent>
            </Sheet>

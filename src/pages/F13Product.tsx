@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Hls from 'hls.js';
 import { Star, ChevronLeft, ChevronRight, ChevronDown, Headphones, BookOpen, Video, HelpCircle, Check, Tag, AlertCircle, Gift, Truck, Shield, Zap } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
+import { useCart } from '../context/CartContext';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HlsVideo – auto-plays HLS or MP4, fully muted and looping
@@ -190,6 +191,7 @@ export default function F13Product() {
   ];
 
   const { formatPrice: fmt } = useCurrency();
+  const { addToCart } = useCart();
 
   return (
     <div className="bg-white font-sans overflow-hidden">
@@ -250,6 +252,11 @@ export default function F13Product() {
               <span className="text-sm text-[#E07000] font-medium">496 reviews</span>
             </div>
 
+            {/* Description */}
+            <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+              Equip your apparel decoration business with the ultimate dual-feed DTF system. Featuring an integrated circulation system for white ink and a choice of premium ovens, the F13 guarantees high-profit margins, smooth operation, and exceptional 1440 DPI print clarity for medium-sized workflows.
+            </p>
+
             {/* Price row */}
             <div>
               <div className="flex items-baseline gap-3 flex-wrap">
@@ -270,7 +277,6 @@ export default function F13Product() {
                 <p className="font-bold text-gray-900">New Member Exclusive</p>
                 <p className="text-sm text-gray-600">Use code <span className="font-bold text-[#E07000]">PROCOLORED5</span> to get 5% off your order</p>
               </div>
-              <span className="text-[#E07000] text-sm font-semibold underline cursor-pointer whitespace-nowrap">Log in</span>
             </div>
 
             {/* Stock card */}
@@ -327,7 +333,7 @@ export default function F13Product() {
               <p className="font-bold text-gray-900 mb-2">What's In The Box</p>
               <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
                 <li>F13 Panda DTF Printer (L1800)</li>
-                <li>Oven For DTF Printer <span className="text-[#E07000] underline cursor-pointer">Learn More</span></li>
+                <li>Oven For DTF Printer</li>
               </ul>
             </div>
 
@@ -345,8 +351,16 @@ export default function F13Product() {
                 <span className="px-6 flex items-center font-bold">{quantity}</span>
                 <button onClick={() => setQuantity(q => q + 1)} className="px-5 font-bold text-gray-700 hover:bg-gray-100 transition">+</button>
               </div>
-              <button className="flex-1 border-2 border-[#E07000] text-[#E07000] font-bold rounded-xl h-14 hover:bg-orange-50 transition text-lg">Add to cart</button>
-              <button className="flex-1 bg-indigo-700 text-white font-bold rounded-xl h-14 hover:bg-indigo-800 transition text-lg">Buy with Shop</button>
+              <button onClick={() => addToCart({ id: 'f13-' + selectedOption, name: currentOption.label, price: String(finalPrice), image: currentOption.img, quantity })} className="flex-1 border-2 border-[#E07000] text-[#E07000] font-bold rounded-xl h-14 hover:bg-orange-50 transition text-lg">Add to cart</button>
+              <button 
+                onClick={() => {
+                  addToCart({ id: 'f13-' + selectedOption, name: currentOption.label, price: String(finalPrice), image: currentOption.img, quantity });
+                  window.location.href = '/checkout';
+                }} 
+                className="flex-1 bg-indigo-700 text-white font-bold rounded-xl h-14 hover:bg-indigo-800 transition text-lg"
+              >
+                Buy with Shop
+              </button>
             </div>
           </div>
         </div>

@@ -23,7 +23,7 @@ const CURRENCIES: Record<string, Currency> = {
 // EU countries
 const EU_COUNTRIES = ['DE','FR','IT','ES','NL','BE','AT','PT','FI','EL','IE','LU','MT','CY','SK','SI','EE','LV','LT','HR'];
 
-const PKR_CURRENCY: Currency = { code: 'PKR', symbol: 'Rs.', divisor: 1, name: 'PKR (Rs.)' };
+
 const EUR_CURRENCY: Currency = { code: 'EUR', symbol: '€',   divisor: 302, name: 'EUR (€)' };
 
 function getCurrencyForCountry(countryCode: string): Currency {
@@ -63,7 +63,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
         if (parsed?.code && parsed?.divisor) return parsed;
       }
     } catch { /* ignore */ }
-    return PKR_CURRENCY;
+    return CURRENCIES.US;
   });
 
   const setCurrency = useCallback((c: Currency) => {
