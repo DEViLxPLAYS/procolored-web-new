@@ -25,14 +25,15 @@ const craftItemsRow2 = [
 ];
 
 const heroSlides = [
-  { id: 1, image: "/images/slide-1.webp" },
-  { id: 2, image: "/images/slide-2.webp" },
-  { id: 3, image: "/images/slide-3.webp" },
-  { id: 4, image: "/images/slide-4.webp" },
-  { id: 5, image: "/images/slide-5.webp" },
-  { id: 6, image: "/images/slide-6.webp" },
-  { id: 7, image: "/images/slide-7.webp" },
-  { id: 8, image: "/images/slide-8.webp" }
+  { id: 1, image: "https://www.procolored.com/cdn/shop/files/20251001-144253_3840x_crop_center.png?v=1759301061" },
+  { id: 2, image: "https://www.procolored.com/cdn/shop/files/repair_1920x_crop_center.jpg?v=1757399187" },
+  { id: 3, image: "https://www.procolored.com/cdn/shop/files/PC_US_Xone_KV_20260309_3840x_crop_center.jpg?v=1773027295" },
+  { id: 4, image: "https://www.procolored.com/cdn/shop/files/20260121-183157_3840x_crop_center.jpg?v=1768991545" },
+  { id: 5, image: "https://www.procolored.com/cdn/shop/files/KV-pc-_1_3840x_crop_center.jpg?v=1759250520" },
+  { id: 6, image: "https://www.procolored.com/cdn/shop/files/KV-_-PC_3840x_crop_center.jpg?v=1773632505" },
+  { id: 7, image: "https://www.procolored.com/cdn/shop/files/20260319-162122_3840x_crop_center.jpg?v=1773908636" },
+  { id: 8, image: "https://www.procolored.com/cdn/shop/files/Procolored_Showroom_Start_Up_1_3840x_crop_center.jpg?v=1772422574" },
+  { id: 9, image: "https://www.procolored.com/cdn/shop/files/Procolored_DTF_Rental_2026_1_1920x_crop_center.jpg?v=1770345455" }
 ];
 
 const stats = [
@@ -168,11 +169,14 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative w-full overflow-hidden flex-none" style={{height:'clamp(220px, 45vw, 600px)'}}>
+      <section className="relative w-full overflow-hidden flex-none bg-[#f4f4f4]">
+        {/* Invisible dummy image ensures the section perfectly matches the aspect ratio */}
+        <img src={heroSlides[0].image} alt="Dummy for ratio" className="w-full h-auto opacity-0" aria-hidden="true" />
+        
         {heroSlides.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-500 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
           >
             <img 
               src={slide.image} 
@@ -182,19 +186,21 @@ export default function Home() {
           </div>
         ))}
         
-        <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-colors">
-          <ChevronLeft className="w-6 h-6 text-white" />
+        <button onClick={prevSlide} className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 md:w-12 md:h-12 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-[0_4px_30px_rgba(0,0,0,0.1)] border border-white/20 hover:scale-105 active:scale-95 group">
+          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:-translate-x-0.5 transition-transform" />
         </button>
-        <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-colors">
-          <ChevronRight className="w-6 h-6 text-white" />
+        <button onClick={nextSlide} className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 md:w-12 md:h-12 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-[0_4px_30px_rgba(0,0,0,0.1)] border border-white/20 hover:scale-105 active:scale-95 group">
+          <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:translate-x-0.5 transition-transform" />
         </button>
         
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+        {/* Stylish dot indicators */}
+        <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2.5 items-center justify-center bg-black/10 backdrop-blur-md px-3 py-1.5 rounded-full">
           {heroSlides.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all ${index === currentSlide ? 'bg-white w-6' : 'bg-white/50'}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-white w-5 md:w-6' : 'bg-white/50 w-1.5 md:w-2 hover:bg-white/70'}`}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
