@@ -170,8 +170,8 @@ export default function Home() {
   return (
     <>
       <section className="relative w-full overflow-hidden flex-none bg-[#f4f4f4]">
-        {/* Invisible dummy image ensures the section perfectly matches the aspect ratio */}
-        <img src={heroSlides[0].image} alt="Dummy for ratio" className="w-full h-auto opacity-0" aria-hidden="true" />
+        {/* Invisible dummy image ensures the section perfectly matches the aspect ratio, with a minimum height to ensure it's comfortably large on mobile/tablet */}
+        <img src={heroSlides[0].image} alt="Dummy for ratio" className="w-full h-auto opacity-0 min-h-[260px] sm:min-h-[350px] md:min-h-[450px] lg:min-h-0 object-cover" aria-hidden="true" />
         
         {heroSlides.map((slide, index) => (
           <div
