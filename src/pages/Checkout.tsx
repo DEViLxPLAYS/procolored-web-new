@@ -192,229 +192,291 @@ export default function Checkout() {
     }
   };
 
-  const handleSuccessClose = () => {
-    setSuccessOrderNumber(null);
-    navigate('/');
-  };
+        const allCountries = [
+          "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo (Congo-Brazzaville)", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia (Czech Republic)", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Holy See", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar (formerly Burma)", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+        ];
 
-  if (items.length === 0 && !successOrderNumber) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 bg-gray-50">
-        <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
-        <Link to="/collections/all" className="bg-[#E85A24] text-white px-8 py-3 font-bold rounded hover:bg-[#d14b1b] transition-colors">
-          Continue Shopping
-        </Link>
-      </div>
-    );
-  }
+        // Fetch user's country based on IP
+        useEffect(() => {
+          fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.country_name) {
+                setCountry(data.country_name);
+              }
+            })
+            .catch(() => { /* Silent fallback to default */ });
+        }, []);
 
-  const inputCls = "w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:border-[#E85A24] focus:ring-1 focus:ring-[#E85A24] bg-white transition-colors placeholder-gray-400";
+        const handleSuccessClose = () => {
+          setSuccessOrderNumber(null);
+          navigate('/');
+        };
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Order Success Popup */}
-      {successOrderNumber && (
-        <OrderSuccessPopup orderNumber={successOrderNumber} onClose={handleSuccessClose} />
-      )}
+        if (items.length === 0 && !successOrderNumber) {
+          return (
+            <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 bg-[#fafafa]">
+              <h2 className="text-2xl font-bold mb-4 text-black text-center">Your bag is empty.</h2>
+              <p className="mb-8 text-sm text-gray-500 text-center max-w-sm">Sign in to see if you have any saved items or continue shopping.</p>
+              <Link to="/collections/all" className="bg-black text-white px-8 py-3.5 text-sm font-bold uppercase tracking-widest rounded hover:bg-gray-800 transition-colors">
+                Continue Shopping
+              </Link>
+            </div>
+          );
+        }
 
-      {/* Header */}
-      <header className="border-b border-gray-100 py-5 px-4 md:px-8 bg-white">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link to="/">
-            <img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" className="h-10 w-auto" />
-          </Link>
-          <Link to="/" className="text-gray-400 hover:text-black transition-colors text-sm font-medium">← Back to store</Link>
-        </div>
-      </header>
+        const inputCls = "w-full border-b border-gray-300 py-3 text-sm focus:outline-none focus:border-black bg-transparent transition-colors placeholder-gray-400";
+        const labelCls = "block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1 mt-4";
 
-      <main className="max-w-6xl mx-auto flex flex-col-reverse lg:flex-row min-h-screen">
-        {/* Left Side: Form */}
-        <div className="w-full lg:w-[55%] p-6 lg:p-12 lg:pr-16 lg:border-r border-gray-100">
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-8">
+        return (
+          <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-black selection:text-white">
+            {successOrderNumber && (
+              <OrderSuccessPopup orderNumber={successOrderNumber} onClose={handleSuccessClose} />
+            )}
 
-              {/* Contact */}
-              <section>
-                <h2 className="text-base font-bold text-gray-900 mb-4 uppercase tracking-wide">Contact</h2>
-                <input
-                  ref={emailRef}
-                  type="email"
-                  required
-                  placeholder="Email address *"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className={inputCls}
-                />
-                <div className="mt-3 flex items-center gap-2">
-                  <input type="checkbox" id="news" className="w-4 h-4 rounded accent-[#E85A24]" defaultChecked />
-                  <label htmlFor="news" className="text-sm text-gray-500">Email me with news and offers</label>
-                </div>
-              </section>
+            {/* Header */}
+            <header className="py-6 px-4 md:px-8 bg-white border-b border-gray-200 sticky top-0 z-40">
+              <div className="max-w-7xl mx-auto flex items-center justify-between">
+                <Link to="/">
+                  <img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" className="h-7 w-auto" />
+                </Link>
+                <Link to="/" className="text-black hover:text-gray-500 transition-colors text-xs font-semibold uppercase tracking-widest">Return to Store</Link>
+              </div>
+            </header>
 
-              {/* Delivery */}
-              <section>
-                <h2 className="text-base font-bold text-gray-900 mb-4 uppercase tracking-wide">Delivery</h2>
-                <div className="space-y-3">
-                  <select
-                    value={country}
-                    onChange={e => setCountry(e.target.value)}
-                    className={inputCls}
-                  >
-                    <option>Pakistan</option>
-                    <option>United States</option>
-                    <option>United Kingdom</option>
-                    <option>Canada</option>
-                    <option>Australia</option>
-                  </select>
-                  <div className="grid grid-cols-2 gap-3">
-                    <input type="text" required placeholder="First name *" value={firstName} onChange={e => setFirstName(e.target.value)} className={inputCls} />
-                    <input type="text" required placeholder="Last name *" value={lastName} onChange={e => setLastName(e.target.value)} className={inputCls} />
-                  </div>
-                  <input type="text" required placeholder="Address *" value={address} onChange={e => setAddress(e.target.value)} className={inputCls} />
-                  <input type="text" placeholder="Apartment, suite, etc. (optional)" value={apartment} onChange={e => setApartment(e.target.value)} className={inputCls} />
-                  <div className="grid grid-cols-3 gap-3">
-                    <input type="text" required placeholder="City *" value={city} onChange={e => setCity(e.target.value)} className={inputCls} />
-                    <input type="text" required placeholder="State / Province *" value={state} onChange={e => setState(e.target.value)} className={inputCls} />
-                    <input type="text" required placeholder="Postal code *" value={postal} onChange={e => setPostal(e.target.value)} className={inputCls} />
-                  </div>
-                  <input
-                    type="tel"
-                    placeholder="Phone (optional)"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                    className={inputCls}
-                  />
-                </div>
-              </section>
+            <main className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row min-h-screen">
+              {/* Left Side: Form */}
+              <div className="w-full lg:w-[60%] p-6 lg:p-16 lg:pr-24 bg-white">
+                <form onSubmit={handleSubmit}>
+                  <div className="space-y-12">
 
-              {/* Payment */}
-              <section>
-                <h2 className="text-base font-bold text-gray-900 mb-1 uppercase tracking-wide">Payment</h2>
-                <p className="text-xs text-gray-400 mb-4">All transactions are secure and encrypted.</p>
-                <div className="border border-gray-200 rounded-xl overflow-hidden">
-                  <div className="p-4 flex items-center justify-between bg-gray-50 border-b border-gray-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-4 h-4 rounded-full border-4 border-[#E85A24] bg-white"></div>
-                      <span className="font-semibold text-sm text-gray-800">Credit card</span>
-                    </div>
-                    <div className="flex gap-1">
-                      <div className="w-9 h-6 bg-white border border-gray-200 rounded text-[6px] font-bold text-[#14213d] flex items-center justify-center">VISA</div>
-                      <div className="w-9 h-6 bg-white border border-gray-200 rounded flex items-center justify-center overflow-hidden">
-                        <div className="flex"><div className="w-2.5 h-2.5 bg-[#EB001B] rounded-full"></div><div className="w-2.5 h-2.5 bg-[#F79E1B] rounded-full -ml-1"></div></div>
+                    {/* Contact */}
+                    <section>
+                      <h2 className="text-2xl font-semibold text-black mb-8">Contact Information</h2>
+                      <div>
+                        <label className={labelCls}>Email Address</label>
+                        <input
+                          ref={emailRef}
+                          type="email"
+                          required
+                          placeholder="Email"
+                          value={email}
+                          onChange={e => setEmail(e.target.value)}
+                          className={inputCls}
+                        />
                       </div>
-                      <div className="w-9 h-6 bg-[#006FCF] rounded flex items-center justify-center"><span className="text-white text-[5px] font-bold">AMEX</span></div>
+                      <div className="mt-6 flex items-center gap-3">
+                        <input type="checkbox" id="news" className="w-4 h-4 rounded border-gray-300 accent-black cursor-pointer" defaultChecked />
+                        <label htmlFor="news" className="text-sm text-gray-600 cursor-pointer">Keep me up to date on news and exclusive offers</label>
+                      </div>
+                    </section>
+
+                    {/* Delivery */}
+                    <section>
+                      <h2 className="text-2xl font-semibold text-black mb-8">Delivery Address</h2>
+                      <div className="space-y-2">
+                        <div>
+                          <label className={labelCls}>Country / Region</label>
+                          <select
+                            value={country}
+                            onChange={e => setCountry(e.target.value)}
+                            className={inputCls + " cursor-pointer"}
+                          >
+                            {allCountries.map(c => <option key={c} value={c}>{c}</option>)}
+                          </select>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-6 pt-2">
+                          <div>
+                            <label className={labelCls}>First Name</label>
+                            <input type="text" required placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} className={inputCls} />
+                          </div>
+                          <div>
+                            <label className={labelCls}>Last Name</label>
+                            <input type="text" required placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} className={inputCls} />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className={labelCls}>Street Address</label>
+                          <input type="text" required placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className={inputCls} />
+                        </div>
+                        
+                        <div>
+                          <label className={labelCls}>Apartment, Suite, etc.</label>
+                          <input type="text" placeholder="Apartment, suite, etc. (optional)" value={apartment} onChange={e => setApartment(e.target.value)} className={inputCls} />
+                        </div>
+
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+                          <div>
+                            <label className={labelCls}>City</label>
+                            <input type="text" required placeholder="City" value={city} onChange={e => setCity(e.target.value)} className={inputCls} />
+                          </div>
+                          <div>
+                            <label className={labelCls}>State / Province</label>
+                            <input type="text" required placeholder="State / Province" value={state} onChange={e => setState(e.target.value)} className={inputCls} />
+                          </div>
+                          <div className="col-span-2 lg:col-span-1">
+                            <label className={labelCls}>Postal Code</label>
+                            <input type="text" required placeholder="Postal code" value={postal} onChange={e => setPostal(e.target.value)} className={inputCls} />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className={labelCls}>Phone Number</label>
+                          <input
+                            type="tel"
+                            placeholder="Phone (optional)"
+                            value={phone}
+                            onChange={e => setPhone(e.target.value)}
+                            className={inputCls}
+                          />
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* Payment */}
+                    <section>
+                      <h2 className="text-2xl font-semibold text-black mb-2">Payment</h2>
+                      <p className="text-sm text-gray-500 mb-8">All transactions are secure and encrypted.</p>
+                      
+                      <div className="border border-gray-300 rounded-xl overflow-hidden bg-white">
+                        <div className="p-5 flex items-center justify-between bg-gray-50 border-b border-gray-300">
+                          <div className="flex items-center gap-3">
+                            <div className="w-5 h-5 rounded-full border-[5px] border-black bg-white"></div>
+                            <span className="font-semibold text-sm text-black">Credit card</span>
+                          </div>
+                          <div className="flex gap-2 opacity-80">
+                            <div className="w-10 h-6 bg-white border border-gray-200 rounded text-[7px] font-bold text-[#14213d] flex items-center justify-center shadow-sm">VISA</div>
+                            <div className="w-10 h-6 bg-white border border-gray-200 rounded flex items-center justify-center overflow-hidden shadow-sm">
+                              <div className="flex"><div className="w-3 h-3 bg-[#EB001B] rounded-full"></div><div className="w-3 h-3 bg-[#F79E1B] rounded-full -ml-1"></div></div>
+                            </div>
+                            <div className="w-10 h-6 bg-[#006FCF] rounded flex items-center justify-center shadow-sm"><span className="text-white text-[6px] font-bold">AMEX</span></div>
+                          </div>
+                        </div>
+                        <div className="p-6 space-y-4">
+                          <div>
+                            <label className={labelCls}>Card Number</label>
+                            <input type="text" required placeholder="Card number" value={cardNumber} onChange={e => setCardNumber(e.target.value)} className={inputCls} />
+                          </div>
+                          <div className="grid grid-cols-2 gap-6">
+                            <div>
+                              <label className={labelCls}>Expiration Date</label>
+                              <input type="text" required placeholder="MM / YY" value={expiry} onChange={e => setExpiry(e.target.value)} className={inputCls} />
+                            </div>
+                            <div>
+                              <label className={labelCls}>Security Code</label>
+                              <input type="text" required placeholder="CVV" value={cvv} onChange={e => setCvv(e.target.value)} className={inputCls} />
+                            </div>
+                          </div>
+                          <div>
+                            <label className={labelCls}>Name on Card</label>
+                            <input type="text" required placeholder="Name on card" value={nameOnCard} onChange={e => setNameOnCard(e.target.value)} className={inputCls} />
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full py-5 bg-black text-white text-sm font-bold uppercase tracking-widest rounded hover:bg-gray-800 transition-all shadow-lg disabled:opacity-75 disabled:cursor-not-allowed mt-8"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+                          Processing...
+                        </span>
+                      ) : 'Place Order'}
+                    </button>
+                  </div>
+                </form>
+
+                <footer className="mt-16 pt-8 border-t border-gray-200 flex flex-wrap gap-6">
+                  <Link to="/pages/refund-policy" className="text-xs font-semibold text-gray-500 hover:text-black uppercase tracking-wider transition-colors">Refund policy</Link>
+                  <Link to="/pages/shipping-policy" className="text-xs font-semibold text-gray-500 hover:text-black uppercase tracking-wider transition-colors">Shipping policy</Link>
+                  <Link to="/pages/privacy-policy" className="text-xs font-semibold text-gray-500 hover:text-black uppercase tracking-wider transition-colors">Privacy policy</Link>
+                  <Link to="/pages/terms-of-service" className="text-xs font-semibold text-gray-500 hover:text-black uppercase tracking-wider transition-colors">Terms of service</Link>
+                </footer>
+              </div>
+
+              {/* Right Side: Order Summary */}
+              <div className="w-full lg:w-[40%] bg-[#fafafa] p-6 lg:p-16 lg:pl-16 relative">
+                <div className="sticky top-24">
+                  <h3 className="text-2xl font-semibold text-black mb-8">Order Summary</h3>
+                  <div className="space-y-6 max-h-[45vh] overflow-y-auto pr-2 hide-scrollbar">
+                    {items.map(item => (
+                      <div key={item.id} className="flex items-start gap-5">
+                        <div className="relative flex-shrink-0">
+                          <div className="w-20 h-20 bg-white border border-gray-200 rounded-lg flex items-center justify-center p-2 shadow-sm">
+                            <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
+                          </div>
+                          <span className="absolute -top-2 -right-2 w-6 h-6 bg-gray-500/90 backdrop-blur text-white text-xs font-bold rounded-full flex items-center justify-center shadow-sm">{item.quantity}</span>
+                        </div>
+                        <div className="flex-1 min-w-0 pt-1">
+                          <h4 className="text-sm font-medium text-gray-900 leading-snug">{item.name}</h4>
+                          <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
+                        </div>
+                        <div className="text-sm font-medium text-gray-900 whitespace-nowrap pt-1">
+                          {formatPriceLocal(parsePrice(item.price) * item.quantity)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-10 pt-8 border-t border-gray-200">
+                    <form onSubmit={handleApplyDiscount} className="flex gap-3">
+                      <input
+                        type="text"
+                        value={discountCode}
+                        onChange={e => setDiscountCode(e.target.value)}
+                        placeholder="Gift card or discount code"
+                        className="flex-1 border border-gray-300 rounded px-4 py-3 text-sm focus:outline-none focus:border-black bg-white transition-colors"
+                      />
+                      <button
+                        type="submit"
+                        disabled={!discountCode.trim() || discountApplied}
+                        className="bg-gray-200 text-black px-6 py-3 font-semibold rounded hover:bg-gray-300 transition-colors disabled:opacity-50 text-sm whitespace-nowrap"
+                      >
+                        Apply
+                      </button>
+                    </form>
+                    {discountApplied && (
+                      <div className="mt-3 flex items-center gap-2">
+                        <span className="bg-green-50 text-green-700 px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 border border-green-200"><CheckCircle className="w-3 h-3" /> PROCOLORED5 applied</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-500">Subtotal</span>
+                      <span className="font-medium text-gray-900">{formatPriceLocal(cartSubtotal)}</span>
+                    </div>
+                    {discountApplied && (
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-gray-500">Discount <span className="text-xs text-green-600 font-bold ml-1">(PROCOLORED5)</span></span>
+                        <span className="font-medium text-green-600">-{formatPriceLocal(discountAmount)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-500">Shipping</span>
+                      <span className="text-gray-500">Calculated logically</span>
                     </div>
                   </div>
-                  <div className="p-4 space-y-3">
-                    <input type="text" required placeholder="Card number" value={cardNumber} onChange={e => setCardNumber(e.target.value)} className={inputCls} />
-                    <div className="grid grid-cols-2 gap-3">
-                      <input type="text" required placeholder="MM / YY" value={expiry} onChange={e => setExpiry(e.target.value)} className={inputCls} />
-                      <input type="text" required placeholder="Security code" value={cvv} onChange={e => setCvv(e.target.value)} className={inputCls} />
+
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <div className="flex justify-between items-end">
+                      <span className="text-lg font-semibold text-gray-900">Total</span>
+                      <div className="text-right flex items-baseline gap-2">
+                        <span className="text-xs text-gray-500 uppercase tracking-widest">{formatPrice(total).replace(/[0-9.,]/g, '').trim()}</span>
+                        <span className="text-3xl font-light text-black tracking-tight">{formatPrice(total).replace(/.*?([\d.,]+).*/, '$1')}</span>
+                      </div>
                     </div>
-                    <input type="text" required placeholder="Name on card" value={nameOnCard} onChange={e => setNameOnCard(e.target.value)} className={inputCls} />
                   </div>
-                </div>
-              </section>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-4 bg-[#E85A24] text-white text-base font-bold rounded-xl hover:bg-[#d14b1b] transition-colors shadow-md disabled:opacity-75 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
-                    Processing...
-                  </span>
-                ) : 'Pay now'}
-              </button>
-            </div>
-          </form>
-
-          <footer className="mt-12 pt-6 border-t border-gray-100 text-xs text-gray-400 font-medium flex flex-wrap gap-4">
-            <Link to="/pages/refund-policy" className="hover:text-black transition-colors">Refund policy</Link>
-            <Link to="/pages/shipping-policy" className="hover:text-black transition-colors">Shipping policy</Link>
-            <Link to="/pages/privacy-policy" className="hover:text-black transition-colors">Privacy policy</Link>
-            <Link to="/pages/terms-of-service" className="hover:text-black transition-colors">Terms of service</Link>
-          </footer>
-        </div>
-
-        {/* Right Side: Order Summary */}
-        <div className="w-full lg:w-[45%] bg-gray-50 p-6 lg:p-12 lg:pl-16">
-          <div className="sticky top-6">
-            <h3 className="text-base font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200 uppercase tracking-wide">Order Summary</h3>
-            <div className="space-y-4 max-h-[40vh] overflow-y-auto pr-1">
-              {items.map(item => (
-                <div key={item.id} className="flex items-center gap-4">
-                  <div className="relative flex-shrink-0">
-                    <div className="w-16 h-16 bg-white border border-gray-200 rounded-xl flex items-center justify-center p-2 shadow-sm">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
-                    </div>
-                    <span className="absolute -top-2 -right-2 w-5 h-5 bg-gray-600 text-white text-xs font-bold rounded-full flex items-center justify-center">{item.quantity}</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-gray-800 line-clamp-2">{item.name}</h4>
-                  </div>
-                  <div className="text-sm font-bold text-gray-900 whitespace-nowrap flex-shrink-0">
-                    {formatPriceLocal(parsePrice(item.price) * item.quantity)}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 pt-6 border-t border-gray-200 space-y-4">
-              <form onSubmit={handleApplyDiscount} className="flex gap-2">
-                <input
-                  type="text"
-                  value={discountCode}
-                  onChange={e => setDiscountCode(e.target.value)}
-                  placeholder="Discount code"
-                  className="flex-1 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#E85A24] focus:ring-1 focus:ring-[#E85A24] bg-white"
-                />
-                <button
-                  type="submit"
-                  disabled={!discountCode.trim() || discountApplied}
-                  className="bg-gray-200 text-gray-700 px-4 py-2.5 font-bold rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50 text-sm whitespace-nowrap"
-                >
-                  Apply
-                </button>
-              </form>
-              {discountApplied && (
-                <div className="flex items-center gap-2">
-                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">✓ PROCOLORED5 applied</span>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-6 pt-6 border-t border-gray-200 space-y-2.5">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-500">Subtotal</span>
-                <span className="font-medium text-gray-900">{formatPriceLocal(cartSubtotal)}</span>
-              </div>
-              {discountApplied && (
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-500">Discount <span className="text-xs text-green-600 font-bold">(PROCOLORED5)</span></span>
-                  <span className="font-medium text-green-600">-{formatPriceLocal(discountAmount)}</span>
-                </div>
-              )}
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-500">Shipping</span>
-                <span className="text-green-600 font-semibold text-xs">Free</span>
-              </div>
-            </div>
-
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="flex justify-between items-center">
-                <span className="text-base font-bold text-gray-900">Total</span>
-                <div className="text-right">
-                  <span className="text-xs text-gray-400 uppercase tracking-wide mr-1">PKR</span>
-                  <span className="text-2xl font-bold text-gray-900">{formatPrice(total).replace('Rs.', '').replace('PKR', '').trim()}</span>
                 </div>
               </div>
-            </div>
+            </main>
           </div>
-        </div>
-      </main>
-    </div>
-  );
-}
+        );
+      }

@@ -82,7 +82,8 @@ router.post('/order',
         totalAmount,
         currency,
         country,
-        city
+        city,
+        paymentMethod
       } = req.body;
 
       // Generate order number
@@ -106,6 +107,7 @@ router.post('/order',
           currency: currency || 'PKR',
           status: 'pending',
           payment_status: 'unpaid',
+          payment_method: paymentMethod || 'Credit Card',
           customer_ip: req.ip,
           customer_country: country || null,
           customer_city: city || null
