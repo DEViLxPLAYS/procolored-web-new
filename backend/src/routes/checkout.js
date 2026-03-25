@@ -125,7 +125,7 @@ router.post('/order',
 
     } catch (error) {
       console.error('Order error:', error.message);
-      return res.status(500).json({ error: 'Failed to create order' });
+      return res.status(500).json({ error: `Failed to create order: ${error.message}` });
     }
   }
 );
