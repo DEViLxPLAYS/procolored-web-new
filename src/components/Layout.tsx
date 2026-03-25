@@ -197,8 +197,7 @@ export default function Layout() {
         <img 
           src="https://i.postimg.cc/KYnYhPVW/MAKE-THIS-IMAGE-202603241555.jpg" 
           alt="Fan Appreciation Sale"
-          className="w-full h-[55px] sm:h-[75px] md:h-[90px] lg:h-[110px] xl:h-[120px] object-cover object-center"
-          style={{ display: 'block' }}
+          className="w-full h-auto block"
         />
       </div>
 
