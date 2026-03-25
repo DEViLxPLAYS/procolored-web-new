@@ -660,30 +660,28 @@ export default function Layout() {
             <div>
               <h4 className="font-bold mb-4 text-white">Product</h4>
               <ul className="space-y-2 text-sm font-medium text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">DTF Printers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">UV DTF Printers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">UV Printers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">DTG Printers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Equipments</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Consumables</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Parts & Accessory</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Tshirt Printers</a></li>
+                <li><Link to="/collections/dtf-printer" className="hover:text-white transition-colors">DTF Printers</Link></li>
+                <li><Link to="/collections/uv-dtf-printer" className="hover:text-white transition-colors">UV DTF Printers</Link></li>
+                <li><Link to="/collections/uv-printer" className="hover:text-white transition-colors">UV Printers</Link></li>
+                <li><Link to="/collections/dtg-printer" className="hover:text-white transition-colors">DTG Printers</Link></li>
+                <li><Link to="/collections/equipment" className="hover:text-white transition-colors">Equipments</Link></li>
+                <li><Link to="/collections/consumables" className="hover:text-white transition-colors">Consumables</Link></li>
+                <li><Link to="/collections/parts-accessory" className="hover:text-white transition-colors">Parts &amp; Accessory</Link></li>
+                <li><Link to="/collections/dtg-printer" className="hover:text-white transition-colors">Tshirt Printers</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4 text-white">Support</h4>
               <ul className="space-y-2 text-sm font-medium text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Resources</a></li>
                 <li><Link to="/warranty" className="hover:text-white transition-colors">Warranty</Link></li>
                 <li><Link to="/repair" className="hover:text-white transition-colors">Repair Appointment</Link></li>
-                <li><a href="#" className="hover:text-white transition-colors">Join Our Group</a></li>
+                <li><Link to="/showroom" className="hover:text-white transition-colors">Showroom</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4 text-white">Company</h4>
               <ul className="space-y-2 text-sm font-medium text-gray-400">
                 <li><Link to="/pages/procolored-siphon-circulation" className="hover:text-white transition-colors">Procolored Siphon Circulation</Link></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
                 <li><Link to="/pages/our-brand" className="hover:text-white transition-colors">Our Brand</Link></li>
                 <li><Link to="/pages/contact-us" className="hover:text-white transition-colors">Contact US</Link></li>
               </ul>

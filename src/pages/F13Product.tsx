@@ -4,23 +4,7 @@ import { Star, ChevronLeft, ChevronRight, ChevronDown, Headphones, BookOpen, Vid
 import { useCurrency } from '../context/CurrencyContext';
 import { useCart } from '../context/CartContext';
 
-const craftItemsRow1 = [
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-  { image: '/images/gallery-item-3.png' },
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-  { image: '/images/gallery-item-3.png' },
-];
 
-const craftItemsRow2 = [
-  { image: '/images/gallery-item-3.png' },
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-  { image: '/images/gallery-item-3.png' },
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-];
 // ─────────────────────────────────────────────────────────────────────────────
 // HlsVideo – auto-plays HLS or MP4, fully muted and looping
 // ─────────────────────────────────────────────────────────────────────────────
@@ -183,17 +167,6 @@ export default function F13Product() {
     { q: 'What is the maximum length it can print with roll film?', a: 'With roll film the printing length is unlimited, constrained only by roll length (typically 328 ft / 100 m).' },
     { q: 'How fast can it print?', a: 'Approximately 6 Letter/A4 prints per hour — around 20–50 quality transfers per dedicated workday.' },
     { q: 'Is the maintenance process complicated?', a: 'Not at all. The F13 auto-cleans every 10 hours when powered on. Basic daily maintenance takes just minutes.' },
-  ];
-
-  const mockupImages = [
-    'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/1_3a8cfaeb-4589-40ed-a63e-fcf62dd8bd12.png',
-    'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/2_ef9ca383-74b5-4df3-a55e-deec2a66e44b.png',
-    'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/4_64ddb445-562b-4ffb-821f-0e1ce8c79c88.png',
-    'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/5_b5fc6f00-381a-42c2-b56e-8211dbf28e21.png',
-    'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/7_70dceb0c-a9a3-48b0-bfb9-8fe8b1e4c76b.png',
-    'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/8_808dd45e-b9ef-4360-a2de-0d2a71fec7b3.png',
-    'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/10_b9ec5f97-ff0b-4029-af94-dabb086f0592.png',
-    'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/12_c6ba0b42-1e96-411a-adb4-ad0ad980c6f5.png',
   ];
 
   const specRows = [
@@ -444,23 +417,6 @@ export default function F13Product() {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════════════════
-          SECTION 5 — Infinite Scroll Marquee
-      ══════════════════════════════════════════════════════════════ */}
-      <div className="py-20 bg-white marquee-wrap overflow-hidden">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Unlock Endless Possibilities</h2>
-        {[0, 1, 2].map(row => (
-          <div key={row} className="overflow-hidden mb-5">
-            <div className={`flex ${row % 2 === 0 ? 'marquee-l' : 'marquee-r'}`} style={{ width: 'max-content' }}>
-              {[...mockupImages, ...mockupImages].map((img, i) => (
-                <div key={i} className="w-[220px] shrink-0 px-2">
-                  <img src={img} alt="mockup" className="w-full h-auto rounded-2xl shadow border border-gray-100" />
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
 
       {/* ══════════════════════════════════════════════════════════════
           SECTION 6 — Core Technology (3-row bento — HLS only)
@@ -573,36 +529,6 @@ export default function F13Product() {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════════════════
-          Marquee Section (Unlock Endless Possibilities)
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="py-24 bg-white flex-none overflow-hidden border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 mb-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-black tracking-tight mb-4">Unlock Endless Possibilities</h2>
-        </div>
-        <div className="relative mb-6">
-          <div className="marquee-container justify-center flex">
-            <div className="marquee-row-1 flex px-2 space-x-4">
-              {[...craftItemsRow1, ...craftItemsRow1, ...craftItemsRow1].map((item, index) => (
-                   <div key={`f13-r1-${index}`} className="flex-shrink-0 w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-2xl overflow-hidden shadow-md border hover:border-gray-200 transition-colors bg-gray-50">
-                     <img src={item.image} alt="Craft Item" className="w-full h-full object-cover" />
-                   </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="relative">
-          <div className="marquee-container justify-center flex">
-            <div className="marquee-row-2 flex px-2 space-x-4">
-              {[...craftItemsRow2, ...craftItemsRow2, ...craftItemsRow2].map((item, index) => (
-                   <div key={`f13-r2-${index}`} className="flex-shrink-0 w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-2xl overflow-hidden shadow-md border hover:border-gray-200 transition-colors bg-gray-50">
-                     <img src={item.image} alt="Craft Item" className="w-full h-full object-cover" />
-                   </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ══════════════════════════════════════════════════════════════
           Specifications

@@ -145,6 +145,7 @@ export const OrdersTab = ({ toast }: { toast:(msg:string,type?:'success'|'error'
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState<string|null>(null);
   const [newIds, setNewIds] = useState<Set<string>>(new Set());
+  const [expandedId, setExpandedId] = useState<string|null>(null);
   const prevTotalRef = useRef<number>(0);
 
   const load = useCallback(async (silent = false) => {
@@ -180,6 +181,19 @@ export const OrdersTab = ({ toast }: { toast:(msg:string,type?:'success'|'error'
 
   const statuses = ['pending','confirmed','processing','shipped','delivered','cancelled','refunded'];
 
+  const fmtAddr = (addr: any) => {
+    if (!addr) return '—';
+    if (typeof addr === 'string') return addr;
+    const { firstName='', lastName='', address='', apartment='', city='', state='', postal='', country='' } = addr;
+    const parts = [
+      [firstName, lastName].filter(Boolean).join(' '),
+      [address, apartment].filter(Boolean).join(', '),
+      [city, state, postal].filter(Boolean).join(', '),
+      country,
+    ].filter(Boolean);
+    return parts.join('\n');
+  };
+
   return (
     <div>
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
@@ -193,33 +207,81 @@ export const OrdersTab = ({ toast }: { toast:(msg:string,type?:'success'|'error'
         <div style={{ overflowX:'auto' }}>
           <table style={{ width:'100%', borderCollapse:'collapse', fontSize:14 }}>
             <thead><tr style={{ background:C.surface }}>
-              {['Order #','Customer','Email','Items','Total','Status','Payment','Date','Update'].map(h=>(
+              {['Order #','Customer','Email','Items','Total','Status','Payment','Date','Update',''].map(h=>(
                 <th key={h} style={{ padding:'10px 12px', textAlign:'left', fontSize:12, fontWeight:700, color:C.muted, whiteSpace:'nowrap', borderBottom:`1px solid ${C.border}` }}>{h}</th>
               ))}
             </tr></thead>
             <tbody>
-              {!orders.length ? <tr><td colSpan={9} style={{ textAlign:'center', padding:40, color:C.muted }}>No orders found</td></tr>
+              {!orders.length ? <tr><td colSpan={10} style={{ textAlign:'center', padding:40, color:C.muted }}>No orders found</td></tr>
               : orders.map(o=>(
-                <tr key={o.id} style={{ borderBottom:`1px solid ${C.border}`, background: newIds.has(o.id) ? '#D1FAE5' : 'transparent', transition:'background 1s ease' }}>
-                  <td style={{ padding:'10px 12px' }}><code style={{ background:C.surface, padding:'2px 6px', borderRadius:4, fontSize:12 }}>{o.order_number}</code></td>
-                  <td style={{ padding:'10px 12px', fontWeight:500 }}>{o.customer_name}</td>
-                  <td style={{ padding:'10px 12px', color:C.muted, fontSize:12 }}>{o.customer_email}</td>
-                  <td style={{ padding:'10px 12px', color:C.muted }}>{Array.isArray(o.items)?o.items.length:0}</td>
-                  <td style={{ padding:'10px 12px', fontWeight:700 }}>{o.currency} {parseFloat(o.total_amount||0).toLocaleString()}</td>
-                  <td style={{ padding:'10px 12px' }}>
-                    <span style={{ background:(ORDER_STATUS_COLOR[o.status]||{bg:C.surface}).bg, color:(ORDER_STATUS_COLOR[o.status]||{color:C.muted}).color, borderRadius:20, padding:'3px 10px', fontSize:11, fontWeight:700 }}>{o.status}</span>
-                  </td>
-                  <td style={{ padding:'10px 12px' }}>
-                    <span style={{ background: o.payment_status==='paid'?'#D1FAE5':o.payment_status==='failed'?'#FEE2E2':'#FEF3C7', color: o.payment_status==='paid'?'#065F46':o.payment_status==='failed'?'#DC2626':'#D97706', borderRadius:20, padding:'3px 10px', fontSize:11, fontWeight:700 }}>{o.payment_status}</span>
-                  </td>
-                  <td style={{ padding:'10px 12px', color:C.muted, fontSize:12 }}>{fmtDate(o.created_at)}</td>
-                  <td style={{ padding:'10px 12px' }}>
-                    <select value={o.status} disabled={updating===o.id} onChange={e=>updateStatus(o.id,e.target.value)}
-                      style={{ border:`1px solid ${C.border}`, borderRadius:6, padding:'4px 8px', fontSize:12, cursor:'pointer', color:C.text, background:C.white }}>
-                      {statuses.map(s=><option key={s} value={s}>{s.charAt(0).toUpperCase()+s.slice(1)}</option>)}
-                    </select>
-                  </td>
-                </tr>
+                <React.Fragment key={o.id}>
+                  <tr style={{ borderBottom:`1px solid ${C.border}`, background: newIds.has(o.id) ? '#D1FAE5' : 'transparent', transition:'background 1s ease' }}>
+                    <td style={{ padding:'10px 12px' }}><code style={{ background:C.surface, padding:'2px 6px', borderRadius:4, fontSize:12 }}>{o.order_number}</code></td>
+                    <td style={{ padding:'10px 12px', fontWeight:500 }}>{o.customer_name}</td>
+                    <td style={{ padding:'10px 12px', color:C.muted, fontSize:12 }}>{o.customer_email}</td>
+                    <td style={{ padding:'10px 12px', color:C.muted }}>{Array.isArray(o.items)?o.items.length:0}</td>
+                    <td style={{ padding:'10px 12px', fontWeight:700 }}>{o.currency} {parseFloat(o.total_amount||0).toLocaleString()}</td>
+                    <td style={{ padding:'10px 12px' }}>
+                      <span style={{ background:(ORDER_STATUS_COLOR[o.status]||{bg:C.surface}).bg, color:(ORDER_STATUS_COLOR[o.status]||{color:C.muted}).color, borderRadius:20, padding:'3px 10px', fontSize:11, fontWeight:700 }}>{o.status}</span>
+                    </td>
+                    <td style={{ padding:'10px 12px' }}>
+                      <span style={{ background: o.payment_status==='paid'?'#D1FAE5':o.payment_status==='failed'?'#FEE2E2':'#FEF3C7', color: o.payment_status==='paid'?'#065F46':o.payment_status==='failed'?'#DC2626':'#D97706', borderRadius:20, padding:'3px 10px', fontSize:11, fontWeight:700 }}>{o.payment_status}</span>
+                    </td>
+                    <td style={{ padding:'10px 12px', color:C.muted, fontSize:12 }}>{fmtDate(o.created_at)}</td>
+                    <td style={{ padding:'10px 12px' }}>
+                      <select value={o.status} disabled={updating===o.id} onChange={e=>updateStatus(o.id,e.target.value)}
+                        style={{ border:`1px solid ${C.border}`, borderRadius:6, padding:'4px 8px', fontSize:12, cursor:'pointer', color:C.text, background:C.white }}>
+                        {statuses.map(s=><option key={s} value={s}>{s.charAt(0).toUpperCase()+s.slice(1)}</option>)}
+                      </select>
+                    </td>
+                    <td style={{ padding:'10px 12px' }}>
+                      <button
+                        onClick={() => setExpandedId(expandedId === o.id ? null : o.id)}
+                        style={{ background: expandedId===o.id ? C.red : '#DBEAFE', color: expandedId===o.id ? '#fff' : '#1D4ED8', border:'none', borderRadius:6, padding:'5px 10px', fontSize:12, cursor:'pointer', fontWeight:600, whiteSpace:'nowrap' }}
+                      >{expandedId===o.id ? '▲ Hide' : '▼ View'}</button>
+                    </td>
+                  </tr>
+                  {expandedId === o.id && (
+                    <tr style={{ background:'#F8FAFF' }}>
+                      <td colSpan={10} style={{ padding:'16px 20px', borderBottom:`1px solid ${C.border}` }}>
+                        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:24 }}>
+                          <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:10, padding:16 }}>
+                            <div style={{ fontSize:12, fontWeight:700, color:C.muted, marginBottom:10, textTransform:'uppercase', letterSpacing:1 }}>📦 Shipping Address</div>
+                            {o.shipping_address ? (
+                              <pre style={{ fontFamily:'inherit', fontSize:13, color:C.text, whiteSpace:'pre-wrap', margin:0, lineHeight:1.7 }}>
+                                {fmtAddr(o.shipping_address)}
+                              </pre>
+                            ) : <span style={{ color:C.muted, fontSize:13 }}>No address on file</span>}
+                            {o.customer_phone && <div style={{ marginTop:8, fontSize:13, color:C.muted }}>📞 {o.customer_phone}</div>}
+                          </div>
+                          <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:10, padding:16 }}>
+                            <div style={{ fontSize:12, fontWeight:700, color:C.muted, marginBottom:10, textTransform:'uppercase', letterSpacing:1 }}>🛍 Products Ordered</div>
+                            {Array.isArray(o.items) && o.items.length > 0 ? (
+                              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                                {o.items.map((item:any, idx:number) => (
+                                  <div key={idx} style={{ display:'flex', alignItems:'center', gap:12, padding:'8px 0', borderBottom:`1px solid ${C.border}` }}>
+                                    {item.image && <img src={item.image} alt={item.name} style={{ width:40, height:40, objectFit:'contain', borderRadius:6, border:`1px solid ${C.border}`, background:C.surface }} />}
+                                    <div style={{ flex:1, minWidth:0 }}>
+                                      <div style={{ fontSize:13, fontWeight:600, color:C.text, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{item.name}</div>
+                                      <div style={{ fontSize:12, color:C.muted }}>Qty: {item.quantity}</div>
+                                    </div>
+                                    <div style={{ fontSize:13, fontWeight:700, color:C.text, whiteSpace:'nowrap' }}>
+                                      PKR {(parseFloat(item.price||0) * (item.quantity||1)).toLocaleString()}
+                                    </div>
+                                  </div>
+                                ))}
+                                <div style={{ display:'flex', justifyContent:'space-between', paddingTop:8, fontWeight:700, fontSize:14 }}>
+                                  <span style={{ color:C.muted }}>Total</span>
+                                  <span style={{ color:C.text }}>{o.currency||'PKR'} {parseFloat(o.total_amount||0).toLocaleString()}</span>
+                                </div>
+                              </div>
+                            ) : <span style={{ color:C.muted, fontSize:13 }}>No items recorded</span>}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
