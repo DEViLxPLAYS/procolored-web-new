@@ -154,6 +154,7 @@ export default function Checkout() {
       customerEmail: email,
       customerPhone: phone || null,
       shippingAddress,
+      billingAddress: shippingAddress,
       items: items.map(i => ({
         id: i.id,
         name: i.name,
@@ -168,6 +169,8 @@ export default function Checkout() {
       totalAmount: total,
       currency: 'PKR',
       country,
+      city,
+      paymentMethod: 'Credit Card',
     };
 
     try {
