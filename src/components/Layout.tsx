@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { 
   Search, User, ShoppingCart, ChevronDown, Menu, X, 
-  ChevronRight, ChevronLeft, MessageCircle, Headphones, Globe,
+  ChevronRight, ChevronLeft, Headphones, Globe,
   Facebook, Instagram, Youtube, 
   MapPin, Award, Shield
 } from 'lucide-react';
@@ -44,9 +44,12 @@ const navbarCategories = [
 ];
 
 const supportLinks = [
-  { name: "Showroom", path: "/showroom" },
-  { name: "Repair", path: "/repair" },
-  { name: "Warranty", path: "/warranty" }
+  { name: "Showroom", path: "/pages/showroom" },
+  { name: "Repair", path: "/pages/repair" },
+  { name: "Warranty", path: "/pages/warranty" },
+  { name: "Pre-Sales Consult", path: "/pages/pre-sales-consult" },
+  { name: "After Sales & Service", path: "/pages/after-sales-service" },
+  { name: "Feedback", path: "/pages/feedback" },
 ];
 const aboutUsLinks = [
   { name: "Procolored Siphon Circulation", path: "/pages/procolored-siphon-circulation" },
@@ -130,7 +133,6 @@ export default function Layout() {
   const [activeMobileMenu, setActiveMobileMenu] = useState<'main' | 'products' | 'support' | 'about'>('main');
   const [expandedProductCategory, setExpandedProductCategory] = useState<string | null>(null);
   
-  const [showChat, setShowChat] = useState(false);
   const { cartCount, setIsCartOpen } = useCart();
   const { currency, setCurrency, allCurrencies } = useCurrency();
 
@@ -193,14 +195,6 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden w-full">
-      <div className="w-full bg-[#e8e4db] overflow-hidden flex justify-center">
-        <img 
-          src="https://i.postimg.cc/KYnYhPVW/MAKE-THIS-IMAGE-202603241555.jpg" 
-          alt="Fan Appreciation Sale"
-          className="w-full object-cover object-top h-[60px] sm:h-[80px] md:h-[100px] lg:h-[120px] xl:h-[150px]"
-          style={{ display: 'block' }}
-        />
-      </div>
 
       {/* Top Utility Bar */}
       <div className="hidden lg:flex justify-end items-center max-w-7xl mx-auto px-4 py-2 border-b border-gray-100 gap-6">
@@ -296,7 +290,7 @@ export default function Layout() {
                       onMouseLeave={handleDropdownLeave}
                     >
                       {supportLinks.map((link, idx) => (
-                        <Link key={idx} to={link.path} className="block px-5 py-2.5 text-sm font-medium text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
+                        <Link key={idx} to={link.path} onClick={() => setActiveDropdown(null)} className="block px-5 py-2.5 text-sm font-medium text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
                           {link.name}
                         </Link>
                       ))}
@@ -320,7 +314,7 @@ export default function Layout() {
                       onMouseLeave={handleDropdownLeave}
                     >
                       {aboutUsLinks.map((link, idx) => (
-                        <Link key={idx} to={link.path} className="block px-5 py-2.5 text-sm font-medium text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
+                        <Link key={idx} to={link.path} onClick={() => setActiveDropdown(null)} className="block px-5 py-2.5 text-sm font-medium text-black hover:text-[#E85A24] hover:bg-gray-50 transition-colors whitespace-nowrap">
                           {link.name}
                         </Link>
                       ))}
@@ -393,6 +387,7 @@ export default function Layout() {
                       key={idx} 
                       to={cat.path}
                       onMouseEnter={() => setHoveredCategory(cat.name)}
+                      onClick={() => setActiveDropdown(null)}
                       className={`group flex items-center justify-between text-[15px] font-medium py-2 px-3 rounded transition-colors ${
                         hoveredCategory === cat.name ? 'text-[#E85A24] bg-gray-50 font-bold' : 'text-black hover:text-[#E85A24] hover:bg-gray-50'
                       }`}
@@ -406,7 +401,7 @@ export default function Layout() {
               <div className="flex-1 p-6 relative flex flex-col">
                 <div className="grid grid-cols-4 gap-6">
                   {rightColumnProducts.map((product, pIdx) => (
-                    <Link key={pIdx} to={`/products/${product.id}`} className="block text-center group">
+                    <Link key={pIdx} to={`/products/${product.id}`} onClick={() => setActiveDropdown(null)} className="block text-center group">
                       <div className="bg-gray-50 rounded-lg p-4 mb-3 group-hover:bg-gray-100 transition-colors h-36 flex items-center justify-center relative overflow-hidden">
                         <img src={product.image} alt={product.title} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                         {product.badge && (
@@ -693,12 +688,6 @@ export default function Layout() {
                 <li><a href="mailto:support@procollored.com" className="hover:text-white">support@procollored.com</a></li>
                 <li className="text-white font-bold mt-3">After-sales:</li>
                 <li><a href="mailto:support@procollored.com" className="hover:text-white">support@procollored.com</a></li>
-                <li className="mt-4 pt-2 border-t border-gray-800">
-                  <a href="#" className="text-red-600 hover:text-red-500 font-bold">Need Help?</a>
-                </li>
-                <li>
-                  <a href="#" className="text-red-600 hover:text-red-500 font-bold">Start Live Chat</a>
-                </li>
               </ul>
             </div>
           </div>
@@ -744,40 +733,7 @@ export default function Layout() {
         </div>
       </footer>
 
-      {/* Chat Widget */}
-      <div className="fixed bottom-6 right-6 z-50">
-        {showChat && (
-          <div className="absolute bottom-16 right-0 w-80 bg-white rounded-lg shadow-2xl overflow-hidden animate-slide-in">
-            <div className="bg-red-600 p-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                  <MessageCircle className="w-4 h-4 text-red-600" />
-                </div>
-                <div>
-                  <p className="text-white font-bold text-sm">Hi there 👋</p>
-                  <p className="text-white/80 text-xs font-medium">We reply immediately</p>
-                </div>
-              </div>
-              <button onClick={() => setShowChat(false)} className="text-white/80 hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-4">
-              <input 
-                type="text" 
-                placeholder="Enter your message..."
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium focus:outline-none focus:border-red-600"
-              />
-            </div>
-          </div>
-        )}
-        <button 
-          onClick={() => setShowChat(!showChat)}
-          className="w-14 h-14 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center shadow-lg transition-colors"
-        >
-          <MessageCircle className="w-6 h-6 text-white" />
-        </button>
-      </div>
+
       <CartDrawer />
     </div>
   );

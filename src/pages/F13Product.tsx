@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Hls from 'hls.js';
 import { Star, ChevronLeft, ChevronRight, ChevronDown, Headphones, BookOpen, Video, HelpCircle, Check, Tag, AlertCircle, Gift, Truck, Shield, Zap } from 'lucide-react';
-import { useCurrency } from '../context/CurrencyContext';
 import { useCart } from '../context/CartContext';
-
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HlsVideo – auto-plays HLS or MP4, fully muted and looping
@@ -56,40 +54,50 @@ export default function F13Product() {
   const [selectedOption, setSelectedOption] = useState(0);
   const [couponCode, setCouponCode] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
+  const [activeSpecTab, setActiveSpecTab] = useState(0);
 
   const DISCOUNT_PERCENT = 5;
 
   const options = [
     {
-      label: 'F13 Printer Only',
-      badge: 'Fan Appreciation Sale',
-      originalPKR: 569_600,
-      salePKR: 427_000,
-      img: 'https://www.procolored.com/cdn/shop/files/F13-DTF-Printer_1_1220x_crop_center.png?v=1770806196',
-    },
-    {
-      label: 'F13 + Oven',
+      label: 'F13+Oven',
       badge: 'Most Popular Choice',
-      originalPKR: 996_700,
-      salePKR: 854_200,
+      originalUSD: 3_499,
+      saleUSD: 2_999,
+      savingUSD: 500,
       img: 'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/L1800-left_1_ff3bd565-f8d6-4779-8b9a-d709a2d77ae3.png?v=1766389693&width=800',
     },
     {
-      label: 'F13 + Smokeless Oven',
-      badge: 'Fan Appreciation Sale',
-      originalPKR: 1_130_100,
-      salePKR: 996_600,
+      label: 'F13+Oven+Heat Press',
+      badge: 'Complete Printing Bundle',
+      originalUSD: 3_799,
+      saleUSD: 3_299,
+      savingUSD: 500,
+      img: 'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/L1800-left_1_ff3bd565-f8d6-4779-8b9a-d709a2d77ae3.png?v=1766389693&width=800',
+    },
+    {
+      label: 'F13+Smokeless Oven',
+      badge: 'Extra $200 OFF for Member',
+      originalUSD: 3_999,
+      saleUSD: 3_499,
+      savingUSD: 500,
+      img: 'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/L1800-left_1_ff3bd565-f8d6-4779-8b9a-d709a2d77ae3.png?v=1766389693&width=800',
+    },
+    {
+      label: 'F13+Smokeless Oven+Heat Press',
+      badge: 'Extra $200 OFF for Member',
+      originalUSD: 4_399,
+      saleUSD: 3_799,
+      savingUSD: 600,
       img: 'https://cdn.shopify.com/s/files/1/0509/3454/6613/files/L1800-left_1_ff3bd565-f8d6-4779-8b9a-d709a2d77ae3.png?v=1766389693&width=800',
     },
   ];
 
   const currentOption = options[selectedOption];
   const finalPrice = couponApplied
-    ? Math.round(currentOption.salePKR * (1 - DISCOUNT_PERCENT / 100))
-    : currentOption.salePKR;
-  const couponSaving = couponApplied
-    ? currentOption.salePKR - finalPrice
-    : 0;
+    ? Math.round(currentOption.saleUSD * (1 - DISCOUNT_PERCENT / 100))
+    : currentOption.saleUSD;
+  const couponSaving = couponApplied ? currentOption.saleUSD - finalPrice : 0;
 
   function applyCoupon() {
     if (couponCode.trim().toLowerCase() === 'procolored5') {
@@ -180,7 +188,6 @@ export default function F13Product() {
     ['Product Size', '33"*15"*11.8" (84*38*30cm)', 'Standard Supplies', 'DTF Ink Set(5×250ml:CMYKW)\nNozzle Protection Fluid(1×250ml)\nAdhesive Powder (500g)\nPET Roll Film (13in × 328ft / 33cm×100m)'],
   ];
 
-  const { formatPrice: fmt } = useCurrency();
   const { addToCart } = useCart();
 
   return (
@@ -250,11 +257,11 @@ export default function F13Product() {
             {/* Price row */}
             <div>
               <div className="flex items-baseline gap-3 flex-wrap">
-                    <span className="text-3xl font-bold">{fmt(finalPrice)}</span>
-                    <span className="text-lg text-gray-400 line-through">{fmt(options[selectedOption].originalPKR)}</span>
+                    <span className="text-3xl font-bold">${finalPrice.toLocaleString()}.00 USD</span>
+                    <span className="text-lg text-gray-400 line-through">${options[selectedOption].originalUSD.toLocaleString()}.00 USD</span>
               </div>
               <p className="text-sm text-[#E07000] flex items-center gap-1 mt-1">
-                <Zap className="w-4 h-4" /> Fan Appreciation Sale (Rs.{fmt(currentOption.originalPKR - currentOption.salePKR)} PKR)
+                <Zap className="w-4 h-4" /> ${options[selectedOption].savingUSD} Off — Fan Appreciation Sale
               </p>
             </div>
 
@@ -292,7 +299,7 @@ export default function F13Product() {
             </div>
             {couponApplied && (
               <p className="text-green-600 text-sm font-semibold flex items-center gap-1">
-                <Check className="w-4 h-4" /> Coupon applied! You save Rs.{fmt(couponSaving)} PKR
+                <Check className="w-4 h-4" /> Coupon applied! You save ${couponSaving.toLocaleString()}.00 USD
               </p>
             )}
 
@@ -308,10 +315,10 @@ export default function F13Product() {
                     className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${selectedOption === i ? 'border-[#E07000] bg-orange-50' : 'border-gray-200 hover:border-gray-300'}`}>
                     <img src={opt.img} alt={opt.label} className="w-14 h-14 object-contain rounded-lg border border-gray-100" />
                     <div className="flex-1">
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full mb-1 inline-block ${i === 1 ? 'bg-[#E07000] text-white' : 'bg-orange-100 text-[#E07000]'}`}>{opt.badge}</span>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full mb-1 inline-block ${i === 0 ? 'bg-[#E07000] text-white' : 'bg-orange-100 text-[#E07000]'}`}>{opt.badge}</span>
                       <p className="font-bold text-gray-900">{opt.label}</p>
-                      <p className="text-sm text-gray-400 line-through">{fmt(opt.originalPKR)}</p>
-                      <p className="text-sm text-[#E07000] font-bold">{fmt(opt.originalPKR - opt.salePKR)} Off → {fmt(couponApplied && selectedOption === i ? finalPrice : opt.salePKR)}</p>
+                      <p className="text-sm text-gray-400 line-through">${opt.originalUSD.toLocaleString()}.00 USD</p>
+                      <p className="text-sm text-[#E07000] font-bold">${opt.savingUSD} Off → ${(couponApplied && selectedOption === i ? finalPrice : opt.saleUSD).toLocaleString()}.00 USD</p>
                     </div>
                   </button>
                 ))}
@@ -538,31 +545,128 @@ export default function F13Product() {
           <h2 className="text-4xl md:text-5xl font-extrabold text-center text-gray-900 mb-8">Explore detailed specifications and see how F13 outperforms the rest</h2>
           <div className="flex flex-wrap justify-center gap-1 p-1 bg-white rounded-full shadow border border-gray-100 mx-auto max-w-fit mb-10">
             {['Printer Specifications', 'Printer Comparison', 'Print Speed', 'Oven Comparison'].map((tab, i) => (
-              <button key={i} className={`px-6 py-2 rounded-full text-sm font-medium transition ${i === 0 ? 'bg-black text-white' : 'text-gray-500 hover:text-gray-800'}`}>{tab}</button>
+              <button
+                key={i}
+                onClick={() => setActiveSpecTab(i)}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition ${activeSpecTab === i ? 'bg-black text-white' : 'text-gray-500 hover:text-gray-800'}`}
+              >{tab}</button>
             ))}
           </div>
-          <p className="text-center text-gray-500 text-lg max-w-2xl mx-auto mb-14">Here you'll find the key F13 specs that actually matter—print size, resolution, ink setup, and system details—so you can quickly see whether this printer fits your workspace and production needs.</p>
-          <div className="flex justify-center mb-14">
-            <img src="https://cdn.shopify.com/s/files/1/0509/3454/6613/files/L1800-left_1_ff3bd565-f8d6-4779-8b9a-d709a2d77ae3.png?v=1766389693&width=800" alt="F13 Printer" className="max-w-[460px] w-full drop-shadow-xl" />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
-            <div>
-              {specRows.map(([lab, val], i) => (
-                <div key={i} className="flex py-4 border-b border-gray-200 last:border-0">
-                  <span className="font-bold text-gray-900 w-1/2 text-sm">{lab}</span>
-                  <span className="text-gray-600 w-1/2 text-sm whitespace-pre-line">{val}</span>
+
+          {/* Tab 0 — Printer Specifications */}
+          {activeSpecTab === 0 && (
+            <>
+              <p className="text-center text-gray-500 text-lg max-w-2xl mx-auto mb-14">Here you'll find the key F13 specs that actually matter—print size, resolution, ink setup, and system details—so you can quickly see whether this printer fits your workspace and production needs.</p>
+              <div className="flex justify-center mb-14">
+                <img src="https://cdn.shopify.com/s/files/1/0509/3454/6613/files/L1800-left_1_ff3bd565-f8d6-4779-8b9a-d709a2d77ae3.png?v=1766389693&width=800" alt="F13 Printer" className="max-w-[460px] w-full drop-shadow-xl" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
+                <div>
+                  {specRows.map(([lab, val], i) => (
+                    <div key={i} className="flex py-4 border-b border-gray-200 last:border-0">
+                      <span className="font-bold text-gray-900 w-1/2 text-sm">{lab}</span>
+                      <span className="text-gray-600 w-1/2 text-sm whitespace-pre-line">{val}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div>
-              {specRows.map(([, , lab, val], i) => (
-                <div key={i} className="flex py-4 border-b border-gray-200 last:border-0">
-                  <span className="font-bold text-gray-900 w-1/2 text-sm">{lab}</span>
-                  <span className="text-gray-600 w-1/2 text-sm whitespace-pre-line">{val}</span>
+                <div>
+                  {specRows.map(([, , lab, val], i) => (
+                    <div key={i} className="flex py-4 border-b border-gray-200 last:border-0">
+                      <span className="font-bold text-gray-900 w-1/2 text-sm">{lab}</span>
+                      <span className="text-gray-600 w-1/2 text-sm whitespace-pre-line">{val}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            </>
+          )}
+
+          {/* Tab 1 — Printer Comparison */}
+          {activeSpecTab === 1 && (
+            <div className="overflow-x-auto">
+              <p className="text-center text-gray-500 text-lg max-w-2xl mx-auto mb-10">Compare how the F13 stacks up against the P13 and K13 Lite across key specifications.</p>
+              <table className="w-full border-collapse text-sm">
+                <thead>
+                  <tr className="bg-black text-white">
+                    <th className="py-4 px-6 text-left font-bold">Spec</th>
+                    <th className="py-4 px-6 text-center font-bold bg-[#E85A24]">F13 ⭐</th>
+                    <th className="py-4 px-6 text-center font-bold">P13</th>
+                    <th className="py-4 px-6 text-center font-bold">K13 Lite</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['Printhead', 'L1800', 'XP600', 'LH-500'],
+                    ['Print Speed', '7min/A4', '4.5min/A4', '4.5min/A4'],
+                    ['Resolution', '1440×1440', '720×1440', '720×1440'],
+                    ['Film Feed', 'Roll-fed', 'Roll-fed', 'Roll-fed'],
+                    ['Film Cutter', 'Yes', 'Yes', 'Yes'],
+                    ['Print Width', '13" (330mm)', '13" (330mm)', '13" (330mm)'],
+                    ['Ink Config', 'CMYK+WW', 'CMYK+WW', 'CMYK+W'],
+                    ['Software', 'Pro RIP', 'Pro RIP', 'Studio Lite'],
+                    ['OS Support', 'Windows', 'Windows', 'Windows'],
+                    ['Weight', '44lb (20kg)', '44lb (20kg)', '40lb (18kg)'],
+                  ].map(([spec, f13, p13, k13], i) => (
+                    <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      <td className="py-3 px-6 font-semibold text-gray-800">{spec}</td>
+                      <td className="py-3 px-6 text-center text-[#E85A24] font-bold">{f13}</td>
+                      <td className="py-3 px-6 text-center text-gray-600">{p13}</td>
+                      <td className="py-3 px-6 text-center text-gray-600">{k13}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          </div>
+          )}
+
+          {/* Tab 2 — Print Speed */}
+          {activeSpecTab === 2 && (
+            <div className="max-w-3xl mx-auto">
+              <p className="text-center text-gray-500 text-lg mb-12">See how the F13 compares in print speed side by side with the P13 and K13 Lite.</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { model: 'F13', speed: '7 min/A4', printhead: 'L1800', color: '#E85A24', note: 'Steady & reliable for daily production' },
+                  { model: 'P13', speed: '4.5 min/A4', printhead: 'XP600', color: '#1a1a1a', note: 'Faster XP600 head, higher throughput' },
+                  { model: 'K13 Lite', speed: '4.5 min/A4', printhead: 'LH-500', color: '#1a1a1a', note: 'Entry-level speed, great for hobbyists' },
+                ].map((item, i) => (
+                  <div key={i} className="bg-white rounded-2xl border-2 p-6 text-center shadow-sm" style={{ borderColor: item.color }}>
+                    <h3 className="text-2xl font-extrabold mb-2" style={{ color: item.color }}>{item.model}</h3>
+                    <div className="text-4xl font-black text-gray-900 mb-2">{item.speed}</div>
+                    <div className="text-sm text-gray-500 mb-4">Printhead: {item.printhead}</div>
+                    <p className="text-sm text-gray-600">{item.note}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-10 bg-orange-50 border border-orange-200 rounded-xl p-6 text-center">
+                <p className="text-gray-700 font-medium">💡 While F13's L1800 printhead prints slightly slower per page, it produces exceptional <strong>1440×1440 DPI</strong> resolution — ideal for high-quality, detailed transfers that command premium pricing.</p>
+              </div>
+            </div>
+          )}
+
+          {/* Tab 3 — Oven Comparison */}
+          {activeSpecTab === 3 && (
+            <div className="max-w-3xl mx-auto">
+              <p className="text-center text-gray-500 text-lg mb-12">Choose the right oven to complete your F13 DTF setup for maximum efficiency and print quality.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { name: 'Standard DTF Oven', features: ['Compatible with F13', 'Cures adhesive powder evenly', 'Temperature control', 'Basic ventilation'], badge: 'Included in Bundle', badgeColor: 'bg-gray-700' },
+                  { name: 'Smokeless DTF Oven', features: ['Compatible with F13', 'Built-in air filtration system', 'Reduces powder smoke & odors', 'Better for indoor environments', 'Safer for enclosed workspaces'], badge: 'Best for Indoors', badgeColor: 'bg-[#E85A24]' },
+                ].map((oven, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                    <span className={`text-xs font-bold px-3 py-1 rounded-full text-white ${oven.badgeColor} mb-3 inline-block`}>{oven.badge}</span>
+                    <h3 className="text-xl font-bold text-gray-900 mb-4">{oven.name}</h3>
+                    <ul className="space-y-2">
+                      {oven.features.map((f, fi) => (
+                        <li key={fi} className="flex items-center gap-2 text-gray-700 text-sm">
+                          <span className="w-2 h-2 bg-[#E85A24] rounded-full shrink-0" />{f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -573,7 +677,7 @@ export default function F13Product() {
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-extrabold text-gray-900 mb-12">What's in the Box</h2>
           <div className="rounded-2xl overflow-hidden shadow border border-gray-100">
-            <img src="https://www.procolored.com/cdn/shop/files/F13_list_of_items_158c2a3b-89ef-488d-a8b5-c55572763413.jpg?v=1768358213&width=1100" alt="Box Contents" className="w-full h-auto object-contain" />
+            <img src="https://www.procolored.com/cdn/shop/files/F13_list_of_items_158c2a3b-89ef-488d-a8b5-c55572763413.jpg?v=1768358213&width=1500" alt="Box Contents" className="w-full h-auto object-contain" />
           </div>
         </div>
       </div>

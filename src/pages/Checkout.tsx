@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { useCart } from '../context/CartContext';
-import { useCurrency } from '../context/CurrencyContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle, X } from 'lucide-react';
 
@@ -8,7 +7,16 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const parsePrice = (priceStr: string) => {
   if (!priceStr) return 0;
-  const normalized = priceStr.replace(/Rs\./i, '').replace(/PKR/i, '').replace(/,/g, '').trim();
+  // Handle any format: "$3,799.00 USD", "Rs.1,234,500.00 PKR", "3799", etc.
+  const normalized = priceStr
+    .replace(/Rs\./gi, '')
+    .replace(/PKR/gi, '')
+    .replace(/USD/gi, '')
+    .replace(/GBP/gi, '')
+    .replace(/EUR/gi, '')
+    .replace(/[$£€]/g, '')
+    .replace(/,/g, '')
+    .trim();
   const num = parseFloat(normalized);
   return isNaN(num) ? 0 : num;
 };
@@ -59,9 +67,11 @@ function OrderSuccessPopup({ orderNumber, onClose }: { orderNumber: string; onCl
 
 export default function Checkout() {
   const { items, cartSubtotal, clearCart } = useCart();
-  const { formatPrice } = useCurrency();
   const navigate = useNavigate();
 
+  // USD formatter — always display in dollars
+  const formatPriceLocal = (val: number) =>
+    `$${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
   // Form fields
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -87,7 +97,6 @@ export default function Checkout() {
   const orderCompletedRef = useRef(false);
   const abandonmentFiredRef = useRef(false);
 
-  const formatPriceLocal = (val: number) => formatPrice(val);
   const discountAmount = discountApplied ? cartSubtotal * 0.05 : 0;
   const shippingCost = 0;
   const total = cartSubtotal - discountAmount + shippingCost;
@@ -167,7 +176,7 @@ export default function Checkout() {
       discountAmount,
       discountCode: discountApplied ? 'PROCOLORED5' : null,
       totalAmount: total,
-      currency: 'PKR',
+      currency: 'USD',
       country,
       city,
       paymentMethod: 'Credit Card',
@@ -472,8 +481,8 @@ export default function Checkout() {
                     <div className="flex justify-between items-end">
                       <span className="text-lg font-semibold text-gray-900">Total</span>
                       <div className="text-right flex items-baseline gap-2">
-                        <span className="text-xs text-gray-500 uppercase tracking-widest">{formatPrice(total).replace(/[0-9.,]/g, '').trim()}</span>
-                        <span className="text-3xl font-light text-black tracking-tight">{formatPrice(total).replace(/.*?([\d.,]+).*/, '$1')}</span>
+                        <span className="text-xs text-gray-500 uppercase tracking-widest">USD</span>
+                        <span className="text-3xl font-light text-black tracking-tight">${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                       </div>
                     </div>
                   </div>

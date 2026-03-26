@@ -266,13 +266,13 @@ export const OrdersTab = ({ toast }: { toast:(msg:string,type?:'success'|'error'
                                       <div style={{ fontSize:12, color:C.muted }}>Qty: {item.quantity}</div>
                                     </div>
                                     <div style={{ fontSize:13, fontWeight:700, color:C.text, whiteSpace:'nowrap' }}>
-                                      PKR {(parseFloat(item.price||0) * (item.quantity||1)).toLocaleString()}
+                                      {(parseFloat(item.price||0) * (item.quantity||1)).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
                                     </div>
                                   </div>
                                 ))}
                                 <div style={{ display:'flex', justifyContent:'space-between', paddingTop:8, fontWeight:700, fontSize:14 }}>
                                   <span style={{ color:C.muted }}>Total</span>
-                                  <span style={{ color:C.text }}>{o.currency||'PKR'} {parseFloat(o.total_amount||0).toLocaleString()}</span>
+                                  <span style={{ color:C.text }}>{o.currency||'USD'} {parseFloat(o.total_amount||0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                                 </div>
                               </div>
                             ) : <span style={{ color:C.muted, fontSize:13 }}>No items recorded</span>}
@@ -408,7 +408,7 @@ export const AbandonmentsTab = () => {
                   <td style={{ padding:'10px 12px' }}>{a.customer_email||'—'}</td>
                   <td style={{ padding:'10px 12px' }}>{a.customer_name||'—'}</td>
                   <td style={{ padding:'10px 12px', color:C.muted }}>{Array.isArray(a.cart_items)?a.cart_items.length:0} item(s)</td>
-                  <td style={{ padding:'10px 12px', fontWeight:600 }}>{a.cart_total?`PKR ${parseFloat(a.cart_total).toLocaleString()}`:'—'}</td>
+                  <td style={{ padding:'10px 12px', fontWeight:600 }}>{a.cart_total?`$${parseFloat(a.cart_total).toLocaleString('en-US', { minimumFractionDigits: 2 })} ${a.currency||'USD'}`:'—'}</td>
                   <td style={{ padding:'10px 12px' }}><span style={{ background:C.surface, color:C.muted, borderRadius:20, padding:'2px 8px', fontSize:11 }}>{a.step_abandoned||'checkout'}</span></td>
                   <td style={{ padding:'10px 12px', color:C.muted }}>{a.customer_country||'—'}</td>
                   <td style={{ padding:'10px 12px', color:C.muted }}>{a.device_type||'—'}</td>

@@ -86,9 +86,7 @@ export default function TermsOfService() {
         <p>You can review the most current version of the Terms of Service at any time at this page.</p>
         <p>We reserve the right, at our sole discretion, to update, change or replace any part of these Terms of Service by posting updates and changes to our website.</p>
         
-        <div className="mt-12 w-full flex justify-center">
-          <img src="https://i.postimg.cc/G36Ghjkt/img.png" alt="Terms of Service Verification" className="w-full max-w-full" />
-        </div>
+        <p>In the event of any concerns and complaints, especially for printers, please send us an email at <a href="mailto:support@procollored.com" className="text-[#0066cc] hover:underline">support@procollored.com</a> and our team will respond within 24-48 business hours.</p>
       </div>
     </div>
   );

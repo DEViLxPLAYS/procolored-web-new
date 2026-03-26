@@ -297,7 +297,7 @@ const DashboardOverview = ({ admin }: { admin: AdminUser }) => {
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(170px,1fr))', gap:16, marginBottom:24 }}>
         <StatCard icon="📧" label="Newsletter Subscribers" value={stats.totalNewsletterSubscribers || 0} accent={C.red} />
         <StatCard icon="📦" label="Total Orders" value={stats.totalOrders || 0} sub={`${stats.pendingOrders || 0} pending`} accent={C.orange} />
-        <StatCard icon="💰" label="Total Revenue (USD)" value={`$${(parseFloat(stats.totalRevenue||'0') / 278).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`} accent="#10B981" />
+        <StatCard icon="💰" label="Total Revenue (USD)" value={`$${parseFloat(stats.totalRevenue||'0').toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`} accent="#10B981" />
         <StatCard icon="🚪" label="Checkout Abandonments" value={stats.checkoutAbandonments || 0} accent="#8B5CF6" />
       </div>
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20, marginBottom:20 }}>
@@ -331,7 +331,7 @@ const DashboardOverview = ({ admin }: { admin: AdminUser }) => {
                 <tr key={o.id} style={{ borderBottom:`1px solid ${C.border}` }}>
                   <td style={{ padding:'8px 12px' }}><code style={{ background:C.surface, padding:'2px 6px', borderRadius:4, fontSize:12 }}>{o.order_number}</code></td>
                   <td style={{ padding:'8px 12px', fontWeight:500 }}>{o.customer_name}</td>
-                  <td style={{ padding:'8px 12px', fontWeight:700 }}>{o.currency} {parseFloat(o.total_amount||0).toLocaleString()}</td>
+                  <td style={{ padding:'8px 12px', fontWeight:700 }}>{o.currency} {parseFloat(o.total_amount||0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
                   <td style={{ padding:'8px 12px' }}>
                     <span style={{ background:'#FEF3C7', color:'#D97706', borderRadius:20, padding:'3px 10px', fontSize:11, fontWeight:700 }}>{o.status}</span>
                   </td>

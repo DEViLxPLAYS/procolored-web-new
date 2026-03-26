@@ -4,7 +4,6 @@ import { Badge } from '@/components/ui/badge';
 import '../App.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { useCurrency } from '../context/CurrencyContext';
 
 const craftItemsRow1 = [
   { image: '/images/gallery-item-1.png' },
@@ -49,70 +48,70 @@ const popularProducts = [
   { 
     id: "procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink",
     name: "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - Pink",
-    pricePKR: 798000, originalPricePKR: 1140200,
+    priceUSD: 2867, originalPriceUSD: 4101,
     image: "https://www.procolored.com/cdn/shop/files/K13_lite_Pink__1_1220x_crop_center.jpg?v=1758869972",
-    badge: "Save Rs.342,200", badgeColor: "bg-red-500",
+    badge: "Save $1,234", badgeColor: "bg-red-500",
     link: "/products/procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink"
   },
   { 
     id: "procolored-k13-lite-dtf-printer-13-a3-oven-premium-white",
     name: "Procolored K13 Lite DTF Printer 13\" A3 & Oven Premium - White",
-    pricePKR: 798000, originalPricePKR: 1140200,
+    priceUSD: 2867, originalPriceUSD: 4101,
     image: "https://www.procolored.com/cdn/shop/files/Procolored_DTF_printer_with_Smokeless_Oven_Bundle_10_1220x_crop_center.jpg?v=1772447536",
-    badge: "Save Rs.342,200", badgeColor: "bg-red-500",
+    badge: "Save $1,234", badgeColor: "bg-red-500",
     link: "/products/procolored-k13-lite-dtf-printer-13-a3-oven-premium-white"
   },
   { 
-    id: "f13-panda",
+    id: "9",
     name: "Procolored F13 Panda DTF Printer 13\" A3 L1800 & Oven",
-    pricePKR: 855000, originalPricePKR: 997000,
+    priceUSD: 3075, originalPriceUSD: 3586,
     image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526",
     badge: "BEST SELLER", badgeColor: "bg-orange-500",
     link: "/f13"
   },
   { 
-    id: "p13-xp600",
+    id: "19",
     name: "Procolored P13 DTF Printer 13\" A3 XP600 & Oven",
-    pricePKR: 1140100, originalPricePKR: 1311200,
+    priceUSD: 4101, originalPriceUSD: 4716,
     image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950",
     badge: "NEW ARRIVAL", badgeColor: "bg-green-500",
-    link: "/collections/dtf-printer"
+    link: "/products/19"
   },
   { 
-    id: "vf13-pro",
+    id: "27",
     name: "Procolored VF13 Pro DTF Printer 13\" A3+",
-    pricePKR: 1967000, originalPricePKR: 0,
+    priceUSD: 7075, originalPriceUSD: 0,
     image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379",
     badge: "NEW ARRIVAL", badgeColor: "bg-green-500",
-    link: "/collections/dtf-printer"
+    link: "/products/27"
   }
 ];
 
 const categoryTabs = [
   { id: "factory", label: "Small-scale Factory", products: [
-    { id: "f1", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510", pricePKR: 1450000 },
-    { id: "f2", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510", pricePKR: 1140100 },
-    { id: "f3", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379", pricePKR: 1967000 }
+    { id: "11", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510", priceUSD: 3999, learnMorePath: "/products/11" },
+    { id: "19", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950", priceUSD: 2199, learnMorePath: "/products/19" },
+    { id: "27", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379", priceUSD: 4999, learnMorePath: "/products/27" }
   ]},
   { id: "personal", label: "Personal Studio", products: [
-    { id: "p1", name: "Procolored K13 Lite", subtitle: "User-friendly", image: "https://www.procolored.com/cdn/shop/files/K13_lite_white_10.png?v=1772447536", pricePKR: 798000 },
-    { id: "p2", name: "Procolored F13", subtitle: "High-quality and Easy-to-use", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526", pricePKR: 855000 },
-    { id: "p3", name: "Procolored P13", subtitle: "High-Performance Print Head", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950", pricePKR: 1140100 }
+    { id: "procolored-k13-lite-dtf-printer-13-a3-white", name: "Procolored K13 Lite", subtitle: "User-friendly", image: "https://www.procolored.com/cdn/shop/files/K13_lite_white_10.png?v=1772447536", priceUSD: 1099, learnMorePath: "/products/procolored-k13-lite-dtf-printer-13-a3-white" },
+    { id: "9", name: "Procolored F13", subtitle: "High-quality and Easy-to-use", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526", priceUSD: 2999, learnMorePath: "/f13" },
+    { id: "19", name: "Procolored P13", subtitle: "High-Performance Print Head", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950", priceUSD: 2199, learnMorePath: "/products/19" }
   ]},
   { id: "hobbyist", label: "Hobbyist Use", products: [
-    { id: "h1", name: "Procolored K13 Lite", subtitle: "Best Value Starter Printer", image: "https://www.procolored.com/cdn/shop/files/K13_lite_pink_10.png?v=1772447536", pricePKR: 798000 },
-    { id: "h2", name: "Procolored F13", subtitle: "Designed for Creative Makers", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526", pricePKR: 855000 },
-    { id: "h3", name: "Procolored F8", subtitle: "Affordable Entry-level Model", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_3.png?v=1766052998", pricePKR: 599000 }
+    { id: "procolored-k13-lite-dtf-printer-13-a3-pink", name: "Procolored K13 Lite", subtitle: "Best Value Starter Printer", image: "https://www.procolored.com/cdn/shop/files/K13_lite_pink_10.png?v=1772447536", priceUSD: 1099, learnMorePath: "/products/procolored-k13-lite-dtf-printer-13-a3-pink" },
+    { id: "9", name: "Procolored F13", subtitle: "Designed for Creative Makers", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526", priceUSD: 2999, learnMorePath: "/f13" },
+    { id: "7", name: "Procolored F8", subtitle: "Affordable Entry-level Model", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_3.png?v=1766052998", priceUSD: 799, learnMorePath: "/products/7" }
   ]}
 ];
 
 const categoryItems = [
-  { name: "UV DTF Printer", image: "/images/cat-uv-dtf.jpg", link: "#" },
-  { name: "UV Printer", image: "/images/cat-uv.jpg", link: "#" },
-  { name: "DTG Printer", image: "/images/cat-dtg.jpg", link: "#" },
-  { name: "Equipment", image: "/images/cat-equipment.jpg", link: "#" },
-  { name: "Consumables", image: "/images/cat-consumables.jpg", link: "#" },
-  { name: "Parts & Accessory", image: "/images/cat-parts.jpg", link: "#" }
+  { name: "DTF Printer", image: "/images/cat-uv-dtf.jpg", link: "/f13" },
+  { name: "UV DTF Printer", image: "/images/cat-uv.jpg", link: "/products/27" },
+  { name: "K13 Lite", image: "/images/cat-dtg.jpg", link: "/products/procolored-k13-lite-dtf-printer-13-a3-white" },
+  { name: "F13 Pro", image: "/images/cat-equipment.jpg", link: "/products/11" },
+  { name: "Ink & Supplies", image: "/images/cat-consumables.jpg", link: "/products/47" },
+  { name: "P13 Printer", image: "/images/cat-parts.jpg", link: "/products/19" }
 ];
 
 const testimonials = [
@@ -142,7 +141,7 @@ export default function Home() {
   const [productScrollPosition, setProductScrollPosition] = useState(0);
   const [reviewIndex, setReviewIndex] = useState(0);
   const { addToCart } = useCart();
-  const { formatPrice } = useCurrency();
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -241,9 +240,9 @@ export default function Home() {
                   <div className="p-4">
                     <h3 className="font-medium text-sm mb-2 line-clamp-2 text-black">{product.name}</h3>
                     <div className="flex items-center gap-2 mb-3 flex-wrap">
-                      <span className="text-red-600 font-bold text-sm">{formatPrice(product.pricePKR)}</span>
-                      {product.originalPricePKR > 0 && (
-                        <span className="text-gray-400 text-xs line-through">{formatPrice(product.originalPricePKR)}</span>
+                      <span className="text-red-600 font-bold text-sm">${product.priceUSD.toLocaleString()} USD</span>
+                      {product.originalPriceUSD > 0 && (
+                        <span className="text-gray-400 text-xs line-through">${product.originalPriceUSD.toLocaleString()} USD</span>
                       )}
                     </div>
                     <div className="flex gap-2">
@@ -251,7 +250,7 @@ export default function Home() {
                         className="flex-1 border border-[#E85A24] text-[#E85A24] hover:bg-[#E85A24] hover:text-white py-1.5 rounded text-xs font-semibold transition-colors"
                         onClick={e => {
                           e.stopPropagation();
-                          addToCart({ id: product.id, name: product.name, price: `Rs.${product.pricePKR.toLocaleString()}.00 PKR`, image: product.image, quantity: 1 });
+                          addToCart({ id: product.id, name: product.name, price: `$${product.priceUSD.toLocaleString()}.00 USD`, image: product.image, quantity: 1 });
                         }}
                       >
                         Add to Cart
@@ -311,15 +310,16 @@ export default function Home() {
                   />
                 </div>
                 <div className="flex gap-3 justify-center">
-                   <button 
+                   <Link 
+                     to={product.learnMorePath}
                      className="flex-1 max-w-[120px] text-sm font-medium text-black hover:text-[#E85A24] transition-colors py-2"
                    >
                      Learn More
-                   </button>
+                   </Link>
                    <button 
                      onClick={(e) => {
                        e.stopPropagation();
-                       addToCart({ id: product.id, name: product.name, price: `Rs.${product.pricePKR.toLocaleString()}.00 PKR`, image: product.image, quantity: 1 });
+                       addToCart({ id: product.id, name: product.name, price: `$${product.priceUSD.toLocaleString()}.00 USD`, image: product.image, quantity: 1 });
                      }}
                      className="flex-1 max-w-[120px] bg-[#E85A24] hover:bg-[#d44e1e] text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-200"
                    >
@@ -336,7 +336,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-8 md:gap-12">
             {categoryItems.map((cat, index) => (
-              <a key={index} href={cat.link} className="flex flex-col items-center gap-3 group">
+              <Link key={index} to={cat.link} className="flex flex-col items-center gap-3 group">
                 <div className="w-20 h-20 bg-white rounded-lg shadow-sm flex items-center justify-center group-hover:shadow-md transition-shadow overflow-hidden">
                   <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
                 </div>
@@ -344,7 +344,7 @@ export default function Home() {
                   <span className="text-sm font-bold text-black block">{cat.name}</span>
                   <span className="text-xs text-red-600 font-medium">Buy Now &gt;</span>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

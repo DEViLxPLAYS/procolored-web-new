@@ -22,8 +22,16 @@ interface CartContextProps {
 
 const parsePrice = (priceStr: string) => {
   if (!priceStr) return 0;
-  // Ex: "Rs.1,234,500.00 PKR" -> 1234500.00
-  const normalized = priceStr.replace(/Rs\./i, '').replace(/PKR/i, '').replace(/,/g, '').trim();
+  // Strip any currency prefixes/suffixes: $, USD, Rs., PKR, £, €, etc.
+  const normalized = priceStr
+    .replace(/Rs\./gi, '')
+    .replace(/PKR/gi, '')
+    .replace(/USD/gi, '')
+    .replace(/GBP/gi, '')
+    .replace(/EUR/gi, '')
+    .replace(/[$£€]/g, '')
+    .replace(/,/g, '')
+    .trim();
   const num = parseFloat(normalized);
   return isNaN(num) ? 0 : num;
 };
