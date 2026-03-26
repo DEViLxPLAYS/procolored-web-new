@@ -1,0 +1,46 @@
+[
+  {
+    "field": "customer_name",
+    "error": null
+  },
+  {
+    "field": "customer_email",
+    "error": null
+  },
+  {
+    "field": "customer_phone",
+    "error": null
+  },
+  {
+    "field": "shipping_address",
+    "error": null
+  },
+  {
+    "field": "billing_address",
+    "error": null
+  },
+  {
+    "field": "discount_code",
+    "error": null
+  },
+  {
+    "field": "currency",
+    "error": "value too long for type character varying(10)"
+  },
+  {
+    "field": "payment_method",
+    "error": null
+  },
+  {
+    "field": "customer_ip",
+    "error": null
+  },
+  {
+    "field": "customer_country",
+    "error": "value too long for type character varying(10)"
+  },
+  {
+    "field": "customer_city",
+    "error": null
+  }
+]

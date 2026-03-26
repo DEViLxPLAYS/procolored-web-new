@@ -109,8 +109,8 @@ router.post('/order',
           payment_status: 'unpaid',
           payment_method: paymentMethod || 'Credit Card',
           customer_ip: req.ip,
-          customer_country: country || null,
-          customer_city: city || null
+          customer_country: country ? (country === 'United States' ? 'USA' : country === 'United Kingdom' ? 'UK' : country === 'New Zealand' ? 'NZ' : country === 'South Africa' ? 'RSA' : country === 'Saudi Arabia' ? 'KSA' : country.substring(0, 10)) : null,
+          customer_city: city ? city.substring(0, 50) : null
         })
         .select()
         .single();
