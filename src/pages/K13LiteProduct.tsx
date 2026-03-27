@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Star, ChevronDown, Shield, Headphones, BookOpen, AlertCircle, Tag, Check, ChevronLeft, ChevronRight, X, ZoomIn, Truck } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
+import { useCart } from '../context/CartContext';
 
 export type K13Variant = {
   color: 'White' | 'Pink';
@@ -179,6 +180,7 @@ const VARIANT_OPPOSITES: Record<string, string> = {
 
 export default function K13LiteProduct({ variant }: { variant: K13Variant }) {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const { formatPrice: fmt } = useCurrency();
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);
@@ -194,6 +196,21 @@ export default function K13LiteProduct({ variant }: { variant: K13Variant }) {
   const couponSaving = couponApplied ? variant.salePKR - finalPrice : 0;
   const oppositeLink = VARIANT_OPPOSITES[variant.slug] ?? '#';
   const pagesOfReviews = [REVIEWS, [], []];
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: variant.slug,
+      name: variant.productName,
+      price: `Rs.${finalPrice}`, // Use Rs. prefix to ensure CartContext converts it
+      image: variant.images[0],
+      quantity: qty
+    });
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    navigate('/checkout');
+  };
 
   return (
     <div className="min-h-screen font-sans bg-white overflow-x-hidden w-full">
@@ -256,9 +273,19 @@ export default function K13LiteProduct({ variant }: { variant: K13Variant }) {
                   <span className="px-4 py-2 text-base font-semibold min-w-[2.5rem] text-center">{qty}</span>
                   <button onClick={() => setQty(q => q + 1)} className="px-3 py-2 text-lg hover:bg-gray-100">+</button>
                 </div>
-                <button className="flex-1 bg-[#E85A24] hover:bg-[#d44e1e] text-white font-bold py-3 px-4 rounded-lg transition-colors text-sm sm:text-base">Add to Cart</button>
+                <button 
+                  onClick={handleAddToCart}
+                  className="flex-1 bg-[#E85A24] hover:bg-[#d44e1e] text-white font-bold py-3 px-4 rounded-lg transition-colors text-sm sm:text-base"
+                >
+                  Add to Cart
+                </button>
               </div>
-              <button className="w-full border-2 border-[#E85A24] text-[#E85A24] hover:bg-[#E85A24] hover:text-white font-bold py-3 rounded-lg transition-colors text-sm sm:text-base">Buy It Now</button>
+              <button 
+                onClick={handleBuyNow}
+                className="w-full border-2 border-[#E85A24] text-[#E85A24] hover:bg-[#E85A24] hover:text-white font-bold py-3 rounded-lg transition-colors text-sm sm:text-base"
+              >
+                Buy It Now
+              </button>
               <div className="flex items-center justify-center gap-1.5 mt-1 mb-2 text-sm font-medium text-gray-700">
                 <Truck className="w-4 h-4 text-green-600" /> 15-17 Business Days Delivery
               </div>

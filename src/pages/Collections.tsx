@@ -3,7 +3,7 @@ import { ChevronDown, ChevronRight, ChevronLeft, SlidersHorizontal } from 'lucid
 import { Badge } from '@/components/ui/badge';
 import { useLocation, Link, useSearchParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { useCurrency, parsePKR } from '../context/CurrencyContext';
+import { useCurrency, convertPrice } from '../context/CurrencyContext';
 import { products } from '../data/products';
 import { Switch } from '@/components/ui/switch';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from '@/components/ui/sheet';
@@ -48,7 +48,7 @@ export default function Collections() {
   const categoryId = pathname.split('/').pop() || 'all';
   const [searchParams, setSearchParams] = useSearchParams();
   const { addToCart } = useCart();
-  const { formatPrice } = useCurrency();
+  const { currency, formatConverted } = useCurrency();
   
   const currentCategoryName = categoryMap[categoryId] || 'All';
   
@@ -448,16 +448,16 @@ export default function Collections() {
                  // Calculate savings
                  let savingsAmount = null;
                  if (product.originalPrice && product.originalPrice !== '——') {
-                   const originalPriceNum = parsePKR(product.originalPrice);
-                   const priceNum = parsePKR(product.price);
+                   const originalPriceNum = convertPrice(product.originalPrice, currency.divisor);
+                   const priceNum = convertPrice(product.price, currency.divisor);
                    if (originalPriceNum > priceNum) {
-                     savingsAmount = 'Save ' + formatPrice(originalPriceNum - priceNum);
+                     savingsAmount = 'Save ' + formatConverted(originalPriceNum - priceNum);
                    }
                  }
 
                  return (
-                 <Link 
-                   to={product.link && product.link !== '#' ? `/products/${product.link}` : `/products/${product.id}`} 
+                  <Link 
+                    to={product.link && product.link !== '#' ? (product.link.startsWith('/') ? product.link : `/products/${product.link}`) : `/products/${product.id}`} 
                    key={product.id} 
                    className="group flex flex-col h-full bg-white relative"
                  >
@@ -482,9 +482,9 @@ export default function Collections() {
                      </h3>
                      <div className="flex flex-col gap-1 mt-auto">
                         <div className="flex items-end gap-2 flex-wrap">
-                          <span className="text-[#E85A24] font-bold text-[16px]">{product.price ? formatPrice(parsePKR(product.price)) : '-'}</span>
+                          <span className="text-[#E85A24] font-bold text-[16px]">{product.price ? formatConverted(convertPrice(product.price, currency.divisor)) : '-'}</span>
                           {product.originalPrice && (
-                            <span className="text-gray-400 text-[13px] line-through pb-0.5">{formatPrice(parsePKR(product.originalPrice))}</span>
+                            <span className="text-gray-400 text-[13px] line-through pb-0.5">{formatConverted(convertPrice(product.originalPrice, currency.divisor))}</span>
                           )}
                           {savingsAmount && (
                             <span className="text-xs font-bold text-[#98db51] bg-[#f2faea] px-1.5 py-0.5 rounded-sm">{savingsAmount}</span>

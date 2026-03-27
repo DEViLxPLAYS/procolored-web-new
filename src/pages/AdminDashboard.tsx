@@ -5,7 +5,7 @@ import {
   C, fmtDate, fmtDateTime, genPassword, pwStrength,
   useToast, ToastContainer, Modal, inp, lbl,
   StatCard, Spinner,
-  OrdersTab, NewsletterTab, AbandonmentsTab
+  OrdersTab, NewsletterTab, AbandonmentsTab, PaymentGatewaysTab
 } from './AdminShared';
 
 // ── Country bar chart ──────────────────────────────────────
@@ -440,6 +440,7 @@ const AdminDashboard = () => {
     { id:'orders',    icon:'📦', label:'Orders' },
     { id:'newsletter',icon:'📧', label:'Newsletter' },
     { id:'abandonments',icon:'🚪', label:'Abandonments' },
+    ...(admin.role==='super_admin' || admin.can_manage_keys ? [{ id:'paymentGateways', icon:'💳', label:'Payment Gateways' }] : []),
     ...(admin.role==='super_admin'?[{ id:'admins', icon:'👥', label:'Admins' }]:[]),
   ];
 
@@ -484,6 +485,7 @@ const AdminDashboard = () => {
         {activeTab==='orders'       && <OrdersTab toast={toast} />}
         {activeTab==='newsletter'   && <NewsletterTab />}
         {activeTab==='abandonments' && <AbandonmentsTab />}
+        {activeTab==='paymentGateways' && (admin.role==='super_admin' || admin.can_manage_keys) && <PaymentGatewaysTab admin={admin} toast={toast} />}
         {activeTab==='admins' && admin.role==='super_admin' && <AdminsTab currentAdmin={admin} toast={toast} />}
       </main>
     </div>

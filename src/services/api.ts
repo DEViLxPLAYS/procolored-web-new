@@ -156,6 +156,42 @@ export const api = {
         credentials: 'include'
       });
       return res.json();
+    },
+
+    // ================================
+    // Payment Gateway Keys
+    // ================================
+    paymentKeys: {
+      list: async () => {
+        const res = await fetch(`${API_BASE}/api/admin/payment-keys`, { credentials: 'include' });
+        if (!res.ok) return { error: 'Failed to load keys' };
+        return res.json();
+      },
+      add: async (data: { gateway: string; key_name: string; key_value: string; admin_password: string }) => {
+        const res = await fetch(`${API_BASE}/api/admin/payment-keys`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(data)
+        });
+        return res.json();
+      },
+      reveal: async (id: string, admin_password: string) => {
+        const res = await fetch(`${API_BASE}/api/admin/payment-keys/${id}/reveal`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ admin_password })
+        });
+        return res.json();
+      },
+      delete: async (id: string) => {
+        const res = await fetch(`${API_BASE}/api/admin/payment-keys/${id}`, {
+          method: 'DELETE',
+          credentials: 'include'
+        });
+        return res.json();
+      }
     }
   }
 };

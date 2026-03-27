@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { useCurrency, convertPrice } from './CurrencyContext';
 
 export interface CartItem {
   id: string; // the product slug/id
@@ -20,21 +21,6 @@ interface CartContextProps {
   cartSubtotal: number;
 }
 
-const parsePrice = (priceStr: string) => {
-  if (!priceStr) return 0;
-  // Strip any currency prefixes/suffixes: $, USD, Rs., PKR, £, €, etc.
-  const normalized = priceStr
-    .replace(/Rs\./gi, '')
-    .replace(/PKR/gi, '')
-    .replace(/USD/gi, '')
-    .replace(/GBP/gi, '')
-    .replace(/EUR/gi, '')
-    .replace(/[$£€]/g, '')
-    .replace(/,/g, '')
-    .trim();
-  const num = parseFloat(normalized);
-  return isNaN(num) ? 0 : num;
-};
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
 
@@ -77,10 +63,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => setItems([]);
 
+  const { currency } = useCurrency();
+
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
   
   const cartSubtotal = items.reduce((sum, item) => {
-    return sum + (parsePrice(item.price) * item.quantity);
+    return sum + (convertPrice(item.price, currency.divisor) * item.quantity);
   }, 0);
 
   return (

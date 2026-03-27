@@ -188,6 +188,31 @@ export default function F13Product() {
     ['Product Size', '33"*15"*11.8" (84*38*30cm)', 'Standard Supplies', 'DTF Ink Set(5×250ml:CMYKW)\nNozzle Protection Fluid(1×250ml)\nAdhesive Powder (500g)\nPET Roll Film (13in × 328ft / 33cm×100m)'],
   ];
 
+  const marqueeRow1 = [
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_537.png?v=1766386278&width=550", w: "w-[300px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_541.png?v=1766386282&width=550", w: "w-[400px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_541.png?v=1766386282&width=550", w: "w-[280px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_536.png?v=1766386281&width=550", w: "w-[340px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_2375.png?v=1766386279&width=550", w: "w-[260px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_2377.png?v=1766386278&width=550", w: "w-[360px]" },
+  ];
+
+  const marqueeRow2 = [
+    { img: "https://www.procolored.com/cdn/shop/files/printing_materials_3.png?v=1766386229&width=550", w: "w-[320px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/printing_materials_7.png?v=1766386228&width=550", w: "w-[260px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/printing_materials_4.png?v=1766386228&width=550", w: "w-[420px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/printing_materials_6.png?v=1766386228&width=550", w: "w-[240px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_2374.png?v=1766386273&width=550", w: "w-[360px]" },
+  ];
+
+  const marqueeRow3 = [
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_538.png?v=1766386259&width=550", w: "w-[380px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_529.png?v=1766386282&width=550", w: "w-[280px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/printing_materials_5.png?v=1766386229&width=550", w: "w-[320px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_2371.png?v=1766386274&width=550", w: "w-[260px]" },
+    { img: "https://www.procolored.com/cdn/shop/files/Rectangle_543.png?v=1766386280&width=550", w: "w-[340px]" },
+  ];
+
   const { addToCart } = useCart();
 
   return (
@@ -356,10 +381,10 @@ export default function F13Product() {
                 <span className="px-6 flex items-center font-bold">{quantity}</span>
                 <button onClick={() => setQuantity(q => q + 1)} className="px-5 font-bold text-gray-700 hover:bg-gray-100 transition">+</button>
               </div>
-              <button onClick={() => addToCart({ id: 'f13-' + selectedOption, name: currentOption.label, price: String(finalPrice), image: currentOption.img, quantity })} className="flex-1 border-2 border-[#E07000] text-[#E07000] font-bold rounded-xl h-14 hover:bg-orange-50 transition text-lg">Add to cart</button>
+              <button onClick={() => addToCart({ id: 'f13-' + selectedOption, name: currentOption.label, price: `$USD:${finalPrice}`, image: currentOption.img, quantity })} className="flex-1 border-2 border-[#E07000] text-[#E07000] font-bold rounded-xl h-14 hover:bg-orange-50 transition text-lg">Add to cart</button>
               <button 
                 onClick={() => {
-                  addToCart({ id: 'f13-' + selectedOption, name: currentOption.label, price: String(finalPrice), image: currentOption.img, quantity });
+                  addToCart({ id: 'f13-' + selectedOption, name: currentOption.label, price: `$USD:${finalPrice}`, image: currentOption.img, quantity });
                   window.location.href = '/checkout';
                 }} 
                 className="flex-1 bg-indigo-700 text-white font-bold rounded-xl h-14 hover:bg-indigo-800 transition text-lg"
@@ -376,6 +401,53 @@ export default function F13Product() {
       ══════════════════════════════════════════════════════════════ */}
       <div className="w-full">
         <img src="https://www.procolored.com/cdn/shop/files/F13_pro_model_pc3.png?v=1766746260&width=1500" alt="Lifestyle Banner" className="w-full h-auto object-cover" />
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════
+          SECTION 2.5 — A3 Print Size Customization
+      ══════════════════════════════════════════════════════════════ */}
+      <div className="py-24 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
+            A3 Print Size for More Versatile Customization
+          </h2>
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed">
+            The A3 print size is perfect for a variety of items, from shirts to tote bags, flags, and caps. Offer more customization options and attract a broader range of customers.
+          </p>
+        </div>
+
+        <div className="w-full relative flex flex-col gap-2 sm:gap-3">
+          {/* Row 1 */}
+          <div className="flex w-max" style={{ animation: 'marquee-left 45s linear infinite' }}>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex gap-2 sm:gap-3 px-1 sm:px-1.5 shrink-0">
+                {marqueeRow1.map((item, idx) => (
+                  <img key={idx} src={item.img} className={`${item.w} h-[180px] sm:h-[240px] rounded-2xl object-cover flex-shrink-0 bg-gray-50`} alt="" loading="lazy" />
+                ))}
+              </div>
+            ))}
+          </div>
+          {/* Row 2 */}
+          <div className="flex w-max" style={{ animation: 'marquee-left 60s linear infinite' }}>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex gap-2 sm:gap-3 px-1 sm:px-1.5 shrink-0">
+                {marqueeRow2.map((item, idx) => (
+                  <img key={idx} src={item.img} className={`${item.w} h-[180px] sm:h-[240px] rounded-2xl object-cover flex-shrink-0 bg-gray-50`} alt="" loading="lazy" />
+                ))}
+              </div>
+            ))}
+          </div>
+          {/* Row 3 */}
+          <div className="flex w-max" style={{ animation: 'marquee-left 50s linear infinite' }}>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex gap-2 sm:gap-3 px-1 sm:px-1.5 shrink-0">
+                {marqueeRow3.map((item, idx) => (
+                  <img key={idx} src={item.img} className={`${item.w} h-[180px] sm:h-[240px] rounded-2xl object-cover flex-shrink-0 bg-gray-50`} alt="" loading="lazy" />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════

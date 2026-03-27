@@ -33,6 +33,8 @@ Thumbs.db
 *.cert
 create-first-admin.js
 create-first-admin.ts
+seed_admin.js
+backend/seed_admin.js
 
 # ── Backend logs ─────────────────────────────
 backend/logs/

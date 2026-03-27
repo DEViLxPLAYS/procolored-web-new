@@ -1,25 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useCart } from '../context/CartContext';
+import { useCurrency, convertPrice } from '../context/CurrencyContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle, X } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
-const parsePrice = (priceStr: string) => {
-  if (!priceStr) return 0;
-  // Handle any format: "$3,799.00 USD", "Rs.1,234,500.00 PKR", "3799", etc.
-  const normalized = priceStr
-    .replace(/Rs\./gi, '')
-    .replace(/PKR/gi, '')
-    .replace(/USD/gi, '')
-    .replace(/GBP/gi, '')
-    .replace(/EUR/gi, '')
-    .replace(/[$£€]/g, '')
-    .replace(/,/g, '')
-    .trim();
-  const num = parseFloat(normalized);
-  return isNaN(num) ? 0 : num;
-};
 
 function getSessionId(): string {
   let id = localStorage.getItem('procolored_session');
@@ -69,9 +55,7 @@ export default function Checkout() {
   const { items, cartSubtotal, clearCart } = useCart();
   const navigate = useNavigate();
 
-  // USD formatter — always display in dollars
-  const formatPriceLocal = (val: number) =>
-    `$${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
+  const { currency, formatConverted } = useCurrency();
   // Form fields
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -167,7 +151,7 @@ export default function Checkout() {
       items: items.map(i => ({
         id: i.id,
         name: i.name,
-        price: parsePrice(i.price),
+        price: convertPrice(i.price, currency.divisor),
         quantity: i.quantity,
         image: i.image,
       })),
@@ -429,9 +413,7 @@ export default function Checkout() {
                           <h4 className="text-sm font-medium text-gray-900 leading-snug">{item.name}</h4>
                           <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
                         </div>
-                        <div className="text-sm font-medium text-gray-900 whitespace-nowrap pt-1">
-                          {formatPriceLocal(parsePrice(item.price) * item.quantity)}
-                        </div>
+                          <span className="text-sm font-medium text-gray-900 whitespace-nowrap">{formatConverted(convertPrice(item.price, currency.divisor) * item.quantity)}</span>
                       </div>
                     ))}
                   </div>
@@ -463,12 +445,12 @@ export default function Checkout() {
                   <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-gray-500">Subtotal</span>
-                      <span className="font-medium text-gray-900">{formatPriceLocal(cartSubtotal)}</span>
+                        <span className="font-medium text-gray-900">{formatConverted(cartSubtotal)}</span>
                     </div>
                     {discountApplied && (
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-500">Discount <span className="text-xs text-green-600 font-bold ml-1">(PROCOLORED5)</span></span>
-                        <span className="font-medium text-green-600">-{formatPriceLocal(discountAmount)}</span>
+                        <span className="font-medium text-green-600">-{formatConverted(discountAmount)}</span>
                       </div>
                     )}
                     <div className="flex justify-between items-center text-sm">
@@ -480,10 +462,7 @@ export default function Checkout() {
                   <div className="mt-6 pt-6 border-t border-gray-200">
                     <div className="flex justify-between items-end">
                       <span className="text-lg font-semibold text-gray-900">Total</span>
-                      <div className="text-right flex items-baseline gap-2">
-                        <span className="text-xs text-gray-500 uppercase tracking-widest">USD</span>
-                        <span className="text-3xl font-light text-black tracking-tight">${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                      </div>
+                        <span className="text-3xl font-light text-black tracking-tight">{formatConverted(total)}</span>
                     </div>
                   </div>
                 </div>

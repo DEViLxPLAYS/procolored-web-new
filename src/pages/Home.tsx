@@ -6,21 +6,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 const craftItemsRow1 = [
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-  { image: '/images/gallery-item-3.png' },
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-  { image: '/images/gallery-item-3.png' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Candle.jpg?v=1745975043&width=550', label: 'Candle' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Hoodie.jpg?v=1745975044&width=550', label: 'Hoodie' },
+  { image: 'https://www.procolored.com/cdn/shop/files/apron.jpg?v=1745975043&width=550', label: 'Apron' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Fabric_Posters.jpg?v=1745975043&width=550', label: 'Fabric Posters' },
+  { image: 'https://www.procolored.com/cdn/shop/files/School_Bag.jpg?v=1745975043&width=550', label: 'School Bag' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Rectangle_537.png?v=1766386278&width=550', label: 'Tote Bag' },
 ];
 
 const craftItemsRow2 = [
-  { image: '/images/gallery-item-3.png' },
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
-  { image: '/images/gallery-item-3.png' },
-  { image: '/images/gallery-item-1.png' },
-  { image: '/images/gallery-item-2.png' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Coffee_Mugs.jpg?v=1745975043&width=550', label: 'Coffee Mugs' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Phone_Cases.jpg?v=1745975043&width=550', label: 'Phone Cases' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Polo_Shirt.jpg?v=1745975043&width=550', label: 'Polo Shirt' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Keychains.jpg?v=1745975043&width=550', label: 'Keychains' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Thermos_Cup.jpg?v=1745975043&width=550', label: 'Thermos Cup' },
+  { image: 'https://www.procolored.com/cdn/shop/files/Rectangle_536.png?v=1766386281&width=550', label: 'Caps' },
 ];
 
 const heroSlides = [
@@ -355,14 +355,14 @@ export default function Home() {
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#fff0e6]/60 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-10 md:mb-14">
-            <h2 className="text-[24px] sm:text-[32px] md:text-[38px] font-black text-black tracking-tight leading-[1.3] md:leading-tight">
-              Global <img src="https://i.postimg.cc/L6GbPfkf/Chat-GPT-Image-Mar-16-2026-11-58-53-A1M.png" alt="No.1" className="inline-block h-8 sm:h-11 md:h-16 w-auto object-contain mx-1 md:mx-3 align-middle -mt-1 md:-mt-2 flex-shrink-0" /> Desktop DTF Printer Brand
+          <div className="text-left mb-10 md:mb-14">
+            <h2 className="text-[24px] sm:text-[32px] md:text-[38px] font-black text-black tracking-tight leading-[1.3] md:leading-tight flex items-center flex-wrap gap-y-2">
+              Global <img src="https://i.postimg.cc/L6GbPfkf/Chat-GPT-Image-Mar-16-2026-11-58-53-A1M.png" alt="No.1" className="inline-block h-8 sm:h-11 md:h-16 w-auto object-contain mx-2 md:mx-3 flex-shrink-0" /> Desktop DTF Printer Brand
             </h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
+          <div className="flex flex-wrap lg:grid lg:grid-cols-6 gap-x-8 gap-y-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-left md:px-2">
+              <div key={index} className="text-left">
                 <div className="text-2xl md:text-[28px] font-bold text-black mb-1.5">{stat.value}</div>
                 <div className="text-[13px] text-gray-500 font-medium">{stat.label}</div>
               </div>
@@ -373,14 +373,17 @@ export default function Home() {
 
       <section className="py-12 bg-white flex-none overflow-hidden border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 mb-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-black tracking-tight mb-4">Unlock Endless Possibilities</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-black tracking-tight mb-4">What You Can Craft</h2>
         </div>
         <div className="relative mb-6">
           <div className="marquee-container justify-center flex">
             <div className="marquee-row-1 flex px-2 space-x-4">
               {[...craftItemsRow1, ...craftItemsRow1, ...craftItemsRow1].map((item, index) => (
-                   <div key={`r1-${index}`} className="flex-shrink-0 w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-2xl overflow-hidden shadow-md border hover:border-gray-200 transition-colors bg-gray-50">
-                     <img src={item.image} alt="Craft Item" className="w-full h-full object-cover" />
+                   <div key={`r1-${index}`} className="flex-shrink-0 w-[220px] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white pb-3 flex flex-col border border-gray-100">
+                     <div className="w-full h-[220px] bg-gray-50 overflow-hidden mb-3">
+                       <img src={item.image} alt={item.label} className="w-full h-full object-cover" loading="lazy" />
+                     </div>
+                     <p className="text-center font-bold text-gray-800 px-2 line-clamp-1">{item.label}</p>
                    </div>
               ))}
             </div>
@@ -390,8 +393,11 @@ export default function Home() {
           <div className="marquee-container justify-center flex">
             <div className="marquee-row-2 flex px-2 space-x-4">
               {[...craftItemsRow2, ...craftItemsRow2, ...craftItemsRow2].map((item, index) => (
-                   <div key={`r2-${index}`} className="flex-shrink-0 w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-2xl overflow-hidden shadow-md border hover:border-gray-200 transition-colors bg-gray-50">
-                     <img src={item.image} alt="Craft Item" className="w-full h-full object-cover" />
+                   <div key={`r2-${index}`} className="flex-shrink-0 w-[220px] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white pb-3 flex flex-col border border-gray-100">
+                     <div className="w-full h-[220px] bg-gray-50 overflow-hidden mb-3">
+                       <img src={item.image} alt={item.label} className="w-full h-full object-cover" loading="lazy" />
+                     </div>
+                     <p className="text-center font-bold text-gray-800 px-2 line-clamp-1">{item.label}</p>
                    </div>
               ))}
             </div>

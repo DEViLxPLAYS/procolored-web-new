@@ -15,7 +15,7 @@ const C = {
 };
 
 // ── Types ─────────────────────────────────────────────────
-export interface AdminUser { id: string; username: string; email: string; role: string; is_active: boolean; last_login?: string; created_at: string; login_attempts?: number; }
+export interface AdminUser { id: string; username: string; email: string; role: string; is_active: boolean; can_manage_keys?: boolean; last_login?: string; created_at: string; login_attempts?: number; }
 export interface ToastItem { id: number; msg: string; type: 'success'|'error'; }
 
 // ── Utility ───────────────────────────────────────────────
@@ -424,8 +424,227 @@ export const AbandonmentsTab = () => {
   );
 };
 
+// ── Payment Gateways Tab ────────────────────────────────────
+export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: (msg: string, type?: 'success'|'error') => void }) => {
+  const [keys, setKeys] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState<'add'|'reveal'|'delete'|null>(null);
+  const [selectedKey, setSelectedKey] = useState<any|null>(null);
+  const [gatewayFilter, setGatewayFilter] = useState('');
+  
+  // Add state
+  const [keyName, setKeyName] = useState('publishable_key');
+  const [keyValue, setKeyValue] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  
+  // Reveal state
+  const [revealedValue, setRevealedValue] = useState<string|null>(null);
+  const [countdown, setCountdown] = useState(0);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const d = await api.admin.paymentKeys.list();
+    if (!d.error) setKeys(d);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  // Handle countdown
+  useEffect(() => {
+    let t: any;
+    if (countdown > 0) {
+      t = setInterval(() => setCountdown(c => c - 1), 1000);
+    } else if (countdown === 0 && revealedValue) {
+      setRevealedValue(null);
+      setModal(null);
+    }
+    return () => clearInterval(t);
+  }, [countdown, revealedValue]);
+
+  const handleAddSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const d = await api.admin.paymentKeys.add({ gateway: gatewayFilter, key_name: keyName, key_value: keyValue, admin_password: adminPassword });
+    if (d.success) {
+      toast('Key added successfully');
+      setModal(null); setKeyValue(''); setAdminPassword('');
+      load();
+    } else {
+      toast(d.error || 'Failed to add key', 'error');
+    }
+    setLoading(false);
+  };
+
+  const handleRevealSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const d = await api.admin.paymentKeys.reveal(selectedKey.id, adminPassword);
+    if (d.key_value) {
+      setRevealedValue(d.key_value);
+      setCountdown(30);
+      setAdminPassword('');
+    } else {
+      toast(d.error || 'Failed to verify password', 'error');
+    }
+    setLoading(false);
+  };
+
+  const handleDelete = async () => {
+    setLoading(true);
+    const d = await api.admin.paymentKeys.delete(selectedKey.id);
+    if (d.success) {
+      toast('Key deleted successfully');
+      setModal(null);
+      load();
+    } else {
+      toast(d.error || 'Failed to delete key', 'error');
+    }
+    setLoading(false);
+  };
+
+  const stripeKeys = keys.filter(k => k.gateway === 'stripe');
+  const paypalKeys = keys.filter(k => k.gateway === 'paypal');
+
+  const GatewayCard = ({ name, data, icon, color }: { name: string, data: any[], icon: string, color: string }) => (
+    <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:10, padding:20, flex:1 }}>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+        <h3 style={{ fontSize:16, fontWeight:700, color:C.text, display:'flex', alignItems:'center', gap:8 }}>
+          <span style={{ fontSize:20 }}>{icon}</span> {name}
+        </h3>
+        <button onClick={() => { setGatewayFilter(name.toLowerCase()); setModal('add'); }} style={{ background:color, color:'#fff', border:'none', borderRadius:6, padding:'6px 14px', cursor:'pointer', fontWeight:600, fontSize:13 }}>
+          + Add Key
+        </button>
+      </div>
+      
+      {data.length === 0 ? (
+        <div style={{ color:C.muted, textAlign:'center', padding:30, background:C.surface, borderRadius:8, fontSize:13 }}>No {name} keys configured</div>
+      ) : (
+        <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
+          <thead>
+            <tr style={{ borderBottom:`1px solid ${C.border}` }}>
+              <th style={{ padding:8, textAlign:'left', color:C.muted }}>Key Name</th>
+              <th style={{ padding:8, textAlign:'left', color:C.muted }}>Value</th>
+              <th style={{ padding:8, textAlign:'left', color:C.muted }}>Saved</th>
+              <th style={{ padding:8, textAlign:'right', color:C.muted }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map(k => (
+              <tr key={k.id} style={{ borderBottom:`1px solid ${C.border}` }}>
+                <td style={{ padding:'10px 8px', fontWeight:600, color:C.text }}>{k.key_name}</td>
+                <td style={{ padding:'10px 8px', color:C.muted, fontFamily:'monospace' }}>sk_live_••••••••••••••••</td>
+                <td style={{ padding:'10px 8px', color:C.muted, fontSize:11 }}>{fmtDate(k.updated_at)}</td>
+                <td style={{ padding:'10px 8px', textAlign:'right' }}>
+                  <div style={{ display:'flex', gap:6, justifyContent:'flex-end' }}>
+                    <button onClick={() => { setSelectedKey(k); setModal('reveal'); }} style={{ background:'#DBEAFE', color:'#1D4ED8', border:'none', borderRadius:6, padding:'4px 8px', cursor:'pointer', fontSize:12, fontWeight:600 }}>👁 Reveal</button>
+                    {admin.role === 'super_admin' && (
+                      <button onClick={() => { setSelectedKey(k); setModal('delete'); }} style={{ background:'#FEE2E2', color:C.red, border:'none', borderRadius:6, padding:'4px 8px', cursor:'pointer', fontSize:12, fontWeight:600 }}>Trash</button>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+
+  return (
+    <div>
+      <h2 style={{ fontSize:20, fontWeight:700, color:C.text, marginBottom:20 }}>Payment Gateways</h2>
+      {loading && keys.length === 0 ? <Spinner /> : (
+        <div style={{ display:'flex', gap:20, flexDirection:'row', flexWrap:'wrap' }}>
+          <GatewayCard name="Stripe" data={stripeKeys} icon="💳" color="#6366F1" />
+          <GatewayCard name="PayPal" data={paypalKeys} icon="🅿️" color="#0079C1" />
+        </div>
+      )}
+
+      {modal === 'add' && (
+        <Modal title={`Add New ${gatewayFilter === 'stripe' ? 'Stripe' : 'PayPal'} Key`} onClose={() => setModal(null)}>
+          <div style={{ background:'#FEE2E2', color:C.red, padding:12, borderRadius:6, fontSize:13, fontWeight:600, marginBottom:16, border:`1px solid ${C.red}30` }}>
+            ⚠️ Changing live keys will immediately affect payments
+          </div>
+          <form onSubmit={handleAddSubmit} style={{ display:'flex', flexDirection:'column', gap:14 }}>
+            <div>
+              <label style={lbl}>Key Name</label>
+              <select style={inp} value={keyName} onChange={e=>setKeyName(e.target.value)}>
+                <option value="publishable_key">Publishable Key</option>
+                <option value="secret_key">Secret Key</option>
+                <option value="webhook_secret">Webhook Secret</option>
+              </select>
+            </div>
+            <div>
+              <label style={lbl}>Key Value</label>
+              <input type="password" style={inp} value={keyValue} onChange={e=>setKeyValue(e.target.value)} required placeholder="sk_live_..." />
+            </div>
+            <div style={{ marginTop:8, paddingTop:12, borderTop:`1px solid ${C.border}` }}>
+              <label style={lbl}>Your Admin Password <span style={{color:C.muted,fontWeight:400}}>(to confirm)</span></label>
+              <input type="password" style={inp} value={adminPassword} onChange={e=>setAdminPassword(e.target.value)} required />
+            </div>
+            <div style={{ display:'flex', gap:10, justifyContent:'flex-end', marginTop:8 }}>
+              <button type="button" onClick={()=>setModal(null)} style={{ border:`1px solid ${C.border}`, background:C.white, color:C.text, borderRadius:6, padding:'10px 20px', cursor:'pointer', fontWeight:500 }}>Cancel</button>
+              <button type="submit" disabled={loading} style={{ background:C.red, color:'#fff', border:'none', borderRadius:6, padding:'10px 24px', cursor:'pointer', fontWeight:700, opacity:loading?0.7:1 }}>
+                {loading ? 'Saving...' : 'Save Encrypted Key'}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {modal === 'reveal' && selectedKey && (
+        <Modal title={`Reveal ${selectedKey.key_name}`} onClose={() => { setModal(null); setRevealedValue(null); }}>
+          {!revealedValue ? (
+            <form onSubmit={handleRevealSubmit} style={{ display:'flex', flexDirection:'column', gap:14 }}>
+              <p style={{ fontSize:14, color:C.text }}>To view this sensitive key, please enter your admin password.</p>
+              <div>
+                <label style={lbl}>Your Admin Password</label>
+                <input type="password" style={inp} value={adminPassword} onChange={e=>setAdminPassword(e.target.value)} required autoFocus />
+              </div>
+              <div style={{ display:'flex', gap:10, justifyContent:'flex-end', marginTop:8 }}>
+                <button type="button" onClick={()=>setModal(null)} style={{ border:`1px solid ${C.border}`, background:C.white, color:C.text, borderRadius:6, padding:'10px 20px', cursor:'pointer', fontWeight:500 }}>Cancel</button>
+                <button type="submit" disabled={loading} style={{ background:'#1D4ED8', color:'#fff', border:'none', borderRadius:6, padding:'10px 24px', cursor:'pointer', fontWeight:700, opacity:loading?0.7:1 }}>
+                  {loading ? 'Verifying...' : 'Show Key'}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div style={{ textAlign:'center' }}>
+              <div style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, padding:'16px', fontFamily:'monospace', fontSize:14, wordBreak:'break-all', color:C.text, marginBottom:16 }}>
+                {revealedValue}
+              </div>
+              <button onClick={() => { navigator.clipboard.writeText(revealedValue); toast('Copied to clipboard'); }} style={{ background:C.success, color:'#fff', border:'none', borderRadius:6, padding:'10px 20px', cursor:'pointer', fontWeight:700, width:'100%', marginBottom:16 }}>
+                📋 Copy Key
+              </button>
+              <p style={{ fontSize:13, color:C.danger, fontWeight:600 }}>Hiding automatically in {countdown} seconds...</p>
+            </div>
+          )}
+        </Modal>
+      )}
+
+      {modal === 'delete' && selectedKey && (
+        <Modal title="Confirm Delete" onClose={() => setModal(null)}>
+          <div style={{ textAlign:'center', padding:'8px 0 20px' }}>
+            <div style={{ fontSize:48, marginBottom:12 }}>🗑️</div>
+            <p style={{ fontSize:15, color:C.text, marginBottom:8 }}>Are you sure you want to delete this key?</p>
+            <p style={{ fontSize:13, color:C.muted }}>Gateway: {selectedKey.gateway} <br/> Name: {selectedKey.key_name}</p>
+          </div>
+          <div style={{ display:'flex', gap:10, justifyContent:'center' }}>
+            <button onClick={() => setModal(null)} style={{ border:`1px solid ${C.border}`, background:C.white, color:C.text, borderRadius:6, padding:'10px 24px', cursor:'pointer', fontWeight:500 }}>Cancel</button>
+            <button onClick={handleDelete} disabled={loading} style={{ background:C.red, color:'#fff', border:'none', borderRadius:6, padding:'10px 24px', cursor:'pointer', fontWeight:700, opacity:loading?0.7:1 }}>
+              {loading ? 'Deleting...' : 'Delete Key'}
+            </button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
 // inject global styles
 const _style = document.createElement('style');
+
 _style.textContent = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   * { font-family: 'Inter', system-ui, sans-serif; box-sizing: border-box; }

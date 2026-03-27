@@ -10,6 +10,7 @@ const newsletterRoutes = require('./routes/newsletter');
 const orderRoutes = require('./routes/orders');
 const checkoutRoutes = require('./routes/checkout');
 const analyticsRoutes = require('./routes/analytics');
+const paymentKeysRouter = require('./routes/paymentKeys');
 
 const app = express();
 
@@ -109,6 +110,7 @@ app.disable('x-powered-by');
 // Routes
 // ================================
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin/payment-keys', paymentKeysRouter);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/checkout', checkoutRoutes);

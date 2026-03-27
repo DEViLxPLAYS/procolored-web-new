@@ -44,6 +44,7 @@ interface CurrencyContextProps {
   setCurrency: (c: Currency) => void;
   allCurrencies: Currency[];
   formatPrice: (pkrAmount: number) => string;
+  formatConverted: (convertedAmount: number) => string;
 }
 
 const CurrencyContext = createContext<CurrencyContextProps | undefined>(undefined);
@@ -77,8 +78,17 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     return `${currency.symbol}${formatted} ${currency.code}`;
   }, [currency]);
 
+  const formatConverted = useCallback((convertedAmount: number): string => {
+    const rounded = Math.round(convertedAmount * 100) / 100;
+    const formatted = rounded.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    return `${currency.symbol}${formatted} ${currency.code}`;
+  }, [currency]);
+
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency, allCurrencies: ALL_CURRENCIES, formatPrice }}>
+    <CurrencyContext.Provider value={{ currency, setCurrency, allCurrencies: ALL_CURRENCIES, formatPrice, formatConverted }}>
       {children}
     </CurrencyContext.Provider>
   );
@@ -98,4 +108,33 @@ export function parsePKR(priceStr: string): number {
   const cleaned = priceStr.replace(/Rs\./gi, '').replace(/PKR/gi, '').replace(/,/g, '').trim();
   const n = parseFloat(cleaned);
   return isNaN(n) ? 0 : n;
+}
+
+/**
+ * Robust price converter that handles:
+ * - PKR strings: "Rs.569,300.00" or "PKR 569300" → base / divisor
+ * - USD-tagged/plain strings: "$2,047.84 USD" → treat as USD, convert to current currency via USD→PKR (×278) ÷ divisor
+ */
+export function convertPrice(priceStr: string, divisor: number): number {
+  if (!priceStr) return 0;
+  const normalized = priceStr.toLowerCase();
+
+  // If it's explicitly PKR or includes "Rs.", treat as base and convert
+  if (normalized.includes('rs.') || normalized.includes('pkr')) {
+    return parsePKR(priceStr) / divisor;
+  }
+
+  // Otherwise treat as USD
+  const cleaned = priceStr
+    .replace(/^\$usd:/i, '')
+    .replace(/USD/gi, '')
+    .replace(/[$£€]/g, '')
+    .replace(/,/g, '')
+    .trim();
+    
+  const usdVal = parseFloat(cleaned);
+  if (isNaN(usdVal)) return 0;
+  
+  // Convert USD → current currency: USD×278 gives PKR, then ÷ divisor
+  return (usdVal * 278) / divisor;
 }
