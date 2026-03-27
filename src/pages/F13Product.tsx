@@ -242,7 +242,7 @@ export default function F13Product() {
           {/* Left — Gallery */}
           <div className="w-full md:w-1/2">
             <div className="relative rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 aspect-square mb-3">
-              <img src={galleryImages[activeImage]} alt="F13" className="w-full h-full object-cover" />
+              <img src={galleryImages[activeImage]} alt="F13" className="w-full h-full object-contain p-4" />
               <button onClick={() => setActiveImage(p => (p === 0 ? galleryImages.length - 1 : p - 1))}
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 border border-gray-200 shadow rounded-full flex items-center justify-center hover:bg-white">
                 <ChevronLeft className="w-5 h-5" />

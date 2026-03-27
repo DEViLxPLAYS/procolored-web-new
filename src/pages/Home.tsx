@@ -89,7 +89,7 @@ const popularProducts = [
 
 const categoryTabs = [
   { id: "factory", label: "Small-scale Factory", products: [
-    { id: "11", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "https://www.procolored.com/cdn/shop/files/F13_Pro_0479da75-8ab0-4338-bffa-583a1c04aa8c.png?v=1765786510", priceUSD: 3999, learnMorePath: "/products/11" },
+    { id: "11", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "https://www.procolored.com/cdn/shop/files/1_51f5ec44-cce2-4464-a9ca-4ac0786e79ec_1220x_crop_center.jpg?v=1773742870", priceUSD: 4799, learnMorePath: "/f13-pro" },
     { id: "19", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950", priceUSD: 2199, learnMorePath: "/products/19" },
     { id: "27", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379", priceUSD: 4999, learnMorePath: "/products/27" }
   ]},
@@ -101,15 +101,15 @@ const categoryTabs = [
   { id: "hobbyist", label: "Hobbyist Use", products: [
     { id: "procolored-k13-lite-dtf-printer-13-a3-pink", name: "Procolored K13 Lite", subtitle: "Best Value Starter Printer", image: "https://www.procolored.com/cdn/shop/files/K13_lite_pink_10.png?v=1772447536", priceUSD: 1099, learnMorePath: "/products/procolored-k13-lite-dtf-printer-13-a3-pink" },
     { id: "9", name: "Procolored F13", subtitle: "Designed for Creative Makers", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526", priceUSD: 2999, learnMorePath: "/f13" },
-    { id: "7", name: "Procolored F8", subtitle: "Affordable Entry-level Model", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_3.png?v=1766052998", priceUSD: 799, learnMorePath: "/products/7" }
+    { id: "7", name: "Procolored F8", subtitle: "Affordable Entry-level Model", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_3.png?v=1766052998", priceUSD: 799, learnMorePath: "/f8-panda" }
   ]}
 ];
 
 const categoryItems = [
   { name: "DTF Printer", image: "/images/cat-uv-dtf.jpg", link: "/f13" },
   { name: "UV DTF Printer", image: "/images/cat-uv.jpg", link: "/products/27" },
-  { name: "K13 Lite", image: "/images/cat-dtg.jpg", link: "/products/procolored-k13-lite-dtf-printer-13-a3-white" },
-  { name: "F13 Pro", image: "/images/cat-equipment.jpg", link: "/products/11" },
+  { name: "K13 Lite", image: "/images/cat-dtg.jpg", link: "/k13-lite" },
+  { name: "F13 Pro", image: "/images/cat-equipment.jpg", link: "/f13-pro" },
   { name: "Ink & Supplies", image: "/images/cat-consumables.jpg", link: "/products/47" },
   { name: "P13 Printer", image: "/images/cat-parts.jpg", link: "/products/19" }
 ];

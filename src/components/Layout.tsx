@@ -401,7 +401,7 @@ export default function Layout() {
               <div className="flex-1 p-6 relative flex flex-col">
                 <div className="grid grid-cols-4 gap-6">
                   {rightColumnProducts.map((product, pIdx) => (
-                    <Link key={pIdx} to={`/products/${product.id}`} onClick={() => setActiveDropdown(null)} className="block text-center group">
+                    <Link key={pIdx} to={product.link || `/products/${product.id}`} onClick={() => setActiveDropdown(null)} className="block text-center group">
                       <div className="bg-gray-50 rounded-lg p-4 mb-3 group-hover:bg-gray-100 transition-colors h-36 flex items-center justify-center relative overflow-hidden">
                         <img src={product.image} alt={product.title} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                         {product.badge && (

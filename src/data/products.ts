@@ -37,7 +37,7 @@ export const products: Product[] = [
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "procolored-k13-lite-dtf-printer-13-a3-white",
+    "link": "/k13-lite",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -62,7 +62,7 @@ export const products: Product[] = [
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "procolored-k13-lite-dtf-printer-13-a3-oven-white",
+    "link": "/k13-lite",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -87,7 +87,7 @@ export const products: Product[] = [
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-white",
+    "link": "/k13-lite",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -112,7 +112,7 @@ export const products: Product[] = [
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "procolored-k13-lite-dtf-printer-13-a3-pink",
+    "link": "/k13-lite",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -137,7 +137,7 @@ export const products: Product[] = [
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "procolored-k13-lite-dtf-printer-13-a3-oven-pink",
+    "link": "/k13-lite",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -162,7 +162,7 @@ export const products: Product[] = [
     "badge": "🆕 New Arrival",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink",
+    "link": "/k13-lite",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -187,7 +187,7 @@ export const products: Product[] = [
     "badge": null,
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f8-panda",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -212,7 +212,7 @@ export const products: Product[] = [
     "badge": null,
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f8-panda",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -287,7 +287,7 @@ export const products: Product[] = [
     "badge": "F13 Pro Spring Sale ($410.07 USD)",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f13-pro",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -312,7 +312,7 @@ export const products: Product[] = [
     "badge": "F13 Pro Spring Sale ($512.23 USD)",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f13-pro",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -337,7 +337,7 @@ export const products: Product[] = [
     "badge": "F13 Pro Spring Sale ($512.23 USD)",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f13-pro",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -362,7 +362,7 @@ export const products: Product[] = [
     "badge": "F13 Pro Spring Sale ($512.23 USD)",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f13-pro",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -387,7 +387,7 @@ export const products: Product[] = [
     "badge": "F13 Pro Spring Sale ($410.07 USD)",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f13-pro",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -412,7 +412,7 @@ export const products: Product[] = [
     "badge": "F13 Pro Spring Sale ($512.23 USD)",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f13-pro",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -437,7 +437,7 @@ export const products: Product[] = [
     "badge": "F13 Pro Spring Sale ($717.27 USD)",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f13-pro",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
@@ -462,7 +462,7 @@ export const products: Product[] = [
     "badge": "F13 Pro Spring Sale ($614.75 USD)",
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "/f13",
+    "link": "/f13-pro",
     "filters": {
       "collection": "DTF Printer",
       "availability": "in-stock",
