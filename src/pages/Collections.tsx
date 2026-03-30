@@ -98,7 +98,7 @@ export default function Collections() {
 
   // The filtered products array applying all checkbox dimensions
   const filteredProducts = useMemo(() => {
-    return categoryProducts.filter((product: any) => {
+    const unfiltered = categoryProducts.filter((product: any) => {
       let match = true;
       for (const group of filterGroups) {
         const activeValues = searchParams.getAll(group.id);
@@ -113,6 +113,16 @@ export default function Collections() {
         }
       }
       return match;
+    });
+
+    // Sort: Printers first, then maintain original order
+    return [...unfiltered].sort((a: any, b: any) => {
+      const aIsPrinter = a.filters?.collection?.toLowerCase().includes('printer');
+      const bIsPrinter = b.filters?.collection?.toLowerCase().includes('printer');
+      
+      if (aIsPrinter && !bIsPrinter) return -1;
+      if (!aIsPrinter && bIsPrinter) return 1;
+      return 0;
     });
   }, [categoryProducts, searchParams]);
 
