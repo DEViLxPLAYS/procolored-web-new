@@ -3,6 +3,7 @@ import { useCart } from '../context/CartContext';
 import { useCurrency, convertPrice } from '../context/CurrencyContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle, X } from 'lucide-react';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -67,15 +68,25 @@ export default function Checkout() {
   const [postal, setPostal] = useState('');
   const [country, setCountry] = useState('Pakistan');
   const [phone, setPhone] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiry, setExpiry] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [nameOnCard, setNameOnCard] = useState('');
 
   const [discountCode, setDiscountCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrderNumber, setSuccessOrderNumber] = useState<string | null>(null);
+  
+  const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
+  const [paypalError, setPaypalError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/paypal/config`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.clientId) {
+          setPaypalClientId(data.clientId);
+        }
+      })
+      .catch(() => setPaypalError("PayPal gateway currently unavailable."));
+  }, []);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const orderCompletedRef = useRef(false);
@@ -131,8 +142,8 @@ export default function Checkout() {
     else alert('Invalid discount code.');
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent, transactionId?: string) => {
+    if(e) e.preventDefault();
     setIsSubmitting(true);
     orderCompletedRef.current = true;
 
@@ -163,7 +174,8 @@ export default function Checkout() {
       currency: 'USD',
       country,
       city,
-      paymentMethod: 'Credit Card',
+      paymentMethod: transactionId ? 'PayPal' : 'Credit Card',
+      transactionId: transactionId || null
     };
 
     try {
@@ -184,6 +196,47 @@ export default function Checkout() {
       alert('Network error. Please check your connection and try again.');
       orderCompletedRef.current = false;
     } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const createPaypalOrder = async () => {
+    // Validate required fields before allowing PayPal to launch
+    if (!email || !firstName || !lastName || !address || !city || !postal) {
+      alert("Please fill out all required contact and delivery information before proceeding to payment.");
+      throw new Error("Missing required fields");
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/api/paypal/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cartTotal: total, currency: 'USD' })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not initiate PayPal order');
+      return data.id;
+    } catch (err: any) {
+      alert(err.message);
+      throw err;
+    }
+  };
+
+  const onPaypalApprove = async (data: any) => {
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/paypal/capture-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderID: data.orderID })
+      });
+      const captureData = await res.json();
+      if (!res.ok) throw new Error(captureData.error || 'Payment capture failed');
+      
+      // If success, officially push the order to our database
+      await handleSubmit(undefined, captureData.capture.id || captureData.capture.status);
+    } catch (err: any) {
+      alert(err.message);
       setIsSubmitting(false);
     }
   };
@@ -333,58 +386,38 @@ export default function Checkout() {
 
                     {/* Payment */}
                     <section>
-                      <h2 className="text-2xl font-semibold text-black mb-2">Payment</h2>
-                      <p className="text-sm text-gray-500 mb-8">All transactions are secure and encrypted.</p>
+                      <h2 className="text-2xl font-semibold text-black mb-2">Secure Payment</h2>
+                      <p className="text-sm text-gray-500 mb-8">All transactions are secure and encrypted via PayPal.</p>
                       
-                      <div className="border border-gray-300 rounded-xl overflow-hidden bg-white">
-                        <div className="p-5 flex items-center justify-between bg-gray-50 border-b border-gray-300">
-                          <div className="flex items-center gap-3">
-                            <div className="w-5 h-5 rounded-full border-[5px] border-black bg-white"></div>
-                            <span className="font-semibold text-sm text-black">Credit card</span>
-                          </div>
-                          <div className="flex gap-2 opacity-80">
-                            <div className="w-10 h-6 bg-white border border-gray-200 rounded text-[7px] font-bold text-[#14213d] flex items-center justify-center shadow-sm">VISA</div>
-                            <div className="w-10 h-6 bg-white border border-gray-200 rounded flex items-center justify-center overflow-hidden shadow-sm">
-                              <div className="flex"><div className="w-3 h-3 bg-[#EB001B] rounded-full"></div><div className="w-3 h-3 bg-[#F79E1B] rounded-full -ml-1"></div></div>
-                            </div>
-                            <div className="w-10 h-6 bg-[#006FCF] rounded flex items-center justify-center shadow-sm"><span className="text-white text-[6px] font-bold">AMEX</span></div>
-                          </div>
+                      {paypalError ? (
+                        <div className="p-4 bg-red-50 text-red-600 border border-red-200 rounded-xl mb-6">
+                          {paypalError}
                         </div>
-                        <div className="p-6 space-y-4">
-                          <div>
-                            <label className={labelCls}>Card Number</label>
-                            <input type="text" required placeholder="Card number" value={cardNumber} onChange={e => setCardNumber(e.target.value)} className={inputCls} />
-                          </div>
-                          <div className="grid grid-cols-2 gap-6">
-                            <div>
-                              <label className={labelCls}>Expiration Date</label>
-                              <input type="text" required placeholder="MM / YY" value={expiry} onChange={e => setExpiry(e.target.value)} className={inputCls} />
-                            </div>
-                            <div>
-                              <label className={labelCls}>Security Code</label>
-                              <input type="text" required placeholder="CVV" value={cvv} onChange={e => setCvv(e.target.value)} className={inputCls} />
-                            </div>
-                          </div>
-                          <div>
-                            <label className={labelCls}>Name on Card</label>
-                            <input type="text" required placeholder="Name on card" value={nameOnCard} onChange={e => setNameOnCard(e.target.value)} className={inputCls} />
-                          </div>
+                      ) : paypalClientId ? (
+                        <div className="relative z-0 min-h-[150px]">
+                            {isSubmitting && (
+                              <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] z-10 flex items-center justify-center rounded-xl border border-gray-100">
+                                <span className="flex items-center justify-center gap-2 font-bold text-gray-700">
+                                  <span className="w-5 h-5 border-2 border-gray-200 border-t-black rounded-full animate-spin"></span>
+                                  Confirming Order...
+                                </span>
+                              </div>
+                            )}
+                            <PayPalScriptProvider options={{ clientId: paypalClientId, components: 'buttons', currency: 'USD' }}>
+                                <PayPalButtons 
+                                  createOrder={createPaypalOrder}
+                                  onApprove={onPaypalApprove}
+                                  style={{ layout: "vertical", shape: "rect", color: "gold" }}
+                                />
+                            </PayPalScriptProvider>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="p-10 border border-gray-200 bg-gray-50 rounded-xl flex items-center justify-center flex-col gap-3">
+                          <span className="w-6 h-6 border-2 border-gray-300 border-t-[#0079C1] rounded-full animate-spin"></span>
+                          <span className="text-sm font-semibold text-gray-600">Initializing Secure Gateway...</span>
+                        </div>
+                      )}
                     </section>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-5 bg-black text-white text-sm font-bold uppercase tracking-widest rounded hover:bg-gray-800 transition-all shadow-lg disabled:opacity-75 disabled:cursor-not-allowed mt-8"
-                    >
-                      {isSubmitting ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
-                          Processing...
-                        </span>
-                      ) : 'Place Order'}
-                    </button>
                   </div>
                 </form>
 

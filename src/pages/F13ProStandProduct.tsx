@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Hls from 'hls.js';
 import { Star, ChevronLeft, ChevronRight, ChevronDown, Check, Headphones, BookOpen, Video, Truck, Shield, Zap } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { STATIC_GALLERY, VARIANTS, MGMT_VIDEOS, RIP_VIDEOS, STEPS, CAROUSEL_ITEMS, SPEC_ROWS, FAQS, REVIEWS } from './F13ProData';
+import { MGMT_VIDEOS, RIP_VIDEOS, STEPS, CAROUSEL_ITEMS, SPEC_ROWS, FAQS, REVIEWS } from './F13ProData';
 
 // ─── HLS Video Player ────────────────────────────────────────────────────────
 function HlsVideo({ src, className = '' }: { src: string; className?: string }) {
@@ -39,8 +39,26 @@ function Accordion({ q, a, open, onClick }: { q: string; a: string; open: boolea
   );
 }
 
+// ─── Stand Data ─────────────────────────────────────────────────────────────
+const STAND_VARIANTS = [
+  { id: 'f13-stand-1', name: 'F13 Pro & Bracket', sale: 5199, original: 5599, saving: 400, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/20260317-182856_1220x_crop_center.jpg?v=1773743412' },
+  { id: 'f13-stand-2', name: 'F13 Pro + Stand + Oven', sale: 5599, original: 6099, saving: 500, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/2_7d6ae33d-8a69-486b-bc77-c2f159bc6295_1220x_crop_center.jpg?v=1773742872' },
+  { id: 'f13-stand-3', name: 'F13 Pro + Stand & Complete Bundle', sale: 5799, original: 6449, saving: 650, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/3_652c9538-ddb3-4741-8693-eb73d5f6812b_1220x_crop_center.jpg?v=1773742872' },
+  { id: 'f13-stand-4', name: 'F13 Pro + Stand + Oven Premium', sale: 5999, original: 6599, saving: 600, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/4_cb2a255c-c662-484d-a4bd-8f2939ec16b1_1220x_crop_center.jpg?v=1773742872' },
+  { id: 'f13-stand-5', name: 'F13 Pro + Stand & Complete Bundle Premium', sale: 6199, original: 6899, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/5_93da3690-2fdc-4884-82f9-71909bb82c09_1220x_crop_center.jpg?v=1773742872' },
+  { id: 'f13-stand-6', name: 'F13 Pro + Stand + Shaker Oven', sale: 6599, original: 7299, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/6_6d30298c-a2b0-4dbc-b8dc-5ad6bb9e91e4_1220x_crop_center.jpg?v=1773742873' },
+  { id: 'f13-stand-7', name: 'F13 Pro & Stand Ultimate Bundle', sale: 6799, original: 7649, saving: 850, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/20260317-182906_1220x_crop_center.jpg?v=1773743412' }
+];
+
+const LOCKED_IMAGES = [
+  'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_4_d8d7ed01-6f5b-4443-a06b-d83c6189339e_1220x_crop_center.png?v=1773743412',
+  'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_3_c6cf14eb-0b07-4fe9-a1e6-ab1362148d99_1220x_crop_center.png?v=1773743412',
+  'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_5_8a9254cf-ad8b-48ea-9392-7c7b6fcb3d36_1220x_crop_center.png?v=1773743412',
+  'https://www.procolored.com/cdn/shop/files/F13_Pro_A3_01_1220x_crop_center.jpg?v=1773742870'
+];
+
 // ─── Main Page ───────────────────────────────────────────────────────────────
-export default function F13ProProduct() {
+export default function F13ProStandProduct() {
   const navigate = useNavigate();
   const [activeImg, setActiveImg] = useState(0);
   const [selectedVar, setSelectedVar] = useState(0);
@@ -52,13 +70,11 @@ export default function F13ProProduct() {
   const [qty, setQty] = useState(1);
   const { addToCart } = useCart();
 
-  const variant = VARIANTS[selectedVar];
-  const galleryImgs = [variant.img, ...STATIC_GALLERY];
+  const variant = STAND_VARIANTS[selectedVar];
+  const galleryImgs = [variant.img, ...LOCKED_IMAGES];
 
   // When variant changes, reset to first image
   useEffect(() => { setActiveImg(0); }, [selectedVar]);
-
-  const finalPrice = variant.sale;
 
   return (
     <div className="bg-white font-sans overflow-hidden">
@@ -70,7 +86,7 @@ export default function F13ProProduct() {
 
       {/* ── Breadcrumb ─────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500 border-b border-gray-100">
-        <a href="/" className="hover:underline">Home</a> / Procolored F13 Pro Panda DTF Printer 13&quot; A3 Dual XP600
+        <a href="/" className="hover:underline">Home</a> / Procolored F13 Pro Panda DTF Printer 13&quot; A3 Dual XP600 &amp; Bracket
       </div>
 
       {/* ═══════════════════════════════════════════════════════
@@ -92,7 +108,7 @@ export default function F13ProProduct() {
             </div>
             {/* Main image */}
             <div className="flex-1 relative rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 aspect-square group">
-              <img src={galleryImgs[activeImg]} alt="F13 Pro" className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
+              <img src={galleryImgs[activeImg]} alt={variant.name} className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
               <button onClick={() => setActiveImg(p => (p === 0 ? galleryImgs.length - 1 : p - 1))}
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200">
                 <ChevronLeft className="w-5 h-5" />
@@ -107,7 +123,7 @@ export default function F13ProProduct() {
           {/* Right — Buy Box */}
           <div className="w-full lg:w-1/2 flex flex-col gap-4">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-snug">
-              Procolored F13 Pro Panda DTF Printer 13&quot; A3 Dual XP600 &amp; Complete Bundle Premium
+              Procolored F13 Pro Panda DTF Printer 13&quot; A3 Dual XP600 &amp; Bracket — {variant.name}
             </h1>
 
             {/* Stars */}
@@ -119,7 +135,7 @@ export default function F13ProProduct() {
             {/* Price */}
             <div>
               <div className="flex items-baseline gap-3 flex-wrap">
-                <span className="text-3xl font-bold text-red-600">${finalPrice.toLocaleString()}.00 USD</span>
+                <span className="text-3xl font-bold text-red-600">${variant.sale.toLocaleString()}.00 USD</span>
                 <s className="text-lg text-gray-400">${variant.original.toLocaleString()}.00 USD</s>
               </div>
               <p className="text-sm text-red-500 flex items-center gap-1 mt-1">
@@ -146,6 +162,20 @@ export default function F13ProProduct() {
               </ul>
             </div>
 
+            {/* Stand Toggle */}
+            <div className="mb-2">
+              <div className="grid grid-cols-2 gap-3">
+                <button onClick={() => navigate('/products/f13-pro')}
+                  className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-gray-200 text-gray-700 hover:border-gray-300">
+                  Without Stand
+                </button>
+                <button
+                  className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-orange-500 text-orange-600 bg-orange-50 cursor-default">
+                  Stand
+                </button>
+              </div>
+            </div>
+
             {/* Options */}
             <div>
               <div className="flex items-center justify-between mb-3">
@@ -153,7 +183,7 @@ export default function F13ProProduct() {
                 <button className="text-blue-500 text-sm hover:underline">Compare &gt;</button>
               </div>
               <div className="flex flex-col gap-2 max-h-[380px] overflow-y-auto pr-1">
-                {VARIANTS.map((v, i) => (
+                {STAND_VARIANTS.map((v, i) => (
                   <button key={i} onClick={() => setSelectedVar(i)}
                     className={`relative flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all ${selectedVar === i ? 'border-orange-500 bg-orange-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
                     <span className={`absolute -top-0 right-0 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-xl rounded-tr-lg ${v.badgeClass}`}>{v.badge}</span>
@@ -173,30 +203,15 @@ export default function F13ProProduct() {
               </div>
             </div>
 
-            {/* Stand Toggle */}
-            <div className="mb-2">
-              <p className="font-bold text-gray-900 mb-2">Option</p>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-orange-500 text-orange-600 bg-orange-50 cursor-default">
-                  Without Stand
-                </button>
-                <button onClick={() => navigate('/products/f13-pro-stand')}
-                  className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-gray-200 text-gray-700 hover:border-gray-300">
-                  Stand
-                </button>
-              </div>
-            </div>
-
             {/* What's In The Box accordion */}
-            <div className="border border-gray-200 rounded-xl overflow-hidden">
+            <div className="border border-gray-200 rounded-xl overflow-hidden mt-2">
               <button onClick={() => setBoxOpen(o => !o)} className="w-full flex justify-between items-center px-5 py-4 font-semibold text-gray-800 hover:bg-gray-50">
                 What's In The Box <ChevronDown className={`w-5 h-5 transition-transform ${boxOpen ? 'rotate-180' : ''}`} />
               </button>
               {boxOpen && (
                 <div className="px-5 pb-4 border-t border-gray-100">
                   <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside mt-2">
-                    {['F13 Pro Panda DTF Printer', 'Powder Shaking And Drying All-In-One Machine', 'Panda Heat Press Machine For DTF Printer', 'Full Set of Initial Ink (CMYKW 5×500ml)', 'Adhesive Powder 500g', 'Printhead Moisturizing Device', 'Nozzle Protection Fluid 2×250ml', 'PET Roll Film (100m)', 'Procolored RIP Software (Windows OS only, C drive ≥50GB, RAM ≥8GB)', 'USB Dongle', 'Power Cable/USB to Ethernet Adapter', 'Ink Tube/Dust Free Cloth/Syringe'].map((it, i) => (
+                    {['F13 Pro Panda DTF Printer + Stand', 'Powder Shaking And Drying All-In-One Machine', 'Panda Heat Press Machine For DTF Printer', 'Full Set of Initial Ink (CMYKW 5×500ml)', 'Adhesive Powder 500g', 'Printhead Moisturizing Device', 'Nozzle Protection Fluid 2×250ml', 'PET Roll Film (100m)', 'Procolored RIP Software (Windows OS only, C drive ≥50GB, RAM ≥8GB)', 'USB Dongle', 'Power Cable/USB to Ethernet Adapter', 'Ink Tube/Dust Free Cloth/Syringe'].map((it, i) => (
                       <li key={i}>{it}</li>
                     ))}
                   </ul>
@@ -244,12 +259,12 @@ export default function F13ProProduct() {
                 <span className="px-5 flex items-center font-bold">{qty}</span>
                 <button onClick={() => setQty(q => q + 1)} className="px-5 font-bold text-gray-700 hover:bg-gray-100">+</button>
               </div>
-              <button onClick={() => addToCart({ id: variant.id, name: `${variant.name}`, price: `$USD:${finalPrice}`, image: variant.img, quantity: qty })}
+              <button onClick={() => addToCart({ id: variant.id, name: `${variant.name}`, price: `$USD:${variant.sale}`, image: variant.img, quantity: qty })}
                 className="flex-1 border-2 border-orange-500 text-orange-500 font-bold rounded-xl h-14 hover:bg-orange-50 transition text-base">
                 Add to cart
               </button>
               <button onClick={() => {
-                addToCart({ id: variant.id, name: `${variant.name}`, price: `$USD:${finalPrice}`, image: variant.img, quantity: qty });
+                addToCart({ id: variant.id, name: `${variant.name}`, price: `$USD:${variant.sale}`, image: variant.img, quantity: qty });
                 window.location.href = '/checkout';
               }} className="flex-1 bg-indigo-700 text-white font-bold rounded-xl h-14 hover:bg-indigo-800 transition text-base">
                 Buy it now
@@ -393,23 +408,8 @@ export default function F13ProProduct() {
         <div className="relative w-full overflow-hidden group">
           <div className="flex flex-nowrap w-max">
             <div className="flex flex-shrink-0 infinite-scroll gap-4 pr-4">
-              {[...CAROUSEL_ITEMS, ...CAROUSEL_ITEMS, ...CAROUSEL_ITEMS].map((c, i) => (
+              {[...CAROUSEL_ITEMS, ...CAROUSEL_ITEMS].map((c, i) => (
                 <div key={i} className="w-64 flex-shrink-0 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                  <img src={c.img} alt={c.item} className="w-full h-44 object-cover" />
-                  <div className="p-4">
-                    <p className="font-bold text-gray-900 mb-3">{c.item}</p>
-                    <div className="space-y-1 text-sm">
-                      <div className="flex justify-between text-gray-600"><span>Retail Price</span><span className="font-semibold">${c.retail.toFixed(2)}</span></div>
-                      <div className="flex justify-between text-gray-600"><span>Material Cost</span><span className="font-semibold">${c.cost.toFixed(2)}</span></div>
-                      <div className="flex justify-between text-green-600 font-bold"><span>Profit</span><span>${c.profit.toFixed(2)}</span></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-shrink-0 infinite-scroll gap-4 pr-4" aria-hidden="true">
-              {[...CAROUSEL_ITEMS, ...CAROUSEL_ITEMS, ...CAROUSEL_ITEMS].map((c, i) => (
-                <div key={`dup-${i}`} className="w-64 flex-shrink-0 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                   <img src={c.img} alt={c.item} className="w-full h-44 object-cover" />
                   <div className="p-4">
                     <p className="font-bold text-gray-900 mb-3">{c.item}</p>

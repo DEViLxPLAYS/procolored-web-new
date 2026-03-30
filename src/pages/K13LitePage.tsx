@@ -68,7 +68,7 @@ const FAQS = [
   { q: "What systems does the K13 Lite support?", a: "Windows OS only. Windows 10+ required. Mac OS is not currently supported." },
   { q: "Does the extended warranty apply to all variants?", a: "Yes. The 12-month warranty and 2 free printhead replacements apply to all K13 Lite bundles." },
   { q: "What materials can this printer use?", a: "Cotton, polyester, blends, denim, canvas and most fabric-based materials using DTF heat transfer film." },
-  { q: "How long does delivery take?", a: "15–17 business days standard delivery." },
+  { q: "How long does delivery take?", a: "14–17 business days standard delivery." },
 ];
 
 const REVIEWS = [
@@ -343,7 +343,7 @@ export default function K13LitePage() {
                 Buy It Now
               </button>
               <div className="flex items-center justify-center gap-1.5 text-sm font-medium text-gray-700">
-                <Truck className="w-4 h-4 text-green-600" /> 15–17 Business Days Delivery
+                <Truck className="w-4 h-4 text-green-600" /> 14–17 Business Days Delivery
               </div>
 
               {/* Trust badges */}

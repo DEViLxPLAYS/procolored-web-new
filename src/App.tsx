@@ -8,6 +8,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 // Placeholder pages
 import F13Product from './pages/F13Product';
 import F13ProProduct from './pages/F13ProProduct';
+import F13ProStandProduct from './pages/F13ProStandProduct';
 import F8PandaProduct from './pages/F8PandaProduct';
 import K13LitePage from './pages/K13LitePage';
 import Collections from './pages/Collections';
@@ -17,6 +18,8 @@ import Warranty from './pages/Warranty';
 import Checkout from './pages/Checkout';
 import ProductDetails from './pages/ProductDetails';
 import InkProduct from './pages/InkProduct';
+import P13Product from './pages/P13Product';
+import VF13ProUVDTFProduct from './pages/VF13ProUVDTFProduct';
 
 // New Pages
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -43,7 +46,10 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="f13" element={<F13Product />} />
-              <Route path="f13-pro" element={<F13ProProduct />} />
+              <Route path="/products/f13-pro" element={<F13ProProduct />} />
+              <Route path="/f13-pro" element={<F13ProProduct />} />
+              <Route path="/products/f13-pro-stand" element={<F13ProStandProduct />} />
+              <Route path="/f13-pro-stand" element={<F13ProStandProduct />} />
               <Route path="f8-panda" element={<F8PandaProduct />} />
               <Route path="k13-lite" element={<K13LitePage />} />
               <Route path="collections/:categoryId" element={<Collections />} />
@@ -62,6 +68,10 @@ function App() {
               <Route path="procolored-k13-lite-dtf-printer-13-a3-oven-pink" element={<Navigate to="/k13-lite" replace />} />
               <Route path="procolored-k13-lite-dtf-printer-13-a3-oven-premium-white" element={<Navigate to="/k13-lite" replace />} />
               <Route path="procolored-k13-lite-dtf-printer-13-a3-oven-premium-pink" element={<Navigate to="/k13-lite" replace />} />
+              <Route path="products/p13-dtf-printer" element={<P13Product />} />
+              <Route path="p13-dtf-printer" element={<P13Product />} />
+              <Route path="products/procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" element={<VF13ProUVDTFProduct />} />
+              <Route path="procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" element={<VF13ProUVDTFProduct />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}
               <Route path="pages/showroom" element={<Showroom />} />

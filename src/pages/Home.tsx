@@ -70,20 +70,20 @@ const popularProducts = [
     link: "/f13"
   },
   { 
+    id: "11",
+    name: "Procolored F13 Pro",
+    priceUSD: 4799, originalPriceUSD: 5499,
+    image: "https://www.procolored.com/cdn/shop/files/1_51f5ec44-cce2-4464-a9ca-4ac0786e79ec_1220x_crop_center.jpg?v=1773742870",
+    badge: "HOT ITEM", badgeColor: "bg-blue-500",
+    link: "/f13-pro"
+  },
+  { 
     id: "19",
     name: "Procolored P13 DTF Printer 13\" A3 XP600 & Oven",
     priceUSD: 4101, originalPriceUSD: 4716,
     image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950",
     badge: "NEW ARRIVAL", badgeColor: "bg-green-500",
     link: "/products/19"
-  },
-  { 
-    id: "27",
-    name: "Procolored VF13 Pro DTF Printer 13\" A3+",
-    priceUSD: 7075, originalPriceUSD: 0,
-    image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379",
-    badge: "NEW ARRIVAL", badgeColor: "bg-green-500",
-    link: "/products/27"
   }
 ];
 

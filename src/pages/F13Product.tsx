@@ -371,7 +371,7 @@ export default function F13Product() {
             <div className="flex items-center gap-4 flex-wrap text-sm font-medium text-gray-700">
               <span className="flex items-center gap-1"><Truck className="w-4 h-4 text-green-600" /> Free Shipping</span>
               <span className="flex items-center gap-1"><Shield className="w-4 h-4 text-blue-600" /> 1 Year Printhead Warranty</span>
-              <span className="flex items-center gap-1"><Gift className="w-4 h-4 text-orange-500" /> 15-17 Business Days Delivery</span>
+              <span className="flex items-center gap-1"><Gift className="w-4 h-4 text-orange-500" /> 14–17 Business Days Delivery</span>
             </div>
 
             {/* Quantity + cart */}

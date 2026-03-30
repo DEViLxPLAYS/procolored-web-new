@@ -287,7 +287,7 @@ export default function K13LiteProduct({ variant }: { variant: K13Variant }) {
                 Buy It Now
               </button>
               <div className="flex items-center justify-center gap-1.5 mt-1 mb-2 text-sm font-medium text-gray-700">
-                <Truck className="w-4 h-4 text-green-600" /> 15-17 Business Days Delivery
+                <Truck className="w-4 h-4 text-green-600" /> 14–17 Business Days Delivery
               </div>
               <div className="flex flex-wrap gap-2">
                 {[{ icon: Shield, text: '12-Month Warranty' }, { icon: Headphones, text: '24/6 Tech Support' }, { icon: BookOpen, text: 'Free Training' }].map(({ icon: Icon, text }) => (
