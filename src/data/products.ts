@@ -105,14 +105,14 @@ export const products: Product[] = [
   {
     "id": "28",
     "title": "Procolored V4 UV Printer 4.7\" A5 L800",
-    "price": "$2,355.04 USD",
+    "price": "$2,299.00 USD",
     "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
+    "image": "https://www.procolored.com/cdn/shop/files/V4_Printer_11_1220x_crop_center.png?v=1743066234",
+    "hoverImage": "https://www.procolored.com/cdn/shop/files/V4_Printer_5_1220x_crop_center.png?v=1743066234",
     "badge": null,
     "buttonStyle": "default",
     "buttonText": "Add to cart",
-    "link": "#",
+    "link": "/products/procolored-v4-uv-printer-4-7-a5-l800",
     "filters": {
       "collection": "UV Printer",
       "availability": "in-stock",

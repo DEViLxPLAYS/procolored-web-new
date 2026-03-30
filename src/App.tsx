@@ -20,6 +20,7 @@ import ProductDetails from './pages/ProductDetails';
 import InkProduct from './pages/InkProduct';
 import P13Product from './pages/P13Product';
 import VF13ProUVDTFProduct from './pages/VF13ProUVDTFProduct';
+import V4UVPrinterA5 from './pages/V4UVPrinterA5';
 
 // New Pages
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -72,6 +73,8 @@ function App() {
               <Route path="p13-dtf-printer" element={<P13Product />} />
               <Route path="products/procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" element={<VF13ProUVDTFProduct />} />
               <Route path="procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" element={<VF13ProUVDTFProduct />} />
+              <Route path="products/procolored-v4-uv-printer-4-7-a5-l800" element={<V4UVPrinterA5 />} />
+              <Route path="procolored-v4-uv-printer-4-7-a5-l800" element={<V4UVPrinterA5 />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}
               <Route path="pages/showroom" element={<Showroom />} />
