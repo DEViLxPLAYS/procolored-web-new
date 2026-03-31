@@ -83,7 +83,9 @@ router.post('/order',
         currency,
         country,
         city,
-        paymentMethod
+        paymentMethod,
+        paymentStatus,   // 'paid' for PayPal confirmed, 'unpaid' otherwise
+        transactionId
       } = req.body;
 
       // Generate order number
@@ -105,9 +107,10 @@ router.post('/order',
           discount_code: discountCode || null,
           total_amount: totalAmount,
           currency: currency || 'USD',
-          status: 'pending',
-          payment_status: 'unpaid',
+          status: paymentStatus === 'paid' ? 'confirmed' : 'pending',
+          payment_status: paymentStatus === 'paid' ? 'paid' : 'unpaid',
           payment_method: paymentMethod || 'Credit Card',
+          transaction_id: transactionId || null,
           customer_ip: req.ip,
           customer_country: country ? (country === 'United States' ? 'USA' : country === 'United Kingdom' ? 'UK' : country === 'New Zealand' ? 'NZ' : country === 'South Africa' ? 'RSA' : country === 'Saudi Arabia' ? 'KSA' : country.substring(0, 10)) : null,
           customer_city: city ? city.substring(0, 50) : null

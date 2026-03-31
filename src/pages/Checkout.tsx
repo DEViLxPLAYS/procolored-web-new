@@ -103,11 +103,13 @@ export default function Checkout() {
     const name = [firstName, lastName].filter(Boolean).join(' ');
     const payload = {
       sessionId: getSessionId(),
-      email: email || undefined,
+      customerEmail: email || undefined,   // ← matches backend field name
       customerName: name || undefined,
       cartItems: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price })),
       cartTotal: cartSubtotal.toFixed(2),
       stepAbandoned: step,
+      country,
+      city,
       deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
     };
     try {
@@ -142,7 +144,7 @@ export default function Checkout() {
     else alert('Invalid discount code.');
   };
 
-  const handleSubmit = async (e?: React.FormEvent, transactionId?: string) => {
+  const handleSubmit = async (e?: React.FormEvent, transactionId?: string, paymentStatus: 'paid' | 'unpaid' = 'unpaid') => {
     if(e) e.preventDefault();
     setIsSubmitting(true);
     orderCompletedRef.current = true;
@@ -175,6 +177,7 @@ export default function Checkout() {
       country,
       city,
       paymentMethod: transactionId ? 'PayPal' : 'Credit Card',
+      paymentStatus,
       transactionId: transactionId || null
     };
 
@@ -233,12 +236,37 @@ export default function Checkout() {
       const captureData = await res.json();
       if (!res.ok) throw new Error(captureData.error || 'Payment capture failed');
       
-      // If success, officially push the order to our database
-      await handleSubmit(undefined, captureData.capture.id || captureData.capture.status);
+      // Extract the actual transaction/capture ID from PayPal's nested response
+      const txId = 
+        captureData?.capture?.purchase_units?.[0]?.payments?.captures?.[0]?.id ||
+        captureData?.capture?.id ||
+        data.orderID;
+
+      // Push confirmed order to our DB with payment_status = 'paid'
+      await handleSubmit(undefined, txId, 'paid');
     } catch (err: any) {
+      // PayPal failed/errored – mark as abandonment
+      orderCompletedRef.current = false;
+      abandonmentFiredRef.current = false;
+      fireAbandonment('paypal_capture_failed');
       alert(err.message);
       setIsSubmitting(false);
     }
+  };
+
+  // User cancelled the PayPal popup without paying → abandonment
+  const onPaypalCancel = () => {
+    orderCompletedRef.current = false;
+    abandonmentFiredRef.current = false;
+    fireAbandonment('paypal_cancelled');
+  };
+
+  // PayPal SDK errored (network, config, etc.) → abandonment
+  const onPaypalError = (err: any) => {
+    console.error('PayPal error:', err);
+    orderCompletedRef.current = false;
+    abandonmentFiredRef.current = false;
+    fireAbandonment('paypal_error');
   };
 
         const allCountries = [
@@ -407,6 +435,8 @@ export default function Checkout() {
                                 <PayPalButtons 
                                   createOrder={createPaypalOrder}
                                   onApprove={onPaypalApprove}
+                                  onCancel={onPaypalCancel}
+                                  onError={onPaypalError}
                                   style={{ layout: "vertical", shape: "rect", color: "gold" }}
                                 />
                             </PayPalScriptProvider>
