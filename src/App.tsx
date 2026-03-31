@@ -23,6 +23,10 @@ import VF13ProUVDTFProduct from './pages/VF13ProUVDTFProduct';
 import V4UVPrinterA5 from './pages/V4UVPrinterA5';
 import V6UVPrinterA4 from './pages/V6UVPrinterA4';
 import V11UVPrinter from './pages/V11UVPrinter';
+import V11ProUVPrinterBase from './pages/V11ProUVPrinterBase';
+import V11ProUVPrinterJigs from './pages/V11ProUVPrinterJigs';
+import V11ProUVPrinterUVLaminator from './pages/V11ProUVPrinterUVLaminator';
+import V11ProUVPrinterJigsUVLaminator from './pages/V11ProUVPrinterJigsUVLaminator';
 
 // New Pages
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -81,6 +85,14 @@ function App() {
               <Route path="procolored-v6-panda-uv-printer-6-7-a4-l800" element={<V6UVPrinterA4 />} />
               <Route path="products/procolored-v11-uv-printer-11-4-a3-r1390" element={<V11UVPrinter />} />
               <Route path="procolored-v11-uv-printer-11-4-a3-r1390" element={<V11UVPrinter />} />
+              <Route path="products/procolored-v11-pro-uv-printer-11-4-a3-dual-tx800" element={<V11ProUVPrinterBase />} />
+              <Route path="procolored-v11-pro-uv-printer-11-4-a3-dual-tx800" element={<V11ProUVPrinterBase />} />
+              <Route path="products/procolored-v11-pro-uv-printer-11-4-a3-dual-tx800-jigs" element={<V11ProUVPrinterJigs />} />
+              <Route path="procolored-v11-pro-uv-printer-11-4-a3-dual-tx800-jigs" element={<V11ProUVPrinterJigs />} />
+              <Route path="products/procolored-v11-pro-uv-printer-11-4-a3-dual-tx800-uv-laminator" element={<V11ProUVPrinterUVLaminator />} />
+              <Route path="procolored-v11-pro-uv-printer-11-4-a3-dual-tx800-uv-laminator" element={<V11ProUVPrinterUVLaminator />} />
+              <Route path="products/procolored-v11-pro-uv-printer-11-4-a3-dual-tx800-jigs-uv-laminator" element={<V11ProUVPrinterJigsUVLaminator />} />
+              <Route path="procolored-v11-pro-uv-printer-11-4-a3-dual-tx800-jigs-uv-laminator" element={<V11ProUVPrinterJigsUVLaminator />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}
               <Route path="pages/showroom" element={<Showroom />} />
