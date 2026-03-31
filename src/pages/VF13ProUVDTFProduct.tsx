@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Star, ChevronLeft, ChevronRight, CheckCircle2, ChevronDown, Play } from 'lucide-react';
+import { Star, ChevronLeft, ChevronRight, CheckCircle2, ChevronDown } from 'lucide-react';
 import Hls from 'hls.js';
 import { useCart } from '../context/CartContext';
 import { useCurrency, convertPrice } from '../context/CurrencyContext';
@@ -89,32 +89,7 @@ export default function VF13ProUVDTFProduct() {
     });
   };
 
-  const relatedProducts = [
-    {
-      title: "Printer Bracket For Procolored DTF Pro and Mini UV DTF Printers",
-      price: 499.00,
-      image: "https://www.procolored.com/cdn/shop/files/Bracket_b95147ae-d5e8-48b4-b892-ecfa81b83d5a_600x600.jpg?v=1690956550", // placeholder
-      btn: "Select Opts"
-    },
-    {
-      title: "Procolored UV DTF Transfer Clear AB Film",
-      price: 159.00,
-      image: "https://www.procolored.com/cdn/shop/files/UV-DTF-Film_600x600.jpg?v=1686734563", // placeholder
-      btn: "Select Opts"
-    },
-    {
-      title: "Procolored Ink for UV DTF Printer 500ml",
-      price: 189.00,
-      image: "https://www.procolored.com/cdn/shop/files/UV-Ink_600x600.jpg?v=1686734563", // placeholder
-      btn: "Select Opts"
-    },
-    {
-      title: "Procolored UV Varnish Ink 500ml",
-      price: 59.00,
-      image: "https://www.procolored.com/cdn/shop/files/Varnish-Ink_600x600.jpg?v=1686734563", // placeholder
-      btn: "Add to cart"
-    }
-  ];
+
 
   return (
     <div className="bg-white font-sans text-[#1a1a1a] overflow-x-hidden">

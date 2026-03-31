@@ -14,7 +14,6 @@ backend/.env.local
 backend/.env.production
 
 # ── Build outputs (upload dist/ to Hostinger manually — don't commit) ──
-dist/
 build/
 
 # ── Editor / OS artefacts ───────────────────
