@@ -134,7 +134,7 @@ export const products: Product[] = [
     "originalPrice": null,
     "image": "https://www.procolored.com/cdn/shop/files/Procolored_V6_Panda_UV_Printer_6.7_A4_L800_1_1220x_crop_center.png?v=1742957321",
     "hoverImage": "https://www.procolored.com/cdn/shop/files/Procolored_V6_Panda_UV_Printer_6.7_A4_L800_4_1220x_crop_center.png?v=1742957321",
-    "badge": "⭐ New",
+    "badge": null,
     "buttonStyle": "outline",
     "buttonText": "Select Opts",
     "link": "/products/procolored-v6-panda-uv-printer-6-7-a4-l800",
