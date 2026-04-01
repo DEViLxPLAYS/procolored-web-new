@@ -3,6 +3,7 @@ const router = express.Router();
 const { supabaseAdmin } = require('../config/supabase');
 const { newsletterLimiter } = require('../middleware/rateLimit');
 const { body, validationResult } = require('express-validator');
+const { sendNewsletterEmailHandler } = require('../controllers/emailController');
 
 // ================================
 // POST /api/newsletter/subscribe
@@ -65,6 +66,13 @@ router.post('/subscribe',
         });
 
       if (error) throw error;
+
+      // Fire email notification (non-blocking)
+      sendNewsletterEmailHandler({
+        subscriberEmail: email,
+        country: country || null,
+        discountCode
+      });
 
       return res.status(201).json({
         message: 'Successfully subscribed!',

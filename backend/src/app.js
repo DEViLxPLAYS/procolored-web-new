@@ -12,6 +12,7 @@ const checkoutRoutes = require('./routes/checkout');
 const analyticsRoutes = require('./routes/analytics');
 const paymentKeysRouter = require('./routes/paymentKeys');
 const paypalRoutes = require('./routes/paypal');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 
@@ -117,6 +118,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/checkout', checkoutRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/paypal', paypalRoutes);
+app.use('/api/contact', contactRoutes);
 
 // ================================
 // Health check (no sensitive data)
