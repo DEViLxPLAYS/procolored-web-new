@@ -4,7 +4,7 @@ export interface ProductFilter {
   printType: 'DTF' | 'DTG' | 'UV' | 'UV DTF' | null;
   printSize: 'Width: 8.2"(210mm)' | 'Width: 6.7"(170mm)' | 'Width: 11.3"(287mm)' | 'Width: 11.8"(300mm)' | 'Width: 13"(330mm)' | null;
   resolution: '1440*1400 DPI (8 Pass)' | '720*1440 DPI (16 Pass)' | null;
-  printSpeed: 'Letter/A4: 4.5min' | 'Letter/A4: 7min' | 'Letter/A4: 10min' | 'Letter/A4: 12.5min' | 'Letter/A4: 14min' | 'Letter/A4: 23 min' | null;
+  printSpeed: 'Letter/A4: 4.5min' | 'Letter/A4: 7min' | 'Letter/A4: 8~9min' | 'Letter/A4: 10min' | 'Letter/A4: 12.5min' | 'Letter/A4: 14min' | 'Letter/A4: 23 min' | null;
   printerHead: 'L800' | 'L1800' | 'LH-500' | 'R1390' | 'TX800' | 'XP600' | null;
   substrateThickness: '0-0.059" (0-15mm)' | '0-4.33" (0-110mm)' | '0-5.51" (0-140mm)' | null;
   consumablesType: 'Ink' | 'Film' | 'Powder' | 'Coatings' | 'Other liquids' | null;
