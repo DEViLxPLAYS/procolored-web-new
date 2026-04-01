@@ -12,6 +12,16 @@ export const api = {
     return res.json();
   },
 
+  // Contact form submission
+  submitContactForm: async (data: object) => {
+    const res = await fetch(`${API_BASE}/api/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
   // Track checkout abandonment
   trackAbandonment: async (data: object) => {
     try {

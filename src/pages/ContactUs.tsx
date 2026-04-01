@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { api } from '../services/api';
 
 type Tab = 'presales' | 'aftersales' | 'feedback';
 
@@ -52,7 +53,7 @@ export default function ContactUs() {
                   <h2 className="text-[#1a1a1a] font-bold text-base mb-2">Looking For A Consultant</h2>
                   <p className="text-[#666666] text-sm">Leave a message if you have any question about choosing products and we'll get back to you shortly.</p>
                 </div>
-                <ContactForm extraField={<ProductField />} submitLabel="Submit" />
+                <ContactForm type="presales" submitLabel="Submit" />
               </>
             )}
 
@@ -72,7 +73,7 @@ export default function ContactUs() {
                   <h2 className="text-[#1a1a1a] font-bold text-base mb-2">Submit an After-Sales Request</h2>
                   <p className="text-[#666666] text-sm">Leave a message about your after-sales concern and our team will get back to you within 24–48 business hours.</p>
                 </div>
-                <ContactForm extraField={<OrderNumberField />} submitLabel="Submit" />
+                <ContactForm type="aftersales" submitLabel="Submit" />
               </>
             )}
 
@@ -92,7 +93,7 @@ export default function ContactUs() {
                   <h2 className="text-[#1a1a1a] font-bold text-base mb-2">Share Your Experience</h2>
                   <p className="text-[#666666] text-sm">Tell us about your experience with Procolored products or services. Your feedback helps us serve you better.</p>
                 </div>
-                <ContactForm extraField={<RatingField />} submitLabel="Submit Feedback" />
+                <ContactForm type="feedback" submitLabel="Submit Feedback" />
               </>
             )}
           </div>
@@ -103,22 +104,80 @@ export default function ContactUs() {
 }
 
 /* ─── Shared form ─── */
-function ContactForm({ extraField, submitLabel }: { extraField?: React.ReactNode; submitLabel: string }) {
+function ContactForm({ type, submitLabel }: { type: 'presales' | 'aftersales' | 'feedback'; submitLabel: string }) {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    country: '',
+    email: '',
+    message: '',
+    productLink: '', // for presales
+    orderNumber: '', // for aftersales
+    rating: ''       // for feedback
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.message || !formData.country) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      // Build message appending context if there's order or feedback rating
+      let finalMessage = formData.message;
+      if (type === 'aftersales' && formData.orderNumber) {
+        finalMessage = `[Order Number: ${formData.orderNumber}]\n\n` + finalMessage;
+      }
+      if (type === 'feedback' && formData.rating) {
+        finalMessage = `[Rating Given: ${formData.rating} Stars]\n\n` + finalMessage;
+      }
+
+      await api.submitContactForm({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        country: formData.country,
+        productLink: formData.productLink,
+        message: finalMessage
+      });
+      setSuccess(true);
+      setFormData({ firstName: '', lastName: '', country: '', email: '', message: '', productLink: '', orderNumber: '', rating: '' });
+      setTimeout(() => setSuccess(false), 5000);
+    } catch (err) {
+      alert('There was an error sending your message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+    <form className="space-y-6" onSubmit={handleSubmit}>
+      {success && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded text-sm mb-4">
+          Message sent successfully! We will get back to you soon.
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-bold text-[#1a1a1a] mb-2">First Name *</label>
-          <input type="text" placeholder="First Name" className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
+          <input name="firstName" value={formData.firstName} onChange={handleChange} type="text" placeholder="First Name" required className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
         </div>
         <div>
           <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Last Name *</label>
-          <input type="text" placeholder="Last Name" className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
+          <input name="lastName" value={formData.lastName} onChange={handleChange} type="text" placeholder="Last Name" required className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
         </div>
       </div>
       <div>
         <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Country *</label>
-        <select className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm appearance-none bg-white focus:outline-none focus:border-red-500 transition-colors">
+        <select name="country" value={formData.country} onChange={handleChange} required className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm appearance-none bg-white focus:outline-none focus:border-red-500 transition-colors">
           <option value="">Please select</option>
           <option>United States</option>
           <option>Canada</option>
@@ -130,52 +189,46 @@ function ContactForm({ extraField, submitLabel }: { extraField?: React.ReactNode
       </div>
       <div>
         <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Email *</label>
-        <input type="email" placeholder="Email" className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
+        <input name="email" value={formData.email} onChange={handleChange} type="email" placeholder="Email" required className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
       </div>
-      {extraField}
+
+      {type === 'presales' && (
+        <div>
+          <label className="block text-sm font-bold text-[#1a1a1a] mb-2">The Product You Are Interested In</label>
+          <input name="productLink" value={formData.productLink} onChange={handleChange} type="text" placeholder="Product link or name" className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
+        </div>
+      )}
+
+      {type === 'aftersales' && (
+        <div>
+          <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Order Number</label>
+          <input name="orderNumber" value={formData.orderNumber} onChange={handleChange} type="text" placeholder="Your order number (if available)" className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
+        </div>
+      )}
+
+      {type === 'feedback' && (
+        <div>
+          <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Rating</label>
+          <select name="rating" value={formData.rating} onChange={handleChange} className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm appearance-none bg-white focus:outline-none focus:border-red-500 transition-colors">
+            <option value="">Select a rating</option>
+            <option value="5">⭐⭐⭐⭐⭐ — Excellent</option>
+            <option value="4">⭐⭐⭐⭐ — Good</option>
+            <option value="3">⭐⭐⭐ — Average</option>
+            <option value="2">⭐⭐ — Poor</option>
+            <option value="1">⭐ — Very Poor</option>
+          </select>
+        </div>
+      )}
+
       <div>
         <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Message *</label>
-        <textarea rows={5} placeholder="Please provide details..." className="w-full border border-gray-300 rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors resize-y" />
+        <textarea name="message" value={formData.message} onChange={handleChange} rows={5} required placeholder="Please provide details..." className="w-full border border-gray-300 rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors resize-y" />
       </div>
       <div className="pt-2">
-        <button type="submit" className="bg-black hover:bg-[#E85A24] text-white font-bold text-sm px-10 py-3 rounded-full transition-colors duration-300 shadow-md">
-          {submitLabel}
+        <button type="submit" disabled={loading} className="bg-black hover:bg-[#E85A24] disabled:opacity-50 text-white font-bold text-sm px-10 py-3 rounded-full transition-colors duration-300 shadow-md">
+          {loading ? 'Sending...' : submitLabel}
         </button>
       </div>
     </form>
-  );
-}
-
-function ProductField() {
-  return (
-    <div>
-      <label className="block text-sm font-bold text-[#1a1a1a] mb-2">The Product You Are Interested In</label>
-      <input type="text" placeholder="Product link or name" className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
-    </div>
-  );
-}
-
-function OrderNumberField() {
-  return (
-    <div>
-      <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Order Number</label>
-      <input type="text" placeholder="Your order number (if available)" className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors" />
-    </div>
-  );
-}
-
-function RatingField() {
-  return (
-    <div>
-      <label className="block text-sm font-bold text-[#1a1a1a] mb-2">Rating</label>
-      <select className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm appearance-none bg-white focus:outline-none focus:border-red-500 transition-colors">
-        <option value="">Select a rating</option>
-        <option value="5">⭐⭐⭐⭐⭐ — Excellent</option>
-        <option value="4">⭐⭐⭐⭐ — Good</option>
-        <option value="3">⭐⭐⭐ — Average</option>
-        <option value="2">⭐⭐ — Poor</option>
-        <option value="1">⭐ — Very Poor</option>
-      </select>
-    </div>
   );
 }
