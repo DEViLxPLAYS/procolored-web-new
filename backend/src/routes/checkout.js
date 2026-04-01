@@ -4,6 +4,7 @@ const { supabaseAdmin } = require('../config/supabase');
 const { checkoutLimiter, orderLimiter } = require('../middleware/rateLimit');
 const { body, validationResult } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
+const { sendNewOrderEmail, sendAbandonmentEmail } = require('../services/emailService');
 
 // ================================
 // POST /api/checkout/abandon
@@ -40,6 +41,15 @@ router.post('/abandon', checkoutLimiter, async (req, res) => {
         device_type: deviceType || null,
         user_agent: req.headers['user-agent'] || null
       });
+
+    // Fire email notification (non-blocking)
+    sendAbandonmentEmail({
+      customerEmail,
+      customerName,
+      cartItems,
+      cartTotal,
+      stepAbandoned
+    }).catch(() => {});
 
     return res.status(200).json({ message: 'Recorded' });
   } catch (error) {
@@ -119,6 +129,17 @@ router.post('/order',
         .single();
 
       if (error) throw error;
+
+      // Fire order confirmation email (non-blocking)
+      sendNewOrderEmail({
+        orderNumber: order.order_number,
+        customerName,
+        customerEmail,
+        items,
+        totalAmount,
+        currency: currency || 'USD',
+        shippingAddress
+      }).catch(() => {});
 
       return res.status(201).json({
         message: 'Order created successfully',

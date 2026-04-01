@@ -92,41 +92,56 @@ export default function Checkout() {
   const orderCompletedRef = useRef(false);
   const abandonmentFiredRef = useRef(false);
 
+  // Keep refs in sync with latest form values so abandonment always has fresh data
+  const latestEmailRef = useRef('');
+  const latestNameRef = useRef('');
+  const latestCityRef = useRef('');
+  const latestCountryRef = useRef('Pakistan');
+  useEffect(() => { latestEmailRef.current = email; }, [email]);
+  useEffect(() => { latestNameRef.current = [firstName, lastName].filter(Boolean).join(' '); }, [firstName, lastName]);
+  useEffect(() => { latestCityRef.current = city; }, [city]);
+  useEffect(() => { latestCountryRef.current = country; }, [country]);
+
   const discountAmount = discountApplied ? cartSubtotal * 0.05 : 0;
   const shippingCost = 0;
   const total = cartSubtotal - discountAmount + shippingCost;
 
   // ── Abandonment tracker ───────────────────────────────────
-  const fireAbandonment = async (step = 'checkout') => {
-    if (orderCompletedRef.current || abandonmentFiredRef.current || items.length === 0) return;
+  const fireAbandonment = (step = 'checkout', force = false) => {
+    if (orderCompletedRef.current) return;
+    // Only block duplicate page-leave events, not PayPal cancel/error
+    if (!force && abandonmentFiredRef.current) return;
+    if (items.length === 0) return;
     abandonmentFiredRef.current = true;
-    const name = [firstName, lastName].filter(Boolean).join(' ');
     const payload = {
       sessionId: getSessionId(),
-      customerEmail: email || undefined,   // ← matches backend field name
-      customerName: name || undefined,
+      customerEmail: latestEmailRef.current || undefined,
+      customerName: latestNameRef.current || undefined,
       cartItems: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price })),
       cartTotal: cartSubtotal.toFixed(2),
       stepAbandoned: step,
-      country,
-      city,
+      country: latestCountryRef.current,
+      city: latestCityRef.current,
       deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
     };
     try {
       if (navigator.sendBeacon) {
         navigator.sendBeacon(`${API_BASE}/api/checkout/abandon`, new Blob([JSON.stringify(payload)], { type: 'application/json' }));
       } else {
-        await fetch(`${API_BASE}/api/checkout/abandon`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), keepalive: true });
+        fetch(`${API_BASE}/api/checkout/abandon`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), keepalive: true }).catch(() => {});
       }
     } catch (_) {}
   };
 
+  // Mount only once — use ref-based values so we always read latest form data
   useEffect(() => {
     if (items.length === 0) return;
-    let idleTimer = setTimeout(() => fireAbandonment('idle_10min'), 10 * 60 * 1000);
-    const resetIdle = () => { clearTimeout(idleTimer); idleTimer = setTimeout(() => fireAbandonment('idle_10min'), 10 * 60 * 1000); };
+    const idleMs = 10 * 60 * 1000;
+    let idleTimer = setTimeout(() => fireAbandonment('idle_10min'), idleMs);
+    const resetIdle = () => { clearTimeout(idleTimer); idleTimer = setTimeout(() => fireAbandonment('idle_10min'), idleMs); };
     window.addEventListener('mousemove', resetIdle);
     window.addEventListener('keydown', resetIdle);
+    // beforeunload = browser tab closed / refreshed / navigated away to external site
     const handleBeforeUnload = () => { fireAbandonment('left_page'); };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
@@ -134,9 +149,10 @@ export default function Checkout() {
       window.removeEventListener('mousemove', resetIdle);
       window.removeEventListener('keydown', resetIdle);
       window.removeEventListener('beforeunload', handleBeforeUnload);
+      // SPA navigation away from checkout (React Router)
       if (!orderCompletedRef.current) fireAbandonment('navigated_away');
     };
-  }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleApplyDiscount = (e: React.FormEvent) => {
     e.preventDefault();
@@ -258,7 +274,7 @@ export default function Checkout() {
   const onPaypalCancel = () => {
     orderCompletedRef.current = false;
     abandonmentFiredRef.current = false;
-    fireAbandonment('paypal_cancelled');
+    fireAbandonment('paypal_cancelled', true); // force=true so it always fires
   };
 
   // PayPal SDK errored (network, config, etc.) → abandonment
@@ -266,7 +282,7 @@ export default function Checkout() {
     console.error('PayPal error:', err);
     orderCompletedRef.current = false;
     abandonmentFiredRef.current = false;
-    fireAbandonment('paypal_error');
+    fireAbandonment('paypal_error', true); // force=true so it always fires
   };
 
         const allCountries = [
