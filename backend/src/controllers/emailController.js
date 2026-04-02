@@ -94,14 +94,17 @@ const sendContactEmailHandler = async (req, res) => {
  * Fire-and-forget internal logic.
  */
 const sendAbandonmentEmailHandler = async (abandonData) => {
-  if (!abandonData.customerEmail && !abandonData.customerName) return;
+  // Always notify admin — even if no email/name captured yet (card failed, anonymous exit, etc.)
+  // We still have cart items + country + device info which is valuable
 
   try {
     const html = abandonedCheckoutTemplate(abandonData);
+    const customerLabel = abandonData.customerName || abandonData.customerEmail || '🕵️ Anonymous Visitor';
+    const stepLabel = abandonData.stepAbandoned || 'checkout';
     await sendMail({
       from: FROM_EMAIL,
       to: NOTIFY_TO,
-      subject: `⚠️ Abandoned Checkout — $${parseFloat(abandonData.cartTotal || 0).toFixed(2)} — ${abandonData.customerName || abandonData.customerEmail || 'Unknown'}`,
+      subject: `⚠️ Abandoned Cart — $${parseFloat(abandonData.cartTotal || 0).toFixed(2)} — ${customerLabel} [${stepLabel}]`,
       html
     });
   } catch (error) {

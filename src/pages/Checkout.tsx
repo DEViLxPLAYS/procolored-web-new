@@ -109,14 +109,13 @@ export default function Checkout() {
   // ── Abandonment tracker ───────────────────────────────────
   const fireAbandonment = (step = 'checkout', force = false) => {
     if (orderCompletedRef.current) return;
-    // Only block duplicate page-leave events, not PayPal cancel/error
     if (!force && abandonmentFiredRef.current) return;
     if (items.length === 0) return;
     abandonmentFiredRef.current = true;
     const payload = {
       sessionId: getSessionId(),
-      customerEmail: latestEmailRef.current || undefined,
-      customerName: latestNameRef.current || undefined,
+      customerEmail: latestEmailRef.current || null,
+      customerName: latestNameRef.current || null,
       cartItems: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price })),
       cartTotal: cartSubtotal.toFixed(2),
       stepAbandoned: step,
@@ -124,13 +123,24 @@ export default function Checkout() {
       city: latestCityRef.current,
       deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
     };
+    const jsonStr = JSON.stringify(payload);
+    const url = `${API_BASE}/api/checkout/abandon`;
     try {
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon(`${API_BASE}/api/checkout/abandon`, new Blob([JSON.stringify(payload)], { type: 'application/json' }));
-      } else {
-        fetch(`${API_BASE}/api/checkout/abandon`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), keepalive: true }).catch(() => {});
-      }
-    } catch (_) {}
+      // Primary: fetch with keepalive=true works for both in-page and tab-close events
+      // keepalive:true allows the request to outlive the page
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: jsonStr,
+        keepalive: true,  // This is the key flag — request survives tab close
+      }).catch(() => {
+        // Fallback: sendBeacon with text/plain bypasses CORS preflight
+        // Backend accepts text/plain and parses it as JSON
+        navigator.sendBeacon(url + '?_beacon=1', jsonStr);
+      });
+    } catch (_) {
+      try { navigator.sendBeacon(url + '?_beacon=1', jsonStr); } catch (_2) {}
+    }
   };
 
   // Mount only once — use ref-based values so we always read latest form data

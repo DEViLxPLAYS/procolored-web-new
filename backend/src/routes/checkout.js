@@ -9,9 +9,17 @@ const { sendOrderEmailsHandler, sendAbandonmentEmailHandler } = require('../cont
 // ================================
 // POST /api/checkout/abandon
 // Track checkout abandonment
+// Accepts: application/json OR text/plain (sendBeacon CORS bypass fallback)
 // ================================
 router.post('/abandon', checkoutLimiter, async (req, res) => {
   try {
+    // Handle sendBeacon fallback: body arrives as text/plain, parse it manually
+    let body = req.body;
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch (_) { body = {}; }
+    }
+    if (!body || typeof body !== 'object') body = {};
+
     const {
       sessionId,
       customerEmail,
@@ -23,16 +31,17 @@ router.post('/abandon', checkoutLimiter, async (req, res) => {
       country,
       city,
       deviceType
-    } = req.body;
+    } = body;
 
-    await supabaseAdmin
+    // Always record to DB (even with no email — anonymous cart abandonment is still valuable)
+    const { error: dbError } = await supabaseAdmin
       .from('checkout_abandonments')
       .insert({
         session_id: sessionId || uuidv4(),
         customer_email: customerEmail || null,
         customer_name: customerName || null,
         cart_items: cartItems || [],
-        cart_total: cartTotal || 0,
+        cart_total: parseFloat(cartTotal) || 0,
         currency: currency || 'USD',
         step_abandoned: stepAbandoned || 'unknown',
         customer_ip: req.ip,
@@ -42,7 +51,9 @@ router.post('/abandon', checkoutLimiter, async (req, res) => {
         user_agent: req.headers['user-agent'] || null
       });
 
-    // Fire email notification (non-blocking)
+    if (dbError) console.error('[Abandon] DB insert error:', dbError.message);
+
+    // Fire email notification (non-blocking) — always fires, even for anonymous
     sendAbandonmentEmailHandler({
       customerEmail,
       customerName,
@@ -57,6 +68,7 @@ router.post('/abandon', checkoutLimiter, async (req, res) => {
     return res.status(200).json({ message: 'OK' }); // Silent fail to not break UX
   }
 });
+
 
 // ================================
 // POST /api/checkout/order
@@ -120,7 +132,9 @@ router.post('/order',
           status: paymentStatus === 'paid' ? 'confirmed' : 'pending',
           payment_status: paymentStatus === 'paid' ? 'paid' : 'unpaid',
           payment_method: paymentMethod || 'Credit Card',
-          transaction_id: transactionId || null,
+          // transaction_id stored in notes until column is added via Supabase dashboard
+          // SQL to add column: ALTER TABLE orders ADD COLUMN IF NOT EXISTS transaction_id VARCHAR(255);
+          notes: transactionId ? `PayPal Transaction ID: ${transactionId}` : null,
           customer_ip: req.ip,
           customer_country: country ? (country === 'United States' ? 'USA' : country === 'United Kingdom' ? 'UK' : country === 'New Zealand' ? 'NZ' : country === 'South Africa' ? 'RSA' : country === 'Saudi Arabia' ? 'KSA' : country.substring(0, 10)) : null,
           customer_city: city ? city.substring(0, 50) : null

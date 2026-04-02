@@ -94,6 +94,7 @@ app.use(globalLimiter);
 // ================================
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(express.text({ limit: '10kb' })); // For sendBeacon fallback (text/plain)
 app.use(cookieParser());
 
 // ================================
