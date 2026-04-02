@@ -18,6 +18,7 @@ import Warranty from './pages/Warranty';
 import Checkout from './pages/Checkout';
 import ProductDetails from './pages/ProductDetails';
 import InkProduct from './pages/InkProduct';
+import WhiteInkProduct from './pages/WhiteInkProduct';
 import P13Product from './pages/P13Product';
 import VF13ProUVDTFProduct from './pages/VF13ProUVDTFProduct';
 import V4UVPrinterA5 from './pages/V4UVPrinterA5';
@@ -61,6 +62,8 @@ function App() {
               <Route path="k13-lite" element={<K13LitePage />} />
               <Route path="collections/:categoryId" element={<Collections />} />
               <Route path="products/47" element={<InkProduct />} />
+              <Route path="products/white-ink-dtf" element={<WhiteInkProduct />} />
+              <Route path="white-ink-dtf" element={<WhiteInkProduct />} />
               {/* K13 Lite — all old per-variant routes redirect to unified page */}
               <Route path="products/procolored-k13-lite-dtf-printer-13-a3-white" element={<Navigate to="/k13-lite" replace />} />
               <Route path="products/procolored-k13-lite-dtf-printer-13-a3-pink" element={<Navigate to="/k13-lite" replace />} />
