@@ -6,7 +6,7 @@ export default function DTFChameleonTransferFilm() {
       data={{
         id: 'dtf-chameleon-transfer-film',
         title: `Procolored DTF Chameleon Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer`,
-        price: 169,
+        
         image: 'https://www.procolored.com/cdn/shop/files/4__1_10_1220x_crop_center.png?v=1755765214',
         variants: [
           { key: 'standard', label: 'Standard Roll', price: 169 },

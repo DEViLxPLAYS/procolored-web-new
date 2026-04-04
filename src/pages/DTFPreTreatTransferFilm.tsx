@@ -6,7 +6,7 @@ export default function DTFPreTreatTransferFilm() {
       data={{
         id: 'dtf-pretreat-transfer-film',
         title: `Procolored DTF PreTreat Transfer Roll Film 13 Inch x 328 FT——fit for A3 DTF Printer`,
-        price: 169,
+        
         image: 'https://www.procolored.com/cdn/shop/files/DTF_PreTreat_Transfer_Roll_Film_1220x_crop_center.jpg?v=1765965179',
         variants: [
           { key: 'standard', label: 'Standard Roll', price: 169 },

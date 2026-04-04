@@ -6,7 +6,7 @@ export default function DTFGiltVeilTransferFilm() {
       data={{
         id: 'dtf-gilt-veil-transfer-film',
         title: `Procolored DTF Gilt Veil Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer`,
-        price: 189,
+        
         image: 'https://www.procolored.com/cdn/shop/files/3__1_13_1220x_crop_center.png?v=1755765192',
         variants: [
           { key: 'standard', label: 'Standard Roll', price: 189 },

@@ -6,7 +6,7 @@ export default function DTFGlitterTransferFilm() {
       data={{
         id: 'dtf-glitter-transfer-film',
         title: `Procolored DTF Glitter Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer`,
-        price: 169,
+        
         image: 'https://www.procolored.com/cdn/shop/files/4__1_8_1220x_crop_center.png?v=1745910718',
         variants: [
           { key: 'standard', label: 'Standard Roll', price: 169 },

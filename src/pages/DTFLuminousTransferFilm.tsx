@@ -6,7 +6,7 @@ export default function DTFLuminousTransferFilm() {
       data={{
         id: 'dtf-luminous-transfer-film',
         title: `Procolored DTF Luminous Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer`,
-        price: 199,
+        
         image: 'https://www.procolored.com/cdn/shop/files/4__1_9_1220x_crop_center.png?v=1755765237',
         variants: [
           { key: 'standard', label: 'Standard Roll', price: 199 },

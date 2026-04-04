@@ -6,7 +6,7 @@ export default function UVDTFHotStampingSliverFilm() {
       data={{
         id: 'uvdtf-hot-stamping-sliver-film',
         title: `Procolored UV DTF Transfer Hot Stamping Sliver Film——fit for A3 UV DTF Printer`,
-        price: 229,
+        
         image: 'https://www.procolored.com/cdn/shop/files/Consumables-26_1220x_crop_center.png?v=1755766000',
         variants: [
           { key: 'standard', label: 'Standard Roll', price: 229 },
