@@ -172,14 +172,16 @@ export default function Layout() {
     if (hoveredCategory === 'View All') {
       return products.slice(0, 4);
     }
-    return products
+    const filtered = products
       .filter(p => p.filters?.collection === hoveredCategory)
       .sort((a, b) => {
         if (a.badge === 'BEST SELLER' && b.badge !== 'BEST SELLER') return -1;
         if (b.badge === 'BEST SELLER' && a.badge !== 'BEST SELLER') return 1;
         return 0;
-      })
-      .slice(0, 4);
+      });
+    // Equipment category shows up to 5; others show up to 4
+    const maxItems = hoveredCategory === 'Equipment' ? 5 : 4;
+    return filtered.slice(0, maxItems);
   }, [hoveredCategory]);
 
   const handleDropdownEnter = (dropdown: string) => {
@@ -399,7 +401,7 @@ export default function Layout() {
                 </div>
               </div>
               <div className="flex-1 p-6 relative flex flex-col">
-                <div className="grid grid-cols-4 gap-6">
+                <div className={`grid gap-6 ${rightColumnProducts.length === 5 ? 'grid-cols-5' : 'grid-cols-4'}`}>
                   {rightColumnProducts.map((product, pIdx) => (
                     <Link key={pIdx} to={product.link || `/products/${product.id}`} onClick={() => setActiveDropdown(null)} className="block text-center group">
                       <div className="bg-gray-50 rounded-lg p-4 mb-3 group-hover:bg-gray-100 transition-colors h-36 flex items-center justify-center relative overflow-hidden">

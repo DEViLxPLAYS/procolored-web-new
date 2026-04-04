@@ -32,7 +32,7 @@ const filterGroups = [
   { id: 'resolution', title: 'Resolution', options: ['1440*1400 DPI (8 Pass)', '720*1440 DPI (16 Pass)', '720*1440 DPI (16 PASS)'] },
   { id: 'printSpeed', title: 'Print Speed', options: [
     'Letter/A4: 4.5min', 'Letter/A4: 6min', 'Letter/A4: 7min', 'Letter/A4: 7.5min', 
-    'Letter/A4: 8~9min', 'Letter/A4: 10min', 'Letter/A4: 12.5min', 'Letter/A4: 14min', 'Letter/A4: 23 min'
+    'Letter/A4: 8~9min', 'Letter/A4: 10min', 'Letter/A4: 12.5min', 'Letter/A4: 14min', 'Letter/A4: 23 min', 'Letter/A4: 23min'
   ] },
   { id: 'printerHead', title: 'Printer Head', options: ['L800', 'L1800', 'LH-500', 'R1390', 'TX800', 'XP600'] },
   { id: 'substrateThickness', title: 'Substrate Thickness Allows', options: [
@@ -115,10 +115,11 @@ export default function Collections() {
       return match;
     });
 
-    // Sort: Printers first, then maintain original order
+    // Sort: All printers first (any printer collection), then maintain original order
     return [...unfiltered].sort((a: any, b: any) => {
-      const aIsPrinter = a.filters?.collection?.toLowerCase().includes('printer');
-      const bIsPrinter = b.filters?.collection?.toLowerCase().includes('printer');
+      const printerCollections = ['DTF Printer', 'UV DTF Printer', 'UV Printer', 'DTG Printer'];
+      const aIsPrinter = printerCollections.includes(a.filters?.collection);
+      const bIsPrinter = printerCollections.includes(b.filters?.collection);
       
       if (aIsPrinter && !bIsPrinter) return -1;
       if (!aIsPrinter && bIsPrinter) return 1;
@@ -453,7 +454,7 @@ export default function Collections() {
               <button onClick={clearFilters} className="mt-4 text-[#E85A24] hover:underline">Clear all filters</button>
             </div>
           ) : (
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 gap-y-10">
+             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 gap-y-12">
                {currentProducts.map((product) => {
                  // Calculate savings
                  let savingsAmount = null;
@@ -471,17 +472,27 @@ export default function Collections() {
                    key={product.id} 
                    className="group flex flex-col h-full bg-white relative"
                  >
-                   <div className="relative mb-3 aspect-[4/3] bg-gray-50 flex items-center justify-center p-4 overflow-hidden rounded-sm">
+                   <div className="relative mb-4 aspect-square bg-gray-50 flex items-center justify-center p-4 overflow-hidden rounded-sm">
                      <img 
                        src={product.image} 
                        alt={product.title}
                        referrerPolicy="no-referrer"
                        loading="lazy"
                        onError={e => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Image'; }}
-                       className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500 mix-blend-multiply"
+                       className={`max-w-full max-h-full object-contain transition-all duration-500 mix-blend-multiply absolute inset-0 w-full h-full p-4 ${product.hoverImage ? 'group-hover:opacity-0 scale-100 group-hover:scale-105' : 'group-hover:scale-105'}`}
                      />
-                     {product.badge && (
-                       <Badge className={`absolute top-2 left-2 px-2 py-1 text-[11px] font-bold rounded-sm border-none shadow-none text-white ${product.badge.includes('New') || product.badge.includes('Sale') ? 'bg-[#E85A24]' : 'bg-[#4294ff]'}`}>
+                      {product.hoverImage && (
+                        <img
+                          src={product.hoverImage}
+                          alt={product.title}
+                          referrerPolicy="no-referrer"
+                          loading="lazy"
+                          onError={e => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Image'; }}
+                          className="max-w-full max-h-full object-contain transition-all duration-500 mix-blend-multiply absolute inset-0 w-full h-full p-4 opacity-0 group-hover:opacity-100 scale-105"
+                        />
+                      )}
+                      {product.badge && (
+                       <Badge className={`absolute top-2 left-2 px-2 py-1 text-[11px] font-bold rounded-sm border-none shadow-none text-white ${product.badge.includes('New') || product.badge.includes('NEW') || product.badge.includes('ARRIVAL') || product.badge.includes('Sale') ? 'bg-[#E85A24]' : 'bg-[#4294ff]'}`}>
                          {product.badge}
                        </Badge>
                      )}
