@@ -130,7 +130,7 @@ export default function Collections() {
       if (aIsPrinter && !bIsPrinter) return -1;
       if (!aIsPrinter && bIsPrinter) return 1;
       
-      const newIds = ['garment-jig-dtg', 'gift-card', 'dtf-powder', 'dtf-ink-250ml', 'uv-white-ink-500ml', 'uvdtf-white-ink-500ml', 'uvdtf-ink-500ml', 'nozzle-protection-liquid', 'dtf-cleaner-ink', 'cleaning-kits', 'uv-cleaner-ink', 'adhesion-promoter', 'uv-varnish-ink', 'uv-printer-ink-500ml'];
+      const newIds = ['garment-jig-dtg', 'gift-card', 'dtf-powder', 'dtf-ink-250ml', 'uv-white-ink-500ml', 'uvdtf-white-ink-500ml', 'uvdtf-ink-500ml', 'nozzle-protection-liquid', 'dtf-cleaner-ink', 'cleaning-kits', 'uv-cleaner-ink', 'adhesion-promoter', 'uv-varnish-ink', 'uv-printer-ink-500ml', 'dtf-gilt-veil-transfer-film', 'dtf-chameleon-transfer-film', 'dtf-luminous-transfer-film', 'dtf-glitter-transfer-film', 'uvdtf-hot-stamping-sliver-film', 'dtf-pretreat-transfer-film'];
       const aIsNew = newIds.includes(a.id);
       const bIsNew = newIds.includes(b.id);
       if (aIsNew && !bIsNew) return -1;

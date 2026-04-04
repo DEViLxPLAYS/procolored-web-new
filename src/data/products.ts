@@ -2965,4 +2965,154 @@ export const products: Product[] = [
       "consumablesCategory": "UV Consumables"
     }
   }
+  ,
+  {
+    "id": "dtf-gilt-veil-transfer-film",
+    "title": "Procolored DTF Gilt Veil Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer",
+    "price": "$189.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/3__1_13_1220x_crop_center.png?v=1755765192",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-gilt-veil-transfer-film",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "dtf-chameleon-transfer-film",
+    "title": "Procolored DTF Chameleon Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer",
+    "price": "$169.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/4__1_10_1220x_crop_center.png?v=1755765214",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-chameleon-transfer-film",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "dtf-luminous-transfer-film",
+    "title": "Procolored DTF Luminous Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer",
+    "price": "$199.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/4__1_9_1220x_crop_center.png?v=1755765237",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-luminous-transfer-film",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "dtf-glitter-transfer-film",
+    "title": "Procolored DTF Glitter Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer",
+    "price": "$169.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/4__1_8_1220x_crop_center.png?v=1745910718",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-glitter-transfer-film",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "uvdtf-hot-stamping-sliver-film",
+    "title": "Procolored UV DTF Transfer Hot Stamping Sliver Film——fit for A3 UV DTF Printer",
+    "price": "$229.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/Consumables-26_1220x_crop_center.png?v=1755766000",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/uvdtf-hot-stamping-sliver-film",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "UV DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "dtf-pretreat-transfer-film",
+    "title": "Procolored DTF PreTreat Transfer Roll Film 13 Inch x 328 FT——fit for A3 DTF Printer",
+    "price": "$169.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/DTF_PreTreat_Transfer_Roll_Film_1220x_crop_center.jpg?v=1765965179",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-pretreat-transfer-film",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  }
 ];

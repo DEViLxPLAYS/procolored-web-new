@@ -1,0 +1,30 @@
+import ConsumableProduct from '../components/ConsumableProduct';
+
+export default function DTFGiltVeilTransferFilm() {
+  return (
+    <ConsumableProduct
+      data={{
+        id: 'dtf-gilt-veil-transfer-film',
+        title: `Procolored DTF Gilt Veil Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer`,
+        price: 189,
+        image: 'https://www.procolored.com/cdn/shop/files/3__1_13_1220x_crop_center.png?v=1755765192',
+        variants: [
+          { key: 'standard', label: 'Standard Roll', price: 189 },
+        ],
+        details: {
+          outlined: `Covered with gold glittering coating, presenting a shimmering effect on the finished printings`,
+          description: `Applicable to: textile fabric, clothes, decor textile with even surface
+Feature: covered with gold glittering coating, presenting a shimmering effect on the finished printings; strong ink absorption, anti-powder adhesion , easy separation`,
+          compatibility: `Compatible printer: Apply to DTF printers of A3 Printing size, including F13, F13 Pro, P13, K13 printers.`,
+          technical: `Substrate: PET with gold glitter coating
+Thickness: 0.1mm
+Film type: single-sided cold tear
+Size: 11.8 Inch x 328 FT (30cm*100m)
+Heat transfer temperature/time: 165-175℃, 15-20"
+Shelf life: 18 months
+Storage: Keep in a dry place and away from direct sunlight`
+        }
+      }}
+    />
+  );
+}

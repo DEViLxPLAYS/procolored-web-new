@@ -62,6 +62,12 @@ import UVCleanerInk from './pages/UVCleanerInk';
 import AdhesionPromoter from './pages/AdhesionPromoter';
 import UVVarnishInk from './pages/UVVarnishInk';
 import UVPrinterInk500ml from './pages/UVPrinterInk500ml';
+import DTFGiltVeilTransferFilm from './pages/DTFGiltVeilTransferFilm';
+import DTFChameleonTransferFilm from './pages/DTFChameleonTransferFilm';
+import DTFLuminousTransferFilm from './pages/DTFLuminousTransferFilm';
+import DTFGlitterTransferFilm from './pages/DTFGlitterTransferFilm';
+import UVDTFHotStampingSliverFilm from './pages/UVDTFHotStampingSliverFilm';
+import DTFPreTreatTransferFilm from './pages/DTFPreTreatTransferFilm';
 
 import NewsletterPopup from './components/NewsletterPopup';
 import AdminDashboard from './pages/AdminDashboard';
@@ -167,6 +173,12 @@ function App() {
               <Route path="products/uv-varnish-ink" element={<UVVarnishInk />} />
               <Route path="uv-varnish-ink" element={<UVVarnishInk />} />
               <Route path="products/uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
+              <Route path="products/dtf-gilt-veil-transfer-film" element={<DTFGiltVeilTransferFilm />} />
+              <Route path="products/dtf-chameleon-transfer-film" element={<DTFChameleonTransferFilm />} />
+              <Route path="products/dtf-luminous-transfer-film" element={<DTFLuminousTransferFilm />} />
+              <Route path="products/dtf-glitter-transfer-film" element={<DTFGlitterTransferFilm />} />
+              <Route path="products/uvdtf-hot-stamping-sliver-film" element={<UVDTFHotStampingSliverFilm />} />
+              <Route path="products/dtf-pretreat-transfer-film" element={<DTFPreTreatTransferFilm />} />
               <Route path="uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}
