@@ -66,7 +66,13 @@ export default function Collections() {
     consumablesCategory: true,
   });
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const currentPageStr = searchParams.get('page');
+  const currentPage = currentPageStr ? parseInt(currentPageStr, 10) : 1;
+  const setCurrentPage = (page: number) => {
+    if (page === 1) searchParams.delete('page');
+    else searchParams.set('page', page.toString());
+    setSearchParams(searchParams, { replace: true });
+  };
   const itemsPerPage = 21;
 
   const toggleSection = (id: string) => {
@@ -123,6 +129,12 @@ export default function Collections() {
       
       if (aIsPrinter && !bIsPrinter) return -1;
       if (!aIsPrinter && bIsPrinter) return 1;
+      
+      const newIds = ['garment-jig-dtg', 'gift-card', 'dtf-powder', 'dtf-ink-250ml', 'uv-white-ink-500ml', 'uvdtf-white-ink-500ml', 'uvdtf-ink-500ml', 'nozzle-protection-liquid', 'dtf-cleaner-ink', 'cleaning-kits', 'uv-cleaner-ink', 'adhesion-promoter', 'uv-varnish-ink', 'uv-printer-ink-500ml'];
+      const aIsNew = newIds.includes(a.id);
+      const bIsNew = newIds.includes(b.id);
+      if (aIsNew && !bIsNew) return -1;
+      if (!aIsNew && bIsNew) return 1;
       return 0;
     });
   }, [categoryProducts, searchParams]);
