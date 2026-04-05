@@ -85,6 +85,11 @@ import PrinterCartridges12PCS from './pages/PrinterCartridges12PCS';
 import WhiteInkCirculationPump from './pages/WhiteInkCirculationPump';
 import OriginalPrintHead from './pages/OriginalPrintHead';
 import InkSacTubesUV from './pages/InkSacTubesUV';
+import RemoteExpertService from './pages/RemoteExpertService';
+import FilmHolder13Inch from './pages/FilmHolder13Inch';
+import OvenHeatingPlate from './pages/OvenHeatingPlate';
+import InkWastePumpOven from './pages/InkWastePumpOven';
+import OvenTemperatureController from './pages/OvenTemperatureController';
 
 import NewsletterPopup from './components/NewsletterPopup';
 import AdminDashboard from './pages/AdminDashboard';
@@ -213,6 +218,11 @@ function App() {
               <Route path="products/white-ink-circulation-pump" element={<WhiteInkCirculationPump />} />
               <Route path="products/original-print-head" element={<OriginalPrintHead />} />
               <Route path="products/ink-sac-tubes-uv" element={<InkSacTubesUV />} />
+              <Route path="products/remote-expert-service" element={<RemoteExpertService />} />
+              <Route path="products/film-holder-13inch" element={<FilmHolder13Inch />} />
+              <Route path="products/oven-heating-plate" element={<OvenHeatingPlate />} />
+              <Route path="products/ink-waste-pump-oven" element={<InkWastePumpOven />} />
+              <Route path="products/oven-temperature-controller" element={<OvenTemperatureController />} />
               <Route path="uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}

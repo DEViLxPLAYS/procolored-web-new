@@ -3540,4 +3540,129 @@ export const products: Product[] = [
       "consumablesCategory": "Parts & Accessories"
     }
   }
+  ,
+  {
+    "id": "remote-expert-service",
+    "title": "Procolored Remote Expert Service",
+    "price": "$50.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/29a3e0b58d9285335e91f4af262fd4d6_9ee8b6d2-2509-491d-b64f-60c1c9d91bdb_1220x_crop_center.png?v=1743061897",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/remote-expert-service",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "film-holder-13inch",
+    "title": "Procolored Film Holder Fit For 13" DTF Roll Film",
+    "price": "$119.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/1__1_14_1220x_crop_center.png?v=1745911935",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/film-holder-13inch",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "oven-heating-plate",
+    "title": "Procolored Oven Heating Plate - Fit For Procolored Oven",
+    "price": "$199.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/heatingplate-1_2_1220x_crop_center.png?v=1745911869",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/oven-heating-plate",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "ink-waste-pump-oven",
+    "title": "Procolored White Ink Circulation Pump/ Ink Waste Pump - Fit For Procolored Printer",
+    "price": "$79.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/DSCF5903_2d7a0aa9-1e23-4386-897a-7ca6fe4b74cf_1220x_crop_center.png?v=1745911809",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/ink-waste-pump-oven",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "oven-temperature-controller",
+    "title": "Procolored Oven Temperature Controller - Fit For Procolored Oven",
+    "price": "$59.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/DSCF5913_1220x_crop_center.png?v=1745911839",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/oven-temperature-controller",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
 ];
