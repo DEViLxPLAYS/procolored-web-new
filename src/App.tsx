@@ -90,6 +90,7 @@ import FilmHolder13Inch from './pages/FilmHolder13Inch';
 import OvenHeatingPlate from './pages/OvenHeatingPlate';
 import InkWastePumpOven from './pages/InkWastePumpOven';
 import OvenTemperatureController from './pages/OvenTemperatureController';
+import ExtendedWarrantyService from './pages/ExtendedWarrantyService';
 
 import NewsletterPopup from './components/NewsletterPopup';
 import AdminDashboard from './pages/AdminDashboard';
@@ -223,6 +224,7 @@ function App() {
               <Route path="products/oven-heating-plate" element={<OvenHeatingPlate />} />
               <Route path="products/ink-waste-pump-oven" element={<InkWastePumpOven />} />
               <Route path="products/oven-temperature-controller" element={<OvenTemperatureController />} />
+              <Route path="products/extended-warranty-service" element={<ExtendedWarrantyService />} />
               <Route path="uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}

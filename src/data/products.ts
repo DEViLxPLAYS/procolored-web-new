@@ -3665,4 +3665,29 @@ export const products: Product[] = [
       "consumablesCategory": "Parts & Accessories"
     }
   }
+  ,
+  {
+    "id": "extended-warranty-service",
+    "title": "Procolored Extended Warranty Service",
+    "price": "$699.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/b78c39d5eabbde51946a49e28fefc57e_1220x_crop_center.png?v=1743061878",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/extended-warranty-service",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
 ];
