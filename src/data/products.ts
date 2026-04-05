@@ -9,7 +9,7 @@ export interface ProductFilter {
   substrateThickness: '0-0.059" (0-15mm)' | '0-4.33" (0-110mm)' | '0-5.51" (0-140mm)' | null;
   consumablesType: 'Ink' | 'Film' | 'Powder' | 'Coatings' | 'Other liquids' | null;
   machineCategory: 'K13 Lite White' | 'K13 Lite Pink' | 'P13 Series' | 'F13 Pro Series' | 'F13 Series' | 'F8 Series' | null;
-  consumablesCategory: 'DTF Consumables' | 'UV DTF Consumables' | 'UV Consumables' | 'DTG Consumables' | null;
+  consumablesCategory: 'DTF Consumables' | 'UV DTF Consumables' | 'UV Consumables' | 'DTG Consumables' | 'Parts & Accessories' | null;
 }
 
 export interface Product {
@@ -3568,7 +3568,7 @@ export const products: Product[] = [
   ,
   {
     "id": "film-holder-13inch",
-    "title": "Procolored Film Holder Fit For 13" DTF Roll Film",
+    "title": "Procolored Film Holder Fit For 13\\\" DTF Roll Film",
     "price": "$119.00 USD",
     "originalPrice": null,
     "image": "https://www.procolored.com/cdn/shop/files/1__1_14_1220x_crop_center.png?v=1745911935",
