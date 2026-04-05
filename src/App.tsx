@@ -73,6 +73,18 @@ import DTFPreTreatSheetA4 from './pages/DTFPreTreatSheetA4';
 import UVDTFHotStampingGoldFilm from './pages/UVDTFHotStampingGoldFilm';
 import UVDTFClearABFilm from './pages/UVDTFClearABFilm';
 import DTFPreTreatRoll8Inch from './pages/DTFPreTreatRoll8Inch';
+import DTFPreTreatSheetA3 from './pages/DTFPreTreatSheetA3';
+import TransferABFilmUVLaminator from './pages/TransferABFilmUVLaminator';
+import DTFCoolingBlock from './pages/DTFCoolingBlock';
+import PrintheadMoisturizingDevice from './pages/PrintheadMoisturizingDevice';
+import PrinterInkCarriageDTF from './pages/PrinterInkCarriageDTF';
+import InkSacTubesDTF from './pages/InkSacTubesDTF';
+import USBDongleRIP from './pages/USBDongleRIP';
+import PrinterMotherboard from './pages/PrinterMotherboard';
+import PrinterCartridges12PCS from './pages/PrinterCartridges12PCS';
+import WhiteInkCirculationPump from './pages/WhiteInkCirculationPump';
+import OriginalPrintHead from './pages/OriginalPrintHead';
+import InkSacTubesUV from './pages/InkSacTubesUV';
 
 import NewsletterPopup from './components/NewsletterPopup';
 import AdminDashboard from './pages/AdminDashboard';
@@ -189,6 +201,18 @@ function App() {
               <Route path="products/uvdtf-hot-stamping-gold-film" element={<UVDTFHotStampingGoldFilm />} />
               <Route path="products/uvdtf-clear-ab-film" element={<UVDTFClearABFilm />} />
               <Route path="products/dtf-pretreat-roll-8inch" element={<DTFPreTreatRoll8Inch />} />
+              <Route path="products/dtf-pretreat-sheet-a3" element={<DTFPreTreatSheetA3 />} />
+              <Route path="products/transfer-ab-film-uv-laminator" element={<TransferABFilmUVLaminator />} />
+              <Route path="products/dtf-cooling-block" element={<DTFCoolingBlock />} />
+              <Route path="products/printhead-moisturizing-device" element={<PrintheadMoisturizingDevice />} />
+              <Route path="products/printer-ink-carriage-dtf" element={<PrinterInkCarriageDTF />} />
+              <Route path="products/ink-sac-tubes-dtf" element={<InkSacTubesDTF />} />
+              <Route path="products/usb-dongle-rip" element={<USBDongleRIP />} />
+              <Route path="products/printer-motherboard" element={<PrinterMotherboard />} />
+              <Route path="products/printer-cartridges-12pcs" element={<PrinterCartridges12PCS />} />
+              <Route path="products/white-ink-circulation-pump" element={<WhiteInkCirculationPump />} />
+              <Route path="products/original-print-head" element={<OriginalPrintHead />} />
+              <Route path="products/ink-sac-tubes-uv" element={<InkSacTubesUV />} />
               <Route path="uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}

@@ -3240,4 +3240,304 @@ export const products: Product[] = [
       "consumablesCategory": "DTF Consumables"
     }
   }
+  ,
+  {
+    "id": "dtf-pretreat-sheet-a3",
+    "title": "Procolored DTF PreTreat Transfer Sheet Film——fit for A3 DTF Printer",
+    "price": "$89.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/2__1_7_1220x_crop_center.png?v=1755765686",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-pretreat-sheet-a3",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "transfer-ab-film-uv-laminator",
+    "title": "Procolored Transfer AB Film - Only for UV Laminator",
+    "price": "$199.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/products/A_UVDTF_-1_1220x_crop_center.jpg?v=1745911190",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/transfer-ab-film-uv-laminator",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "UV DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "dtf-cooling-block",
+    "title": "Procolored DTF Cooling Block",
+    "price": "$49.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/coolingblock_1_1220x_crop_center.png?v=1764921720",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-cooling-block",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printhead-moisturizing-device",
+    "title": "Procolored Printer Protective For Printhead Moisturizing Device",
+    "price": "$149.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/BSZZ22_1220x_crop_center.jpg?v=1742287138",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/printhead-moisturizing-device",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printer-ink-carriage-dtf",
+    "title": "Procolored Printer Ink Carriage for DTF Printer",
+    "price": "$99.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/12__1_7_1220x_crop_center.png?v=1743061802",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/printer-ink-carriage-dtf",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "ink-sac-tubes-dtf",
+    "title": "Procolored Printer 6*120cm Ink Sac Tubes With Cartridges—Fit For DTF Printer",
+    "price": "$89.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/1__1_13_dc5b3eae-9127-4e82-9b64-e93f92d29978_1220x_crop_center.png?v=1745912196",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/ink-sac-tubes-dtf",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "usb-dongle-rip",
+    "title": "USB Dongle for Procolored RIP V2.3 or later",
+    "price": "$139.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/20241126-182906_1220x_crop_center.jpg?v=1745912218",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/usb-dongle-rip",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printer-motherboard",
+    "title": "Procolored Printer Motherboard",
+    "price": "$149.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/000046_1220x_crop_center.png?v=1749551014",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/printer-motherboard",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printer-cartridges-12pcs",
+    "title": "Procolored Printer Cartridges(12PCS)",
+    "price": "$39.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/TB1_1220x_crop_center.png?v=1743061842",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/printer-cartridges-12pcs",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "white-ink-circulation-pump",
+    "title": "Procolored White Ink Circulation Pump/ Ink Waste Pump",
+    "price": "$69.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/10__1_18_1220x_crop_center.png?v=1743061786",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/white-ink-circulation-pump",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "original-print-head",
+    "title": "Procolored Original Print Head Brand New 100%——fit for Procolored Printer",
+    "price": "$320.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/products/R330_L800_1220x_crop_center.png?v=1744785902",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/original-print-head",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "ink-sac-tubes-uv",
+    "title": "Procolored Printer 6*120cm Ink Sac Tubes With Cartridges—Fit For UV Printer",
+    "price": "$69.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/1__1_13_1220x_crop_center.png?v=1745912286",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/ink-sac-tubes-uv",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
 ];
