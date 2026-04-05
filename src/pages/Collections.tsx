@@ -488,19 +488,17 @@ export default function Collections() {
                      <img 
                        src={product.image} 
                        alt={product.title}
-                       referrerPolicy="no-referrer"
                        loading="lazy"
                        onError={e => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Image'; }}
-                       className={`max-w-full max-h-full object-contain transition-all duration-500 mix-blend-multiply absolute inset-0 w-full h-full p-4 ${product.hoverImage ? 'group-hover:opacity-0 scale-100 group-hover:scale-105' : 'group-hover:scale-105'}`}
+                       className={`max-w-full max-h-full object-contain transition-all duration-500 absolute inset-0 w-full h-full p-4 ${product.hoverImage ? 'group-hover:opacity-0 scale-100 group-hover:scale-105' : 'group-hover:scale-105'}`}
                      />
                       {product.hoverImage && (
                         <img
                           src={product.hoverImage}
                           alt={product.title}
-                          referrerPolicy="no-referrer"
                           loading="lazy"
                           onError={e => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Image'; }}
-                          className="max-w-full max-h-full object-contain transition-all duration-500 mix-blend-multiply absolute inset-0 w-full h-full p-4 opacity-0 group-hover:opacity-100 scale-105"
+                          className="max-w-full max-h-full object-contain transition-all duration-500 absolute inset-0 w-full h-full p-4 opacity-0 group-hover:opacity-100 scale-105"
                         />
                       )}
                       {product.badge && (
