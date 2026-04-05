@@ -92,7 +92,7 @@ export default function T8PandaProduct() {
           </p>
 
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-            
+
             {/* Left: Gallery */}
             <div className="w-full lg:w-[45%] flex-shrink-0 flex flex-col gap-4">
               <div className="flex flex-col md:flex-row gap-4">
@@ -131,13 +131,13 @@ export default function T8PandaProduct() {
 
             {/* Right: Info */}
             <div className="w-full lg:w-[55%] flex flex-col gap-6">
-              
+
               <div>
                 <h1 className="text-3xl lg:text-[2.5rem] font-bold text-gray-900 leading-tight mb-3">
                   Procolored T8 Panda DTG Printer 8.2" A4 L800
                 </h1>
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="flex">{[1,2,3,4].map(s => <Star key={s} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}<Star className="w-4 h-4 text-yellow-400" style={{clipPath: 'polygon(0 0, 67% 0, 67% 100%, 0 100%)', backgroundColor: '#facc15'}} /></div>
+                  <div className="flex">{[1, 2, 3, 4].map(s => <Star key={s} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}<Star className="w-4 h-4 text-yellow-400" style={{ clipPath: 'polygon(0 0, 67% 0, 67% 100%, 0 100%)', backgroundColor: '#facc15' }} /></div>
                   <a href="#reviews" className="text-sm text-blue-600 hover:underline">4.67 out of 5 — 3 reviews</a>
                 </div>
 
@@ -160,9 +160,8 @@ export default function T8PandaProduct() {
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   {VARIANTS.map((v, i) => (
                     <button key={v.id} onClick={() => setVIdx(i)}
-                      className={`relative w-full flex items-center justify-center p-3 rounded-lg border-2 transition-all ${
-                        vIdx === i ? 'border-orange-500 text-orange-600 font-bold' : 'border-gray-200 bg-white hover:border-gray-300 text-gray-700'
-                      }`}>
+                      className={`relative w-full flex items-center justify-center p-3 rounded-lg border-2 transition-all ${vIdx === i ? 'border-orange-500 text-orange-600 font-bold' : 'border-gray-200 bg-white hover:border-gray-300 text-gray-700'
+                        }`}>
                       {v.shortName}
                     </button>
                   ))}
@@ -199,7 +198,7 @@ export default function T8PandaProduct() {
       </section>
 
       {/* Overview / Banner (Skipped banner, straight to features as reference screenshot) */}
-      
+
       {/* Feature 1 */}
       <section className="py-12 bg-white">
         <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-center bg-gray-50 rounded-2xl overflow-hidden">
@@ -249,21 +248,21 @@ export default function T8PandaProduct() {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-10">Parameters</h2>
-          
+
           <div className="bg-[#FFF4F2] rounded-2xl p-6 lg:p-10 border border-red-100 text-sm md:text-base">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0">
               <div className="border-b border-white py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Printhead</span><span className="text-gray-600 text-right">L800</span></div>
               <div className="border-b border-white py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Configuration</span><span className="text-gray-600 text-right">Single-Array</span></div>
-              
+
               <div className="border-b border-white py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Print Accuracy</span><span className="text-gray-600 text-right">1440*1400 DPI (8 Pass)</span></div>
               <div className="border-b border-white py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Print Size</span><span className="text-gray-600 text-right">210*297 mm</span></div>
-              
+
               <div className="border-b border-white py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Applicable System</span><span className="text-gray-600 text-right">Windows OS</span></div>
               <div className="border-b border-white py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Print Speed</span><span className="text-gray-600 text-right">Letter/A4: 23min</span></div>
-              
+
               <div className="border-b border-white py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Prints Per Hour</span><span className="text-gray-600 text-right">3 pcs</span></div>
               <div className="border-b border-white py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Ink Consumption</span><span className="text-gray-600 text-right">Letter/A4: 1.5ml</span></div>
-              
+
               <div className="py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Software</span><span className="text-gray-600 text-right">Pro RIP</span></div>
               <div className="py-4 flex items-center justify-between"><span className="font-bold text-gray-900">Net Weight</span><span className="text-gray-600 text-right">73.9 lb(33.5 kg)</span></div>
             </div>
@@ -275,7 +274,7 @@ export default function T8PandaProduct() {
       <section className="py-16 bg-gray-50 border-y border-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Printing Step</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
               <div className="aspect-[4/3] bg-gray-50 flex items-center justify-center p-4">
@@ -283,35 +282,35 @@ export default function T8PandaProduct() {
               </div>
               <div className="p-4 bg-white"><p className="font-bold text-gray-800 text-center">① Design Pictures</p></div>
             </div>
-            
+
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
               <div className="aspect-[4/3] bg-gray-50 flex items-center justify-center p-4">
                 <img src="https://www.procolored.com/cdn/shop/files/20241113-161857_690x_crop_center.jpg?v=1731486099" alt="Heat Press" className="max-w-full max-h-full object-contain" />
               </div>
               <div className="p-4 bg-white"><p className="font-bold text-gray-800 text-center text-sm md:text-base">② Heat Press the Fabric to Remove Wrinkles</p></div>
             </div>
-            
+
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
               <div className="aspect-[4/3] bg-gray-50 flex items-center justify-center py-8">
                 <img src="https://www.procolored.com/cdn/shop/files/DTG-T8_4_690x_crop_center.png?v=1731404102" alt="Place" className="w-full h-full object-cover" />
               </div>
               <div className="p-4 bg-white"><p className="font-bold text-gray-800 text-center text-sm md:text-base">③ Place the printed items on the platform</p></div>
             </div>
-            
+
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
               <div className="aspect-[4/3] bg-gray-50 flex items-center justify-center py-8">
                 <img src="https://www.procolored.com/cdn/shop/files/DTG-T8_5_690x_crop_center.png?v=1731404103" alt="Pre-treatment" className="w-full h-full object-cover" />
               </div>
               <div className="p-4 bg-white"><p className="font-bold text-gray-800 text-center">④ Spray Pre-treatment Liquid</p></div>
             </div>
-            
+
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
               <div className="aspect-[4/3] bg-gray-50 flex items-center justify-center p-4">
                 <img src="https://www.procolored.com/cdn/shop/files/20241112-181501_690x_crop_center.jpg?v=1731406649" alt="Software" className="max-w-full max-h-full object-contain" />
               </div>
               <div className="p-4 bg-white"><p className="font-bold text-gray-800 text-center">⑤ Set software then click print</p></div>
             </div>
-            
+
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
               <div className="aspect-[4/3] bg-gray-50 flex items-center justify-center">
                 <img src="https://www.procolored.com/cdn/shop/files/DTG-T8_6_690x_crop_center.png?v=1731404102" alt="Finish" className="w-full h-full object-cover" />
@@ -326,12 +325,12 @@ export default function T8PandaProduct() {
       <section id="reviews" className="py-20 bg-[#fefdfb]">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">Customer Reviews</h2>
-          
+
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="text-center md:col-span-1">
               <div className="flex justify-center mb-2">
-                {[1,2,3,4].map(s => <Star key={s} className="w-6 h-6 fill-yellow-400 text-yellow-400" />)}
-                <Star className="w-6 h-6 text-yellow-400" style={{clipPath: 'polygon(0 0, 67% 0, 67% 100%, 0 100%)', backgroundColor: '#facc15'}} />
+                {[1, 2, 3, 4].map(s => <Star key={s} className="w-6 h-6 fill-yellow-400 text-yellow-400" />)}
+                <Star className="w-6 h-6 text-yellow-400" style={{ clipPath: 'polygon(0 0, 67% 0, 67% 100%, 0 100%)', backgroundColor: '#facc15' }} />
               </div>
               <span className="text-xl font-extrabold text-gray-900">4.67 out of 5</span>
               <p className="text-sm text-gray-500 mt-1">Based on 3 reviews</p>
@@ -339,11 +338,11 @@ export default function T8PandaProduct() {
             <div className="md:col-span-1 flex flex-col gap-1.5 justify-center pl-4 md:border-l border-gray-200">
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <div className="flex"><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /></div>
-                <div className="w-full h-3 bg-gray-200"><div className="bg-yellow-400 h-full" style={{width: '66%'}}></div></div><span>2</span>
+                <div className="w-full h-3 bg-gray-200"><div className="bg-yellow-400 h-full" style={{ width: '66%' }}></div></div><span>2</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <div className="flex"><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 text-gray-300" /></div>
-                <div className="w-full h-3 bg-gray-200"><div className="bg-yellow-400 h-full" style={{width: '33%'}}></div></div><span>1</span>
+                <div className="w-full h-3 bg-gray-200"><div className="bg-yellow-400 h-full" style={{ width: '33%' }}></div></div><span>1</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <div className="flex"><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /><Star className="w-3 h-3 text-gray-300" /><Star className="w-3 h-3 text-gray-300" /></div>
@@ -382,14 +381,14 @@ export default function T8PandaProduct() {
                 <div className="w-full md:w-1/4">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
                     </div>
                     <p className="font-bold text-gray-800 text-sm">{r.name}</p>
                   </div>
                 </div>
                 <div className="w-full md:w-3/4">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex">{[1,2,3,4,5].map(s => <Star key={s} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}</div>
+                    <div className="flex">{[1, 2, 3, 4, 5].map(s => <Star key={s} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}</div>
                     <p className="text-xs text-gray-400">{r.date}</p>
                   </div>
                   {r.title && <p className="font-bold text-gray-900 text-sm mb-2">{r.title}</p>}

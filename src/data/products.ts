@@ -3690,4 +3690,254 @@ export const products: Product[] = [
       "consumablesCategory": "Parts & Accessories"
     }
   }
+  ,
+  {
+    "id": "power-socket-switch",
+    "title": "Procolored Power Socket with Switch - Fit For Procolored Printer",
+    "price": "$39.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/DSCF5896_1220x_crop_center.png?v=1745911901",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/power-socket-switch",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printer-ink-tank",
+    "title": "Procolored Printer Ink Tank",
+    "price": "$49.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/DSCF5958_1220x_crop_center.png?v=1745911740",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/printer-ink-tank",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printer-ink-tank-agitator",
+    "title": "Procolored Printer Ink Tank with Agitator",
+    "price": "$79.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/DSCF5932_1220x_crop_center.png?v=1745911705",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/printer-ink-tank-agitator",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printhead-capping-unit",
+    "title": "Procolored Printhead Capping Unit - Fit For Procolored Printer",
+    "price": "$49.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/DSCF5985_1220x_crop_center.png?v=1743064959",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/printhead-capping-unit",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "oven-exhaust-gas-filter",
+    "title": "Procolored Oven Exhaust Gas Filter",
+    "price": "$49.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/cotton_core_1220x_crop_center.jpg?v=1730282939",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/oven-exhaust-gas-filter",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printer-control-board",
+    "title": "Procolored Printer Control Board",
+    "price": "$179.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/000035_V11_T11_Printer_control_board_1220x_crop_center.png?v=1749463360",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/printer-control-board",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printer-power-board",
+    "title": "Procolored Printer Power Board",
+    "price": "$99.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/000038_printhead_driver_board_1220x_crop_center.png?v=1749463205",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/printer-power-board",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printhead-driver-board",
+    "title": "Procolored Printhead Driver Board",
+    "price": "$179.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/001550_V13_Pro_TX800_Printhead_Driver_Board_1220x_crop_center.png?v=1749463205",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/printhead-driver-board",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printer-startup-button-board",
+    "title": "Procolored Printer Startup Button Board",
+    "price": "$99.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/000734_startup_button_board_1_1220x_crop_center.png?v=1749463175",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/printer-startup-button-board",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
+  ,
+  {
+    "id": "printer-switching-power-supply",
+    "title": "Procolored Printer Switching Power Supply - L1800/R1390",
+    "price": "$99.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/img_v3_02i6_dc3e96d6-70d1-4cf0-accb-aa47b147256g_1220x_crop_center.png?v=1745911615",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Select option",
+    "link": "/products/printer-switching-power-supply",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": "Parts & Accessories"
+    }
+  }
 ];

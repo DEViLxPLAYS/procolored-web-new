@@ -91,6 +91,16 @@ import OvenHeatingPlate from './pages/OvenHeatingPlate';
 import InkWastePumpOven from './pages/InkWastePumpOven';
 import OvenTemperatureController from './pages/OvenTemperatureController';
 import ExtendedWarrantyService from './pages/ExtendedWarrantyService';
+import PowerSocketSwitch from './pages/PowerSocketSwitch';
+import PrinterInkTank from './pages/PrinterInkTank';
+import PrinterInkTankAgitator from './pages/PrinterInkTankAgitator';
+import PrintheadCappingUnit from './pages/PrintheadCappingUnit';
+import OvenExhaustGasFilter from './pages/OvenExhaustGasFilter';
+import PrinterControlBoard from './pages/PrinterControlBoard';
+import PrinterPowerBoard from './pages/PrinterPowerBoard';
+import PrintheadDriverBoard from './pages/PrintheadDriverBoard';
+import PrinterStartupButtonBoard from './pages/PrinterStartupButtonBoard';
+import PrinterSwitchingPowerSupply from './pages/PrinterSwitchingPowerSupply';
 
 import NewsletterPopup from './components/NewsletterPopup';
 import AdminDashboard from './pages/AdminDashboard';
@@ -225,6 +235,16 @@ function App() {
               <Route path="products/ink-waste-pump-oven" element={<InkWastePumpOven />} />
               <Route path="products/oven-temperature-controller" element={<OvenTemperatureController />} />
               <Route path="products/extended-warranty-service" element={<ExtendedWarrantyService />} />
+              <Route path="products/power-socket-switch" element={<PowerSocketSwitch />} />
+              <Route path="products/printer-ink-tank" element={<PrinterInkTank />} />
+              <Route path="products/printer-ink-tank-agitator" element={<PrinterInkTankAgitator />} />
+              <Route path="products/printhead-capping-unit" element={<PrintheadCappingUnit />} />
+              <Route path="products/oven-exhaust-gas-filter" element={<OvenExhaustGasFilter />} />
+              <Route path="products/printer-control-board" element={<PrinterControlBoard />} />
+              <Route path="products/printer-power-board" element={<PrinterPowerBoard />} />
+              <Route path="products/printhead-driver-board" element={<PrintheadDriverBoard />} />
+              <Route path="products/printer-startup-button-board" element={<PrinterStartupButtonBoard />} />
+              <Route path="products/printer-switching-power-supply" element={<PrinterSwitchingPowerSupply />} />
               <Route path="uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}
