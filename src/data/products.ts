@@ -277,7 +277,6 @@ export const products: Product[] = [
       "consumablesCategory": null
     }
   },
-
   {
     "id": "33",
     "title": "Procolored T8 Panda DTG Printer 8.2\" A4 L800",
@@ -454,106 +453,6 @@ export const products: Product[] = [
     }
   },
   {
-    "id": "38",
-    "title": "Procolored Oven Heating Plate - Fit For Procolored Oven",
-    "price": "$203.96 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": "NEW ARRIVAL",
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Equipment",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "39",
-    "title": "Procolored Oven Temperature Controller - Fit For Procolored Oven",
-    "price": "$60.79 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": "NEW ARRIVAL",
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Equipment",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "40",
-    "title": "Procolored Oven Exhaust Gas Filter",
-    "price": "$50.36 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Equipment",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "41",
-    "title": "Procolored DTF Cooling Block",
-    "price": "$50.36 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Equipment",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
     "id": "42",
     "title": "Printer Bracket For Procolored DTF Pro and Mini UV DTF Printers",
     "price": "$499.00 USD",
@@ -604,81 +503,6 @@ export const products: Product[] = [
     }
   },
   {
-    "id": "44",
-    "title": "Procolored A3/A4 Garment Jig For DTG Printer",
-    "price": "$132.37 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Equipment",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "45",
-    "title": "Procolored Film Holder Fit For 13\" DTF Roll Film",
-    "price": "$121.94 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Equipment",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "46",
-    "title": "Procolored Printer Protective For Printhead Moisturizing Device",
-    "price": "$152.88 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Equipment",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
     "id": "47",
     "title": "Procolored Direct to Transfer Film Ink 500ml",
     "price": "$234.89 USD",
@@ -704,1231 +528,6 @@ export const products: Product[] = [
     }
   },
   {
-    "id": "48",
-    "title": "Procolored Direct to Transfer Film Ink 250ml",
-    "price": "$132.37 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Ink",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "49",
-    "title": "Procolored White Ink for DTF Printing",
-    "price": "$50.36 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Ink",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "50",
-    "title": "Procolored Direct to Transfer Film Powder",
-    "price": "$39.21 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Powder",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "51",
-    "title": "Procolored White Ink for UV Printing 500ml",
-    "price": "$60.79 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Ink",
-      "machineCategory": null,
-      "consumablesCategory": "UV Consumables"
-    }
-  },
-  {
-    "id": "52",
-    "title": "Procolored White Ink for UV DTF Printing 500ml",
-    "price": "$60.79 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Ink",
-      "machineCategory": null,
-      "consumablesCategory": "UV DTF Consumables"
-    }
-  },
-  {
-    "id": "53",
-    "title": "Procolored Ink for UV DTF Printer 500ml",
-    "price": "$193.88 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Ink",
-      "machineCategory": null,
-      "consumablesCategory": "UV DTF Consumables"
-    }
-  },
-  {
-    "id": "54",
-    "title": "Procolored Nozzle Protection Moisturizing Liquid/Printhead Cleaning Fluid 500ml",
-    "price": "$60.79 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Other liquids",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "55",
-    "title": "Procolored Ink Cleaner (DTF) DTF Cleaner Ink 500ml",
-    "price": "$70.86 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Other liquids",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "56",
-    "title": "Procolored Ink Adhesion Promoter UV/DTG Pretreatment Liquid 500ml",
-    "price": "$60.79 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Coatings",
-      "machineCategory": null,
-      "consumablesCategory": "UV Consumables"
-    }
-  },
-  {
-    "id": "57",
-    "title": "Procolored Ink Cleaner (UV) UV Cleaner Ink 500ml",
-    "price": "$70.86 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Other liquids",
-      "machineCategory": null,
-      "consumablesCategory": "UV Consumables"
-    }
-  },
-  {
-    "id": "58",
-    "title": "Procolored UV Varnish Ink 500ml",
-    "price": "$60.79 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Ink",
-      "machineCategory": null,
-      "consumablesCategory": "UV Consumables"
-    }
-  },
-  {
-    "id": "59",
-    "title": "Procolored Ink for UV Printer 500ml",
-    "price": "$193.88 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Ink",
-      "machineCategory": null,
-      "consumablesCategory": "UV Consumables"
-    }
-  },
-  {
-    "id": "60",
-    "title": "Procolored Direct to Garment Textile Ink 500ml",
-    "price": "$234.89 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Ink",
-      "machineCategory": null,
-      "consumablesCategory": "DTG Consumables"
-    }
-  },
-  {
-    "id": "61",
-    "title": "Procolored DTF Gilt Veil Transfer Roll Film 11.8 Inch x 328 FT",
-    "price": "$193.88 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "62",
-    "title": "Procolored DTF Chameleon Transfer Roll Film 11.8 Inch x 328 FT",
-    "price": "$173.38 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "63",
-    "title": "Procolored DTF Luminous Transfer Roll Film 11.8 Inch x 328 FT",
-    "price": "$203.96 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "64",
-    "title": "Procolored DTF Glitter Transfer Roll Film 11.8 Inch x 328 FT",
-    "price": "$173.38 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "65",
-    "title": "Procolored UV DTF Transfer Hot Stamping Silver Film",
-    "price": "$234.89 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "UV DTF Consumables"
-    }
-  },
-  {
-    "id": "66",
-    "title": "Procolored DTF PreTreat Transfer Roll Film 13 Inch x 328 FT",
-    "price": "$173.38 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "67",
-    "title": "Procolored DTF PreTreat Transfer Sheet Film - fit for A4 DTF Printer",
-    "price": "$70.86 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "68",
-    "title": "Procolored UV DTF Transfer Hot Stamping Gold Film",
-    "price": "$203.96 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "UV DTF Consumables"
-    }
-  },
-  {
-    "id": "69",
-    "title": "Procolored UV DTF Transfer Clear AB Film",
-    "price": "$162.95 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "UV DTF Consumables"
-    }
-  },
-  {
-    "id": "70",
-    "title": "Procolored Transfer AB Film - Only for UV Laminator",
-    "price": "$203.96 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "UV Consumables"
-    }
-  },
-  {
-    "id": "71",
-    "title": "Procolored DTF PreTreat Transfer Roll Film 8.2 Inch x 328 FT",
-    "price": "$91.37 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "72",
-    "title": "Procolored DTF PreTreat Transfer Sheet Film - fit for A3 DTF Printer",
-    "price": "$91.37 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Film",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "73",
-    "title": "Cleaning Kits",
-    "price": "$50.36 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Other liquids",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
-    }
-  },
-  {
-    "id": "74",
-    "title": "Procolored Printer Control Board",
-    "price": "$183.45 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "75",
-    "title": "Procolored Printer Power Board",
-    "price": "$101.44 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "76",
-    "title": "Procolored Printhead Driver Board",
-    "price": "$613.67 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "77",
-    "title": "Procolored Printer Startup Button Board",
-    "price": "$101.44 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "78",
-    "title": "Procolored Printer Motherboard",
-    "price": "$152.88 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "79",
-    "title": "Procolored Printer Switching Power Supply - L1800/R1390",
-    "price": "$101.44 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "80",
-    "title": "Procolored Original Print Head Brand New 100%",
-    "price": "$328.06 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "81",
-    "title": "Procolored Printhead Capping Unit - Fit For Procolored Printer",
-    "price": "$50.36 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": "NEW ARRIVAL",
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "82",
-    "title": "Procolored White Ink Circulation Pump/Ink Waste Pump - Fit For Procolored Printer",
-    "price": "$80.94 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": "NEW ARRIVAL",
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "83",
-    "title": "Procolored White Ink Circulation Pump/Ink Waste Pump",
-    "price": "$70.86 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "84",
-    "title": "Procolored Printer Ink Carriage for DTF Printer",
-    "price": "$101.44 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "85",
-    "title": "Procolored Printer Ink Tank",
-    "price": "$50.36 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": "NEW ARRIVAL",
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "86",
-    "title": "Procolored Printer Ink Tank with Agitator",
-    "price": "$80.94 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": "NEW ARRIVAL",
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "87",
-    "title": "Procolored Power Socket with Switch - Fit For Procolored Printer",
-    "price": "$40.29 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": "NEW ARRIVAL",
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "88",
-    "title": "Procolored Printer Cartridges (12PCS)",
-    "price": "$40.29 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "89",
-    "title": "Procolored Printer 6x120cm Ink Sac Tubes With Cartridges - Fit For DTF Printer",
-    "price": "$91.37 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "90",
-    "title": "Procolored Printer 6x120cm Ink Sac Tubes With Cartridges",
-    "price": "$70.86 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "91",
-    "title": "USB Dongle for Procolored RIP V2.3 or later",
-    "price": "$142.45 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Parts & Accessory",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "92",
-    "title": "Procolored Remote Expert Service",
-    "price": "$51.44 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Extended Warranty",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "93",
-    "title": "Procolored Extended Warranty Service",
-    "price": "$716.19 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Extended Warranty",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "94",
-    "title": "Procolored Gift Card",
-    "price": "$102.43 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Extended Warranty",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "95",
-    "title": "Procolored Selected Material 10% Discount Card",
-    "price": "$51.44 USD",
-    "originalPrice": "$82.01 USD",
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": "🔜 Coming Soon",
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Extended Warranty",
-      "availability": "out-of-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "96",
-    "title": "SHIPPING COST DHL Air Express",
-    "price": "$35.97 USD",
-    "originalPrice": null,
-    "image": "https://placehold.co/400x400/f3f4f6/a1a1aa.png?text=Procolored...",
-    "hoverImage": "https://placehold.co/400x400/e5e7eb/9ca3af.png?text=Hover+",
-    "badge": null,
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "#",
-    "filters": {
-      "collection": "Extended Warranty",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-    {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600",
         "price": "$4,799.00 USD",
@@ -1953,7 +552,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-oven",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Oven",
         "price": "$5,199.00 USD",
@@ -1978,7 +577,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-complete-bundle",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Complete Bundle",
         "price": "$5,399.00 USD",
@@ -2003,7 +602,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-oven-premium",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Oven Premium",
         "price": "$5,699.00 USD",
@@ -2028,7 +627,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-complete-bundle-premium",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Complete Bundle Premium",
         "price": "$5,899.00 USD",
@@ -2053,7 +652,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-dtf-shaker-bundle",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & DTF Shaker Bundle",
         "price": "$6,399.00 USD",
@@ -2078,7 +677,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-ultimate-bundle",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Ultimate Bundle",
         "price": "$6,599.00 USD",
@@ -2103,7 +702,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-bracket",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Bracket",
         "price": "$5,199.00 USD",
@@ -2128,7 +727,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-stand-oven",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 + Stand + Oven",
         "price": "$5,599.00 USD",
@@ -2153,7 +752,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-stand-complete-bundle",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 + Stand & Complete Bundle",
         "price": "$5,799.00 USD",
@@ -2178,7 +777,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-stand-oven-premium",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 + Stand + Oven Premium",
         "price": "$5,999.00 USD",
@@ -2203,7 +802,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-stand-complete-bundle-premium",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 + Stand & Complete Bundle Premium",
         "price": "$6,199.00 USD",
@@ -2228,7 +827,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-stand-shaker-oven",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 + Stand + Shaker Oven",
         "price": "$6,599.00 USD",
@@ -2253,7 +852,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f13-pro-panda-dtf-printer-13-a3-dual-xp600-stand-ultimate-bundle",
         "title": "Procolored F13 Pro Panda DTF Printer 13\" A3 Dual XP600 & Stand Ultimate Bundle",
         "price": "$6,799.00 USD",
@@ -2278,7 +877,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-p13-dtf-printer-13-a3-xp600",
         "title": "Procolored P13 DTF Printer 13\" A3 XP600",
         "price": "$3,685.00 USD",
@@ -2303,7 +902,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-p13-dtf-printer-13-a3-xp600-oven",
         "title": "Procolored P13 DTF Printer 13\" A3 XP600 & Oven",
         "price": "$4,093.00 USD",
@@ -2328,7 +927,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-p13-dtf-printer-13-a3-xp600-dtf-shaker-bundle",
         "title": "Procolored P13 DTF Printer 13\" A3 XP600 & DTF Shaker Bundle",
         "price": "$5,323.00 USD",
@@ -2353,7 +952,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-p13-dtf-printer-13-a3-xp600-oven-premium",
         "title": "Procolored P13 DTF Printer 13\" A3 XP600 & Oven Premium",
         "price": "$4,401.00 USD",
@@ -2378,7 +977,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f8-panda-dtf-printer-8-2-a4-l800",
         "title": "Procolored F8 Panda DTF Printer 8.2\" A4 L800",
         "price": "$1,899.00 USD",
@@ -2403,7 +1002,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f8-panda-dtf-printer-8-2-a4-l800-oven",
         "title": "Procolored F8 Panda DTF Printer 8.2\" A4 L800 & Oven",
         "price": "$2,399.00 USD",
@@ -2428,7 +1027,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-f8-panda-dtf-printer-8-2-a4-l800-complete-bundle",
         "title": "Procolored F8 Panda DTF Printer 8.2\" A4 L800 & Complete Bundle",
         "price": "$2,699.00 USD",
@@ -2453,7 +1052,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-k13-lite-dtf-printer-13-a3",
         "title": "Procolored K13 Lite DTF Printer 13\" A3",
         "price": "$1,999.00 USD",
@@ -2478,7 +1077,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-k13-lite-dtf-printer-13-a3-oven",
         "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven",
         "price": "$2,499.00 USD",
@@ -2503,7 +1102,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-k13-lite-dtf-printer-13-a3-oven-heat-press",
         "title": "Procolored K13 Lite DTF Printer 13\" A3 & Oven+Heat Press",
         "price": "$2,799.00 USD",
@@ -2528,7 +1127,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-k13-lite-dtf-printer-13-a3-smokeless-oven",
         "title": "Procolored K13 Lite DTF Printer 13\" A3 & Smokeless Oven",
         "price": "$2,799.00 USD",
@@ -2553,7 +1152,7 @@ export const products: Product[] = [
           "consumablesCategory": null
         }
       },
-    {
+  {
         "id": "procolored-k13-lite-dtf-printer-13-a3-smokeless-oven-heat-press",
         "title": "Procolored K13 Lite DTF Printer 13\" A3 & Smokeless Oven+Heat Press",
         "price": "$3,099.00 USD",
@@ -2577,8 +1176,7 @@ export const products: Product[] = [
           "machineCategory": "K13 Lite White",
           "consumablesCategory": null
         }
-      }
-  ,
+      },
   {
     "id": "white-ink-dtf",
     "title": "Procolored White Ink for DTF Printing",
@@ -2603,8 +1201,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "garment-jig-dtg",
     "title": "Procolored A3/A4 Garment Jig For DTG Printer",
@@ -2704,8 +1301,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "uv-white-ink-500ml",
     "title": "Procolored White Ink for UV Printing 500ml",
@@ -2730,8 +1326,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "uvdtf-white-ink-500ml",
     "title": "Procolored White Ink for UV DTF Printing 500ml",
@@ -2756,8 +1351,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "uvdtf-ink-500ml",
     "title": "Procolored Ink for UV DTF Printer 500ml",
@@ -2782,8 +1376,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "nozzle-protection-liquid",
     "title": "Procolored Nozzle Protection Moisturizing Liquid / Printhead Cleaning Fluid 500ml",
@@ -2808,8 +1401,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": null
     }
-  }
-  ,
+  },
   {
     "id": "dtf-cleaner-ink",
     "title": "Procolored Ink Cleaner (DTF) DTF Cleaner Ink 500ml",
@@ -2834,8 +1426,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "cleaning-kits",
     "title": "Cleaning Kits",
@@ -2860,8 +1451,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": null
     }
-  }
-  ,
+  },
   {
     "id": "uv-cleaner-ink",
     "title": "Procolored Ink Cleaner (UV) UV Cleaner Ink 500ml",
@@ -2886,8 +1476,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "adhesion-promoter",
     "title": "Procolored Ink Adhesion Promoter UV/DTG Pretreatment Liquid 500ml",
@@ -2912,8 +1501,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": null
     }
-  }
-  ,
+  },
   {
     "id": "uv-varnish-ink",
     "title": "Procolored UV Varnish Ink 500ml",
@@ -2938,8 +1526,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "uv-printer-ink-500ml",
     "title": "Procolored Ink for UV Printer 500ml",
@@ -2964,8 +1551,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-gilt-veil-transfer-film",
     "title": "Procolored DTF Gilt Veil Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer",
@@ -2989,8 +1575,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-chameleon-transfer-film",
     "title": "Procolored DTF Chameleon Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer",
@@ -3014,8 +1599,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-luminous-transfer-film",
     "title": "Procolored DTF Luminous Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer",
@@ -3039,8 +1623,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-glitter-transfer-film",
     "title": "Procolored DTF Glitter Transfer Roll Film 11.8 Inch x 328 FT——fit for A3 DTF Printer",
@@ -3064,8 +1647,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "uvdtf-hot-stamping-sliver-film",
     "title": "Procolored UV DTF Transfer Hot Stamping Sliver Film——fit for A3 UV DTF Printer",
@@ -3089,8 +1671,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-pretreat-transfer-film",
     "title": "Procolored DTF PreTreat Transfer Roll Film 13 Inch x 328 FT——fit for A3 DTF Printer",
@@ -3114,8 +1695,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-pretreat-roll-13inch",
     "title": "Procolored DTF PreTreat Transfer Roll Film 13 Inch x 328 FT——fit for A3 DTF Printer",
@@ -3139,8 +1719,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-pretreat-sheet-a4",
     "title": "Procolored DTF PreTreat Transfer Sheet Film——fit for A4 DTF Printer",
@@ -3164,8 +1743,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "uvdtf-hot-stamping-gold-film",
     "title": "Procolored UV DTF Transfer Hot Stamping Gold Film——fit for A3 UV DTF Printer",
@@ -3189,8 +1767,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "uvdtf-clear-ab-film",
     "title": "Procolored UV DTF Transfer Clear AB Film - fit for A3 UV DTF Printer",
@@ -3214,8 +1791,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-pretreat-roll-8inch",
     "title": "Procolored DTF PreTreat Transfer Roll Film 8.2 Inch x 328 FT——fit for A4 DTF Printer",
@@ -3239,8 +1815,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-pretreat-sheet-a3",
     "title": "Procolored DTF PreTreat Transfer Sheet Film——fit for A3 DTF Printer",
@@ -3264,8 +1839,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "transfer-ab-film-uv-laminator",
     "title": "Procolored Transfer AB Film - Only for UV Laminator",
@@ -3289,8 +1863,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "UV DTF Consumables"
     }
-  }
-  ,
+  },
   {
     "id": "dtf-cooling-block",
     "title": "Procolored DTF Cooling Block",
@@ -3314,8 +1887,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printhead-moisturizing-device",
     "title": "Procolored Printer Protective For Printhead Moisturizing Device",
@@ -3339,8 +1911,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printer-ink-carriage-dtf",
     "title": "Procolored Printer Ink Carriage for DTF Printer",
@@ -3364,8 +1935,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "ink-sac-tubes-dtf",
     "title": "Procolored Printer 6*120cm Ink Sac Tubes With Cartridges—Fit For DTF Printer",
@@ -3389,8 +1959,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "usb-dongle-rip",
     "title": "USB Dongle for Procolored RIP V2.3 or later",
@@ -3414,8 +1983,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printer-motherboard",
     "title": "Procolored Printer Motherboard",
@@ -3439,8 +2007,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printer-cartridges-12pcs",
     "title": "Procolored Printer Cartridges(12PCS)",
@@ -3464,8 +2031,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "white-ink-circulation-pump",
     "title": "Procolored White Ink Circulation Pump/ Ink Waste Pump",
@@ -3489,8 +2055,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "original-print-head",
     "title": "Procolored Original Print Head Brand New 100%——fit for Procolored Printer",
@@ -3514,8 +2079,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "ink-sac-tubes-uv",
     "title": "Procolored Printer 6*120cm Ink Sac Tubes With Cartridges—Fit For UV Printer",
@@ -3539,8 +2103,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "remote-expert-service",
     "title": "Procolored Remote Expert Service",
@@ -3564,8 +2127,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "film-holder-13inch",
     "title": "Procolored Film Holder Fit For 13\\\" DTF Roll Film",
@@ -3589,8 +2151,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "oven-heating-plate",
     "title": "Procolored Oven Heating Plate - Fit For Procolored Oven",
@@ -3614,8 +2175,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "ink-waste-pump-oven",
     "title": "Procolored White Ink Circulation Pump/ Ink Waste Pump - Fit For Procolored Printer",
@@ -3639,8 +2199,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "oven-temperature-controller",
     "title": "Procolored Oven Temperature Controller - Fit For Procolored Oven",
@@ -3664,8 +2223,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "extended-warranty-service",
     "title": "Procolored Extended Warranty Service",
@@ -3689,8 +2247,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "power-socket-switch",
     "title": "Procolored Power Socket with Switch - Fit For Procolored Printer",
@@ -3714,8 +2271,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printer-ink-tank",
     "title": "Procolored Printer Ink Tank",
@@ -3739,8 +2295,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printer-ink-tank-agitator",
     "title": "Procolored Printer Ink Tank with Agitator",
@@ -3764,8 +2319,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printhead-capping-unit",
     "title": "Procolored Printhead Capping Unit - Fit For Procolored Printer",
@@ -3789,8 +2343,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "oven-exhaust-gas-filter",
     "title": "Procolored Oven Exhaust Gas Filter",
@@ -3814,8 +2367,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printer-control-board",
     "title": "Procolored Printer Control Board",
@@ -3839,8 +2391,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printer-power-board",
     "title": "Procolored Printer Power Board",
@@ -3864,8 +2415,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printhead-driver-board",
     "title": "Procolored Printhead Driver Board",
@@ -3889,8 +2439,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printer-startup-button-board",
     "title": "Procolored Printer Startup Button Board",
@@ -3914,8 +2463,7 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": "Parts & Accessories"
     }
-  }
-  ,
+  },
   {
     "id": "printer-switching-power-supply",
     "title": "Procolored Printer Switching Power Supply - L1800/R1390",

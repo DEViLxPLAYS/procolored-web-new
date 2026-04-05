@@ -75,6 +75,11 @@ import UVDTFClearABFilm from './pages/UVDTFClearABFilm';
 import DTFPreTreatRoll8Inch from './pages/DTFPreTreatRoll8Inch';
 import DTFPreTreatSheetA3 from './pages/DTFPreTreatSheetA3';
 import TransferABFilmUVLaminator from './pages/TransferABFilmUVLaminator';
+import DTFCoolingBlock from './pages/DTFCoolingBlock';
+import InkSacTubesDTF from './pages/InkSacTubesDTF';
+import USBDongleRIP from './pages/USBDongleRIP';
+import OriginalPrintHead from './pages/OriginalPrintHead';
+import InkSacTubesUV from './pages/InkSacTubesUV';
 import PrintheadMoisturizingDevice from './pages/PrintheadMoisturizingDevice';
 import PrinterInkCarriageDTF from './pages/PrinterInkCarriageDTF';
 import PrinterMotherboard from './pages/PrinterMotherboard';
@@ -214,6 +219,11 @@ function App() {
               <Route path="products/dtf-pretreat-roll-8inch" element={<DTFPreTreatRoll8Inch />} />
               <Route path="products/dtf-pretreat-sheet-a3" element={<DTFPreTreatSheetA3 />} />
               <Route path="products/transfer-ab-film-uv-laminator" element={<TransferABFilmUVLaminator />} />
+              <Route path="products/dtf-cooling-block" element={<DTFCoolingBlock />} />
+              <Route path="products/ink-sac-tubes-dtf" element={<InkSacTubesDTF />} />
+              <Route path="products/usb-dongle-rip" element={<USBDongleRIP />} />
+              <Route path="products/original-print-head" element={<OriginalPrintHead />} />
+              <Route path="products/ink-sac-tubes-uv" element={<InkSacTubesUV />} />
 
               <Route path="products/printhead-moisturizing-device" element={<PrintheadMoisturizingDevice />} />
               <Route path="products/printer-ink-carriage-dtf" element={<PrinterInkCarriageDTF />} />
