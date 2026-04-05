@@ -68,6 +68,11 @@ import DTFLuminousTransferFilm from './pages/DTFLuminousTransferFilm';
 import DTFGlitterTransferFilm from './pages/DTFGlitterTransferFilm';
 import UVDTFHotStampingSliverFilm from './pages/UVDTFHotStampingSliverFilm';
 import DTFPreTreatTransferFilm from './pages/DTFPreTreatTransferFilm';
+import DTFPreTreatRoll13Inch from './pages/DTFPreTreatRoll13Inch';
+import DTFPreTreatSheetA4 from './pages/DTFPreTreatSheetA4';
+import UVDTFHotStampingGoldFilm from './pages/UVDTFHotStampingGoldFilm';
+import UVDTFClearABFilm from './pages/UVDTFClearABFilm';
+import DTFPreTreatRoll8Inch from './pages/DTFPreTreatRoll8Inch';
 
 import NewsletterPopup from './components/NewsletterPopup';
 import AdminDashboard from './pages/AdminDashboard';
@@ -179,6 +184,11 @@ function App() {
               <Route path="products/dtf-glitter-transfer-film" element={<DTFGlitterTransferFilm />} />
               <Route path="products/uvdtf-hot-stamping-sliver-film" element={<UVDTFHotStampingSliverFilm />} />
               <Route path="products/dtf-pretreat-transfer-film" element={<DTFPreTreatTransferFilm />} />
+              <Route path="products/dtf-pretreat-roll-13inch" element={<DTFPreTreatRoll13Inch />} />
+              <Route path="products/dtf-pretreat-sheet-a4" element={<DTFPreTreatSheetA4 />} />
+              <Route path="products/uvdtf-hot-stamping-gold-film" element={<UVDTFHotStampingGoldFilm />} />
+              <Route path="products/uvdtf-clear-ab-film" element={<UVDTFClearABFilm />} />
+              <Route path="products/dtf-pretreat-roll-8inch" element={<DTFPreTreatRoll8Inch />} />
               <Route path="uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}

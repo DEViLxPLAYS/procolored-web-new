@@ -3115,4 +3115,129 @@ export const products: Product[] = [
       "consumablesCategory": "DTF Consumables"
     }
   }
+  ,
+  {
+    "id": "dtf-pretreat-roll-13inch",
+    "title": "Procolored DTF PreTreat Transfer Roll Film 13 Inch x 328 FT——fit for A3 DTF Printer",
+    "price": "$169.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/DTF_PreTreat_Transfer_Roll_Film_1220x_crop_center.jpg?v=1765965179",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-pretreat-roll-13inch",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "dtf-pretreat-sheet-a4",
+    "title": "Procolored DTF PreTreat Transfer Sheet Film——fit for A4 DTF Printer",
+    "price": "$69.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/2__1_6_1220x_crop_center.png?v=1745910963",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-pretreat-sheet-a4",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "uvdtf-hot-stamping-gold-film",
+    "title": "Procolored UV DTF Transfer Hot Stamping Gold Film——fit for A3 UV DTF Printer",
+    "price": "$199.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/Consumables-25_1220x_crop_center.png?v=1755765423",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/uvdtf-hot-stamping-gold-film",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "UV DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "uvdtf-clear-ab-film",
+    "title": "Procolored UV DTF Transfer Clear AB Film - fit for A3 UV DTF Printer",
+    "price": "$159.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/2__1_10_1220x_crop_center.png?v=1755765443",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/uvdtf-clear-ab-film",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "UV DTF Consumables"
+    }
+  }
+  ,
+  {
+    "id": "dtf-pretreat-roll-8inch",
+    "title": "Procolored DTF PreTreat Transfer Roll Film 8.2 Inch x 328 FT——fit for A4 DTF Printer",
+    "price": "$89.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/4__1_7_1220x_crop_center.png?v=1743061653",
+    "badge": null,
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/dtf-pretreat-roll-8inch",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Film",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  }
 ];
