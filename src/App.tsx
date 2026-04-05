@@ -75,16 +75,11 @@ import UVDTFClearABFilm from './pages/UVDTFClearABFilm';
 import DTFPreTreatRoll8Inch from './pages/DTFPreTreatRoll8Inch';
 import DTFPreTreatSheetA3 from './pages/DTFPreTreatSheetA3';
 import TransferABFilmUVLaminator from './pages/TransferABFilmUVLaminator';
-import DTFCoolingBlock from './pages/DTFCoolingBlock';
 import PrintheadMoisturizingDevice from './pages/PrintheadMoisturizingDevice';
 import PrinterInkCarriageDTF from './pages/PrinterInkCarriageDTF';
-import InkSacTubesDTF from './pages/InkSacTubesDTF';
-import USBDongleRIP from './pages/USBDongleRIP';
 import PrinterMotherboard from './pages/PrinterMotherboard';
 import PrinterCartridges12PCS from './pages/PrinterCartridges12PCS';
 import WhiteInkCirculationPump from './pages/WhiteInkCirculationPump';
-import OriginalPrintHead from './pages/OriginalPrintHead';
-import InkSacTubesUV from './pages/InkSacTubesUV';
 import RemoteExpertService from './pages/RemoteExpertService';
 import FilmHolder13Inch from './pages/FilmHolder13Inch';
 import OvenHeatingPlate from './pages/OvenHeatingPlate';
@@ -219,16 +214,14 @@ function App() {
               <Route path="products/dtf-pretreat-roll-8inch" element={<DTFPreTreatRoll8Inch />} />
               <Route path="products/dtf-pretreat-sheet-a3" element={<DTFPreTreatSheetA3 />} />
               <Route path="products/transfer-ab-film-uv-laminator" element={<TransferABFilmUVLaminator />} />
-              <Route path="products/dtf-cooling-block" element={<DTFCoolingBlock />} />
+
               <Route path="products/printhead-moisturizing-device" element={<PrintheadMoisturizingDevice />} />
               <Route path="products/printer-ink-carriage-dtf" element={<PrinterInkCarriageDTF />} />
-              <Route path="products/ink-sac-tubes-dtf" element={<InkSacTubesDTF />} />
-              <Route path="products/usb-dongle-rip" element={<USBDongleRIP />} />
+
               <Route path="products/printer-motherboard" element={<PrinterMotherboard />} />
               <Route path="products/printer-cartridges-12pcs" element={<PrinterCartridges12PCS />} />
               <Route path="products/white-ink-circulation-pump" element={<WhiteInkCirculationPump />} />
-              <Route path="products/original-print-head" element={<OriginalPrintHead />} />
-              <Route path="products/ink-sac-tubes-uv" element={<InkSacTubesUV />} />
+
               <Route path="products/remote-expert-service" element={<RemoteExpertService />} />
               <Route path="products/film-holder-13inch" element={<FilmHolder13Inch />} />
               <Route path="products/oven-heating-plate" element={<OvenHeatingPlate />} />
