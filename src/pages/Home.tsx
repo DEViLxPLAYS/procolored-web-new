@@ -24,9 +24,8 @@ const craftItemsRow2 = [
 ];
 
 const heroSlides = [
-  { id: 1, image: "https://www.procolored.com/cdn/shop/files/20251001-144253_3840x_crop_center.png?v=1759301061" },
-  { id: 2, image: "https://www.procolored.com/cdn/shop/files/repair_1920x_crop_center.jpg?v=1757399187" },
   { id: 3, image: "https://www.procolored.com/cdn/shop/files/PC_US_Xone_KV_20260309_3840x_crop_center.jpg?v=1773027295" },
+  { id: 2, image: "https://www.procolored.com/cdn/shop/files/repair_1920x_crop_center.jpg?v=1757399187" },
   { id: 4, image: "https://www.procolored.com/cdn/shop/files/20260121-183157_3840x_crop_center.jpg?v=1768991545" },
   { id: 5, image: "https://www.procolored.com/cdn/shop/files/KV-pc-_1_3840x_crop_center.jpg?v=1759250520" },
   { id: 6, image: "https://www.procolored.com/cdn/shop/files/KV-_-PC_3840x_crop_center.jpg?v=1773632505" },
