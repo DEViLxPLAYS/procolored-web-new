@@ -1,0 +1,7 @@
+INSERT INTO payment_gateway_keys (gateway, key_name, encrypted_value, iv, is_active) VALUES
+('paypal', 'paypal_live_client_id', 'eb9fefc269b84daf785cafc270ef8423e6ad69c9755fcaf47f3836c54f150c02c6dec1b2a25a3160a93fb0bfbb99e8f156fe5524c76d279dd59498f12455e61fd225dc655d1a53caaeddebe5ecea02e2cdbba536a43fc2681ef2ba4626fec33b', 'd8af63fa90488b3463eef6f6c647b446', true),
+('paypal', 'paypal_live_secret_key', '75ae837be9ca4d464442afdf1981743bfeed6433f9dd267f9d56b02df8a61e617179df412e285ffb294cba95c1b109e6a80c95a19c7a275def4fdffdcd4e8bd7447f309cbcf917e679dfb7afd4dda168344c3b416ea248ab8570224832dfecbe', '906a79bc3ccc1666556e57280963a2ca', true),
+('paypal', 'paypal_mode', '180c4a03b467d4e39cd4d474b0d90838', 'de051e614a41fd3300f7ad0e8b88766e', true),
+('stripe', 'stripe_live_client_id', '074ab702540d08006144619fabdc3d89b1fe18d7b902e5f5a5c84a09a6598e87a756235d1bbfe58c89b8d58b290f5f1f2821a8e3a0e7a7e7f76b869cabb0fe33d32b66f0681a090bb99cf42e47bf8b69a73c8027a7692c84b5eb79927cfb16c3258e587adb8bc24019d5d4740bb7bb49', 'f5fa485503336bc6a82de73d38d33535', true),
+('stripe', 'stripe_live_secret_key', 'e5a4712e71f42dbbe0f78686c686e485481e06690ba579fad24a721a3f9163d00502e277826701aaf8818d0dd6a332c624c02ab436aff1cca4633eb4daf16091c2e56049c435d7bf4b2228220edace45366e4e5f78e6f97455e0fd6b639cbc6614220744c5bb86ac1cd0b91135b2ed68', 'bd5f9bf0e99240fc90b04d1aef106c32', true),
+('stripe', 'stripe_mode', '48c2895b2d932c634ea930692dcab4df', 'e9afa051016c82c6fb24b0c2eea27f46', true);
