@@ -101,6 +101,12 @@ import PrinterPowerBoard from './pages/PrinterPowerBoard';
 import PrintheadDriverBoard from './pages/PrintheadDriverBoard';
 import PrinterStartupButtonBoard from './pages/PrinterStartupButtonBoard';
 import PrinterSwitchingPowerSupply from './pages/PrinterSwitchingPowerSupply';
+import F13MultifunctionalBoard from './pages/F13MultifunctionalBoard';
+import PrinterLeaseF8WithOven from './pages/PrinterLeaseF8WithOven';
+import DepositF8WithOven from './pages/DepositF8WithOven';
+import PrinterLeaseF8NoOven from './pages/PrinterLeaseF8NoOven';
+import DepositF8NoOven from './pages/DepositF8NoOven';
+import PandaDoll from './pages/PandaDoll';
 
 import NewsletterPopup from './components/NewsletterPopup';
 import AdminDashboard from './pages/AdminDashboard';
@@ -248,6 +254,12 @@ function App() {
               <Route path="products/printhead-driver-board" element={<PrintheadDriverBoard />} />
               <Route path="products/printer-startup-button-board" element={<PrinterStartupButtonBoard />} />
               <Route path="products/printer-switching-power-supply" element={<PrinterSwitchingPowerSupply />} />
+              <Route path="products/f13-multifunctional-board" element={<F13MultifunctionalBoard />} />
+              <Route path="products/printer-lease-f8-with-oven" element={<PrinterLeaseF8WithOven />} />
+              <Route path="products/deposit-f8-with-oven" element={<DepositF8WithOven />} />
+              <Route path="products/printer-lease-f8-no-oven" element={<PrinterLeaseF8NoOven />} />
+              <Route path="products/deposit-f8-no-oven" element={<DepositF8NoOven />} />
+              <Route path="products/panda-doll" element={<PandaDoll />} />
               <Route path="uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}
