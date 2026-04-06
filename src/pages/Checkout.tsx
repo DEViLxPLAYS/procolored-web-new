@@ -76,12 +76,15 @@ function StripeCardForm({
   const CARD_STYLE = {
     style: {
       base: {
-        fontSize: '15px',
-        color: '#1a1a1a',
+        fontSize: '16px',
+        color: '#1f2937', // gray-800
         fontFamily: 'Inter, system-ui, sans-serif',
-        '::placeholder': { color: '#9ca3af' },
+        fontSmoothing: 'antialiased',
+        iconColor: '#6366F1',
+        '::placeholder': { color: '#9ca3af' }, // gray-400
       },
-      invalid: { color: '#ef4444' },
+      invalid: { color: '#ef4444', iconColor: '#ef4444' },
+      complete: { color: '#10b981', iconColor: '#10b981' },
     },
   };
 
@@ -125,9 +128,29 @@ function StripeCardForm({
 
   return (
     <form onSubmit={handlePay}>
-      <div className="border border-gray-200 rounded-xl p-5 bg-white mb-4">
-        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Card Details</label>
-        <CardElement options={CARD_STYLE} />
+      <div className="mb-6">
+        <label className="flex items-center gap-2 text-[13px] font-bold text-gray-800 uppercase tracking-widest mb-3">
+          <CreditCard className="w-5 h-5 text-gray-500" />
+          Debit or Credit Card
+        </label>
+        
+        {/* Premium Input Container */}
+        <div className="border border-gray-300 hover:border-gray-400 focus-within:border-[#6366F1] focus-within:ring-2 focus-within:ring-[#6366F1]/20 rounded-xl bg-white p-4 shadow-sm transition-all duration-200">
+          <CardElement options={CARD_STYLE} />
+        </div>
+        
+        {/* Trust Badges */}
+        <div className="flex items-center justify-between mt-3 px-1">
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-gray-500 font-medium">Secured by</span>
+            <span className="text-[#6366F1] font-bold text-xs tracking-wider">stripe</span>
+          </div>
+          <div className="flex gap-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" className="h-3 object-contain grayscale opacity-60" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-4 object-contain grayscale opacity-60" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="Amex" className="h-4 object-contain grayscale opacity-60" />
+          </div>
+        </div>
       </div>
       {cardError && (
         <div className="p-3 bg-red-50 text-red-600 border border-red-200 rounded-lg text-sm mb-4">{cardError}</div>
@@ -149,7 +172,7 @@ function StripeCardForm({
           </>
         )}
       </button>
-      <p className="text-xs text-gray-400 text-center mt-3">🔒 Secured by Stripe</p>
+      <p className="text-[11px] text-gray-400 text-center mt-4">Your payment information is encrypted and secure.</p>
     </form>
   );
 }
