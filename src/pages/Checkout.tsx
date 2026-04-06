@@ -221,9 +221,6 @@ export default function Checkout() {
   useEffect(() => { latestCityRef.current = city; }, [city]);
   useEffect(() => { latestCountryRef.current = country; }, [country]);
 
-  const discountAmount = discountApplied ? cartSubtotal * 0.05 : 0;
-  const shippingCost = 0;
-  const total = cartSubtotal - discountAmount + shippingCost;
 
   // ── Abandonment tracker ───────────────────────────────────
   const fireAbandonment = (step = 'checkout', force = false) => {
