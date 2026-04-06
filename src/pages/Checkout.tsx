@@ -9,6 +9,10 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
+// ── Payment credentials (public keys only — safe in frontend) ──
+const PAYPAL_CLIENT_ID = 'AQX-QhTz6DnccxrHN5xtX1gnuB85hqNWDtDrd_DVxSQGkMyNUnA7su9qOsBvKg8FW0LKcjIrv99VpQN4';
+const STRIPE_PK = 'pk_live_51TCQKWIXB0IPPK5N9scYtqgos5k2N7etZtTPgP5lO9cBVa4xA34KrqnzkVRPdwWAMuzv3gcuRJh7isn5JpUtY3kF00WCs32dcA';
+
 
 function getSessionId(): string {
   let id = localStorage.getItem('procolored_session');
@@ -179,19 +183,20 @@ export default function Checkout() {
   const [paymentTab, setPaymentTab] = useState<'paypal' | 'stripe'>('paypal');
 
   useEffect(() => {
+    // Try backend first, fall back to hardcoded public keys instantly
     fetch(`${API_BASE}/api/paypal/config`)
       .then(res => res.json())
       .then(data => {
-        if (data && data.clientId) setPaypalClientId(data.clientId);
+        setPaypalClientId((data && data.clientId) ? data.clientId : PAYPAL_CLIENT_ID);
       })
-      .catch(() => setPaypalError("PayPal gateway currently unavailable."));
+      .catch(() => setPaypalClientId(PAYPAL_CLIENT_ID));
 
     fetch(`${API_BASE}/api/stripe/config`)
       .then(res => res.json())
       .then(data => {
-        if (data && data.publishableKey) setStripePublishableKey(data.publishableKey);
+        setStripePublishableKey((data && data.publishableKey) ? data.publishableKey : STRIPE_PK);
       })
-      .catch(() => setStripeError("Stripe gateway currently unavailable."));
+      .catch(() => setStripePublishableKey(STRIPE_PK));
   }, []);
 
   const emailRef = useRef<HTMLInputElement>(null);
