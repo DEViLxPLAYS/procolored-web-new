@@ -512,7 +512,7 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
         <h3 style={{ fontSize: 16, fontWeight: 700, color: C.text, display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 20 }}>{icon}</span> {name}
         </h3>
-        <button onClick={() => { setGatewayFilter(name.toLowerCase()); setModal('add'); }} style={{ background: color, color: '#fff', border: 'none', borderRadius: 6, padding: '6px 14px', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>
+        <button onClick={() => { setGatewayFilter(name.toLowerCase()); setKeyName(name.toLowerCase() === 'stripe' ? 'stripe_test_client_id' : 'paypal_sandbox_client_id'); setModal('add'); }} style={{ background: color, color: '#fff', border: 'none', borderRadius: 6, padding: '6px 14px', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>
           + Add Key
         </button>
       </div>
@@ -580,16 +580,26 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
                   </>
                 ) : (
                   <>
-                    <option value="publishable_key">Publishable Key</option>
-                    <option value="secret_key">Secret Key</option>
-                    <option value="webhook_secret">Webhook Secret</option>
+                    <option value="stripe_test_client_id">Test Client ID (Publishable Key)</option>
+                    <option value="stripe_test_secret_key">Test Secret Key</option>
+                    <option value="stripe_live_client_id">Live Client ID (Publishable Key)</option>
+                    <option value="stripe_live_secret_key">Live Secret Key</option>
+                    <option value="stripe_webhook_secret">Webhook Secret</option>
+                    <option value="stripe_mode">Active Mode ('test' or 'live')</option>
                   </>
                 )}
               </select>
             </div>
             <div>
               <label style={lbl}>Key Value</label>
-              <input type={keyName === 'paypal_mode' ? 'text' : 'password'} style={inp} value={keyValue} onChange={e => setKeyValue(e.target.value)} required placeholder={keyName === 'paypal_mode' ? '"sandbox" or "live"' : "key value..."} />
+              <input
+                type={(keyName === 'paypal_mode' || keyName === 'stripe_mode') ? 'text' : 'password'}
+                style={inp}
+                value={keyValue}
+                onChange={e => setKeyValue(e.target.value)}
+                required
+                placeholder={keyName === 'paypal_mode' ? '"sandbox" or "live"' : keyName === 'stripe_mode' ? '"test" or "live"' : "key value..."}
+              />
             </div>
             <div style={{ marginTop: 8, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
               <label style={lbl}>Your Admin Password <span style={{ color: C.muted, fontWeight: 400 }}>(to confirm)</span></label>
