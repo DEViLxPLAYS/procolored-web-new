@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { useCart } from '../context/CartContext';
 import { useCurrency, convertPrice } from '../context/CurrencyContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle, X } from 'lucide-react';
+import { CheckCircle, X, CreditCard } from 'lucide-react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -52,6 +54,102 @@ function OrderSuccessPopup({ orderNumber, onClose }: { orderNumber: string; onCl
   );
 }
 
+// ── Stripe Card Form ────────────────────────────────────────
+function StripeCardForm({
+  total, isSubmitting, setIsSubmitting, onSuccess, validateForm, apiBase
+}: {
+  total: number;
+  isSubmitting: boolean;
+  setIsSubmitting: (v: boolean) => void;
+  onSuccess: (txId: string) => void;
+  validateForm: () => boolean;
+  apiBase: string;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [cardError, setCardError] = useState('');
+
+  const CARD_STYLE = {
+    style: {
+      base: {
+        fontSize: '15px',
+        color: '#1a1a1a',
+        fontFamily: 'Inter, system-ui, sans-serif',
+        '::placeholder': { color: '#9ca3af' },
+      },
+      invalid: { color: '#ef4444' },
+    },
+  };
+
+  const handlePay = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    if (!stripe || !elements) return;
+    const card = elements.getElement(CardElement);
+    if (!card) return;
+
+    setIsSubmitting(true);
+    setCardError('');
+
+    try {
+      // 1. Create PaymentIntent on server
+      const res = await fetch(`${apiBase}/api/stripe/create-payment-intent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: Math.round(total * 100), currency: 'usd' }),
+      });
+      const { clientSecret, error: serverError } = await res.json();
+      if (serverError || !clientSecret) throw new Error(serverError || 'Failed to initialize payment');
+
+      // 2. Confirm card payment
+      const { paymentIntent, error: stripeErr } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: { card },
+      });
+
+      if (stripeErr) throw new Error(stripeErr.message || 'Card payment failed');
+      if (paymentIntent?.status === 'succeeded') {
+        await onSuccess(paymentIntent.id);
+      } else {
+        throw new Error('Payment not completed. Please try again.');
+      }
+    } catch (err: any) {
+      setCardError(err.message || 'Payment failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handlePay}>
+      <div className="border border-gray-200 rounded-xl p-5 bg-white mb-4">
+        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Card Details</label>
+        <CardElement options={CARD_STYLE} />
+      </div>
+      {cardError && (
+        <div className="p-3 bg-red-50 text-red-600 border border-red-200 rounded-lg text-sm mb-4">{cardError}</div>
+      )}
+      <button
+        type="submit"
+        disabled={isSubmitting || !stripe}
+        className="w-full bg-[#6366F1] hover:bg-[#4F46E5] text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+      >
+        {isSubmitting ? (
+          <>
+            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            Processing...
+          </>
+        ) : (
+          <>
+            <CreditCard className="w-4 h-4" />
+            Pay with Card
+          </>
+        )}
+      </button>
+      <p className="text-xs text-gray-400 text-center mt-3">🔒 Secured by Stripe</p>
+    </form>
+  );
+}
+
 export default function Checkout() {
   const { items, cartSubtotal, clearCart } = useCart();
   const navigate = useNavigate();
@@ -76,16 +174,24 @@ export default function Checkout() {
   
   const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
   const [paypalError, setPaypalError] = useState<string | null>(null);
+  const [stripePublishableKey, setStripePublishableKey] = useState<string | null>(null);
+  const [stripeError, setStripeError] = useState<string | null>(null);
+  const [paymentTab, setPaymentTab] = useState<'paypal' | 'stripe'>('paypal');
 
   useEffect(() => {
     fetch(`${API_BASE}/api/paypal/config`)
       .then(res => res.json())
       .then(data => {
-        if (data && data.clientId) {
-          setPaypalClientId(data.clientId);
-        }
+        if (data && data.clientId) setPaypalClientId(data.clientId);
       })
       .catch(() => setPaypalError("PayPal gateway currently unavailable."));
+
+    fetch(`${API_BASE}/api/stripe/config`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.publishableKey) setStripePublishableKey(data.publishableKey);
+      })
+      .catch(() => setStripeError("Stripe gateway currently unavailable."));
   }, []);
 
   const emailRef = useRef<HTMLInputElement>(null);
@@ -202,7 +308,7 @@ export default function Checkout() {
       currency: 'USD',
       country,
       city,
-      paymentMethod: transactionId ? 'PayPal' : 'Credit Card',
+      paymentMethod: transactionId ? (transactionId.startsWith('pi_') ? 'Stripe' : 'PayPal') : 'Credit Card',
       paymentStatus,
       transactionId: transactionId || null
     };
@@ -438,17 +544,42 @@ export default function Checkout() {
                       </div>
                     </section>
 
-                    {/* Payment */}
                     <section>
                       <h2 className="text-2xl font-semibold text-black mb-2">Secure Payment</h2>
-                      <p className="text-sm text-gray-500 mb-8">All transactions are secure and encrypted via PayPal.</p>
-                      
-                      {paypalError ? (
-                        <div className="p-4 bg-red-50 text-red-600 border border-red-200 rounded-xl mb-6">
-                          {paypalError}
-                        </div>
-                      ) : paypalClientId ? (
-                        <div className="relative z-0 min-h-[150px]">
+                      <p className="text-sm text-gray-500 mb-6">All transactions are secure and encrypted.</p>
+
+                      {/* Payment Method Tabs */}
+                      <div className="flex gap-0 mb-6 border border-gray-200 rounded-xl overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={() => setPaymentTab('paypal')}
+                          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold transition-all ${
+                            paymentTab === 'paypal'
+                              ? 'bg-[#0079C1] text-white'
+                              : 'bg-white text-gray-500 hover:bg-gray-50'
+                          }`}
+                        >
+                          <span className="text-base">🅿️</span> PayPal
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPaymentTab('stripe')}
+                          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold transition-all ${
+                            paymentTab === 'stripe'
+                              ? 'bg-[#6366F1] text-white'
+                              : 'bg-white text-gray-500 hover:bg-gray-50'
+                          }`}
+                        >
+                          <CreditCard className="w-4 h-4" /> Credit / Debit Card
+                        </button>
+                      </div>
+
+                      {/* PayPal Panel */}
+                      {paymentTab === 'paypal' && (
+                        paypalError ? (
+                          <div className="p-4 bg-red-50 text-red-600 border border-red-200 rounded-xl mb-6">{paypalError}</div>
+                        ) : paypalClientId ? (
+                          <div className="relative z-0 min-h-[150px]">
                             {isSubmitting && (
                               <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] z-10 flex items-center justify-center rounded-xl border border-gray-100">
                                 <span className="flex items-center justify-center gap-2 font-bold text-gray-700">
@@ -458,20 +589,50 @@ export default function Checkout() {
                               </div>
                             )}
                             <PayPalScriptProvider options={{ clientId: paypalClientId, components: 'buttons', currency: 'USD' }}>
-                                <PayPalButtons 
-                                  createOrder={createPaypalOrder}
-                                  onApprove={onPaypalApprove}
-                                  onCancel={onPaypalCancel}
-                                  onError={onPaypalError}
-                                  style={{ layout: "vertical", shape: "rect", color: "gold" }}
-                                />
+                              <PayPalButtons
+                                createOrder={createPaypalOrder}
+                                onApprove={onPaypalApprove}
+                                onCancel={onPaypalCancel}
+                                onError={onPaypalError}
+                                style={{ layout: "vertical", shape: "rect", color: "gold" }}
+                              />
                             </PayPalScriptProvider>
-                        </div>
-                      ) : (
-                        <div className="p-10 border border-gray-200 bg-gray-50 rounded-xl flex items-center justify-center flex-col gap-3">
-                          <span className="w-6 h-6 border-2 border-gray-300 border-t-[#0079C1] rounded-full animate-spin"></span>
-                          <span className="text-sm font-semibold text-gray-600">Initializing Secure Gateway...</span>
-                        </div>
+                          </div>
+                        ) : (
+                          <div className="p-10 border border-gray-200 bg-gray-50 rounded-xl flex items-center justify-center flex-col gap-3">
+                            <span className="w-6 h-6 border-2 border-gray-300 border-t-[#0079C1] rounded-full animate-spin"></span>
+                            <span className="text-sm font-semibold text-gray-600">Initializing PayPal...</span>
+                          </div>
+                        )
+                      )}
+
+                      {/* Stripe Panel */}
+                      {paymentTab === 'stripe' && (
+                        stripeError ? (
+                          <div className="p-4 bg-red-50 text-red-600 border border-red-200 rounded-xl mb-6">{stripeError}</div>
+                        ) : stripePublishableKey ? (
+                          <Elements stripe={loadStripe(stripePublishableKey)}>
+                            <StripeCardForm
+                              total={total}
+                              isSubmitting={isSubmitting}
+                              setIsSubmitting={setIsSubmitting}
+                              onSuccess={(txId) => handleSubmit(undefined, txId, 'paid')}
+                              validateForm={() => {
+                                if (!email || !firstName || !lastName || !address || !city || !postal) {
+                                  alert("Please fill out all required contact and delivery information before proceeding to payment.");
+                                  return false;
+                                }
+                                return true;
+                              }}
+                              apiBase={API_BASE}
+                            />
+                          </Elements>
+                        ) : (
+                          <div className="p-10 border border-gray-200 bg-gray-50 rounded-xl flex items-center justify-center flex-col gap-3">
+                            <span className="w-6 h-6 border-2 border-gray-300 border-t-[#6366F1] rounded-full animate-spin"></span>
+                            <span className="text-sm font-semibold text-gray-600">Initializing Stripe...</span>
+                          </div>
+                        )
                       )}
                     </section>
                   </div>
