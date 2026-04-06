@@ -136,6 +136,7 @@ const mediaReviews = [
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [prevSlide, setPrevSlide] = useState<number | null>(null);
   const [activeCategoryTab, setActiveCategoryTab] = useState("factory");
   const [productScrollPosition, setProductScrollPosition] = useState(0);
   const [reviewIndex, setReviewIndex] = useState(0);
@@ -143,15 +144,21 @@ export default function Home() {
   
   const navigate = useNavigate();
 
+  const goToSlide = (index: number) => {
+    setPrevSlide(currentSlide);
+    setCurrentSlide(index);
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+      goToSlide((currentSlide + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSlide]);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  const nextSlide = () => goToSlide((currentSlide + 1) % heroSlides.length);
+  const prevSlideNav = () => goToSlide((currentSlide - 1 + heroSlides.length) % heroSlides.length);
 
   const scrollProducts = (direction: 'left' | 'right') => {
     const container = document.getElementById('products-container');
@@ -167,36 +174,52 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative w-full overflow-hidden flex-none bg-[#f4f4f4]">
-        {/* Invisible dummy image ensures the section perfectly matches the aspect ratio, with a minimum height to ensure it's comfortably large on mobile/tablet */}
-        <img src={heroSlides[0].image} alt="Dummy for ratio" className="w-full h-auto opacity-0 min-h-[260px] sm:min-h-[350px] md:min-h-[450px] lg:min-h-0 object-cover" aria-hidden="true" />
+      {/* Preload all slide images to prevent white flash */}
+      {heroSlides.map(slide => (
+        <link key={slide.id} rel="preload" as="image" href={slide.image} />
+      ))}
+
+      <section className="relative w-full overflow-hidden flex-none bg-black">
+        {/* Invisible dummy image preserves the aspect ratio */}
+        <img src={heroSlides[0].image} alt="" className="w-full h-auto opacity-0 min-h-[260px] sm:min-h-[350px] md:min-h-[450px] lg:min-h-0 object-cover" aria-hidden="true" />
         
-        {heroSlides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
-          >
-            <img 
-              src={slide.image} 
-              alt={`Slide ${slide.id}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ))}
+        {heroSlides.map((slide, index) => {
+          const isCurrent = index === currentSlide;
+          const isPrev = index === prevSlide;
+          return (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
+                isCurrent
+                  ? 'opacity-100 z-20'
+                  : isPrev
+                    ? 'opacity-100 z-10'
+                    : 'opacity-0 z-0 pointer-events-none'
+              }`}
+            >
+              <img 
+                src={slide.image} 
+                alt={`Slide ${slide.id}`}
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
+            </div>
+          );
+        })}
         
-        <button onClick={prevSlide} className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 md:w-12 md:h-12 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-[0_4px_30px_rgba(0,0,0,0.1)] border border-white/20 hover:scale-105 active:scale-95 group">
+        <button onClick={prevSlideNav} className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 md:w-12 md:h-12 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-[0_4px_30px_rgba(0,0,0,0.1)] border border-white/20 hover:scale-105 active:scale-95 group">
           <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:-translate-x-0.5 transition-transform" />
         </button>
         <button onClick={nextSlide} className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 md:w-12 md:h-12 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-[0_4px_30px_rgba(0,0,0,0.1)] border border-white/20 hover:scale-105 active:scale-95 group">
           <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:translate-x-0.5 transition-transform" />
         </button>
         
-        {/* Stylish dot indicators */}
+        {/* Dot indicators */}
         <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2.5 items-center justify-center bg-black/10 backdrop-blur-md px-3 py-1.5 rounded-full">
           {heroSlides.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentSlide(index)}
+              onClick={() => goToSlide(index)}
               className={`h-1.5 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-white w-5 md:w-6' : 'bg-white/50 w-1.5 md:w-2 hover:bg-white/70'}`}
               aria-label={`Go to slide ${index + 1}`}
             />
