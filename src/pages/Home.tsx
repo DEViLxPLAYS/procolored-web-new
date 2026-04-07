@@ -24,14 +24,14 @@ const craftItemsRow2 = [
 ];
 
 const heroSlides = [
-  { id: 3, image: "https://www.procolored.com/cdn/shop/files/PC_US_Xone_KV_20260309_3840x_crop_center.jpg?v=1773027295" },
-  { id: 2, image: "https://www.procolored.com/cdn/shop/files/repair_1920x_crop_center.jpg?v=1757399187" },
   { id: 4, image: "https://www.procolored.com/cdn/shop/files/20260121-183157_3840x_crop_center.jpg?v=1768991545" },
   { id: 5, image: "https://www.procolored.com/cdn/shop/files/KV-pc-_1_3840x_crop_center.jpg?v=1759250520" },
+  { id: 9, image: "https://www.procolored.com/cdn/shop/files/Procolored_DTF_Rental_2026_1_1920x_crop_center.jpg?v=1770345455" },
+  { id: 3, image: "https://www.procolored.com/cdn/shop/files/PC_US_Xone_KV_20260309_3840x_crop_center.jpg?v=1773027295" },
+  { id: 2, image: "https://www.procolored.com/cdn/shop/files/repair_1920x_crop_center.jpg?v=1757399187" },
   { id: 6, image: "https://www.procolored.com/cdn/shop/files/KV-_-PC_3840x_crop_center.jpg?v=1773632505" },
   { id: 7, image: "https://www.procolored.com/cdn/shop/files/20260319-162122_3840x_crop_center.jpg?v=1773908636" },
-  { id: 8, image: "https://www.procolored.com/cdn/shop/files/Procolored_Showroom_Start_Up_1_3840x_crop_center.jpg?v=1772422574" },
-  { id: 9, image: "https://www.procolored.com/cdn/shop/files/Procolored_DTF_Rental_2026_1_1920x_crop_center.jpg?v=1770345455" }
+  { id: 8, image: "https://www.procolored.com/cdn/shop/files/Procolored_Showroom_Start_Up_1_3840x_crop_center.jpg?v=1772422574" }
 ];
 
 const stats = [
@@ -82,20 +82,20 @@ const popularProducts = [
     priceUSD: 4101, originalPriceUSD: 4716,
     image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950",
     badge: "NEW ARRIVAL", badgeColor: "bg-green-500",
-    link: "/products/19"
+    link: "/p13-dtf-printer"
   }
 ];
 
 const categoryTabs = [
   { id: "factory", label: "Small-scale Factory", products: [
     { id: "11", name: "Procolored F13 Pro", subtitle: "Perfect for Growing Businesses", image: "https://www.procolored.com/cdn/shop/files/1_51f5ec44-cce2-4464-a9ca-4ac0786e79ec_1220x_crop_center.jpg?v=1773742870", priceUSD: 4799, learnMorePath: "/f13-pro" },
-    { id: "19", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950", priceUSD: 2199, learnMorePath: "/products/19" },
-    { id: "27", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379", priceUSD: 4999, learnMorePath: "/products/27" }
+    { id: "19", name: "Procolored P13", subtitle: "Stable Printing Speed", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950", priceUSD: 2199, learnMorePath: "/p13-dtf-printer" },
+    { id: "27", name: "Procolored VF13 Pro", subtitle: "Versatile Applications", image: "https://www.procolored.com/cdn/shop/files/VF13_pro_main.png?v=1747819379", priceUSD: 4999, learnMorePath: "/products/procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" }
   ]},
   { id: "personal", label: "Personal Studio", products: [
     { id: "procolored-k13-lite-dtf-printer-13-a3-white", name: "Procolored K13 Lite", subtitle: "User-friendly", image: "https://www.procolored.com/cdn/shop/files/K13_lite_white_10.png?v=1772447536", priceUSD: 1099, learnMorePath: "/products/procolored-k13-lite-dtf-printer-13-a3-white" },
     { id: "9", name: "Procolored F13", subtitle: "High-quality and Easy-to-use", image: "https://www.procolored.com/cdn/shop/files/Procolored_F13_Panda_DTF_Printer_1.png?v=1770090526", priceUSD: 2999, learnMorePath: "/f13" },
-    { id: "19", name: "Procolored P13", subtitle: "High-Performance Print Head", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950", priceUSD: 2199, learnMorePath: "/products/19" }
+    { id: "19", name: "Procolored P13", subtitle: "High-Performance Print Head", image: "https://www.procolored.com/cdn/shop/files/DTF_Printer_Main_4.png?v=1765787950", priceUSD: 2199, learnMorePath: "/p13-dtf-printer" }
   ]},
   { id: "hobbyist", label: "Hobbyist Use", products: [
     { id: "procolored-k13-lite-dtf-printer-13-a3-pink", name: "Procolored K13 Lite", subtitle: "Best Value Starter Printer", image: "https://www.procolored.com/cdn/shop/files/K13_lite_pink_10.png?v=1772447536", priceUSD: 1099, learnMorePath: "/products/procolored-k13-lite-dtf-printer-13-a3-pink" },
@@ -106,11 +106,11 @@ const categoryTabs = [
 
 const categoryItems = [
   { name: "DTF Printer", image: "/images/cat-uv-dtf.jpg", link: "/f13" },
-  { name: "UV DTF Printer", image: "/images/cat-uv.jpg", link: "/products/27" },
+  { name: "UV DTF Printer", image: "/images/cat-uv.jpg", link: "/products/procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" },
   { name: "K13 Lite", image: "/images/cat-dtg.jpg", link: "/k13-lite" },
   { name: "F13 Pro", image: "/images/cat-equipment.jpg", link: "/f13-pro" },
   { name: "Ink & Supplies", image: "/images/cat-consumables.jpg", link: "/products/47" },
-  { name: "P13 Printer", image: "/images/cat-parts.jpg", link: "/products/19" }
+  { name: "P13 Printer", image: "/images/cat-parts.jpg", link: "/p13-dtf-printer" }
 ];
 
 const testimonials = [
@@ -229,6 +229,61 @@ export default function Home() {
 
 
 
+      <section className="py-12 bg-white flex-none">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-black mb-8">Shop By Category</h2>
+          <div className="flex gap-4 mb-8 overflow-x-auto hide-scrollbar pb-1" style={{WebkitOverflowScrolling:'touch'}}>
+            {categoryTabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveCategoryTab(tab.id)}
+                className={`px-5 py-2 rounded text-sm font-medium transition-colors whitespace-nowrap ${
+                  activeCategoryTab === tab.id ? 'bg-black text-white rounded-sm' : 'text-black hover:text-[#E85A24]'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {categoryTabs.find(t => t.id === activeCategoryTab)?.products.map((product) => (
+              <div key={product.id} className="text-center">
+                <h3 className="font-bold text-lg mb-1 text-black">{product.name}</h3>
+                <p className="text-gray-600 text-sm mb-4 font-medium">{product.subtitle}</p>
+                <div className="bg-gray-50 rounded-lg p-6 mb-4">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-48 object-contain"
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x300/f3f4f6/9ca3af?text=' + encodeURIComponent(product.name); }}
+                  />
+                </div>
+                <div className="flex gap-3 justify-center">
+                   <Link 
+                     to={product.learnMorePath}
+                     className="flex-1 max-w-[120px] text-sm font-medium text-black hover:text-[#E85A24] transition-colors py-2"
+                   >
+                     Learn More
+                   </Link>
+                   <button 
+                     onClick={(e) => {
+                       e.stopPropagation();
+                       addToCart({ id: product.id, name: product.name, price: `$${product.priceUSD.toLocaleString()}.00 USD`, image: product.image, quantity: 1 });
+                     }}
+                     className="flex-1 max-w-[120px] bg-[#E85A24] hover:bg-[#d44e1e] text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-200"
+                   >
+                     Add to Cart
+                   </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-12 bg-gray-50 flex-none">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
@@ -295,61 +350,6 @@ export default function Home() {
             <button onClick={() => scrollProducts('right')} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors">
               <ChevronRight className="w-5 h-5" />
             </button>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 bg-white flex-none">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-black mb-8">Shop By Category</h2>
-          <div className="flex gap-4 mb-8 overflow-x-auto hide-scrollbar pb-1" style={{WebkitOverflowScrolling:'touch'}}>
-            {categoryTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveCategoryTab(tab.id)}
-                className={`px-5 py-2 rounded text-sm font-medium transition-colors whitespace-nowrap ${
-                  activeCategoryTab === tab.id ? 'bg-black text-white rounded-sm' : 'text-black hover:text-[#E85A24]'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {categoryTabs.find(t => t.id === activeCategoryTab)?.products.map((product) => (
-              <div key={product.id} className="text-center">
-                <h3 className="font-bold text-lg mb-1 text-black">{product.name}</h3>
-                <p className="text-gray-600 text-sm mb-4 font-medium">{product.subtitle}</p>
-                <div className="bg-gray-50 rounded-lg p-6 mb-4">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-48 object-contain"
-                    referrerPolicy="no-referrer"
-                    loading="lazy"
-                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x300/f3f4f6/9ca3af?text=' + encodeURIComponent(product.name); }}
-                  />
-                </div>
-                <div className="flex gap-3 justify-center">
-                   <Link 
-                     to={product.learnMorePath}
-                     className="flex-1 max-w-[120px] text-sm font-medium text-black hover:text-[#E85A24] transition-colors py-2"
-                   >
-                     Learn More
-                   </Link>
-                   <button 
-                     onClick={(e) => {
-                       e.stopPropagation();
-                       addToCart({ id: product.id, name: product.name, price: `$${product.priceUSD.toLocaleString()}.00 USD`, image: product.image, quantity: 1 });
-                     }}
-                     className="flex-1 max-w-[120px] bg-[#E85A24] hover:bg-[#d44e1e] text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-200"
-                   >
-                     Add to Cart
-                   </button>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>

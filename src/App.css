@@ -188,13 +188,13 @@ input:focus-visible {
 
 .marquee-row-1 {
   display: flex;
-  animation: marquee-left 40s linear infinite;
+  animation: marquee-left 25s linear infinite;
   width: fit-content;
 }
 
 .marquee-row-2 {
   display: flex;
-  animation: marquee-right 40s linear infinite;
+  animation: marquee-right 25s linear infinite;
   width: fit-content;
 }
 

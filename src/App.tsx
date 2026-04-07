@@ -156,6 +156,9 @@ function App() {
               <Route path="procolored-t11-pro-dtg-printer-11-8-a3-dual-tx800" element={<T11ProProduct />} />
               <Route path="products/procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" element={<VF13ProUVDTFProduct />} />
               <Route path="procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" element={<VF13ProUVDTFProduct />} />
+              {/* Redirects for old numeric product IDs */}
+              <Route path="products/27" element={<Navigate to="/products/procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" replace />} />
+              <Route path="products/19" element={<Navigate to="/p13-dtf-printer" replace />} />
               <Route path="products/procolored-v4-uv-printer-4-7-a5-l800" element={<V4UVPrinterA5 />} />
               <Route path="procolored-v4-uv-printer-4-7-a5-l800" element={<V4UVPrinterA5 />} />
               <Route path="products/procolored-v6-panda-uv-printer-6-7-a4-l800" element={<V6UVPrinterA4 />} />
