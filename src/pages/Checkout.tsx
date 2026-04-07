@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useCart } from '../context/CartContext';
 import { useCurrency, convertPrice } from '../context/CurrencyContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle, X, CreditCard, ChevronRight, Lock, ShieldCheck } from 'lucide-react';
+import { CheckCircle, X, CreditCard, Lock, ShieldCheck } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
@@ -46,10 +46,7 @@ function OrderSuccessPopup({ orderNumber, onClose }: { orderNumber: string; onCl
             <p className="text-lg font-bold text-[#E85A24] font-mono">{orderNumber}</p>
           </div>
           <p className="text-xs text-gray-400">A confirmation email will be sent shortly.</p>
-          <button
-            onClick={onClose}
-            className="w-full bg-[#E85A24] text-white font-bold py-3 rounded-xl hover:bg-[#d14b1b] transition-colors"
-          >
+          <button onClick={onClose} className="w-full bg-[#E85A24] text-white font-bold py-3 rounded-xl hover:bg-[#d14b1b] transition-colors">
             Continue Shopping
           </button>
         </div>
@@ -58,15 +55,17 @@ function OrderSuccessPopup({ orderNumber, onClose }: { orderNumber: string; onCl
   );
 }
 
-// ── Stripe Payment Form (rendered only after address step is complete) ───────
+// ── Stripe Payment Form ──────────────────────────────────────────────────────
 function StripePaymentForm({
   isSubmitting,
   setIsSubmitting,
   onSuccess,
+  validateForm,
 }: {
   isSubmitting: boolean;
   setIsSubmitting: (v: boolean) => void;
   onSuccess: (txId: string) => void;
+  validateForm: () => boolean;
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -74,6 +73,7 @@ function StripePaymentForm({
 
   const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
     if (!stripe || !elements) return;
 
     setIsSubmitting(true);
@@ -83,15 +83,10 @@ function StripePaymentForm({
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         redirect: 'if_required',
-        confirmParams: {
-          return_url: window.location.href,
-        },
+        confirmParams: { return_url: window.location.href },
       });
 
-      if (error) {
-        throw new Error(error.message || 'Payment failed. Please check your card details.');
-      }
-
+      if (error) throw new Error(error.message || 'Payment failed. Please check your card details.');
       if (paymentIntent && paymentIntent.status === 'succeeded') {
         onSuccess(paymentIntent.id);
       } else {
@@ -106,31 +101,33 @@ function StripePaymentForm({
 
   return (
     <form onSubmit={handlePay} className="space-y-5">
-      {/* Stripe Payment Element - renders card, Google Pay, Apple Pay etc. */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-        <div className="flex items-center gap-2 mb-4">
-          <Lock className="w-4 h-4 text-[#6366F1]" />
-          <span className="text-sm font-semibold text-gray-700">Secure Card Payment</span>
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        {/* Header bar */}
+        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 bg-gray-50">
+          <div className="flex items-center gap-2">
+            <Lock className="w-3.5 h-3.5 text-[#6366F1]" />
+            <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">Secure Card Payment</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" className="h-2.5 object-contain grayscale opacity-50" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-3.5 object-contain grayscale opacity-50" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="Amex" className="h-3.5 object-contain grayscale opacity-50" />
+          </div>
         </div>
-        <PaymentElement
-          options={{
-            layout: 'tabs',
-            wallets: { applePay: 'never', googlePay: 'never' },
-          }}
-        />
+        {/* Stripe Payment Element */}
+        <div className="p-5">
+          <PaymentElement
+            options={{
+              layout: 'tabs',
+              wallets: { applePay: 'never', googlePay: 'never' },
+            }}
+          />
+        </div>
       </div>
 
-      {/* Card brand logos */}
-      <div className="flex items-center justify-between px-1">
-        <div className="flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
-          <span className="text-[11px] text-gray-500">256-bit SSL encryption</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" className="h-3 object-contain grayscale opacity-60" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-4 object-contain grayscale opacity-60" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="Amex" className="h-4 object-contain grayscale opacity-60" />
-        </div>
+      <div className="flex items-center gap-2 px-1">
+        <ShieldCheck className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
+        <span className="text-[11px] text-gray-400">256-bit SSL encryption. Your payment info is never stored on our servers.</span>
       </div>
 
       {errorMsg && (
@@ -157,9 +154,6 @@ function StripePaymentForm({
           </>
         )}
       </button>
-      <p className="text-[11px] text-gray-400 text-center">
-        Your payment information is encrypted and secure. Powered by Stripe.
-      </p>
     </form>
   );
 }
@@ -169,9 +163,6 @@ export default function Checkout() {
   const { items, cartSubtotal, clearCart } = useCart();
   const navigate = useNavigate();
   const { currency, formatConverted } = useCurrency();
-
-  // ── Step state: 'address' | 'payment' ──
-  const [step, setStep] = useState<'address' | 'payment'>('address');
 
   // ── Form fields ──
   const [email, setEmail] = useState('');
@@ -185,7 +176,7 @@ export default function Checkout() {
   const [country, setCountry] = useState('Pakistan');
   const [phone, setPhone] = useState('');
 
-  // ── Other states ──
+  // ── App states ──
   const [discountCode, setDiscountCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -201,21 +192,21 @@ export default function Checkout() {
   const shippingCost = 0;
   const total = cartSubtotal - discountAmount + shippingCost;
 
-  // ── Refs ──
-  const emailRef = useRef<HTMLInputElement>(null);
+  // ── Refs for abandonment tracking ──
   const orderCompletedRef = useRef(false);
   const abandonmentFiredRef = useRef(false);
   const latestEmailRef = useRef('');
   const latestNameRef = useRef('');
   const latestCityRef = useRef('');
   const latestCountryRef = useRef('Pakistan');
+  const emailRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { latestEmailRef.current = email; }, [email]);
   useEffect(() => { latestNameRef.current = [firstName, lastName].filter(Boolean).join(' '); }, [firstName, lastName]);
   useEffect(() => { latestCityRef.current = city; }, [city]);
   useEffect(() => { latestCountryRef.current = country; }, [country]);
 
-  // ── Fetch Stripe publishable key from backend ──
+  // ── Fetch Stripe publishable key ──
   useEffect(() => {
     fetch(`${API_BASE}/api/stripe/config`)
       .then(res => res.json())
@@ -223,9 +214,9 @@ export default function Checkout() {
       .catch(() => setStripePublishableKey(STRIPE_PK));
   }, []);
 
-  // ── Create PaymentIntent when moving to payment step ──
+  // ── Create PaymentIntent as soon as total is available ──
   useEffect(() => {
-    if (step === 'payment' && total > 0 && !clientSecret) {
+    if (total > 0 && stripePublishableKey && !clientSecret) {
       fetch(`${API_BASE}/api/stripe/create-payment-intent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -234,11 +225,19 @@ export default function Checkout() {
         .then(res => res.json())
         .then(data => {
           if (data.clientSecret) setClientSecret(data.clientSecret);
-          else setStripeError(data.error || 'Could not initialize payment. Please try again.');
+          else setStripeError(data.error || 'Could not initialize payment.');
         })
-        .catch(() => setStripeError('Network error. Could not initialize payment.'));
+        .catch(() => setStripeError('Network error. Could not initialize Stripe.'));
     }
-  }, [step, total, clientSecret]);
+  }, [total, stripePublishableKey, clientSecret]);
+
+  // ── Re-create PaymentIntent when discount changes (total changes) ──
+  useEffect(() => {
+    if (total > 0 && stripePublishableKey) {
+      setClientSecret(null); // reset so the effect above triggers again
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [discountApplied]);
 
   // ── Auto-detect country from IP ──
   useEffect(() => {
@@ -295,18 +294,17 @@ export default function Checkout() {
     else alert('Invalid discount code.');
   };
 
-  // ── Validate address before proceeding to payment ──
-  const handleContinueToPayment = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !firstName || !lastName || !address || !city || !postal) {
-      alert('Please fill in all required fields before proceeding to payment.');
-      return;
-    }
-    setStep('payment');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // ── Validate before payment ──
+  const validateForm = () => {
+    if (!email) { emailRef.current?.focus(); alert('Please enter your email address.'); return false; }
+    if (!firstName || !lastName) { alert('Please enter your first and last name.'); return false; }
+    if (!address) { alert('Please enter your street address.'); return false; }
+    if (!city) { alert('Please enter your city.'); return false; }
+    if (!postal) { alert('Please enter your postal code.'); return false; }
+    return true;
   };
 
-  // ── Save order to DB after successful Stripe payment ──
+  // ── Save order after Stripe success ──
   const handleOrderComplete = async (transactionId: string) => {
     setIsSubmitting(true);
     orderCompletedRef.current = true;
@@ -349,18 +347,22 @@ export default function Checkout() {
         clearCart();
         setSuccessOrderNumber(data.orderNumber);
       } else {
-        alert(data.error || 'Order could not be saved. Please contact support with your payment confirmation.');
+        alert(data.error || 'Order could not be saved. Contact support with your payment confirmation.');
         orderCompletedRef.current = false;
       }
     } catch {
-      alert('Network error. Please contact support with your payment confirmation.');
+      alert('Network error. Contact support with your payment confirmation.');
       orderCompletedRef.current = false;
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // ── Countries list ──
+  const handleSuccessClose = () => {
+    setSuccessOrderNumber(null);
+    navigate('/');
+  };
+
   const allCountries = [
     "Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Côte d'Ivoire","Cabo Verde","Cambodia","Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo (Congo-Brazzaville)","Costa Rica","Croatia","Cuba","Cyprus","Czechia","Democratic Republic of the Congo","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Holy See","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Palau","Palestine State","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"
   ];
@@ -380,11 +382,6 @@ export default function Checkout() {
   const inputCls = "w-full border-b border-gray-300 py-3 text-sm focus:outline-none focus:border-black bg-transparent transition-colors placeholder-gray-400";
   const labelCls = "block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1 mt-4";
 
-  const handleSuccessClose = () => {
-    setSuccessOrderNumber(null);
-    navigate('/');
-  };
-
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-black selection:text-white">
       {successOrderNumber && (
@@ -397,179 +394,134 @@ export default function Checkout() {
           <Link to="/">
             <img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" className="h-7 w-auto" />
           </Link>
-          {/* Step breadcrumb */}
-          <div className="flex items-center gap-2 text-xs font-semibold">
-            <span className={step === 'address' ? 'text-black' : 'text-gray-400'}>Contact & Delivery</span>
-            <ChevronRight className="w-3 h-3 text-gray-300" />
-            <span className={step === 'payment' ? 'text-black' : 'text-gray-400'}>Payment</span>
-          </div>
           <Link to="/" className="text-black hover:text-gray-500 transition-colors text-xs font-semibold uppercase tracking-widest">Return to Store</Link>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row min-h-screen">
-        {/* Left Side */}
+        {/* Left Side — single scrollable form */}
         <div className="w-full lg:w-[60%] p-6 lg:p-16 lg:pr-24 bg-white">
 
-          {/* ── STEP 1: Address ── */}
-          {step === 'address' && (
-            <form onSubmit={handleContinueToPayment}>
-              <div className="space-y-12">
-                {/* Contact */}
-                <section>
-                  <h2 className="text-2xl font-semibold text-black mb-8">Contact Information</h2>
-                  <div>
-                    <label className={labelCls}>Email Address *</label>
-                    <input
-                      ref={emailRef}
-                      type="email"
-                      required
-                      placeholder="Email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      className={inputCls}
-                    />
-                  </div>
-                  <div className="mt-6 flex items-center gap-3">
-                    <input type="checkbox" id="news" className="w-4 h-4 rounded border-gray-300 accent-black cursor-pointer" defaultChecked />
-                    <label htmlFor="news" className="text-sm text-gray-600 cursor-pointer">Keep me up to date on news and exclusive offers</label>
-                  </div>
-                </section>
-
-                {/* Delivery */}
-                <section>
-                  <h2 className="text-2xl font-semibold text-black mb-8">Delivery Address</h2>
-                  <div className="space-y-2">
-                    <div>
-                      <label className={labelCls}>Country / Region *</label>
-                      <select value={country} onChange={e => setCountry(e.target.value)} className={inputCls + " cursor-pointer"}>
-                        {allCountries.map(c => <option key={c} value={c}>{c}</option>)}
-                      </select>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-6 pt-2">
-                      <div>
-                        <label className={labelCls}>First Name *</label>
-                        <input type="text" required placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} className={inputCls} />
-                      </div>
-                      <div>
-                        <label className={labelCls}>Last Name *</label>
-                        <input type="text" required placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} className={inputCls} />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className={labelCls}>Street Address *</label>
-                      <input type="text" required placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className={inputCls} />
-                    </div>
-
-                    <div>
-                      <label className={labelCls}>Apartment, Suite, etc.</label>
-                      <input type="text" placeholder="Apartment, suite, etc. (optional)" value={apartment} onChange={e => setApartment(e.target.value)} className={inputCls} />
-                    </div>
-
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-                      <div>
-                        <label className={labelCls}>City *</label>
-                        <input type="text" required placeholder="City" value={city} onChange={e => setCity(e.target.value)} className={inputCls} />
-                      </div>
-                      <div>
-                        <label className={labelCls}>State / Province</label>
-                        <input type="text" placeholder="State / Province" value={stateVal} onChange={e => setStateVal(e.target.value)} className={inputCls} />
-                      </div>
-                      <div className="col-span-2 lg:col-span-1">
-                        <label className={labelCls}>Postal Code *</label>
-                        <input type="text" required placeholder="Postal code" value={postal} onChange={e => setPostal(e.target.value)} className={inputCls} />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className={labelCls}>Phone Number</label>
-                      <input type="tel" placeholder="Phone (optional)" value={phone} onChange={e => setPhone(e.target.value)} className={inputCls} />
-                    </div>
-                  </div>
-                </section>
-
-                {/* Continue button */}
-                <button
-                  type="submit"
-                  className="w-full bg-black text-white font-bold py-4 rounded-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
-                >
-                  Continue to Payment
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </form>
-          )}
-
-          {/* ── STEP 2: Payment ── */}
-          {step === 'payment' && (
+          {/* ── Contact Information ── */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold text-black mb-8">Contact Information</h2>
             <div>
-              {/* Address summary (editable) */}
-              <div className="mb-10 p-5 bg-gray-50 rounded-xl border border-gray-200">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Delivering to</span>
-                  <button
-                    type="button"
-                    onClick={() => setStep('address')}
-                    className="text-xs font-semibold text-[#6366F1] hover:underline"
-                  >
-                    Edit
-                  </button>
-                </div>
-                <p className="text-sm text-gray-800 font-medium">{firstName} {lastName}</p>
-                <p className="text-sm text-gray-600">{address}{apartment ? `, ${apartment}` : ''}, {city}, {postal}</p>
-                <p className="text-sm text-gray-600">{country}</p>
-                <p className="text-sm text-gray-600 mt-1">{email}</p>
-              </div>
-
-              <h2 className="text-2xl font-semibold text-black mb-2">Secure Payment</h2>
-              <p className="text-sm text-gray-500 mb-6">All transactions are encrypted and secure.</p>
-
-              {stripeError ? (
-                <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-xl mb-6">
-                  <strong>Payment Error:</strong> {stripeError}
-                </div>
-              ) : stripePublishableKey && clientSecret ? (
-                <Elements
-                  stripe={loadStripe(stripePublishableKey)}
-                  options={{
-                    clientSecret,
-                    appearance: {
-                      theme: 'stripe',
-                      variables: {
-                        colorPrimary: '#6366F1',
-                        borderRadius: '8px',
-                        fontFamily: 'Inter, system-ui, sans-serif',
-                      },
-                    },
-                  }}
-                >
-                  <StripePaymentForm
-                    isSubmitting={isSubmitting}
-                    setIsSubmitting={setIsSubmitting}
-                    onSuccess={handleOrderComplete}
-                  />
-                </Elements>
-              ) : (
-                <div className="p-12 border border-gray-200 bg-gray-50 rounded-xl flex items-center justify-center flex-col gap-3">
-                  <span className="w-7 h-7 border-2 border-gray-300 border-t-[#6366F1] rounded-full animate-spin"></span>
-                  <span className="text-sm font-semibold text-gray-600">Initializing Secure Checkout...</span>
-                </div>
-              )}
-
-              {/* Back button */}
-              <button
-                type="button"
-                onClick={() => setStep('address')}
-                className="mt-6 w-full border border-gray-300 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-50 transition-all text-sm"
-              >
-                ← Back to Delivery Details
-              </button>
+              <label className={labelCls}>Email Address *</label>
+              <input
+                ref={emailRef}
+                type="email"
+                required
+                placeholder="Email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className={inputCls}
+              />
             </div>
-          )}
+            <div className="mt-6 flex items-center gap-3">
+              <input type="checkbox" id="news" className="w-4 h-4 rounded border-gray-300 accent-black cursor-pointer" defaultChecked />
+              <label htmlFor="news" className="text-sm text-gray-600 cursor-pointer">Keep me up to date on news and exclusive offers</label>
+            </div>
+          </section>
 
-          <footer className="mt-16 pt-8 border-t border-gray-200 flex flex-wrap gap-6">
+          {/* ── Delivery Address ── */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold text-black mb-8">Delivery Address</h2>
+            <div className="space-y-2">
+              <div>
+                <label className={labelCls}>Country / Region *</label>
+                <select value={country} onChange={e => setCountry(e.target.value)} className={inputCls + " cursor-pointer"}>
+                  {allCountries.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-6 pt-2">
+                <div>
+                  <label className={labelCls}>First Name *</label>
+                  <input type="text" required placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} className={inputCls} />
+                </div>
+                <div>
+                  <label className={labelCls}>Last Name *</label>
+                  <input type="text" required placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} className={inputCls} />
+                </div>
+              </div>
+              <div>
+                <label className={labelCls}>Street Address *</label>
+                <input type="text" required placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Apartment, Suite, etc.</label>
+                <input type="text" placeholder="Apartment, suite, etc. (optional)" value={apartment} onChange={e => setApartment(e.target.value)} className={inputCls} />
+              </div>
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+                <div>
+                  <label className={labelCls}>City *</label>
+                  <input type="text" required placeholder="City" value={city} onChange={e => setCity(e.target.value)} className={inputCls} />
+                </div>
+                <div>
+                  <label className={labelCls}>State / Province</label>
+                  <input type="text" placeholder="State / Province" value={stateVal} onChange={e => setStateVal(e.target.value)} className={inputCls} />
+                </div>
+                <div className="col-span-2 lg:col-span-1">
+                  <label className={labelCls}>Postal Code *</label>
+                  <input type="text" required placeholder="Postal code" value={postal} onChange={e => setPostal(e.target.value)} className={inputCls} />
+                </div>
+              </div>
+              <div>
+                <label className={labelCls}>Phone Number</label>
+                <input type="tel" placeholder="Phone (optional)" value={phone} onChange={e => setPhone(e.target.value)} className={inputCls} />
+              </div>
+            </div>
+          </section>
+
+          {/* ── Payment ── */}
+          <section className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-semibold text-black">Payment</h2>
+              <div className="flex items-center gap-1.5 text-[11px] text-green-600 font-semibold">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                Secure & Encrypted
+              </div>
+            </div>
+
+            {stripeError ? (
+              <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-xl">
+                <strong>Payment Error:</strong> {stripeError}
+              </div>
+            ) : stripePublishableKey && clientSecret ? (
+              <Elements
+                stripe={loadStripe(stripePublishableKey)}
+                options={{
+                  clientSecret,
+                  appearance: {
+                    theme: 'stripe',
+                    variables: {
+                      colorPrimary: '#6366F1',
+                      borderRadius: '8px',
+                      fontFamily: 'Inter, system-ui, sans-serif',
+                      spacingUnit: '4px',
+                    },
+                    rules: {
+                      '.Input': { boxShadow: 'none', border: '1px solid #e5e7eb' },
+                      '.Input:focus': { border: '1px solid #6366F1', boxShadow: '0 0 0 3px rgba(99,102,241,0.1)' },
+                    },
+                  },
+                }}
+              >
+                <StripePaymentForm
+                  isSubmitting={isSubmitting}
+                  setIsSubmitting={setIsSubmitting}
+                  onSuccess={handleOrderComplete}
+                  validateForm={validateForm}
+                />
+              </Elements>
+            ) : (
+              <div className="p-12 border border-gray-200 bg-gray-50 rounded-xl flex items-center justify-center flex-col gap-3">
+                <span className="w-7 h-7 border-2 border-gray-300 border-t-[#6366F1] rounded-full animate-spin"></span>
+                <span className="text-sm font-semibold text-gray-500">Loading Secure Payment...</span>
+              </div>
+            )}
+          </section>
+
+          <footer className="mt-8 pt-8 border-t border-gray-200 flex flex-wrap gap-6">
             <Link to="/pages/refund-policy" className="text-xs font-semibold text-gray-500 hover:text-black uppercase tracking-wider transition-colors">Refund policy</Link>
             <Link to="/pages/shipping-policy" className="text-xs font-semibold text-gray-500 hover:text-black uppercase tracking-wider transition-colors">Shipping policy</Link>
             <Link to="/pages/privacy-policy" className="text-xs font-semibold text-gray-500 hover:text-black uppercase tracking-wider transition-colors">Privacy policy</Link>
@@ -599,7 +551,7 @@ export default function Checkout() {
               ))}
             </div>
 
-            {/* Discount code */}
+            {/* Discount */}
             <div className="mt-10 pt-8 border-t border-gray-200">
               <form onSubmit={handleApplyDiscount} className="flex gap-3">
                 <input
