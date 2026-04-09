@@ -2788,5 +2788,30 @@ export const products: Product[] = [
       "machineCategory": null,
       "consumablesCategory": null
     }
+  },
+  {
+    "id": "procolored-demo-order-test",
+    "title": "Procolored Demo Order (Testing Only)",
+    "price": "$0.00 USD",
+    "originalPrice": null,
+    "image": "https://i.postimg.cc/Y9M7TqxR/logo.webp",
+    "hoverImage": "https://i.postimg.cc/Y9M7TqxR/logo.webp",
+    "badge": "TEST",
+    "buttonStyle": "default",
+    "buttonText": "Add to cart",
+    "link": "/products/procolored-demo-order-test",
+    "filters": {
+      "collection": "Extended Warranty",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": null,
+      "machineCategory": null,
+      "consumablesCategory": null
+    }
   }
 ];

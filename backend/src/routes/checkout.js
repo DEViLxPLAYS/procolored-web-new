@@ -72,7 +72,7 @@ router.post('/abandon', checkoutLimiter, async (req, res) => {
 
 // ================================
 // POST /api/checkout/order
-// Create new order
+// Create new order (Stripe payment confirmed)
 // ================================
 router.post('/order',
   orderLimiter,
@@ -106,7 +106,7 @@ router.post('/order',
         country,
         city,
         paymentMethod,
-        paymentStatus,   // 'paid' for PayPal confirmed, 'unpaid' otherwise
+        paymentStatus,   // 'paid' for confirmed payment, 'unpaid' otherwise
         transactionId
       } = req.body;
 
@@ -131,10 +131,8 @@ router.post('/order',
           currency: currency || 'USD',
           status: paymentStatus === 'paid' ? 'confirmed' : 'pending',
           payment_status: paymentStatus === 'paid' ? 'paid' : 'unpaid',
-          payment_method: paymentMethod || 'Credit Card',
-          // transaction_id stored in notes until column is added via Supabase dashboard
-          // SQL to add column: ALTER TABLE orders ADD COLUMN IF NOT EXISTS transaction_id VARCHAR(255);
-          notes: transactionId ? `PayPal Transaction ID: ${transactionId}` : null,
+          payment_method: paymentMethod || 'Stripe',
+          notes: transactionId ? `Stripe Transaction ID: ${transactionId}` : null,
           customer_ip: req.ip,
           customer_country: country ? (country === 'United States' ? 'USA' : country === 'United Kingdom' ? 'UK' : country === 'New Zealand' ? 'NZ' : country === 'South Africa' ? 'RSA' : country === 'Saudi Arabia' ? 'KSA' : country.substring(0, 10)) : null,
           customer_city: city ? city.substring(0, 50) : null
@@ -144,15 +142,26 @@ router.post('/order',
 
       if (error) throw error;
 
-      // Fire order confirmation email (non-blocking) - this handles BOTH customer receipt and admin alert
+      // Fire BOTH order confirmation emails (non-blocking)
+      // Customer gets beautiful branded receipt, admin gets detailed alert
       sendOrderEmailsHandler({
         orderNumber: order.order_number,
         customerName,
         customerEmail,
+        customerPhone: customerPhone || null,
         items,
+        subtotal: subtotal || totalAmount,
+        shippingCost: shippingCost || 0,
+        discountAmount: discountAmount || 0,
+        discountCode: discountCode || null,
         totalAmount,
         currency: currency || 'USD',
-        shippingAddress
+        shippingAddress,
+        paymentMethod: paymentMethod || 'Stripe',
+        customerCountry: country || null,
+        customerCity: city || null,
+        customerIp: req.ip,
+        isDemoOrder: false
       });
 
       return res.status(201).json({
@@ -167,5 +176,94 @@ router.post('/order',
     }
   }
 );
+
+
+// ================================
+// POST /api/checkout/demo-order
+// Create $0 demo order — no payment required
+// Fires both customer and admin emails for testing
+// ================================
+router.post('/demo-order', orderLimiter, async (req, res) => {
+  try {
+    const {
+      customerName,
+      customerEmail,
+      shippingAddress,
+      country,
+      city
+    } = req.body;
+
+    if (!customerEmail) {
+      return res.status(400).json({ error: 'Email is required to create a demo order.' });
+    }
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(customerEmail)) {
+      return res.status(400).json({ error: 'Please provide a valid email address.' });
+    }
+
+    const orderNumber = `PRO-DEMO-${Date.now()}`;
+    const demoItems = [{ name: 'Procolored Demo Order (Testing Only)', quantity: 1, price: 0 }];
+
+    const { data: order, error } = await supabaseAdmin
+      .from('orders')
+      .insert({
+        order_number: orderNumber,
+        customer_name: customerName || 'Demo Customer',
+        customer_email: customerEmail,
+        shipping_address: shippingAddress || {},
+        items: demoItems,
+        subtotal: 0,
+        shipping_cost: 0,
+        discount_amount: 0,
+        total_amount: 0,
+        currency: 'USD',
+        status: 'confirmed',
+        payment_status: 'paid',
+        payment_method: 'Demo (No Payment)',
+        customer_ip: req.ip,
+        customer_country: country || null,
+        customer_city: city || null,
+        notes: 'Demo order — testing only — $0'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Fire both emails for demo order — non-blocking, errors don't fail the order
+    sendOrderEmailsHandler({
+      orderNumber,
+      customerName: customerName || 'Demo Customer',
+      customerEmail,
+      customerPhone: null,
+      items: demoItems,
+      subtotal: 0,
+      shippingCost: 0,
+      discountAmount: 0,
+      discountCode: null,
+      totalAmount: 0,
+      currency: 'USD',
+      shippingAddress: shippingAddress || {},
+      paymentMethod: 'Demo (No Payment)',
+      customerCountry: country || null,
+      customerCity: city || null,
+      customerIp: req.ip,
+      isDemoOrder: true
+    });
+
+    return res.status(201).json({
+      success: true,
+      orderNumber,
+      orderId: order.id,
+      isDemoOrder: true
+    });
+
+  } catch (error) {
+    console.error('Demo order error:', error.message);
+    return res.status(500).json({ error: 'Failed to create demo order' });
+  }
+});
 
 module.exports = router;

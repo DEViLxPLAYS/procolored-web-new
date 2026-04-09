@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCart } from '../context/CartContext';
 import { useCurrency, convertPrice } from '../context/CurrencyContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle, X, CreditCard, Lock, ShieldCheck } from 'lucide-react';
+import { CheckCircle, CreditCard, Lock, ShieldCheck, AlertCircle, X } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
@@ -10,6 +10,9 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 // Live Stripe publishable key (safe on frontend)
 const STRIPE_PK = 'pk_live_51TCQKWIXB0IPPK5N9scYtqgos5k2N7etZtTPgP5lO9cBVa4xA34KrqnzkVRPdwWAMuzv3gcuRJh7isn5JpUtY3kF00WCs32dcA';
+
+// Demo product ID
+const DEMO_PRODUCT_ID = 'procolored-demo-order-test';
 
 function getSessionId(): string {
   let id = localStorage.getItem('procolored_session');
@@ -20,37 +23,294 @@ function getSessionId(): string {
   return id;
 }
 
-// ── Order Success Popup ──────────────────────────────────────────────────────
-function OrderSuccessPopup({ orderNumber, onClose }: { orderNumber: string; onClose: () => void }) {
+// ── Beautiful Order Success Popup ────────────────────────────────────────────
+interface OrderSuccessData {
+  orderNumber: string;
+  customerName: string;
+  totalAmount: number;
+  currency: string;
+  customerEmail: string;
+  items: any[];
+  isDemoOrder?: boolean;
+}
+
+function OrderSuccessPopup({ data, onClose }: { data: OrderSuccessData; onClose: () => void }) {
   useEffect(() => {
-    const t = setTimeout(onClose, 8000);
-    return () => clearTimeout(t);
-  }, [onClose]);
+    // Lock body scroll while popup is open
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  const currSymbol = data.currency === 'PKR' ? 'Rs.' : '$';
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
-          <X className="w-5 h-5" />
-        </button>
-        <div className="flex flex-col items-center text-center gap-4">
-          <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
-            <CheckCircle className="w-12 h-12 text-green-500" />
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(0,0,0,0.75)',
+        zIndex: 99999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px',
+        animation: 'fadeIn 0.3s ease',
+      }}
+    >
+      <div
+        style={{
+          background: 'white',
+          borderRadius: '16px',
+          maxWidth: '520px',
+          width: '100%',
+          overflow: 'hidden',
+          boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
+          animation: 'slideUp 0.35s ease',
+        }}
+      >
+        {/* Green success header */}
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+            padding: '40px 32px',
+            textAlign: 'center',
+          }}
+        >
+          <div
+            style={{
+              width: '72px',
+              height: '72px',
+              background: 'rgba(255,255,255,0.2)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px',
+              fontSize: '36px',
+            }}
+          >
+            ✅
           </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-1">Order Placed! 🎉</h2>
-            <p className="text-gray-500 text-sm">Thank you for your purchase. We'll be in touch soon.</p>
+          <h2 style={{ color: 'white', fontSize: '26px', fontWeight: '800', margin: '0 0 8px' }}>
+            {data.isDemoOrder ? 'Demo Order Created!' : 'Order Confirmed!'}
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '15px', margin: 0 }}>
+            Thank you, {data.customerName}! 🎉
+          </p>
+        </div>
+
+        {/* Content */}
+        <div style={{ padding: '32px' }}>
+          {/* Stripe / payment badge */}
+          {!data.isDemoOrder && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                marginBottom: '20px',
+                padding: '8px 16px',
+                background: '#f0fdf4',
+                borderRadius: '8px',
+                fontSize: '13px',
+                color: '#166534',
+                fontWeight: '600',
+              }}
+            >
+              <ShieldCheck style={{ width: '15px', height: '15px' }} />
+              Payment confirmed via Stripe
+            </div>
+          )}
+
+          {/* Order number + total */}
+          <div
+            style={{
+              background: '#f8f8f8',
+              borderRadius: '8px',
+              padding: '16px 20px',
+              marginBottom: '20px',
+              borderLeft: '4px solid #E8302A',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontSize: '11px',
+                  fontWeight: '700',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                  color: '#999',
+                  marginBottom: '4px',
+                }}
+              >
+                Order Number
+              </div>
+              <div
+                style={{
+                  fontSize: '20px',
+                  fontWeight: '800',
+                  color: '#E8302A',
+                  letterSpacing: '1px',
+                }}
+              >
+                {data.orderNumber}
+              </div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div
+                style={{
+                  fontSize: '11px',
+                  fontWeight: '700',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                  color: '#999',
+                  marginBottom: '4px',
+                }}
+              >
+                Total {data.isDemoOrder ? '(Demo)' : 'Paid'}
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: '800', color: '#1a1a1a' }}>
+                {data.isDemoOrder ? 'FREE' : `${currSymbol}${data.totalAmount.toLocaleString()} ${data.currency}`}
+              </div>
+            </div>
           </div>
-          <div className="bg-gray-50 rounded-xl px-6 py-3 border border-gray-100 w-full">
-            <p className="text-xs text-gray-500 mb-1 font-medium uppercase tracking-wide">Order Number</p>
-            <p className="text-lg font-bold text-[#E85A24] font-mono">{orderNumber}</p>
+
+          {/* Items summary */}
+          {data.items.length > 0 && (
+            <div style={{ marginBottom: '20px' }}>
+              <div
+                style={{
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                  color: '#999',
+                  marginBottom: '10px',
+                }}
+              >
+                Items Ordered
+              </div>
+              {data.items.slice(0, 3).map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    padding: '8px 0',
+                    borderBottom: '1px solid #f0f0f0',
+                    fontSize: '14px',
+                    color: '#333',
+                  }}
+                >
+                  <span style={{ fontWeight: '600' }}>
+                    {item.name} {item.quantity > 1 ? `×${item.quantity}` : ''}
+                  </span>
+                  <span style={{ color: '#666' }}>
+                    {data.isDemoOrder ? 'FREE' : `${currSymbol}${parseFloat(item.price || 0).toLocaleString()}`}
+                  </span>
+                </div>
+              ))}
+              {data.items.length > 3 && (
+                <div
+                  style={{
+                    fontSize: '13px',
+                    color: '#888',
+                    padding: '8px 0',
+                    fontStyle: 'italic',
+                  }}
+                >
+                  +{data.items.length - 3} more item{data.items.length - 3 !== 1 ? 's' : ''}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Email confirmation note */}
+          <div
+            style={{
+              background: '#f0fdf4',
+              borderRadius: '8px',
+              padding: '14px 16px',
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '10px',
+            }}
+          >
+            <span style={{ fontSize: '18px', flexShrink: 0 }}>📧</span>
+            <div style={{ fontSize: '13px', color: '#166534', lineHeight: '1.5' }}>
+              A detailed confirmation email has been sent to{' '}
+              <strong>{data.customerEmail}</strong>. Please check your inbox.
+            </div>
           </div>
-          <p className="text-xs text-gray-400">A confirmation email will be sent shortly.</p>
-          <button onClick={onClose} className="w-full bg-[#E85A24] text-white font-bold py-3 rounded-xl hover:bg-[#d14b1b] transition-colors">
+
+          {/* Delivery note */}
+          {!data.isDemoOrder && (
+            <div
+              style={{
+                background: '#fff8f0',
+                borderRadius: '8px',
+                padding: '14px 16px',
+                marginBottom: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+              }}
+            >
+              <span style={{ fontSize: '18px', flexShrink: 0 }}>🚚</span>
+              <div style={{ fontSize: '13px', color: '#92400e', lineHeight: '1.5' }}>
+                <strong>Estimated Delivery:</strong> 1-2 weeks after payment confirmation.
+                <br />
+                Our team will contact you with shipping details.
+              </div>
+            </div>
+          )}
+
+          {/* CTA Button — only way to close */}
+          <button
+            id="order-success-close-btn"
+            onClick={onClose}
+            style={{
+              width: '100%',
+              background: '#E8302A',
+              color: 'white',
+              border: 'none',
+              padding: '16px',
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              letterSpacing: '0.5px',
+              transition: 'background 0.2s',
+            }}
+            onMouseOver={e => ((e.target as HTMLButtonElement).style.background = '#c72020')}
+            onMouseOut={e => ((e.target as HTMLButtonElement).style.background = '#E8302A')}
+          >
             Continue Shopping
           </button>
+
+          <p style={{ textAlign: 'center', fontSize: '12px', color: '#999', marginTop: '12px' }}>
+            Questions? Email us at{' '}
+            <a href="mailto:support@procollored.com" style={{ color: '#E8302A', fontWeight: '600' }}>
+              support@procollored.com
+            </a>
+          </p>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { 
+          from { transform: translateY(30px); opacity: 0; } 
+          to { transform: translateY(0); opacity: 1; } 
+        }
+      `}</style>
     </div>
   );
 }
@@ -106,7 +366,7 @@ function StripePaymentForm({
         <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 bg-gray-50">
           <div className="flex items-center gap-2">
             <Lock className="w-3.5 h-3.5 text-[#6366F1]" />
-            <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">Secure Card Payment</span>
+            <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">Stripe Secure Payment</span>
           </div>
           <div className="flex items-center gap-1.5">
             <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" className="h-2.5 object-contain grayscale opacity-50" />
@@ -127,7 +387,7 @@ function StripePaymentForm({
 
       <div className="flex items-center gap-2 px-1">
         <ShieldCheck className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
-        <span className="text-[11px] text-gray-400">256-bit SSL encryption. Your payment info is never stored on our servers.</span>
+        <span className="text-[11px] text-gray-400">256-bit SSL encryption via Stripe. Your payment info is never stored on our servers.</span>
       </div>
 
       {errorMsg && (
@@ -139,6 +399,7 @@ function StripePaymentForm({
 
       <button
         type="submit"
+        id="stripe-pay-btn"
         disabled={isSubmitting || !stripe}
         className="w-full bg-[#6366F1] hover:bg-[#4F46E5] active:bg-[#4338CA] text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-indigo-200"
       >
@@ -150,11 +411,48 @@ function StripePaymentForm({
         ) : (
           <>
             <CreditCard className="w-4 h-4" />
-            Pay Now
+            Pay with Stripe
           </>
         )}
       </button>
     </form>
+  );
+}
+
+// ── Demo Order Button (for $0 cart) ─────────────────────────────────────────
+function DemoOrderButton({
+  isSubmitting,
+  onSubmit,
+}: {
+  isSubmitting: boolean;
+  onSubmit: () => void;
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+        <div className="text-lg mb-2">🧪</div>
+        <div className="text-sm font-bold text-amber-800 mb-1">Demo Order — No Payment Required</div>
+        <div className="text-xs text-amber-700">This is a $0 test order. No card will be charged.</div>
+      </div>
+      <button
+        id="demo-order-btn"
+        onClick={onSubmit}
+        disabled={isSubmitting}
+        className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {isSubmitting ? (
+          <>
+            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            Creating Demo Order...
+          </>
+        ) : (
+          <>
+            <CheckCircle className="w-4 h-4" />
+            Confirm Demo Order (Free)
+          </>
+        )}
+      </button>
+    </div>
   );
 }
 
@@ -166,6 +464,7 @@ export default function Checkout() {
 
   // ── Form fields ──
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
@@ -180,17 +479,21 @@ export default function Checkout() {
   const [discountCode, setDiscountCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successOrderNumber, setSuccessOrderNumber] = useState<string | null>(null);
+  const [successData, setSuccessData] = useState<OrderSuccessData | null>(null);
 
   // ── Stripe states ──
   const [stripePublishableKey, setStripePublishableKey] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [isFreeOrder, setIsFreeOrder] = useState(false);
   const [stripeError, setStripeError] = useState<string | null>(null);
 
   // ── Pricing ──
   const discountAmount = discountApplied ? cartSubtotal * 0.05 : 0;
   const shippingCost = 0;
   const total = cartSubtotal - discountAmount + shippingCost;
+
+  // ── Is demo product in cart? ──
+  const isDemoCart = items.some(i => i.id === DEMO_PRODUCT_ID) && total === 0;
 
   // ── Refs for abandonment tracking ──
   const orderCompletedRef = useRef(false);
@@ -214,8 +517,14 @@ export default function Checkout() {
       .catch(() => setStripePublishableKey(STRIPE_PK));
   }, []);
 
-  // ── Create PaymentIntent as soon as total is available ──
+  // ── Create PaymentIntent as soon as total is available (skip for free/demo) ──
   useEffect(() => {
+    if (isDemoCart || total === 0) {
+      setIsFreeOrder(true);
+      setClientSecret(null);
+      return;
+    }
+
     if (total > 0 && stripePublishableKey && !clientSecret) {
       fetch(`${API_BASE}/api/stripe/create-payment-intent`, {
         method: 'POST',
@@ -224,17 +533,23 @@ export default function Checkout() {
       })
         .then(res => res.json())
         .then(data => {
-          if (data.clientSecret) setClientSecret(data.clientSecret);
-          else setStripeError(data.error || 'Could not initialize payment.');
+          if (data.isFreeOrder) {
+            setIsFreeOrder(true);
+          } else if (data.clientSecret) {
+            setClientSecret(data.clientSecret);
+            setIsFreeOrder(false);
+          } else {
+            setStripeError(data.error || 'Could not initialize payment.');
+          }
         })
         .catch(() => setStripeError('Network error. Could not initialize Stripe.'));
     }
-  }, [total, stripePublishableKey, clientSecret]);
+  }, [total, stripePublishableKey, clientSecret, isDemoCart]);
 
-  // ── Re-create PaymentIntent when discount changes (total changes) ──
+  // ── Re-create PaymentIntent when discount changes ──
   useEffect(() => {
-    if (total > 0 && stripePublishableKey) {
-      setClientSecret(null); // reset so the effect above triggers again
+    if (total > 0 && stripePublishableKey && !isDemoCart) {
+      setClientSecret(null);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [discountApplied]);
@@ -248,7 +563,7 @@ export default function Checkout() {
   }, []);
 
   // ── Abandonment tracker ──
-  const fireAbandonment = (stepName = 'checkout', force = false) => {
+  const fireAbandonment = useCallback((stepName = 'checkout', force = false) => {
     if (orderCompletedRef.current) return;
     if (!force && abandonmentFiredRef.current) return;
     if (items.length === 0) return;
@@ -268,7 +583,7 @@ export default function Checkout() {
     const url = `${API_BASE}/api/checkout/abandon`;
     fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: jsonStr, keepalive: true })
       .catch(() => { try { navigator.sendBeacon(url + '?_beacon=1', jsonStr); } catch (_) {} });
-  };
+  }, [items, cartSubtotal]);
 
   useEffect(() => {
     if (items.length === 0) return;
@@ -286,7 +601,7 @@ export default function Checkout() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       if (!orderCompletedRef.current) fireAbandonment('navigated_away');
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fireAbandonment]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleApplyDiscount = (e: React.FormEvent) => {
     e.preventDefault();
@@ -294,9 +609,23 @@ export default function Checkout() {
     else alert('Invalid discount code.');
   };
 
-  // ── Validate before payment ──
+  // ── Email validation ──
+  const validateEmail = (val: string) => {
+    if (!val) return 'Please enter a valid email address to receive your order confirmation';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(val)) return 'Please enter a valid email address to receive your order confirmation';
+    return '';
+  };
+
+  // ── Validate full form before payment ──
   const validateForm = () => {
-    if (!email) { emailRef.current?.focus(); alert('Please enter your email address.'); return false; }
+    const emailErr = validateEmail(email);
+    if (emailErr) {
+      setEmailError(emailErr);
+      emailRef.current?.focus();
+      emailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return false;
+    }
     if (!firstName || !lastName) { alert('Please enter your first and last name.'); return false; }
     if (!address) { alert('Please enter your street address.'); return false; }
     if (!city) { alert('Please enter your city.'); return false; }
@@ -304,14 +633,11 @@ export default function Checkout() {
     return true;
   };
 
-  // ── Save order after Stripe success ──
-  const handleOrderComplete = async (transactionId: string) => {
-    setIsSubmitting(true);
-    orderCompletedRef.current = true;
-
-    const shippingAddress = { firstName, lastName, address, apartment, city, state: stateVal, postal, country };
-    const orderPayload = {
-      customerName: `${firstName} ${lastName}`.trim(),
+  // ── Build order payload ──
+  const buildOrderPayload = (transactionId: string | null, isDemoOrder = false) => {
+    const shippingAddress = { street: address, apartment, city, state: stateVal, postalCode: postal, country };
+    return {
+      customerName: `${firstName} ${lastName}`.trim() || 'Demo Customer',
       customerEmail: email,
       customerPhone: phone || null,
       shippingAddress,
@@ -327,31 +653,87 @@ export default function Checkout() {
       shippingCost: 0,
       discountAmount,
       discountCode: discountApplied ? 'PROCOLORED5' : null,
-      totalAmount: total,
+      totalAmount: isDemoOrder ? 0 : total,
       currency: 'USD',
       country,
       city,
-      paymentMethod: 'Stripe',
+      paymentMethod: isDemoOrder ? 'Demo (No Payment)' : 'Stripe',
       paymentStatus: 'paid',
       transactionId,
     };
+  };
+
+  // ── Save order after Stripe success ──
+  const handleOrderComplete = async (transactionId: string) => {
+    setIsSubmitting(true);
+    orderCompletedRef.current = true;
 
     try {
       const res = await fetch(`${API_BASE}/api/checkout/order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderPayload),
+        body: JSON.stringify(buildOrderPayload(transactionId, false)),
       });
       const data = await res.json();
       if (res.ok && data.orderNumber) {
         clearCart();
-        setSuccessOrderNumber(data.orderNumber);
+        setSuccessData({
+          orderNumber: data.orderNumber,
+          customerName: `${firstName} ${lastName}`.trim() || 'Customer',
+          totalAmount: total,
+          currency: 'USD',
+          customerEmail: email,
+          items: items.map(i => ({ name: i.name, price: convertPrice(i.price, currency.divisor), quantity: i.quantity })),
+          isDemoOrder: false,
+        });
       } else {
         alert(data.error || 'Order could not be saved. Contact support with your payment confirmation.');
         orderCompletedRef.current = false;
       }
     } catch {
-      alert('Network error. Contact support with your payment confirmation.');
+      alert('Network error. Contact support with your Stripe payment confirmation.');
+      orderCompletedRef.current = false;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // ── Handle Demo / $0 Order ──
+  const handleDemoOrder = async () => {
+    if (!validateForm()) return;
+    setIsSubmitting(true);
+    orderCompletedRef.current = true;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/checkout/demo-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: `${firstName} ${lastName}`.trim() || 'Demo Customer',
+          customerEmail: email,
+          shippingAddress: { street: address, apartment, city, state: stateVal, postalCode: postal, country },
+          country,
+          city,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.orderNumber) {
+        clearCart();
+        setSuccessData({
+          orderNumber: data.orderNumber,
+          customerName: `${firstName} ${lastName}`.trim() || 'Demo Customer',
+          totalAmount: 0,
+          currency: 'USD',
+          customerEmail: email,
+          items: items.map(i => ({ name: i.name, price: 0, quantity: i.quantity })),
+          isDemoOrder: true,
+        });
+      } else {
+        alert(data.error || 'Failed to create demo order.');
+        orderCompletedRef.current = false;
+      }
+    } catch {
+      alert('Network error. Please try again.');
       orderCompletedRef.current = false;
     } finally {
       setIsSubmitting(false);
@@ -359,7 +741,7 @@ export default function Checkout() {
   };
 
   const handleSuccessClose = () => {
-    setSuccessOrderNumber(null);
+    setSuccessData(null);
     navigate('/');
   };
 
@@ -367,7 +749,7 @@ export default function Checkout() {
     "Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Côte d'Ivoire","Cabo Verde","Cambodia","Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo (Congo-Brazzaville)","Costa Rica","Croatia","Cuba","Cyprus","Czechia","Democratic Republic of the Congo","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Holy See","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Palau","Palestine State","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"
   ];
 
-  if (items.length === 0 && !successOrderNumber) {
+  if (items.length === 0 && !successData) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 bg-[#fafafa]">
         <h2 className="text-2xl font-bold mb-4 text-black text-center">Your bag is empty.</h2>
@@ -384,8 +766,9 @@ export default function Checkout() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-black selection:text-white">
-      {successOrderNumber && (
-        <OrderSuccessPopup orderNumber={successOrderNumber} onClose={handleSuccessClose} />
+      {/* Order Success Popup — only way to dismiss is clicking "Continue Shopping" */}
+      {successData && (
+        <OrderSuccessPopup data={successData} onClose={handleSuccessClose} />
       )}
 
       {/* Header */}
@@ -409,13 +792,24 @@ export default function Checkout() {
               <label className={labelCls}>Email Address *</label>
               <input
                 ref={emailRef}
+                id="checkout-email"
                 type="email"
                 required
-                placeholder="Email"
+                placeholder="Email address (required for order confirmation)"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
-                className={inputCls}
+                onChange={e => {
+                  setEmail(e.target.value);
+                  if (emailError) setEmailError(validateEmail(e.target.value));
+                }}
+                onBlur={e => setEmailError(validateEmail(e.target.value))}
+                className={inputCls + (emailError ? ' border-red-500 focus:border-red-500' : '')}
               />
+              {emailError && (
+                <div className="flex items-center gap-1.5 mt-2 text-red-600 text-xs">
+                  <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                  {emailError}
+                </div>
+              )}
             </div>
             <div className="mt-6 flex items-center gap-3">
               <input type="checkbox" id="news" className="w-4 h-4 rounded border-gray-300 accent-black cursor-pointer" defaultChecked />
@@ -436,16 +830,16 @@ export default function Checkout() {
               <div className="grid grid-cols-2 gap-6 pt-2">
                 <div>
                   <label className={labelCls}>First Name *</label>
-                  <input type="text" required placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} className={inputCls} />
+                  <input id="checkout-first-name" type="text" required placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} className={inputCls} />
                 </div>
                 <div>
                   <label className={labelCls}>Last Name *</label>
-                  <input type="text" required placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} className={inputCls} />
+                  <input id="checkout-last-name" type="text" required placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} className={inputCls} />
                 </div>
               </div>
               <div>
                 <label className={labelCls}>Street Address *</label>
-                <input type="text" required placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className={inputCls} />
+                <input id="checkout-address" type="text" required placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className={inputCls} />
               </div>
               <div>
                 <label className={labelCls}>Apartment, Suite, etc.</label>
@@ -454,7 +848,7 @@ export default function Checkout() {
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
                 <div>
                   <label className={labelCls}>City *</label>
-                  <input type="text" required placeholder="City" value={city} onChange={e => setCity(e.target.value)} className={inputCls} />
+                  <input id="checkout-city" type="text" required placeholder="City" value={city} onChange={e => setCity(e.target.value)} className={inputCls} />
                 </div>
                 <div>
                   <label className={labelCls}>State / Province</label>
@@ -462,7 +856,7 @@ export default function Checkout() {
                 </div>
                 <div className="col-span-2 lg:col-span-1">
                   <label className={labelCls}>Postal Code *</label>
-                  <input type="text" required placeholder="Postal code" value={postal} onChange={e => setPostal(e.target.value)} className={inputCls} />
+                  <input id="checkout-postal" type="text" required placeholder="Postal code" value={postal} onChange={e => setPostal(e.target.value)} className={inputCls} />
                 </div>
               </div>
               <div>
@@ -482,7 +876,10 @@ export default function Checkout() {
               </div>
             </div>
 
-            {stripeError ? (
+            {/* Demo / $0 order — no Stripe needed */}
+            {(isDemoCart || isFreeOrder) ? (
+              <DemoOrderButton isSubmitting={isSubmitting} onSubmit={handleDemoOrder} />
+            ) : stripeError ? (
               <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-xl">
                 <strong>Payment Error:</strong> {stripeError}
               </div>
@@ -516,7 +913,7 @@ export default function Checkout() {
             ) : (
               <div className="p-12 border border-gray-200 bg-gray-50 rounded-xl flex items-center justify-center flex-col gap-3">
                 <span className="w-7 h-7 border-2 border-gray-300 border-t-[#6366F1] rounded-full animate-spin"></span>
-                <span className="text-sm font-semibold text-gray-500">Loading Secure Payment...</span>
+                <span className="text-sm font-semibold text-gray-500">Loading Stripe Secure Payment...</span>
               </div>
             )}
           </section>
@@ -545,46 +942,55 @@ export default function Checkout() {
                   <div className="flex-1 min-w-0 pt-1">
                     <h4 className="text-sm font-medium text-gray-900 leading-snug">{item.name}</h4>
                     <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
+                    {item.id === DEMO_PRODUCT_ID && (
+                      <span className="inline-block mt-1 text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full uppercase tracking-wide">
+                        TEST — $0
+                      </span>
+                    )}
                   </div>
-                  <span className="text-sm font-medium text-gray-900 whitespace-nowrap">{formatConverted(convertPrice(item.price, currency.divisor) * item.quantity)}</span>
+                  <span className="text-sm font-medium text-gray-900 whitespace-nowrap">
+                    {item.id === DEMO_PRODUCT_ID ? 'FREE' : formatConverted(convertPrice(item.price, currency.divisor) * item.quantity)}
+                  </span>
                 </div>
               ))}
             </div>
 
             {/* Discount */}
-            <div className="mt-10 pt-8 border-t border-gray-200">
-              <form onSubmit={handleApplyDiscount} className="flex gap-3">
-                <input
-                  type="text"
-                  value={discountCode}
-                  onChange={e => setDiscountCode(e.target.value)}
-                  placeholder="Gift card or discount code"
-                  className="flex-1 border border-gray-300 rounded px-4 py-3 text-sm focus:outline-none focus:border-black bg-white transition-colors"
-                />
-                <button
-                  type="submit"
-                  disabled={!discountCode.trim() || discountApplied}
-                  className="bg-gray-200 text-black px-6 py-3 font-semibold rounded hover:bg-gray-300 transition-colors disabled:opacity-50 text-sm whitespace-nowrap"
-                >
-                  Apply
-                </button>
-              </form>
-              {discountApplied && (
-                <div className="mt-3 flex items-center gap-2">
-                  <span className="bg-green-50 text-green-700 px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 border border-green-200">
-                    <CheckCircle className="w-3 h-3" /> PROCOLORED5 applied — 5% off
-                  </span>
-                </div>
-              )}
-            </div>
+            {!isDemoCart && (
+              <div className="mt-10 pt-8 border-t border-gray-200">
+                <form onSubmit={handleApplyDiscount} className="flex gap-3">
+                  <input
+                    type="text"
+                    value={discountCode}
+                    onChange={e => setDiscountCode(e.target.value)}
+                    placeholder="Gift card or discount code"
+                    className="flex-1 border border-gray-300 rounded px-4 py-3 text-sm focus:outline-none focus:border-black bg-white transition-colors"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!discountCode.trim() || discountApplied}
+                    className="bg-gray-200 text-black px-6 py-3 font-semibold rounded hover:bg-gray-300 transition-colors disabled:opacity-50 text-sm whitespace-nowrap"
+                  >
+                    Apply
+                  </button>
+                </form>
+                {discountApplied && (
+                  <div className="mt-3 flex items-center gap-2">
+                    <span className="bg-green-50 text-green-700 px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 border border-green-200">
+                      <CheckCircle className="w-3 h-3" /> PROCOLORED5 applied — 5% off
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Totals */}
             <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
               <div className="flex justify-between items-center text-sm">
                 <span className="text-gray-500">Subtotal</span>
-                <span className="font-medium text-gray-900">{formatConverted(cartSubtotal)}</span>
+                <span className="font-medium text-gray-900">{isDemoCart ? 'FREE' : formatConverted(cartSubtotal)}</span>
               </div>
-              {discountApplied && (
+              {discountApplied && !isDemoCart && (
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-500">Discount <span className="text-xs text-green-600 font-bold ml-1">(PROCOLORED5)</span></span>
                   <span className="font-medium text-green-600">-{formatConverted(discountAmount)}</span>
@@ -599,7 +1005,9 @@ export default function Checkout() {
             <div className="mt-6 pt-6 border-t border-gray-200">
               <div className="flex justify-between items-end">
                 <span className="text-lg font-semibold text-gray-900">Total</span>
-                <span className="text-3xl font-light text-black tracking-tight">{formatConverted(total)}</span>
+                <span className="text-3xl font-light text-black tracking-tight">
+                  {isDemoCart ? <span className="text-amber-500 font-bold text-2xl">$0.00 FREE</span> : formatConverted(total)}
+                </span>
               </div>
             </div>
           </div>

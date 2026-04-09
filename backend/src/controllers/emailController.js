@@ -7,38 +7,110 @@ const {
   newsletterTemplate
 } = require('../services/emailTemplates');
 
-const NOTIFY_TO = process.env.NOTIFY_EMAIL || 'Support@procollored.com';
+// NEW: Import the beautiful branded templates
+const { orderConfirmationCustomer } = require('../templates/orderConfirmationCustomer');
+const { newOrderAdmin } = require('../templates/newOrderAdmin');
+
+const NOTIFY_TO = process.env.NOTIFY_EMAIL || process.env.ADMIN_EMAIL || 'Support@procollored.com';
 const FROM_EMAIL = process.env.SMTP_FROM || `"Procolored Store" <${process.env.SMTP_USER}>`;
 
 /**
  * Triggered on successful checkout.
- * Sends receipt to customer AND alert to admin.
+ * Sends beautiful branded receipt to customer AND detailed alert to admin.
  * Returns a Promise resolving to { success: boolean, ... }
  */
 const sendOrderEmailsHandler = async (orderData) => {
-  const { customerEmail, customerName, orderNumber } = orderData;
+  const { 
+    customerEmail, 
+    customerName, 
+    orderNumber,
+    items,
+    subtotal,
+    shippingCost,
+    discountAmount,
+    discountCode,
+    totalAmount,
+    currency,
+    shippingAddress,
+    paymentMethod,
+    customerCountry,
+    customerCity,
+    customerIp,
+    isDemoOrder
+  } = orderData;
+
   const results = { customerSent: false, adminSent: false, errors: [] };
 
   try {
-    // 1. Send Customer Receipt
+    // 1. Send Customer Beautiful Branded Receipt
     if (customerEmail) {
-      const custHtml = customerOrderReceiptTemplate(orderData);
+      let custHtml;
+      try {
+        custHtml = orderConfirmationCustomer({
+          customerName: customerName || 'Valued Customer',
+          orderNumber,
+          items: items || [],
+          subtotal: subtotal || totalAmount || 0,
+          shippingCost: shippingCost || 0,
+          discountAmount: discountAmount || 0,
+          discountCode: discountCode || null,
+          totalAmount: totalAmount || 0,
+          currency: currency || 'USD',
+          shippingAddress: shippingAddress || {},
+          estimatedDelivery: isDemoOrder ? 'N/A — Demo Order' : '1-2 weeks after payment confirmation',
+          isDemoOrder: !!isDemoOrder
+        });
+      } catch (tplErr) {
+        console.error('[Email] Customer template error, falling back:', tplErr.message);
+        custHtml = customerOrderReceiptTemplate(orderData);
+      }
+
       const custResp = await sendMail({
         from: FROM_EMAIL,
         to: customerEmail,
-        subject: `Order Confirmation #${orderNumber} — Procolored`,
+        subject: isDemoOrder 
+          ? `✅ [Demo] Order Confirmed — ${orderNumber} | Procolored`
+          : `✅ Order Confirmed — #${orderNumber} | Procolored`,
         html: custHtml
       });
       if (custResp.success) results.customerSent = true;
       else results.errors.push(`Customer email failed: ${custResp.error}`);
     }
 
-    // 2. Send Admin Alert
-    const adminHtml = adminNewOrderAlertTemplate(orderData);
+    // 2. Send Admin Detailed Alert
+    let adminHtml;
+    try {
+      adminHtml = newOrderAdmin({
+        orderNumber,
+        customerName: customerName || 'Unknown',
+        customerEmail: customerEmail || 'Unknown',
+        customerPhone: orderData.customerPhone || null,
+        items: items || [],
+        subtotal: subtotal || totalAmount || 0,
+        shippingCost: shippingCost || 0,
+        discountAmount: discountAmount || 0,
+        discountCode: discountCode || null,
+        totalAmount: totalAmount || 0,
+        currency: currency || 'USD',
+        shippingAddress: shippingAddress || {},
+        paymentMethod: paymentMethod || 'Stripe',
+        customerCountry: customerCountry || null,
+        customerCity: customerCity || null,
+        customerIp: customerIp || 'Unknown',
+        isDemoOrder: !!isDemoOrder,
+        createdAt: new Date()
+      });
+    } catch (tplErr) {
+      console.error('[Email] Admin template error, falling back:', tplErr.message);
+      adminHtml = adminNewOrderAlertTemplate(orderData);
+    }
+
     const adminResp = await sendMail({
       from: FROM_EMAIL,
       to: NOTIFY_TO,
-      subject: `🚨 New Order #${orderNumber} from ${customerName}`,
+      subject: isDemoOrder
+        ? `🧪 Demo Order #${orderNumber} — ${customerEmail}`
+        : `🔔 New Order #${orderNumber} — ${customerName} — $${parseFloat(totalAmount || 0).toFixed(2)}`,
       html: adminHtml
     });
     if (adminResp.success) results.adminSent = true;
@@ -73,7 +145,7 @@ const sendContactEmailHandler = async (req, res) => {
     const response = await sendMail({
       from: FROM_EMAIL,
       to: NOTIFY_TO,
-      replyTo: email, // This allows the admin to hit "Reply" and email the customer directly
+      replyTo: email,
       subject: `📩 New Website Contact from ${firstName} ${lastName || ''}`.trim(),
       html
     });
@@ -94,9 +166,6 @@ const sendContactEmailHandler = async (req, res) => {
  * Fire-and-forget internal logic.
  */
 const sendAbandonmentEmailHandler = async (abandonData) => {
-  // Always notify admin — even if no email/name captured yet (card failed, anonymous exit, etc.)
-  // We still have cart items + country + device info which is valuable
-
   try {
     const html = abandonedCheckoutTemplate(abandonData);
     const customerLabel = abandonData.customerName || abandonData.customerEmail || '🕵️ Anonymous Visitor';

@@ -11,6 +11,7 @@ import F13ProProduct from './pages/F13ProProduct';
 import F13ProStandProduct from './pages/F13ProStandProduct';
 import F8PandaProduct from './pages/F8PandaProduct';
 import K13LitePage from './pages/K13LitePage';
+import K13Page from './pages/K13Page';
 import Collections from './pages/Collections';
 import Showroom from './pages/Showroom';
 import Repair from './pages/Repair';
@@ -107,6 +108,7 @@ import DepositF8WithOven from './pages/DepositF8WithOven';
 import PrinterLeaseF8NoOven from './pages/PrinterLeaseF8NoOven';
 import DepositF8NoOven from './pages/DepositF8NoOven';
 import PandaDoll from './pages/PandaDoll';
+import DemoOrderProduct from './pages/DemoOrderProduct';
 
 import NewsletterPopup from './components/NewsletterPopup';
 import AdminDashboard from './pages/AdminDashboard';
@@ -129,7 +131,9 @@ function App() {
               <Route path="/products/f13-pro-stand" element={<F13ProStandProduct />} />
               <Route path="/f13-pro-stand" element={<F13ProStandProduct />} />
               <Route path="f8-panda" element={<F8PandaProduct />} />
+              <Route path="f8-panda-dtf-printer" element={<F8PandaProduct />} />
               <Route path="k13-lite" element={<K13LitePage />} />
+              <Route path="k13" element={<K13Page />} />
               <Route path="collections/:categoryId" element={<Collections />} />
               <Route path="products/47" element={<InkProduct />} />
               <Route path="products/white-ink-dtf" element={<WhiteInkProduct />} />
@@ -263,6 +267,8 @@ function App() {
               <Route path="products/printer-lease-f8-no-oven" element={<PrinterLeaseF8NoOven />} />
               <Route path="products/deposit-f8-no-oven" element={<DepositF8NoOven />} />
               <Route path="products/panda-doll" element={<PandaDoll />} />
+              <Route path="products/procolored-demo-order-test" element={<DemoOrderProduct />} />
+              <Route path="procolored-demo-order-test" element={<DemoOrderProduct />} />
               <Route path="uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}
