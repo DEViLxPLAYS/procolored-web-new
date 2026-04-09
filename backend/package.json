@@ -1,7 +1,7 @@
 {
   "name": "procolored-backend",
-  "version": "1.0.0",
-  "description": "Procolored backend API server",
+  "version": "1.0.1",
+  "description": "Procolored backend API server — order confirmation, branded emails, demo orders",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
