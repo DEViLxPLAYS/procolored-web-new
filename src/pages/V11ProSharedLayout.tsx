@@ -129,7 +129,6 @@ export default function V11ProSharedLayout({ activeVariant }: V11ProSharedLayout
   const [activeImage, setActiveImage] = useState(0);
   const [isZooming, setIsZooming] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [overviewExpanded, setOverviewExpanded] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
 
   const currentProduct = VARIANTS[activeVariant];
@@ -269,24 +268,13 @@ export default function V11ProSharedLayout({ activeVariant }: V11ProSharedLayout
 
             <div className="mb-10 text-gray-500 text-sm leading-relaxed">
               <p className="font-bold text-gray-700 mb-2 tracking-wide uppercase text-xs">Overview</p>
-              The Procolored V11 Pro (Varnish Version) is a cutting-edge UV printer designed for high-quality, versatile printing with a unique dual-head system. One head is dedicated to
-              {' '}
-              <button
-                onClick={() => setOverviewExpanded(!overviewExpanded)}
-                className="text-gray-400 hover:text-gray-700 transition"
-              >
-                View More <ChevronDown className="inline w-3 h-3 ml-0.5" />
-              </button>
-              {overviewExpanded && (
-                <span> color printing and the other for varnish. This allows you to print both color and varnish layers simultaneously, significantly reducing print times and increasing productivity.</span>
-              )}
+              The Procolored V11 Pro (Varnish Version) is a cutting-edge UV printer designed for high-quality, versatile printing with a unique dual-head system. One head is dedicated to color printing and the other for varnish. This allows you to print both color and varnish layers simultaneously, significantly reducing print times and increasing productivity.
             </div>
 
             {/* Options Panel */}
             <div className="mb-8">
               <div className="flex justify-between items-end mb-4">
                 <h3 className="font-extrabold text-gray-900 text-base">Options</h3>
-                <button className="text-blue-500 text-sm font-semibold hover:underline">Compare &gt;</button>
               </div>
               <div className="flex flex-col gap-3">
                 {Object.values(VARIANTS).map((v) => {

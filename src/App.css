@@ -188,14 +188,16 @@ input:focus-visible {
 
 .marquee-row-1 {
   display: flex;
-  animation: marquee-left 25s linear infinite;
+  animation: marquee-left 12s linear infinite;
   width: fit-content;
+  will-change: transform;
 }
 
 .marquee-row-2 {
   display: flex;
-  animation: marquee-right 25s linear infinite;
+  animation: marquee-right 12s linear infinite;
   width: fit-content;
+  will-change: transform;
 }
 
 @keyframes marquee-left {
@@ -216,10 +218,10 @@ input:focus-visible {
   }
 }
 
-/* Pause marquee on hover */
-.marquee-row-1:hover,
-.marquee-row-2:hover {
-  animation-play-state: paused;
+/* Marquee never pauses — continuous infinite scroll */
+.marquee-row-1,
+.marquee-row-2 {
+  animation-play-state: running !important;
 }
 
 /* =====================

@@ -199,6 +199,7 @@ export default function F8PandaProduct() {
                 <span className="bg-red-500 text-white font-bold px-3 py-1 rounded text-sm shadow-sm">F8 A4</span>
                 <span className="flex items-center gap-1"><Truck className="w-4 h-4" /> Free Shipping</span>
                 <span>0% Interest Rate under $3000</span>
+                <span className="flex items-center gap-1 text-green-700">🚚 14–17 Business Days Delivery</span>
               </div>
 
               {/* Package cards */}
@@ -251,7 +252,6 @@ export default function F8PandaProduct() {
                   <div className="p-4 border-t border-gray-100 text-sm text-gray-600 space-y-1">
                     <p className="flex items-center gap-2"><span className="w-1 h-1 bg-gray-400 rounded-full"></span> F8 Panda DTF Printer</p>
                     <p className="flex items-center gap-2"><span className="w-1 h-1 bg-gray-400 rounded-full"></span> Oven For DTF Printer <a href="#" className="text-blue-500 hover:underline">Learn More</a></p>
-                    <button className="text-gray-400 hover:text-gray-600 font-medium text-xs mt-2 flex items-center gap-1">View More <ChevronDown className="w-3 h-3" /></button>
                   </div>
                 </div>
               </div>
@@ -260,7 +260,6 @@ export default function F8PandaProduct() {
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="font-extrabold text-gray-900 text-base">Options</span>
-                  <a href="#" className="text-blue-600 text-sm hover:underline font-medium">Compare &gt;</a>
                 </div>
 
                 <div className="flex flex-col gap-3">

@@ -274,11 +274,6 @@ export default function F13Product() {
               <span className="text-sm text-[#E07000] font-medium">496 reviews</span>
             </div>
 
-            {/* Description */}
-            <p className="text-gray-600 text-sm md:text-base leading-relaxed">
-              Equip your apparel decoration business with the ultimate dual-feed DTF system. Featuring an integrated circulation system for white ink and a choice of premium ovens, the F13 guarantees high-profit margins, smooth operation, and exceptional 1440 DPI print clarity for medium-sized workflows.
-            </p>
-
             {/* Price row */}
             <div>
               <div className="flex items-baseline gap-3 flex-wrap">

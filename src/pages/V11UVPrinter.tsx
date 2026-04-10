@@ -343,7 +343,7 @@ export default function V11UVPrinter() {
             {/* Bottom badges */}
             <div className="flex items-center gap-6 pt-4 border-t border-gray-100 text-xs font-medium text-gray-600 flex-wrap">
               <div className="flex items-center gap-1.5 cursor-pointer hover:text-black">📚 Resources</div>
-              <div className="flex items-center gap-1.5">🚚 1-2 weeks Delivery</div>
+              <div className="flex items-center gap-1.5">🚚 14–17 Business Days Delivery</div>
               <div className="flex items-center gap-1.5 cursor-pointer hover:text-black">📖 Instruction Manual</div>
             </div>
           </div>

@@ -163,6 +163,7 @@ export default function P13Product() {
                   <span className="bg-red-500 text-white font-bold px-3 py-2 text-[11px] uppercase tracking-wider h-full flex items-center rounded-l-xl">P13 A3</span>
                   <span className="flex items-center gap-1.5 px-3 py-2 border-r border-blue-200"><Truck className="w-4 h-4 text-gray-800" /> Free Shipping</span>
                   <span className="px-3 py-2">💳 0% Interest Rate under $3000</span>
+                  <span className="px-3 py-2 text-green-700 font-semibold">🚚 14–17 Business Days Delivery</span>
                 </div>
 
                 {/* Package thumbnails (Matches screenshot: Printer Supplies + Smokeless Oven etc depending on variant basically) */}
@@ -295,7 +296,6 @@ export default function P13Product() {
                   <ul className="text-xs text-gray-600 space-y-1 mt-2 list-disc list-inside">
                     <li>P13 DTF Printer (XP600)</li>
                   </ul>
-                  <button className="text-orange-500 text-xs font-semibold mt-1.5 hover:underline">View More</button>
                 </div>
               </div>
             </div>
@@ -304,7 +304,6 @@ export default function P13Product() {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <p className="font-bold text-gray-900 text-sm">Options</p>
-                <button className="text-blue-500 text-xs hover:underline">Compare &gt;</button>
               </div>
               <div className="flex flex-col gap-3">
                 {VARIANTS.map((v, i) => (

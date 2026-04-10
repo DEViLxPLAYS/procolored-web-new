@@ -17,54 +17,53 @@ const PINK_IMAGES = [
 // ─── Bundles ──────────────────────────────────────────────────────────────────
 interface Bundle { id: string; label: string; sale: number; original: number; saving: number; }
 const BUNDLES: Bundle[] = [
-  { id: 'lite',                label: 'K13 Lite',                          sale: 1999,  original: 2999,  saving: 1000 },
-  { id: 'lite-oven',           label: 'K13 Lite+Oven',                     sale: 2499,  original: 3598,  saving: 1099 },
-  { id: 'lite-oven-heat',      label: 'K13 Lite+Oven+Heat Press',          sale: 2799,  original: 3997,  saving: 1198 },
-  { id: 'lite-smokeless',      label: 'K13 Lite+Smokeless Oven',           sale: 2799,  original: 3999,  saving: 1200 },
-  { id: 'lite-smokeless-heat', label: 'K13 Lite+Smokeless Oven+Heat Press',sale: 3099,  original: 4398,  saving: 1299 },
+  { id: 'k13',                 label: 'K13',                              sale: 2299,  original: 3299,  saving: 1000 },
+  { id: 'k13-oven',            label: 'K13+Oven',                         sale: 2799,  original: 3898,  saving: 1099 },
+  { id: 'k13-oven-heat',       label: 'K13+Oven+Heat Press',              sale: 3099,  original: 4297,  saving: 1198 },
+  { id: 'k13-smokeless',       label: 'K13+Smokeless Oven',               sale: 3099,  original: 4299,  saving: 1200 },
+  { id: 'k13-smokeless-heat',  label: 'K13+Smokeless Oven+Heat Press',    sale: 3399,  original: 4698,  saving: 1299 },
 ];
 
-// below-image package thumbnails
 
-// ─── Spec / FAQ / Review data ──────────────────────────────────────────────────
+
 const SPECS: [string, string][] = [
-  ['Model', 'Procolored K13 (Lite)'],
+  ['Model', 'Procolored K13'],
   ['Printhead', 'LH-500 Single Array'],
   ['Print Accuracy', '1440×1440 DPI (8 Pass)'],
   ['Print Width', '13" (330mm)'],
   ['Applicable System', 'Windows OS'],
   ['Color Config', 'CMYK+W'],
-  ['Ink Consumption', 'Letter/A4: 3.75ml'],
-  ['Software', 'Procolored Studio Lite'],
+  ['Ink Consumption', 'Letter/A4: 3.5ml'],
+  ['Software', 'Procolored Studio'],
   ['Net Weight', '40 lb (18kg)'],
   ['Printer Size', '29.1"×12.6"×9.1"'],
 ];
 
 const IN_BOX = [
-  'K13 DTF Lite Printer (LH-500)',
+  'K13 DTF Printer (LH-500)',
   'Full Set of Initial Ink (CMYKW 5×250ml)',
   '500g Adhesive Powder',
   '13in × 328ft (33cm × 100m) Roll Film',
   'User Manual + Data Cable + Power Cable',
-  'RIP Dongle (Procolored Studio Lite)',
+  'RIP Dongle (Procolored Studio)',
   'Film Stand + Tray with Cutter',
   'Moisturizing Device + Ink Tubes',
 ];
 
 const FAQS = [
-  { q: "What's the main difference between the F13 and K13 Lite?", a: "The K13 Lite prints about 15% slower than the F13 and uses a single LH-500 head. It's designed for entry-level users seeking a great balance of affordability and full DTF capability." },
-  { q: "What systems does the K13 Lite support?", a: "Windows OS only. Windows 10+ required. Mac OS is not currently supported." },
-  { q: "Does the extended warranty apply to all variants?", a: "Yes. The 12-month warranty and 2 free printhead replacements apply to all K13 Lite bundles." },
+  { q: "What's the main difference between K13 and K13 Lite?", a: "The K13 is the full standard model with faster print speeds and enhanced features. The K13 Lite is the entry-level version with a slightly slower speed, designed for beginners." },
+  { q: "What systems does the K13 support?", a: "Windows OS only. Windows 10+ required. Mac OS is not currently supported." },
+  { q: "Does the extended warranty apply to all variants?", a: "Yes. The 12-month warranty and 2 free printhead replacements apply to all K13 bundles." },
   { q: "What materials can this printer use?", a: "Cotton, polyester, blends, denim, canvas and most fabric-based materials using DTF heat transfer film." },
   { q: "How long does delivery take?", a: "14–17 business days standard delivery." },
 ];
 
 const REVIEWS = [
-  { name: 'Vardan Tsarukyan', date: '03/16/2026', rating: 5, text: "Such a good machine and great help from the customer service. The best contact." },
-  { name: 'Carlos Garcia', date: '03/14/2026', rating: 5, text: "Amazing technical support via chat with engineers. I've been in the DTF printing game for 6 years and the K13 Lite is a fantastic compact option." },
-  { name: 'Wendy Mejia', date: '03/13/2026', rating: 5, text: "They helped me install my new print head step by step. Engineer Oscar was amazing guiding me through every question I had." },
-  { name: 'Fatima R.', date: '03/13/2026', rating: 5, text: "Love the printer, it's amazing and fast shipping!" },
-  { name: 'Demarious Mitchell', date: '03/13/2026', rating: 5, text: "Excellent product, exactly as described. Very happy with the purchase." },
+  { name: 'Marcus T.', date: '03/16/2026', rating: 5, text: "Upgraded from the Lite to the full K13 — the difference in speed is very noticeable. Much happier with the output." },
+  { name: 'Priya N.', date: '03/14/2026', rating: 5, text: "The K13 is a powerhouse. Customer support was excellent guiding me through the installation." },
+  { name: 'Javier M.', date: '03/13/2026', rating: 5, text: "Excellent build quality and print results. The bundle with the oven made everything seamless." },
+  { name: 'Fatima R.', date: '03/13/2026', rating: 5, text: "Love the printer, it's fast and the colors are super vibrant!" },
+  { name: 'Anthony B.', date: '03/13/2026', rating: 5, text: "Very solid machine. Easy to maintain, great for my small business." },
 ];
 
 // ─── Lightbox ─────────────────────────────────────────────────────────────────
@@ -87,7 +86,6 @@ function Lightbox({ images, startIdx, onClose }: { images: string[]; startIdx: n
   );
 }
 
-// ─── Video helper ─────────────────────────────────────────────────────────────
 function AutoVideo({ src, className = '' }: { src: string; className?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => { const v = ref.current; if (!v) return; v.src = src; v.play().catch(() => {}); }, [src]);
@@ -103,7 +101,7 @@ const VIDEOS = [
 ];
 
 // ─── Main Component ────────────────────────────────────────────────────────────
-export default function K13LitePage() {
+export default function K13Page() {
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
@@ -123,26 +121,23 @@ export default function K13LitePage() {
   const DISCOUNT = 5;
   const finalPrice = couponApplied ? Math.round(bundle.sale * (1 - DISCOUNT / 100)) : bundle.sale;
   const couponSaving = couponApplied ? bundle.sale - finalPrice : 0;
-  const productName = `Procolored K13 Lite DTF Printer 13" A3 - ${color}${bundle.id !== 'lite' ? ` (${bundle.label.replace('K13 Lite', '').trim()})` : ''}`;
+  const productName = `Procolored K13 DTF Printer 13" A3 - ${color}${bundle.id !== 'k13' ? ` (${bundle.label.replace('K13', '').trim()})` : ''}`;
 
   const handleColorChange = (c: 'White' | 'Pink') => { setColor(c); setActiveImg(0); };
   const handleAddToCart = () => {
-    addToCart({ id: `k13-lite-${color}-${bundle.id}`, name: productName, price: `$USD:${finalPrice}`, image: images[0], quantity: qty });
+    addToCart({ id: `k13-${color}-${bundle.id}`, name: productName, price: `$USD:${finalPrice}`, image: images[0], quantity: qty });
   };
   const handleBuyNow = () => { handleAddToCart(); navigate('/checkout'); };
 
   return (
     <div className="bg-white font-sans min-h-screen">
 
-      {/* ══════════════════════════════════════════════════════════
-          SECTION 1 — HERO
-      ══════════════════════════════════════════════════════════ */}
+      {/* ══ SECTION 1 — HERO ══ */}
       <section className="pt-6 pb-0 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          {/* Breadcrumb */}
           <p className="text-sm text-gray-500 mb-4">
             <a href="/" className="hover:underline">Home</a>
-            {' / '}Procolored K13 Lite DTF Printer 13&quot; A3
+            {' / '}Procolored K13 DTF Printer 13&quot; A3
           </p>
 
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
@@ -166,11 +161,10 @@ export default function K13LitePage() {
                     className="relative bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden aspect-square group cursor-zoom-in"
                     onClick={() => setLightboxIdx(activeImg)}
                   >
-                    <img src={images[activeImg]} alt="K13 Lite" className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
+                    <img src={images[activeImg]} alt="K13" className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                       <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" />
                     </div>
-                    {/* Prev/Next arrows */}
                     <button onClick={e => { e.stopPropagation(); setActiveImg(p => (p === 0 ? images.length - 1 : p - 1)); }}
                       className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200 z-10">
                       <ChevronLeft className="w-4 h-4" />
@@ -181,8 +175,9 @@ export default function K13LitePage() {
                     </button>
                   </div>
 
+                  {/* Packages strip */}
                   <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-xs font-medium text-gray-700 flex-wrap">
-                    <span className="bg-red-500 text-white font-bold px-2 py-0.5 rounded text-xs">K13 Lite A3</span>
+                    <span className="bg-red-500 text-white font-bold px-2 py-0.5 rounded text-xs">K13 A3</span>
                     <span className="flex items-center gap-1"><Truck className="w-3 h-3 text-gray-500" /> Free Shipping</span>
                     <span>0% Interest Rate under $3000</span>
                     <span className="flex items-center gap-1 text-green-700 font-semibold">🚚 Delivered in 14–17 Business Days</span>
@@ -197,11 +192,11 @@ export default function K13LitePage() {
               {/* Title + Rating */}
               <div>
                 <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-snug mb-2">
-                  Procolored K13 Lite DTF Printer 13&quot; A3 &amp; Oven — {color}
+                  Procolored K13 DTF Printer 13&quot; A3 &amp; Oven — {color}
                 </h1>
                 <div className="flex items-center gap-2">
                   <div className="flex">{[1,2,3,4,5].map(s => <Star key={s} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}</div>
-                  <span className="text-sm text-gray-600">4.96 (252 reviews)</span>
+                  <span className="text-sm text-gray-600">4.95 (218 reviews)</span>
                 </div>
               </div>
 
@@ -245,21 +240,21 @@ export default function K13LitePage() {
 
               {/* Model selector */}
               <div>
-                <p className="text-sm font-bold text-gray-700 mb-2">Model: <span className="font-normal">K13 Lite</span></p>
+                <p className="text-sm font-bold text-gray-700 mb-2">Model: <span className="font-normal">K13</span></p>
                 <div className="flex gap-3">
                   <button
-                    className="px-6 py-2 rounded-full border-2 font-semibold text-sm transition-all border-orange-500 bg-orange-50 text-orange-600">
+                    onClick={() => navigate('/k13-lite')}
+                    className="px-6 py-2 rounded-full border-2 font-semibold text-sm transition-all border-gray-300 text-gray-700 hover:border-gray-400">
                     K13 Lite
                   </button>
                   <button
-                    onClick={() => navigate('/k13')}
-                    className="px-6 py-2 rounded-full border-2 font-semibold text-sm transition-all border-gray-300 text-gray-700 hover:border-gray-400">
+                    className="px-6 py-2 rounded-full border-2 font-semibold text-sm transition-all border-orange-500 bg-orange-50 text-orange-600">
                     K13
                   </button>
                 </div>
               </div>
 
-              {/* Color selector — pill buttons like reference */}
+              {/* Color selector */}
               <div>
                 <p className="text-sm font-bold text-gray-700 mb-2">Color: <span className="font-normal">{color}</span></p>
                 <div className="flex gap-3">
@@ -272,7 +267,7 @@ export default function K13LitePage() {
                 </div>
               </div>
 
-              {/* ── What's In The Box ── */}
+              {/* What's In The Box */}
               <div className="border border-gray-200 rounded-xl overflow-hidden">
                 <button onClick={() => setBoxOpen(p => !p)}
                   className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 transition-colors">
@@ -281,7 +276,7 @@ export default function K13LitePage() {
                 </button>
                 {boxOpen && (
                   <div className="px-4 pb-4 border-t border-gray-100">
-                    <p className="text-xs font-semibold text-gray-600 mt-3 mb-2">K13 DTF Lite Printer (LH-500)</p>
+                    <p className="text-xs font-semibold text-gray-600 mt-3 mb-2">K13 DTF Printer (LH-500)</p>
                     <ul className="space-y-1">
                       {IN_BOX.slice(1).map((item, i) => (
                         <li key={i} className="text-xs text-gray-600 flex items-start gap-1.5">
@@ -293,7 +288,7 @@ export default function K13LitePage() {
                 )}
               </div>
 
-              {/* Options — all 5 stacked cards */}
+              {/* Options — bundle cards */}
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-sm font-bold text-gray-900">Options</p>
@@ -332,17 +327,19 @@ export default function K13LitePage() {
               </div>
               <button onClick={handleBuyNow}
                 className="w-full border-2 border-[#E85A24] text-[#E85A24] hover:bg-[#E85A24] hover:text-white font-bold py-3 rounded-xl transition text-base">
-                Buy It Now
+                Buy Now
               </button>
-              <div className="flex items-center justify-center gap-1.5 text-sm font-medium text-gray-700">
-                <Truck className="w-4 h-4 text-green-600" /> 14–17 Business Days Delivery
-              </div>
 
               {/* Trust badges */}
-              <div className="flex flex-wrap gap-2">
-                {[{ icon: Shield, text: '12-Month Warranty' }, { icon: Headphones, text: '24/6 Tech Support' }, { icon: BookOpen, text: 'Free Training' }].map(({ icon: Icon, text }) => (
-                  <div key={text} className="flex items-center gap-1.5 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1">
-                    <Icon className="w-3.5 h-3.5 text-gray-500" /><span>{text}</span>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { Icon: Shield, label: '12-Month Warranty' },
+                  { Icon: Headphones, label: '24/7 Support' },
+                  { Icon: BookOpen, label: 'Video Tutorials' },
+                ].map(({ Icon, label }) => (
+                  <div key={label} className="flex flex-col items-center gap-1 bg-gray-50 rounded-xl py-3 px-2 border border-gray-100">
+                    <Icon className="w-5 h-5 text-orange-500" />
+                    <span className="text-xs font-semibold text-gray-700 text-center">{label}</span>
                   </div>
                 ))}
               </div>
@@ -351,114 +348,90 @@ export default function K13LitePage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════
-          SECTION 2 — VIDEO TABS
-      ══════════════════════════════════════════════════════════ */}
-      <section className="bg-black mt-12">
-        <div className="border-b border-gray-800 sticky top-0 z-10 bg-black">
-          <div className="max-w-7xl mx-auto px-4 flex overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+      {/* ══ SECTION 2 — SPECS ══ */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Specifications</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {SPECS.map(([k, v]) => (
+              <div key={k} className="flex gap-3 bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wide w-36 flex-shrink-0 pt-0.5">{k}</span>
+                <span className="text-sm text-gray-800 font-medium">{v}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SECTION 3 — VIDEO TABS ══ */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">See It In Action</h2>
+          <div className="flex gap-2 flex-wrap mb-6">
             {VIDEOS.map((v, i) => (
               <button key={i} onClick={() => setActiveVideoTab(i)}
-                className={`flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${activeVideoTab === i ? 'border-white text-white' : 'border-transparent text-gray-400 hover:text-gray-200'}`}>
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${activeVideoTab === i ? 'bg-[#E85A24] text-white' : 'bg-white border border-gray-300 text-gray-700 hover:border-orange-400'}`}>
                 {v.tab}
               </button>
             ))}
           </div>
-        </div>
-        {VIDEOS.map((v, i) => (
-          <div key={i} className={i === activeVideoTab ? 'block' : 'hidden'}>
-            <div className="max-w-7xl mx-auto px-4 py-10 flex flex-col md:flex-row gap-8 items-center">
-              <div className="md:w-1/3">
-                <h2 className="text-3xl font-black text-white mb-3">{v.heading}</h2>
-                <p className="text-gray-400 text-sm leading-relaxed">{v.desc}</p>
-              </div>
-              <div className="flex-1 w-full">
-                <AutoVideo src={v.src} className="w-full rounded-2xl" />
-              </div>
+          <div className="flex flex-col lg:flex-row gap-8 items-center">
+            <div className="w-full lg:w-1/2 rounded-2xl overflow-hidden shadow-lg">
+              <AutoVideo src={VIDEOS[activeVideoTab].src} className="w-full aspect-video object-cover" />
             </div>
-          </div>
-        ))}
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════
-          SECTION 3 — SPECS
-      ══════════════════════════════════════════════════════════ */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-10">Parameter Table</h2>
-          <div className="flex flex-col lg:flex-row gap-10 items-start">
-            <div className="lg:w-2/5 flex justify-center">
-              <img src={images[0]} alt="K13 Lite" className="max-w-xs w-full object-contain drop-shadow-xl" />
-            </div>
-            <div className="lg:w-3/5 overflow-x-auto">
-              <table className="w-full text-sm border-collapse">
-                <tbody>
-                  {SPECS.map(([label, value]) => (
-                    <tr key={label} className="border-b border-gray-200 last:border-0">
-                      <td className="py-3 pr-4 font-bold text-gray-900 w-2/5">{label}</td>
-                      <td className="py-3 text-blue-600">{value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="w-full lg:w-1/2">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">{VIDEOS[activeVideoTab].heading}</h3>
+              <p className="text-gray-600 leading-relaxed">{VIDEOS[activeVideoTab].desc}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════
-          SECTION 4 — FAQs
-      ══════════════════════════════════════════════════════════ */}
+      {/* ══ SECTION 4 — FAQ ══ */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-10">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            {FAQS.map((faq, i) => (
-              <div key={i} className="bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden">
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full text-left px-6 py-5 flex justify-between items-center font-semibold text-gray-900 hover:bg-gray-100 transition-colors">
-                  <span className="pr-4">{faq.q}</span>
-                  <ChevronDown className={`w-5 h-5 flex-shrink-0 text-gray-400 transition-transform ${openFaq === i ? 'rotate-180 text-orange-500' : ''}`} />
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h2>
+          <div className="flex flex-col gap-3">
+            {FAQS.map((f, i) => (
+              <div key={i} className={`border border-gray-200 rounded-2xl overflow-hidden ${openFaq === i ? 'shadow-md' : 'hover:bg-gray-50'}`}>
+                <button className="w-full text-left px-6 py-5 flex justify-between items-center font-semibold text-gray-900" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                  <span className="pr-4">{f.q}</span>
+                  <ChevronDown className={`w-5 h-5 shrink-0 text-gray-400 transition-transform duration-300 ${openFaq === i ? 'rotate-180 text-orange-500' : ''}`} />
                 </button>
-                {openFaq === i && (
-                  <div className="px-6 py-4 text-gray-600 text-sm leading-relaxed border-t border-gray-200">{faq.a}</div>
-                )}
+                <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-60 border-t border-gray-100' : 'max-h-0'}`}>
+                  <p className="px-6 py-4 text-gray-600 leading-relaxed">{f.a}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════
-          SECTION 5 — Reviews
-      ══════════════════════════════════════════════════════════ */}
+      {/* ══ SECTION 5 — REVIEWS ══ */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Customer Reviews</h2>
-            <div className="flex items-center justify-center gap-2">
-              <div className="flex">{[1,2,3,4,5].map(s => <Star key={s} className="w-5 h-5 fill-yellow-400 text-yellow-400" />)}</div>
-              <span className="text-xl font-extrabold text-gray-900">4.96</span>
-              <span className="text-gray-500">(252 reviews)</span>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Customer Reviews</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {REVIEWS.map((r, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="font-bold text-gray-900">{r.name}</p>
-                  <p className="text-xs text-gray-400">{r.date}</p>
+              <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                <div className="flex items-center gap-1 mb-2">
+                  {[...Array(r.rating)].map((_, j) => <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                 </div>
-                <div className="flex mb-3">{Array.from({ length: r.rating }).map((_, j) => <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}</div>
-                <p className="text-gray-600 text-sm leading-relaxed">{r.text}</p>
+                <p className="text-gray-700 text-sm leading-relaxed mb-3">"{r.text}"</p>
+                <div className="flex justify-between items-center text-xs text-gray-400">
+                  <span className="font-semibold text-gray-600">{r.name}</span>
+                  <span>{r.date}</span>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* lightbox */}
-      {lightboxIdx !== null && <Lightbox images={images} startIdx={lightboxIdx} onClose={() => setLightboxIdx(null)} />}
+      {/* Lightbox */}
+      {lightboxIdx !== null && (
+        <Lightbox images={images} startIdx={lightboxIdx} onClose={() => setLightboxIdx(null)} />
+      )}
     </div>
   );
 }

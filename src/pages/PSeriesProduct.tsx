@@ -196,7 +196,6 @@ export default function PSeriesProduct() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <p className="font-bold text-gray-900 text-lg">Options</p>
-                <button className="text-[#3b82f6] text-sm hover:underline">Compare &gt;</button>
               </div>
 
               {/* Scrollable list of options */}

@@ -105,12 +105,12 @@ const categoryTabs = [
 ];
 
 const categoryItems = [
-  { name: "DTF Printer", image: "/images/cat-uv-dtf.jpg", link: "/f13" },
-  { name: "UV DTF Printer", image: "/images/cat-uv.jpg", link: "/products/procolored-vf13-pro-panda-uv-dtf-printer-13-a3-dual-xp600-2-in-1" },
-  { name: "K13 Lite", image: "/images/cat-dtg.jpg", link: "/k13-lite" },
-  { name: "F13 Pro", image: "/images/cat-equipment.jpg", link: "/f13-pro" },
-  { name: "Ink & Supplies", image: "/images/cat-consumables.jpg", link: "/products/47" },
-  { name: "P13 Printer", image: "/images/cat-parts.jpg", link: "/p13-dtf-printer" }
+  { name: "DTF Printer",    image: "/images/cat-uv-dtf.jpg",     link: "/collections/dtf-printer" },
+  { name: "UV DTF Printer", image: "/images/cat-uv.jpg",          link: "/collections/uv-dtf-printer" },
+  { name: "UV Printer",     image: "/images/cat-dtg.jpg",         link: "/collections/uv-printer" },
+  { name: "DTG Printer",    image: "/images/cat-equipment.jpg",   link: "/collections/dtg-printer" },
+  { name: "Equipment",      image: "/images/cat-consumables.jpg", link: "/collections/equipment" },
+  { name: "Consumables",    image: "/images/cat-parts.jpg",       link: "/collections/consumables" },
 ];
 
 const testimonials = [
@@ -356,10 +356,10 @@ export default function Home() {
 
       <section className="py-8 bg-gray-50 flex-none">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-10">
             {categoryItems.map((cat, index) => (
               <Link key={index} to={cat.link} className="flex flex-col items-center gap-3 group">
-                <div className="w-20 h-20 bg-white rounded-lg shadow-sm flex items-center justify-center group-hover:shadow-md transition-shadow overflow-hidden">
+                <div className="bg-white rounded-xl shadow-sm flex items-center justify-center group-hover:shadow-md transition-shadow overflow-hidden" style={{width: '100px', height: '100px'}}>
                   <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="text-center">

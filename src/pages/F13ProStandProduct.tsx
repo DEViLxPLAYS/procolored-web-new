@@ -180,7 +180,6 @@ export default function F13ProStandProduct() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <p className="font-bold text-gray-900">Options</p>
-                <button className="text-blue-500 text-sm hover:underline">Compare &gt;</button>
               </div>
               <div className="flex flex-col gap-2 max-h-[380px] overflow-y-auto pr-1">
                 {STAND_VARIANTS.map((v, i) => (

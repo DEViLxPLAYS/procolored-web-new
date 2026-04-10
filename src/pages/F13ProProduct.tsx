@@ -80,27 +80,34 @@ export default function F13ProProduct() {
         <div className="flex flex-col lg:flex-row gap-10">
 
           {/* Left — Gallery */}
-          <div className="w-full lg:w-1/2 flex gap-3">
-            {/* Thumbnails */}
-            <div className="flex flex-col gap-2">
-              {galleryImgs.map((img, i) => (
-                <button key={i} onClick={() => setActiveImg(i)}
-                  className={`w-16 h-16 rounded-xl border-2 overflow-hidden flex-shrink-0 transition-all ${activeImg === i ? 'border-orange-500' : 'border-gray-200 hover:border-gray-400'}`}>
-                  <img src={img} className="w-full h-full object-cover" alt="" />
-                </button>
-              ))}
-            </div>
+          <div className="w-full lg:w-1/2 flex flex-col gap-3">
             {/* Main image */}
-            <div className="flex-1 relative rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 aspect-square group">
-              <img src={galleryImgs[activeImg]} alt="F13 Pro" className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
+            <div className="relative rounded-2xl overflow-hidden bg-white shadow-sm aspect-square group" style={{background:'#f9f9f9'}}>
+              <img
+                src={galleryImgs[activeImg]}
+                alt="F13 Pro"
+                className="w-full h-full object-contain p-6 transition-transform duration-300 group-hover:scale-105"
+                style={{background:'#f9f9f9'}}
+              />
               <button onClick={() => setActiveImg(p => (p === 0 ? galleryImgs.length - 1 : p - 1))}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200">
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button onClick={() => setActiveImg(p => (p === galleryImgs.length - 1 ? 0 : p + 1))}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200">
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <ChevronRight className="w-5 h-5" />
               </button>
+            </div>
+            {/* Thumbnails */}
+            <div className="flex gap-2 flex-wrap">
+              {galleryImgs.map((img, i) => (
+                <button key={i} onClick={() => setActiveImg(i)}
+                  className={`w-16 h-16 rounded-xl border-2 overflow-hidden flex-shrink-0 transition-all bg-white ${
+                    activeImg === i ? 'border-orange-500' : 'border-gray-200 hover:border-gray-400'
+                  }`}>
+                  <img src={img} className="w-full h-full object-contain p-1" alt="" />
+                </button>
+              ))}
             </div>
           </div>
 
@@ -150,7 +157,6 @@ export default function F13ProProduct() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <p className="font-bold text-gray-900">Options</p>
-                <button className="text-blue-500 text-sm hover:underline">Compare &gt;</button>
               </div>
               <div className="flex flex-col gap-2 max-h-[380px] overflow-y-auto pr-1">
                 {VARIANTS.map((v, i) => (
