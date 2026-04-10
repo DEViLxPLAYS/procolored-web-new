@@ -1,82 +1,108 @@
 /**
- * Nodemailer transporter with dual-port fallback.
+ * Email sender — supports BOTH:
+ *   1. Resend API (preferred for Railway — uses HTTPS, not SMTP)
+ *   2. Nodemailer SMTP fallback (for local dev)
  * 
- * Railway often blocks port 465 (SSL SMTP).
- * This config tries 465 first, then auto-falls back to 587 (TLS).
+ * Set RESEND_API_KEY in Railway env vars to use Resend.
+ * Falls back to SMTP if RESEND_API_KEY is not set.
+ * 
+ * Get a FREE Resend API key at: https://resend.com (free: 3000 emails/month)
  */
 const nodemailer = require('nodemailer');
 
-const SMTP_HOST = () => process.env.SMTP_HOST || 'smtp.hostinger.com';
-const SMTP_USER = () => process.env.SMTP_USER || 'support@procollored.com';
-const SMTP_PASS = () => process.env.SMTP_PASS;
-const SMTP_PORT = () => parseInt(process.env.SMTP_PORT || '465', 10);
+// ── Resend sender (HTTPS API — works on Railway no SMTP port issues) ──────────
+async function sendViaResend(options) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return null; // Not configured, fall through to SMTP
 
-function buildTransporter(port) {
-  const secure = port === 465;
-  return nodemailer.createTransport({
-    host: SMTP_HOST(),
-    port,
-    secure,
-    auth: { user: SMTP_USER(), pass: SMTP_PASS() },
-    tls: { rejectUnauthorized: false },
-    connectionTimeout: 20000,
-    greetingTimeout: 15000,
-    socketTimeout: 30000,
-  });
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: options.from || `Procolored Store <${process.env.SMTP_USER || 'support@procollored.com'}>`,
+        to: [options.to],
+        subject: options.subject,
+        html: options.html,
+        reply_to: options.replyTo || process.env.SMTP_USER,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.id) {
+      console.log(`[Email] ✅ Resend: sent to ${options.to} — ID: ${data.id}`);
+      return { success: true, messageId: data.id, provider: 'resend' };
+    } else {
+      console.error('[Email] Resend error:', JSON.stringify(data));
+      return { success: false, error: JSON.stringify(data), provider: 'resend' };
+    }
+  } catch (err) {
+    console.error('[Email] Resend fetch error:', err.message);
+    return { success: false, error: err.message, provider: 'resend' };
+  }
 }
 
-/**
- * Try sending on primary port, then fallback port if it fails.
- * Returns { success, messageId?, error? }
- */
-const sendMail = async (mailOptions) => {
-  const pass = SMTP_PASS();
-  const user = SMTP_USER();
+// ── SMTP sender via Nodemailer (fallback, with dual-port) ─────────────────────
+async function sendViaSmtp(options) {
+  const pass = process.env.SMTP_PASS;
+  const user = process.env.SMTP_USER || 'support@procollored.com';
+  const host = process.env.SMTP_HOST || 'smtp.hostinger.com';
 
   if (!pass) {
-    console.warn('[Email] SMTP_PASS not set — cannot send.');
-    return { success: false, error: 'SMTP_PASS missing in environment' };
+    console.warn('[Email] SMTP_PASS not set — cannot send via SMTP.');
+    return { success: false, error: 'SMTP_PASS missing', provider: 'smtp' };
   }
 
   const fromLabel = process.env.SMTP_FROM || `Procolored Store <${user}>`;
-  const primaryPort = SMTP_PORT();
-  const fallbackPort = primaryPort === 465 ? 587 : 465;
 
-  const options = {
-    from: mailOptions.from || fromLabel,
-    to: mailOptions.to,
-    subject: mailOptions.subject,
-    html: mailOptions.html,
-    replyTo: mailOptions.replyTo || user,
+  const mailOptions = {
+    from: options.from || fromLabel,
+    to: options.to,
+    subject: options.subject,
+    html: options.html,
+    replyTo: options.replyTo || user,
   };
 
-  // ── Try primary port ──────────────────────────────────────────────────────
-  try {
-    const t = buildTransporter(primaryPort);
-    const info = await t.sendMail(options);
-    console.log(`[Email] ✅ Sent (port ${primaryPort}) to ${options.to} — MsgID: ${info.messageId}`);
-    return { success: true, messageId: info.messageId, port: primaryPort };
-  } catch (err1) {
-    console.error(`[Email] ❌ Port ${primaryPort} failed: ${err1.message} (code: ${err1.code})`);
+  // Try port 465 first, then 587
+  for (const port of [465, 587]) {
+    const secure = port === 465;
+    const transporter = nodemailer.createTransport({
+      host,
+      port,
+      secure,
+      auth: { user, pass },
+      tls: { rejectUnauthorized: false },
+      connectionTimeout: 15000,
+      greetingTimeout: 12000,
+      socketTimeout: 20000,
+    });
 
-    // ── Fallback to other port ────────────────────────────────────────────
-    console.log(`[Email] 🔄 Retrying on port ${fallbackPort}...`);
     try {
-      const t2 = buildTransporter(fallbackPort);
-      const info2 = await t2.sendMail(options);
-      console.log(`[Email] ✅ Sent (port ${fallbackPort} fallback) to ${options.to} — MsgID: ${info2.messageId}`);
-      return { success: true, messageId: info2.messageId, port: fallbackPort };
-    } catch (err2) {
-      console.error(`[Email] ❌ Port ${fallbackPort} also failed: ${err2.message} (code: ${err2.code})`);
-      console.error('[Email] Both ports failed. Check Railway SMTP firewall settings.');
-      return {
-        success: false,
-        error: `Port ${primaryPort}: ${err1.message} | Port ${fallbackPort}: ${err2.message}`,
-        code465: err1.code,
-        code587: err2.code,
-      };
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`[Email] ✅ SMTP port ${port}: sent to ${options.to} — MsgID: ${info.messageId}`);
+      return { success: true, messageId: info.messageId, provider: `smtp-${port}` };
+    } catch (err) {
+      console.error(`[Email] ❌ SMTP port ${port} failed: ${err.message} (code: ${err.code})`);
     }
   }
+
+  return { success: false, error: 'Both SMTP ports (465, 587) failed', provider: 'smtp' };
+}
+
+// ── Main sendMail — tries Resend first, then SMTP ────────────────────────────
+const sendMail = async (mailOptions) => {
+  // 1. Try Resend if API key is set (preferred on Railway)
+  if (process.env.RESEND_API_KEY) {
+    const result = await sendViaResend(mailOptions);
+    if (result) return result;
+  }
+
+  // 2. Fall back to SMTP (works locally, may fail on Railway)
+  return sendViaSmtp(mailOptions);
 };
 
 module.exports = { sendMail };
