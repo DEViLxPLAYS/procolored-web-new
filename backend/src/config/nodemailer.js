@@ -1,56 +1,81 @@
 /**
- * Nodemailer transporter — lazy init so Railway env vars are
- * read at send time (not at module load time before dotenv runs).
+ * Nodemailer transporter with dual-port fallback.
+ * 
+ * Railway often blocks port 465 (SSL SMTP).
+ * This config tries 465 first, then auto-falls back to 587 (TLS).
  */
 const nodemailer = require('nodemailer');
 
-// ── Build a fresh transporter each call (cheap, ensures env vars are fresh) ──
-function buildTransporter() {
-  const host = process.env.SMTP_HOST;
-  const port = parseInt(process.env.SMTP_PORT || '465', 10);
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+const SMTP_HOST = () => process.env.SMTP_HOST || 'smtp.hostinger.com';
+const SMTP_USER = () => process.env.SMTP_USER || 'support@procollored.com';
+const SMTP_PASS = () => process.env.SMTP_PASS;
+const SMTP_PORT = () => parseInt(process.env.SMTP_PORT || '465', 10);
 
-  if (!host || !user || !pass) return null;
-
+function buildTransporter(port) {
+  const secure = port === 465;
   return nodemailer.createTransport({
-    host,
+    host: SMTP_HOST(),
     port,
-    secure: port === 465,      // SSL for 465, TLS for 587
-    auth: { user, pass },
+    secure,
+    auth: { user: SMTP_USER(), pass: SMTP_PASS() },
     tls: { rejectUnauthorized: false },
-    connectionTimeout: 15000,
-    greetingTimeout: 10000,
-    socketTimeout: 20000,
+    connectionTimeout: 20000,
+    greetingTimeout: 15000,
+    socketTimeout: 30000,
   });
 }
 
 /**
- * Send a single email.
- * Returns { success: true, messageId } or { success: false, error: string }
+ * Try sending on primary port, then fallback port if it fails.
+ * Returns { success, messageId?, error? }
  */
 const sendMail = async (mailOptions) => {
-  const host = process.env.SMTP_HOST;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const pass = SMTP_PASS();
+  const user = SMTP_USER();
 
-  if (!host || !user || !pass) {
-    console.warn('[Email] SMTP credentials not set — skipping email send.');
-    return { success: false, error: 'SMTP credentials missing' };
+  if (!pass) {
+    console.warn('[Email] SMTP_PASS not set — cannot send.');
+    return { success: false, error: 'SMTP_PASS missing in environment' };
   }
 
-  const transporter = buildTransporter();
-  if (!transporter) {
-    return { success: false, error: 'Could not build SMTP transporter' };
-  }
+  const fromLabel = process.env.SMTP_FROM || `Procolored Store <${user}>`;
+  const primaryPort = SMTP_PORT();
+  const fallbackPort = primaryPort === 465 ? 587 : 465;
 
+  const options = {
+    from: mailOptions.from || fromLabel,
+    to: mailOptions.to,
+    subject: mailOptions.subject,
+    html: mailOptions.html,
+    replyTo: mailOptions.replyTo || user,
+  };
+
+  // ── Try primary port ──────────────────────────────────────────────────────
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`[Email] ✅ Sent to ${mailOptions.to} — MessageID: ${info.messageId}`);
-    return { success: true, messageId: info.messageId };
-  } catch (error) {
-    console.error(`[Email] ❌ Failed to send to ${mailOptions.to}: ${error.message}`);
-    return { success: false, error: error.message };
+    const t = buildTransporter(primaryPort);
+    const info = await t.sendMail(options);
+    console.log(`[Email] ✅ Sent (port ${primaryPort}) to ${options.to} — MsgID: ${info.messageId}`);
+    return { success: true, messageId: info.messageId, port: primaryPort };
+  } catch (err1) {
+    console.error(`[Email] ❌ Port ${primaryPort} failed: ${err1.message} (code: ${err1.code})`);
+
+    // ── Fallback to other port ────────────────────────────────────────────
+    console.log(`[Email] 🔄 Retrying on port ${fallbackPort}...`);
+    try {
+      const t2 = buildTransporter(fallbackPort);
+      const info2 = await t2.sendMail(options);
+      console.log(`[Email] ✅ Sent (port ${fallbackPort} fallback) to ${options.to} — MsgID: ${info2.messageId}`);
+      return { success: true, messageId: info2.messageId, port: fallbackPort };
+    } catch (err2) {
+      console.error(`[Email] ❌ Port ${fallbackPort} also failed: ${err2.message} (code: ${err2.code})`);
+      console.error('[Email] Both ports failed. Check Railway SMTP firewall settings.');
+      return {
+        success: false,
+        error: `Port ${primaryPort}: ${err1.message} | Port ${fallbackPort}: ${err2.message}`,
+        code465: err1.code,
+        code587: err2.code,
+      };
+    }
   }
 };
 

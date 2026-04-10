@@ -128,6 +128,48 @@ app.use('/api/stripe', stripeRoutes);
 app.use('/api/contact', contactRoutes);
 
 // ================================
+// Email Diagnostic Route
+// GET /api/email-test?to=email@example.com
+// Tests SMTP live from Railway — shows exact error if failing
+// ================================
+app.get('/api/email-test', async (req, res) => {
+  const { sendMail } = require('./src/config/nodemailer');
+  const toEmail = req.query.to || process.env.NOTIFY_EMAIL || process.env.SMTP_USER;
+
+  const config = {
+    SMTP_HOST: process.env.SMTP_HOST || '(not set)',
+    SMTP_PORT: process.env.SMTP_PORT || '(not set)',
+    SMTP_USER: process.env.SMTP_USER || '(not set)',
+    SMTP_PASS: process.env.SMTP_PASS ? '✅ set (' + process.env.SMTP_PASS.length + ' chars)' : '❌ NOT SET',
+    SMTP_FROM: process.env.SMTP_FROM || '(not set)',
+    NOTIFY_EMAIL: process.env.NOTIFY_EMAIL || '(not set)',
+    NODE_ENV: process.env.NODE_ENV,
+    sendingTo: toEmail,
+  };
+
+  console.log('[EmailTest] Config:', config);
+
+  const result = await sendMail({
+    to: toEmail,
+    subject: `✅ Railway SMTP Test — ${new Date().toISOString()}`,
+    html: `
+      <div style="font-family:sans-serif;padding:24px;max-width:480px;">
+        <h2 style="color:#22c55e;">✅ Email System Working!</h2>
+        <p>This test was sent from Railway at <strong>${new Date().toISOString()}</strong></p>
+        <pre style="background:#f1f1f1;padding:12px;border-radius:6px;font-size:12px;">${JSON.stringify(config, null, 2)}</pre>
+      </div>
+    `,
+  });
+
+  res.json({
+    config,
+    emailResult: result,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+
+// ================================
 // Health check (no sensitive data)
 // ================================
 app.get('/health', (req, res) => {
