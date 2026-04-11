@@ -57,10 +57,15 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:3000',
+  // Old domain
   'https://procollored.com',
   'https://www.procollored.com',
   'https://procolored.com',
   'https://www.procolored.com',
+  // New domain
+  'https://procolored-us.com',
+  'https://www.procolored-us.com',
+  'http://185.170.58.82',
 ].filter(Boolean);
 
 const corsOptions = {

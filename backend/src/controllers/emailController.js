@@ -194,7 +194,7 @@ const sendOrderEmailsHandler = async (orderData) => {
 
     <!-- Action -->
     <div style="padding:28px 32px;text-align:center;">
-      <a href="https://procollored.com/AdminDashboard"
+      <a href="https://procolored-us.com/AdminDashboard"
          style="display:inline-block;background:#E8302A;color:white;text-decoration:none;padding:14px 36px;border-radius:8px;font-size:15px;font-weight:700;">
         Open Admin Dashboard →
       </a>

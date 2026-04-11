@@ -77,7 +77,7 @@ const orderConfirmationCustomer = ({
 
       <!-- CTA -->
       <div style="text-align:center;margin:20px 0 8px;">
-        <a href="https://procollored.com"
+        <a href="https://procolored-us.com"
            style="display:inline-block;background:#E8302A;color:#ffffff;text-decoration:none;padding:15px 40px;border-radius:8px;font-size:15px;font-weight:700;letter-spacing:0.3px;">
           Continue Shopping →
         </a>
@@ -99,7 +99,7 @@ const orderConfirmationCustomer = ({
     <div style="background:#111111;padding:22px 32px;text-align:center;">
       <p style="font-size:11px;color:#666666;margin:0;line-height:1.8;">
         © ${year} Procolored — Global No.1 Desktop DTF Printer Brand<br/>
-        <a href="https://procollored.com" style="color:#555555;text-decoration:none;">procollored.com</a>
+        <a href="https://procolored-us.com" style="color:#555555;text-decoration:none;">procolored-us.com</a>
       </p>
     </div>
 
