@@ -18,6 +18,12 @@ const contactRoutes = require('./routes/contact');
 const app = express();
 
 // ================================
+// Trust Nginx reverse proxy
+// Required for express-rate-limit behind Nginx
+// ================================
+app.set('trust proxy', 1);
+
+// ================================
 // Security Headers (Helmet)
 // ================================
 app.use(helmet({
