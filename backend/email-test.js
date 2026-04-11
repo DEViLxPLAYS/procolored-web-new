@@ -17,8 +17,8 @@ const SMTP_PASS = process.env.SMTP_PASS;
 const SMTP_FROM = process.env.SMTP_FROM || `"Procolored Store" <${SMTP_USER}>`;
 const ADMIN_EMAIL = process.env.NOTIFY_EMAIL || process.env.ADMIN_EMAIL || SMTP_USER;
 
-// Test recipient — change this to any email you want to receive the test
-const TEST_CUSTOMER_EMAIL = process.argv[2] || SMTP_USER;
+// Test recipient — defaults to arfa1054@gmail.com for testing
+const TEST_CUSTOMER_EMAIL = process.argv[2] || 'arfa1054@gmail.com';
 
 console.log('\n📧 Procolored Email Direct Test');
 console.log('================================');
@@ -138,7 +138,7 @@ const adminEmail = {
         <tr><td style="padding:8px 0;font-size:14px;color:#555;"><strong>Payment:</strong></td><td style="font-size:14px;color:#22c55e;font-weight:700;">Demo / Test</td></tr>
       </table>
       
-      <a href="https://procollored.com/AdminDashboard" style="display:inline-block;background:#E8302A;color:white;text-decoration:none;padding:14px 36px;border-radius:8px;font-size:15px;font-weight:700;">
+      <a href="https://procolored-us.com/AdminDashboard" style="display:inline-block;background:#E8302A;color:white;text-decoration:none;padding:14px 36px;border-radius:8px;font-size:15px;font-weight:700;">
         View in Admin Dashboard →
       </a>
     </div>
