@@ -8,7 +8,7 @@ export default function PandaDoll() {
         title: 'Procolored Panda Doll',
         image: 'https://www.procolored.com/cdn/shop/files/xm_deae226a-30b3-44d3-8604-e1b5b67aeaf7_1220x_crop_center.png?v=1725963688',
         badge: 'Limited Edition',
-        variants: [{ key: 'standard', label: 'Procolored Panda Doll', price: 29.99 }],
+        variants: [{ key: 'standard', label: 'Procolored Panda Doll', price: 1.00 }],
         infoSections: [
           {
             label: 'Description',

@@ -1,9 +1,9 @@
 /**
  * Email Controller
- * 
+ *
  * sendOrderEmailsHandler  — fires when an order is placed (demo or real)
- *   → Customer receives: simple "thank you for ordering" email
- *   → Admin receives: detailed order notification
+ *   → Customer: Shopify-style order confirmation with full order details
+ *   → Admin: Identical email (ditto copy) with same template
  *
  * sendContactEmailHandler — fires on contact/warranty form submissions
  * sendAbandonmentEmailHandler — fires on checkout abandonment
@@ -11,7 +11,7 @@
  */
 
 const { sendMail } = require('../config/nodemailer');
-const { orderConfirmationCustomer } = require('../templates/orderConfirmationCustomer');
+const { buildOrderEmailHtml } = require('../templates/orderEmail');
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const getFrom = () =>
@@ -32,13 +32,14 @@ const sendOrderEmailsHandler = async (orderData) => {
     customerName,
     orderNumber,
     items = [],
+    subtotal = 0,
     totalAmount = 0,
     currency = 'USD',
     paymentMethod = 'Stripe',
     shippingAddress = {},
+    billingAddress = {},
     customerCountry,
     customerCity,
-    customerIp,
     isDemoOrder = false,
   } = orderData;
 
@@ -48,182 +49,62 @@ const sendOrderEmailsHandler = async (orderData) => {
 
   console.log(`[Email] Processing order emails for ${orderNumber} — customer: ${customerEmail}, admin: ${ADMIN}`);
 
-  // ── 1. Customer — simple thank you email ───────────────────────────────────
+  // Build the shared Shopify-style template data
+  const templateData = {
+    orderNumber,
+    customerName: customerName || 'Valued Customer',
+    customerEmail: customerEmail || '',
+    items,
+    subtotal: subtotal || totalAmount,
+    totalAmount,
+    currency,
+    paymentMethod: isDemoOrder ? 'Demo / Test Order' : paymentMethod,
+    shippingAddress,
+    billingAddress: billingAddress && Object.keys(billingAddress).length > 0
+      ? billingAddress
+      : shippingAddress, // fall back to shipping if billing not provided
+  };
+
+  // Build HTML once — same for both customer and admin
+  let html;
+  try {
+    html = buildOrderEmailHtml(templateData);
+  } catch (tplErr) {
+    console.error('[Email] Template build error:', tplErr.message);
+    html = `<div style="font-family:sans-serif;padding:32px;">
+      <h2>Order ${orderNumber} Confirmed</h2>
+      <p>Hi ${customerName}, thank you for your order!</p>
+      <p>Questions? <a href="mailto:support@procollored.com">support@procollored.com</a></p>
+    </div>`;
+  }
+
+  const subjectCustomer = isDemoOrder
+    ? `[Demo] Order ${orderNumber} confirmed — Procolored`
+    : `Order ${orderNumber} confirmed — Procolored`;
+
+  const subjectAdmin = isDemoOrder
+    ? `🧪 Demo Order ${orderNumber} — ${customerEmail || 'no email'}`
+    : `🔔 New Order ${orderNumber} — ${customerName} — $${parseFloat(totalAmount).toFixed(2)}`;
+
+  // ── 1. Customer email ──────────────────────────────────────────────────────
   if (customerEmail) {
-    let html;
-    try {
-      html = orderConfirmationCustomer({
-        customerName: customerName || 'Valued Customer',
-        orderNumber,
-        isDemoOrder,
-      });
-    } catch (tplErr) {
-      console.error('[Email] Customer template error:', tplErr.message);
-      // Fallback: ultra simple plain HTML
-      html = `
-        <div style="font-family:sans-serif;max-width:500px;margin:32px auto;padding:32px;background:#fff;border-radius:12px;border:1px solid #eee;">
-          <h2 style="color:#E8302A;">Thank you for your order at Procolored!</h2>
-          <p>Hi ${customerName || 'there'}, we've received your order <strong>${orderNumber}</strong>.</p>
-          <p>Our team will contact you shortly with shipping details.</p>
-          <p style="color:#666;font-size:13px;">Questions? <a href="mailto:support@procollored.com" style="color:#E8302A;">support@procollored.com</a></p>
-        </div>
-      `;
-    }
-
-    const resp = await sendMail({
-      from: FROM,
-      to: customerEmail,
-      subject: isDemoOrder
-        ? `[Demo] You've placed an order on Procolored! 🎉`
-        : `You've placed an order on Procolored — Thank you! 🎉`,
-      html,
-    });
-
+    const resp = await sendMail({ from: FROM, to: customerEmail, subject: subjectCustomer, html });
     if (resp.success) results.customerSent = true;
     else results.errors.push(`Customer email: ${resp.error}`);
   } else {
     console.warn('[Email] No customer email address — skipping customer email.');
   }
 
-  // ── 2. Admin — detailed order notification ────────────────────────────────
-  const addrParts = [
-    shippingAddress.street || shippingAddress.address || '',
-    shippingAddress.city || customerCity || '',
-    shippingAddress.state || '',
-    shippingAddress.postalCode || shippingAddress.postal || '',
-    shippingAddress.country || customerCountry || '',
-  ].filter(Boolean);
-  const fullAddr = addrParts.join(', ') || 'Not provided';
-
-  const itemRows = items.map(i =>
-    `<tr>
-      <td style="padding:10px 8px;font-size:14px;color:#1a1a1a;border-bottom:1px solid #f0f0f0;">${i.name || 'Item'}</td>
-      <td style="padding:10px 8px;font-size:14px;color:#555;border-bottom:1px solid #f0f0f0;text-align:center;">${i.quantity || 1}</td>
-      <td style="padding:10px 8px;font-size:14px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #f0f0f0;text-align:right;">
-        ${isDemoOrder ? 'FREE' : `$${parseFloat(i.price || 0).toFixed(2)}`}
-      </td>
-    </tr>`
-  ).join('');
-
-  const adminHtml = `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"/></head>
-<body style="margin:0;padding:0;background:#f2f2f2;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <div style="max-width:620px;margin:32px auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
-
-    <!-- Header -->
-    <div style="background:#111111;padding:28px;text-align:center;">
-      <img src="https://i.postimg.cc/Y9M7TqxR/logo.webp" alt="Procolored" style="height:38px;width:auto;display:block;margin:0 auto 14px;"/>
-      <span style="background:${isDemoOrder ? '#f59e0b' : '#22c55e'};color:white;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:1px;">
-        ${isDemoOrder ? '🧪 DEMO ORDER' : '🔔 NEW ORDER'}
-      </span>
-    </div>
-
-    <!-- Alert bar -->
-    <div style="background:${isDemoOrder ? '#fffbeb' : '#f0fdf4'};padding:18px 32px;text-align:center;border-bottom:1px solid ${isDemoOrder ? '#fde68a' : '#bbf7d0'};">
-      <div style="font-size:20px;font-weight:800;color:${isDemoOrder ? '#92400e' : '#166534'};">
-        ${isDemoOrder ? '🧪 Demo Test Order Received' : '✅ New Order Received!'}
-      </div>
-      <div style="font-size:13px;color:#555555;margin-top:4px;">
-        Order <strong>${orderNumber}</strong> &bull; ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
-      </div>
-    </div>
-
-    <!-- Summary boxes -->
-    <div style="padding:28px 32px 0;">
-      <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-          <td width="31%" style="background:#f8f8f8;border-radius:8px;padding:16px;text-align:center;">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999;">Order Total</div>
-            <div style="font-size:22px;font-weight:800;color:#E8302A;margin-top:4px;">
-              ${isDemoOrder ? 'FREE' : `$${parseFloat(totalAmount).toFixed(2)}`}
-            </div>
-            <div style="font-size:11px;color:#888;">${currency}</div>
-          </td>
-          <td width="4%"></td>
-          <td width="31%" style="background:#f8f8f8;border-radius:8px;padding:16px;text-align:center;">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999;">Payment</div>
-            <div style="font-size:15px;font-weight:700;color:#22c55e;margin-top:4px;">✓ ${paymentMethod}</div>
-          </td>
-          <td width="4%"></td>
-          <td width="31%" style="background:#f8f8f8;border-radius:8px;padding:16px;text-align:center;">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999;">Items</div>
-            <div style="font-size:22px;font-weight:800;color:#1a1a1a;margin-top:4px;">${items.length}</div>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- Customer Info -->
-    <div style="padding:24px 32px 0;">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999;margin-bottom:12px;">Customer Details</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f8f8;border-radius:8px;overflow:hidden;">
-        <tr>
-          <td style="padding:10px 18px;font-size:12px;font-weight:700;color:#888;text-transform:uppercase;width:100px;">Name</td>
-          <td style="padding:10px 18px;font-size:15px;color:#1a1a1a;font-weight:600;">${customerName || 'Unknown'}</td>
-        </tr>
-        <tr style="border-top:1px solid #eeeeee;">
-          <td style="padding:10px 18px;font-size:12px;font-weight:700;color:#888;text-transform:uppercase;">Email</td>
-          <td style="padding:10px 18px;"><a href="mailto:${customerEmail}" style="font-size:15px;color:#E8302A;font-weight:600;">${customerEmail || 'N/A'}</a></td>
-        </tr>
-        <tr style="border-top:1px solid #eeeeee;">
-          <td style="padding:10px 18px;font-size:12px;font-weight:700;color:#888;text-transform:uppercase;">Address</td>
-          <td style="padding:10px 18px;font-size:14px;color:#1a1a1a;">${fullAddr}</td>
-        </tr>
-        <tr style="border-top:1px solid #eeeeee;">
-          <td style="padding:10px 18px;font-size:12px;font-weight:700;color:#888;text-transform:uppercase;">IP</td>
-          <td style="padding:10px 18px;font-size:13px;color:#888;font-family:monospace;">${customerIp || 'Unknown'}</td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- Items -->
-    <div style="padding:24px 32px 0;">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999;margin-bottom:12px;">Items Ordered</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eeeeee;border-radius:8px;overflow:hidden;">
-        <thead>
-          <tr style="background:#f8f8f8;">
-            <th style="padding:10px 8px;font-size:11px;font-weight:700;text-transform:uppercase;color:#888;text-align:left;">Product</th>
-            <th style="padding:10px 8px;font-size:11px;font-weight:700;text-transform:uppercase;color:#888;text-align:center;">Qty</th>
-            <th style="padding:10px 8px;font-size:11px;font-weight:700;text-transform:uppercase;color:#888;text-align:right;">Price</th>
-          </tr>
-        </thead>
-        <tbody>${itemRows || `<tr><td colspan="3" style="padding:16px;text-align:center;color:#888;">No items</td></tr>`}</tbody>
-      </table>
-    </div>
-
-    <!-- Action -->
-    <div style="padding:28px 32px;text-align:center;">
-      <a href="https://procolored-us.com/AdminDashboard"
-         style="display:inline-block;background:#E8302A;color:white;text-decoration:none;padding:14px 36px;border-radius:8px;font-size:15px;font-weight:700;">
-        Open Admin Dashboard →
-      </a>
-    </div>
-
-    <!-- Footer -->
-    <div style="background:#111111;padding:20px 32px;text-align:center;">
-      <p style="font-size:11px;color:#666666;margin:0;">Internal notification — Procolored Order System</p>
-    </div>
-
-  </div>
-</body>
-</html>`;
-
-  const adminResp = await sendMail({
-    from: FROM,
-    to: ADMIN,
-    subject: isDemoOrder
-      ? `🧪 Demo Order ${orderNumber} — ${customerEmail || 'no email'}`
-      : `🔔 New Order ${orderNumber} — ${customerName} — $${parseFloat(totalAmount).toFixed(2)}`,
-    html: adminHtml,
-  });
-
+  // ── 2. Admin email (identical template) ───────────────────────────────────
+  const adminResp = await sendMail({ from: FROM, to: ADMIN, subject: subjectAdmin, html });
   if (adminResp.success) results.adminSent = true;
   else results.errors.push(`Admin email: ${adminResp.error}`);
 
   console.log(`[Email] Results — customer: ${results.customerSent}, admin: ${results.adminSent}`, results.errors);
   return { success: results.customerSent || results.adminSent, ...results };
 };
+
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONTACT / WARRANTY FORM

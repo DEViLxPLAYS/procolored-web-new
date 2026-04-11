@@ -13,12 +13,12 @@ import { useCurrency } from '../context/CurrencyContext';
 const variants = [
   {
     size: '250ml',
-    price: 100, // Currently $1.00 USD for testing
+    price: 4900, // $49.00 USD
     image: 'https://www.procolored.com/cdn/shop/files/250ml_cdfd861c-62b6-4d98-9331-934d56bfe03e_1220x_crop_center.png?v=1762339048'
   },
   {
     size: '500ml',
-    price: 100, // Currently $1.00 USD for testing
+    price: 5900, // $59.00 USD
     image: 'https://www.procolored.com/cdn/shop/files/White_0d2df479-3b68-4cab-abc3-8f352988d5d2_1220x_crop_center.png?v=1762339022'
   }
 ];
