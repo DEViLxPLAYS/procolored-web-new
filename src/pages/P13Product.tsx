@@ -265,7 +265,7 @@ export default function P13Product() {
               <div className="flex items-center gap-2 mt-1.5">
                 <span className="inline-flex items-center gap-1.5 bg-red-50 border border-red-200 rounded-full px-3 py-1 text-xs font-bold text-red-600">
                   <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
-                  🔴 P13 Exclusive Deal (Rs.{variant.saving * 278}.00 PKR Off)
+                  🔴 P13 Exclusive Deal — Save ${variant.saving.toLocaleString()}.00 USD
                 </span>
               </div>
             </div>
@@ -318,12 +318,12 @@ export default function P13Product() {
                       <div>
                         <p className="font-bold text-gray-900 text-[13px]">{v.name}</p>
                         <span className="bg-pink-50 text-pink-600 border border-pink-100/50 text-[10px] font-bold px-1.5 py-0.5 rounded inline-block mt-0.5 tracking-tight">
-                          Rs.{(v.saving * 278).toLocaleString()}.00 Off
+                          Save ${v.saving.toLocaleString()}.00 USD
                         </span>
                       </div>
                       <div className="text-right ml-2 flex-shrink-0">
-                        <p className="text-[10px] leading-none mb-0.5"><s className="text-gray-400 font-medium">Rs.{(v.original * 278).toLocaleString()}.00 PKR</s></p>
-                        <p className="text-[13px] font-black text-gray-900 tracking-tight">Rs.{(v.sale * 278).toLocaleString()}.00 PKR</p>
+                        <p className="text-[10px] leading-none mb-0.5"><s className="text-gray-400 font-medium">${v.original.toLocaleString()}.00 USD</s></p>
+                        <p className="text-[13px] font-black text-gray-900 tracking-tight">${v.sale.toLocaleString()}.00 USD</p>
                       </div>
                     </div>
                   </button>
