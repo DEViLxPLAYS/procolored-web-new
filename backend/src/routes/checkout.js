@@ -111,7 +111,7 @@ router.post('/order',
       } = req.body;
 
       // Generate order number
-      const orderNumber = `PRO-${Date.now()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
+      const orderNumber = `PRO-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
 
       const { data: order, error } = await supabaseAdmin
         .from('orders')
@@ -203,7 +203,7 @@ router.post('/demo-order', orderLimiter, async (req, res) => {
       return res.status(400).json({ error: 'Please provide a valid email address.' });
     }
 
-    const orderNumber = `PRO-DEMO-${Date.now()}`;
+    const orderNumber = `PRO-DEMO-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
     const demoItems = [{ name: 'Procolored Demo Order (Testing Only)', quantity: 1, price: 0 }];
 
     const { data: order, error } = await supabaseAdmin
