@@ -92,11 +92,12 @@ export default function F13ProStandProduct() {
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="flex flex-col lg:flex-row gap-10">
 
-          {/* Left — Gallery */}
+          {/* Left — Gallery (only shown when images exist) */}
+          {galleryImgs.some(img => img) && (
           <div className="w-full lg:w-1/2 flex gap-3">
             {/* Thumbnails */}
             <div className="flex flex-col gap-2">
-              {galleryImgs.map((img, i) => (
+              {galleryImgs.filter(img => img).map((img, i) => (
                 <button key={i} onClick={() => setActiveImg(i)}
                   className={`w-16 h-16 rounded-xl border-2 overflow-hidden flex-shrink-0 transition-all bg-white ${activeImg === i ? 'border-orange-500' : 'border-gray-200 hover:border-gray-400'}`}>
                   <img src={img} className="w-full h-full object-contain p-1" alt="" />
@@ -119,6 +120,7 @@ export default function F13ProStandProduct() {
               </button>
             </div>
           </div>
+          )}
 
           {/* Right — Buy Box */}
           <div className="w-full lg:w-1/2 flex flex-col gap-4">
