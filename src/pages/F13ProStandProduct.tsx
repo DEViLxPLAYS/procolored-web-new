@@ -51,7 +51,11 @@ const STAND_VARIANTS = [
 ];
 
 const LOCKED_IMAGES: string[] = [
-  // Images will be added here
+  'https://www.procolored.com/cdn/shop/files/1_51f5ec44-cce2-4464-a9ca-4ac0786e79ec_1220x_crop_center.jpg?v=1773742870',
+  'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_4_d8d7ed01-6f5b-4443-a06b-d83c6189339e_1220x_crop_center.png?v=1773743412',
+  'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_3_c6cf14eb-0b07-4fe9-a1e6-ab1362148d99_1220x_crop_center.png?v=1773743412',
+  'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_5_8a9254cf-ad8b-48ea-9392-7c7b6fcb3d36_1220x_crop_center.png?v=1773743412',
+  'https://www.procolored.com/cdn/shop/files/F13_Pro_A3_01_1220x_crop_center.jpg?v=1773742870',
 ];
 
 // ─── Main Page ───────────────────────────────────────────────────────────────
