@@ -41,20 +41,17 @@ function Accordion({ q, a, open, onClick }: { q: string; a: string; open: boolea
 
 // ─── Stand Data ─────────────────────────────────────────────────────────────
 const STAND_VARIANTS = [
-  { id: 'f13-stand-1', name: 'F13 Pro & Bracket', sale: 5199, original: 5599, saving: 400, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/1_51f5ec44-cce2-4464-a9ca-4ac0786e79ec_1220x_crop_center.jpg?v=1773742870' },
-  { id: 'f13-stand-2', name: 'F13 Pro + Stand + Oven', sale: 5599, original: 6099, saving: 500, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/2_84b225f2-17e1-4a54-ae70-99b9d6fc31e3_1220x_crop_center.jpg?v=1773742871' },
-  { id: 'f13-stand-3', name: 'F13 Pro + Stand & Complete Bundle', sale: 5799, original: 6449, saving: 650, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/3_e2abdf88-0e5e-4ea2-a1e9-0ba27ed7481b_1220x_crop_center.jpg?v=1773742870' },
-  { id: 'f13-stand-4', name: 'F13 Pro + Stand + Oven Premium', sale: 5999, original: 6599, saving: 600, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/4_3aebd596-738b-4e01-85ca-4d0992279502_1220x_crop_center.jpg?v=1773742871' },
-  { id: 'f13-stand-5', name: 'F13 Pro + Stand & Complete Bundle Premium', sale: 6199, original: 6899, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/5_f34e58a9-454a-4f85-b9d1-84416f3f7cb3_1220x_crop_center.jpg?v=1773742870' },
-  { id: 'f13-stand-6', name: 'F13 Pro + Stand + Shaker Oven', sale: 6599, original: 7299, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/6_fc3cfef8-24d7-4726-a449-bc38e64f7058_1220x_crop_center.jpg?v=1773742870' },
-  { id: 'f13-stand-7', name: 'F13 Pro & Stand Ultimate Bundle', sale: 6799, original: 7649, saving: 850, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/7_3a38569b-ecc1-4ce5-88d8-1c9cc42b1b51_1220x_crop_center.jpg?v=1773742871' }
+  { id: 'f13-stand-1', name: 'F13 Pro & Bracket', sale: 5199, original: 5599, saving: 400, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: '' },
+  { id: 'f13-stand-2', name: 'F13 Pro + Stand + Oven', sale: 5599, original: 6099, saving: 500, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: '' },
+  { id: 'f13-stand-3', name: 'F13 Pro + Stand & Complete Bundle', sale: 5799, original: 6449, saving: 650, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: '' },
+  { id: 'f13-stand-4', name: 'F13 Pro + Stand + Oven Premium', sale: 5999, original: 6599, saving: 600, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: '' },
+  { id: 'f13-stand-5', name: 'F13 Pro + Stand & Complete Bundle Premium', sale: 6199, original: 6899, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: '' },
+  { id: 'f13-stand-6', name: 'F13 Pro + Stand + Shaker Oven', sale: 6599, original: 7299, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: '' },
+  { id: 'f13-stand-7', name: 'F13 Pro & Stand Ultimate Bundle', sale: 6799, original: 7649, saving: 850, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: '' }
 ];
 
-const LOCKED_IMAGES = [
-  'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_4_d8d7ed01-6f5b-4443-a06b-d83c6189339e_1220x_crop_center.png?v=1773743412',
-  'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_3_c6cf14eb-0b07-4fe9-a1e6-ab1362148d99_1220x_crop_center.png?v=1773743412',
-  'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_5_8a9254cf-ad8b-48ea-9392-7c7b6fcb3d36_1220x_crop_center.png?v=1773743412',
-  'https://www.procolored.com/cdn/shop/files/F13_Pro_A3_01_1220x_crop_center.jpg?v=1773742870'
+const LOCKED_IMAGES: string[] = [
+  // Images will be added here
 ];
 
 // ─── Main Page ───────────────────────────────────────────────────────────────
