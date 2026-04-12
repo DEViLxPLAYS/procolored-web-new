@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useCart } from '../context/CartContext';
 import { useCurrency, convertPrice } from '../context/CurrencyContext';
 import { Link, useNavigate } from 'react-router-dom';
@@ -114,7 +114,7 @@ function StripePaymentForm({ isSubmitting, setIsSubmitting, onSuccess, validateF
           </div>
         </div>
         <div style={{ padding: 16 }}>
-          <PaymentElement options={{ layout: 'tabs', wallets: { applePay: 'never', googlePay: 'never' } }} />
+          <PaymentElement options={{ layout: 'tabs', wallets: { applePay: 'never', googlePay: 'never' }, fields: { billingDetails: 'never' } }} />
         </div>
       </div>
       {errorMsg && (
@@ -125,7 +125,7 @@ function StripePaymentForm({ isSubmitting, setIsSubmitting, onSuccess, validateF
       <button type="submit" disabled={isSubmitting || !stripe}
         style={{ width: '100%', background: '#1a1a1a', color: '#fff', border: 'none', padding: 15, borderRadius: 6, fontSize: 15, fontWeight: 700, cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
         {isSubmitting
-          ? <><span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} /> Processing...</>
+          ? <><span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />Processing...</>
           : <><CreditCard size={16} /> Pay now</>}
       </button>
     </form>
@@ -141,7 +141,7 @@ function DemoOrderButton({ isSubmitting, onSubmit }: { isSubmitting: boolean; on
       <button onClick={onSubmit} disabled={isSubmitting}
         style={{ width: '100%', background: '#1a1a1a', color: '#fff', border: 'none', padding: 15, borderRadius: 6, fontSize: 15, fontWeight: 700, cursor: isSubmitting ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
         {isSubmitting
-          ? <><span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} /> Processing...</>
+          ? <><span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />Processing...</>
           : <><CheckCircle size={16} /> Place order</>}
       </button>
     </div>
@@ -188,12 +188,10 @@ function OrderConfirmation({
       <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: '20px 24px', marginBottom: 24 }}>
         <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 20px', color: '#1a1a1a' }}>Order details</h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px 32px' }}>
-          {/* Contact */}
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', marginBottom: 6 }}>Contact information</div>
             <div style={{ fontSize: 14, color: '#555' }}>{data.customerEmail}</div>
           </div>
-          {/* Payment method */}
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', marginBottom: 6 }}>Payment method</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#555' }}>
@@ -201,7 +199,6 @@ function OrderConfirmation({
             </div>
             {data.totalAmount > 0 && <div style={{ fontSize: 13, color: '#777', marginTop: 6 }}>${data.totalAmount.toFixed(2)} USD</div>}
           </div>
-          {/* Shipping address */}
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', marginBottom: 6 }}>Shipping address</div>
             <div style={{ fontSize: 14, color: '#555', lineHeight: 1.7 }}>
@@ -211,7 +208,6 @@ function OrderConfirmation({
               {addr?.country}
             </div>
           </div>
-          {/* Billing address */}
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', marginBottom: 6 }}>Billing address</div>
             <div style={{ fontSize: 14, color: '#555', lineHeight: 1.7 }}>
@@ -221,7 +217,6 @@ function OrderConfirmation({
               {addr?.country}
             </div>
           </div>
-          {/* Shipping method */}
           <div style={{ gridColumn: '1 / -1' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', marginBottom: 6 }}>Shipping method</div>
             <div style={{ fontSize: 14, color: '#555' }}>Standard Shipping (14–17 business days)</div>
@@ -254,6 +249,165 @@ function OrderConfirmation({
   );
 }
 
+// ── Shell — TOP-LEVEL component (NOT nested inside Checkout) ──────────────────
+// IMPORTANT: defining this outside Checkout prevents React from remounting it on
+// every state change, which would cause all inputs to lose focus after each keystroke.
+interface ShellProps {
+  activePolicyKey: string | null;
+  onClosePolicy: () => void;
+  children: React.ReactNode;
+}
+function CheckoutShell({ activePolicyKey, onClosePolicy, children }: ShellProps) {
+  return (
+    <div style={{ minHeight: '100vh', background: '#fff', fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif' }}>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        input:focus, select:focus { border-color: #1a1a1a !important; outline: none; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+        input::placeholder, select::placeholder { color: #aaa; }
+        * { box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+        @media (max-width: 768px) { .checkout-layout { flex-direction: column !important; } .checkout-right { width: 100% !important; height: auto !important; position: relative !important; border-left: none !important; border-top: 1px solid #e5e7eb !important; } .checkout-left { padding: 24px 20px 40px !important; } }
+      `}</style>
+      {activePolicyKey && <PolicyModal policyKey={activePolicyKey} onClose={onClosePolicy} />}
+      <header style={{ borderBottom: '1px solid #e5e7eb', padding: '0 40px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff', position: 'sticky', top: 0, zIndex: 100 }}>
+        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+          <img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" style={{ height: 30 }} />
+        </Link>
+        <Link to="/" style={{ fontSize: 13, color: '#555', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 500 }}>
+          Return to store <ChevronRight size={13} />
+        </Link>
+      </header>
+      {children}
+    </div>
+  );
+}
+
+// ── Right Order Summary Panel — TOP-LEVEL component (NOT nested inside Checkout) ──
+// Same reason: must be outside Checkout to avoid remounting on every keystroke.
+interface RightPanelProps {
+  displayItems: any[];
+  successData: OrderSuccessData | null;
+  isDemoCart: boolean;
+  fmtUSD: (n: number) => string;
+  discountApplied: boolean;
+  discountCode: string;
+  setDiscountCode: (v: string) => void;
+  discountError: string;
+  setDiscountError: (v: string) => void;
+  subtotalUSD: number;
+  discountAmount: number;
+  totalUSD: number;
+  handleApplyDiscount: (e: React.FormEvent) => void;
+  setDiscountApplied: (v: boolean) => void;
+}
+function CheckoutRightPanel({
+  displayItems, successData, isDemoCart, fmtUSD, discountApplied, discountCode,
+  setDiscountCode, discountError, setDiscountError, subtotalUSD, discountAmount,
+  totalUSD, handleApplyDiscount, setDiscountApplied,
+}: RightPanelProps) {
+  const inp = { width: '100%', border: '1px solid #d1d5db', borderRadius: 6, padding: '12px 14px', fontSize: 14, outline: 'none', background: '#fff', boxSizing: 'border-box' as const, color: '#1a1a1a', fontFamily: 'inherit' };
+  return (
+    <div style={{
+      width: '44%', minWidth: 320, maxWidth: 520, background: '#f5f5f5', borderLeft: '1px solid #e5e7eb',
+      position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', padding: '40px 36px',
+      boxSizing: 'border-box', flexShrink: 0,
+    }}>
+      {/* Items list */}
+      <div style={{ marginBottom: 20 }}>
+        {displayItems.map((item: any, idx: number) => {
+          const price = item.priceUSD ?? 0;
+          const qty = item.quantity ?? 1;
+          return (
+            <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, marginBottom: 18 }}>
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <div style={{ width: 60, height: 60, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 6 }}>
+                  {item.image && <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+                </div>
+                <span style={{ position: 'absolute', top: -8, right: -8, width: 20, height: 20, background: '#888', color: '#fff', borderRadius: '50%', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {qty}
+                </span>
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', lineHeight: 1.4 }}>{item.name}</div>
+              </div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#1a1a1a', whiteSpace: 'nowrap' }}>
+                {price > 0 ? fmtUSD(price * qty) : 'FREE'}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Discount input — only during checkout (not on confirmation) */}
+      {!successData && !isDemoCart && (
+        <div style={{ marginBottom: 16 }}>
+          <form onSubmit={handleApplyDiscount} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+            <div style={{ position: 'relative', flex: 1 }}>
+              <Tag size={13} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#aaa' }} />
+              <input type="text" value={discountCode} onChange={e => { setDiscountCode(e.target.value); setDiscountError(''); }}
+                placeholder="Discount code or gift card" disabled={discountApplied}
+                style={{ ...inp, paddingLeft: 34, fontSize: 13 }} />
+            </div>
+            <button type="submit" disabled={!discountCode.trim() || discountApplied}
+              style={{ padding: '12px 14px', border: '1px solid #d1d5db', borderRadius: 6, background: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', color: discountCode.trim() && !discountApplied ? '#1a1a1a' : '#aaa' }}>
+              Apply
+            </button>
+          </form>
+          {discountError && <div style={{ fontSize: 12, color: '#dc2626' }}>{discountError}</div>}
+          {discountApplied && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 6, fontSize: 13, color: '#166534' }}>
+              🏷️ <strong>PROCOLORED5</strong> — 5% off applied
+              <button onClick={() => { setDiscountApplied(false); setDiscountCode(''); }} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: '#166534', fontSize: 18, lineHeight: 1, padding: 0 }}>×</button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Totals */}
+      <div style={{ borderTop: '1px solid #d5d5d5', paddingTop: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 10 }}>
+          <span>Subtotal</span>
+          <span style={{ color: '#1a1a1a', fontWeight: 500 }}>{isDemoCart ? 'FREE' : fmtUSD(subtotalUSD)}</span>
+        </div>
+        {discountApplied && !isDemoCart && !successData && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 10 }}>
+            <span>Order discount <span style={{ fontSize: 12, color: '#166534', fontWeight: 600 }}>(PROCOLORED5)</span></span>
+            <span style={{ color: '#166534', fontWeight: 600 }}>−{fmtUSD(discountAmount)}</span>
+          </div>
+        )}
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 10 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            Shipping
+            <span title="Free worldwide shipping" style={{ width: 14, height: 14, border: '1px solid #bbb', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#888', cursor: 'help', flexShrink: 0 }}>?</span>
+          </span>
+          <span style={{ fontWeight: 700, color: '#22c55e' }}>FREE</span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 18 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            Estimated taxes
+            <span title="No taxes applied" style={{ width: 14, height: 14, border: '1px solid #bbb', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#888', cursor: 'help', flexShrink: 0 }}>?</span>
+          </span>
+          <span style={{ color: '#1a1a1a', fontWeight: 500 }}>$0.00</span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #d5d5d5', paddingTop: 14 }}>
+          <span style={{ fontSize: 17, fontWeight: 700, color: '#1a1a1a' }}>Total</span>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+            <span style={{ fontSize: 13, color: '#888' }}>USD</span>
+            <span style={{ fontSize: 22, fontWeight: 800, color: '#1a1a1a' }}>
+              {isDemoCart ? '$0.00' : fmtUSD(successData ? successData.totalAmount : totalUSD)}
+            </span>
+          </div>
+        </div>
+        {discountApplied && !isDemoCart && !successData && (
+          <div style={{ fontSize: 13, color: '#166534', marginTop: 10 }}>
+            🏷️ <strong>TOTAL SAVINGS {fmtUSD(discountAmount)}</strong>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Main Checkout ─────────────────────────────────────────────────────────────
 export default function Checkout() {
   const { items, cartSubtotal, clearCart } = useCart();
@@ -270,7 +424,7 @@ export default function Checkout() {
   const [city, setCity] = useState('');
   const [stateVal, setStateVal] = useState('');
   const [postal, setPostal] = useState('');
-  const [country, setCountry] = useState('Pakistan');
+  const [country, setCountry] = useState('United States');
   const [phone, setPhone] = useState('');
   const [billingSame, setBillingSame] = useState(true);
 
@@ -288,6 +442,14 @@ export default function Checkout() {
   const [isFreeOrder, setIsFreeOrder] = useState(false);
   const [stripeError, setStripeError] = useState<string | null>(null);
 
+  // Memoize stripePromise — only recreated when the publishable key changes.
+  const stripePromise = useMemo(
+    () => stripePublishableKey
+      ? loadStripe(stripePublishableKey, { advancedFraudSignals: false } as any)
+      : null,
+    [stripePublishableKey]
+  );
+
   // Pricing — always in USD
   const subtotalUSD = items.reduce((sum, item) => sum + (convertPrice(item.price, 278) * item.quantity), 0);
   const discountAmount = discountApplied ? subtotalUSD * 0.05 : 0;
@@ -296,13 +458,13 @@ export default function Checkout() {
 
   const fmtUSD = (n: number) => `$${n.toFixed(2)}`;
 
-  // Abandonment
+  // Abandonment tracking refs
   const orderCompletedRef = useRef(false);
   const abandonmentFiredRef = useRef(false);
   const latestEmailRef = useRef('');
   const latestNameRef = useRef('');
   const latestCityRef = useRef('');
-  const latestCountryRef = useRef('Pakistan');
+  const latestCountryRef = useRef('United States');
   const emailRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { latestEmailRef.current = email; }, [email]);
@@ -335,10 +497,8 @@ export default function Checkout() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [discountApplied]);
 
-  useEffect(() => {
-    fetch('https://ipapi.co/json/').then(r => r.json())
-      .then(d => { if (d?.country_name) setCountry(d.country_name); }).catch(() => {});
-  }, []);
+  // Note: IP geolocation removed — caused CORS/403 errors on production.
+  // Users can manually select their country from the dropdown.
 
   const fireAbandonment = useCallback((stepName = 'checkout') => {
     if (orderCompletedRef.current || abandonmentFiredRef.current || items.length === 0) return;
@@ -425,6 +585,11 @@ export default function Checkout() {
   const inp = { width: '100%', border: '1px solid #d1d5db', borderRadius: 6, padding: '12px 14px', fontSize: 14, outline: 'none', background: '#fff', boxSizing: 'border-box' as const, color: '#1a1a1a', fontFamily: 'inherit' };
   const openPolicy = (k: string) => setActivePolicyKey(k);
 
+  // Items for right panel — use saved cartItems after success
+  const displayItems = successData ? successData.cartItems : items.map(i => ({
+    name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image,
+  }));
+
   // ── Empty cart ──────────────────────────────────────────────────────────────
   if (items.length === 0 && !successData) {
     return (
@@ -442,157 +607,29 @@ export default function Checkout() {
     );
   }
 
-  // Items for right panel — use saved cartItems after success
-  const displayItems = successData ? successData.cartItems : items.map(i => ({
-    name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image,
-  }));
-
-  // ── RIGHT panel (static/sticky order summary) ─────────────────────────────
-  const RightPanel = () => (
-    <div style={{
-      width: '44%', minWidth: 320, maxWidth: 520, background: '#f5f5f5', borderLeft: '1px solid #e5e7eb',
-      position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', padding: '40px 36px',
-      boxSizing: 'border-box', flexShrink: 0,
-    }}>
-      {/* Items list */}
-      <div style={{ marginBottom: 20 }}>
-        {displayItems.map((item: any, idx: number) => {
-          const price = item.priceUSD ?? 0;
-          const qty = item.quantity ?? 1;
-          return (
-            <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, marginBottom: 18 }}>
-              <div style={{ position: 'relative', flexShrink: 0 }}>
-                <div style={{ width: 60, height: 60, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 6 }}>
-                  {item.image && <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
-                </div>
-                <span style={{ position: 'absolute', top: -8, right: -8, width: 20, height: 20, background: '#888', color: '#fff', borderRadius: '50%', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {qty}
-                </span>
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', lineHeight: 1.4 }}>{item.name}</div>
-              </div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: '#1a1a1a', whiteSpace: 'nowrap' }}>
-                {price > 0 ? fmtUSD(price * qty) : 'FREE'}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Discount input — only when checking out (not on confirmation) */}
-      {!successData && !isDemoCart && (
-        <div style={{ marginBottom: 16 }}>
-          <form onSubmit={handleApplyDiscount} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-            <div style={{ position: 'relative', flex: 1 }}>
-              <Tag size={13} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#aaa' }} />
-              <input type="text" value={discountCode} onChange={e => { setDiscountCode(e.target.value); setDiscountError(''); }}
-                placeholder="Discount code or gift card" disabled={discountApplied}
-                style={{ ...inp, paddingLeft: 34, fontSize: 13 }} />
-            </div>
-            <button type="submit" disabled={!discountCode.trim() || discountApplied}
-              style={{ padding: '12px 14px', border: '1px solid #d1d5db', borderRadius: 6, background: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', color: discountCode.trim() && !discountApplied ? '#1a1a1a' : '#aaa' }}>
-              Apply
-            </button>
-          </form>
-          {discountError && <div style={{ fontSize: 12, color: '#dc2626' }}>{discountError}</div>}
-          {discountApplied && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 6, fontSize: 13, color: '#166534' }}>
-              🏷️ <strong>PROCOLORED5</strong> — 5% off applied
-              <button onClick={() => { setDiscountApplied(false); setDiscountCode(''); }} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: '#166534', fontSize: 18, lineHeight: 1, padding: 0 }}>×</button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Totals */}
-      <div style={{ borderTop: '1px solid #d5d5d5', paddingTop: 16 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 10 }}>
-          <span>Subtotal</span>
-          <span style={{ color: '#1a1a1a', fontWeight: 500 }}>{isDemoCart ? 'FREE' : fmtUSD(subtotalUSD)}</span>
-        </div>
-        {discountApplied && !isDemoCart && !successData && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 10 }}>
-            <span>Order discount <span style={{ fontSize: 12, color: '#166534', fontWeight: 600 }}>(PROCOLORED5)</span></span>
-            <span style={{ color: '#166534', fontWeight: 600 }}>−{fmtUSD(discountAmount)}</span>
-          </div>
-        )}
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 10 }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            Shipping
-            <span title="Free worldwide shipping" style={{ width: 14, height: 14, border: '1px solid #bbb', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#888', cursor: 'help', flexShrink: 0 }}>?</span>
-          </span>
-          <span style={{ fontWeight: 700, color: '#22c55e' }}>FREE</span>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 18 }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            Estimated taxes
-            <span title="No taxes applied" style={{ width: 14, height: 14, border: '1px solid #bbb', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#888', cursor: 'help', flexShrink: 0 }}>?</span>
-          </span>
-          <span style={{ color: '#1a1a1a', fontWeight: 500 }}>$0.00</span>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #d5d5d5', paddingTop: 14 }}>
-          <span style={{ fontSize: 17, fontWeight: 700, color: '#1a1a1a' }}>Total</span>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span style={{ fontSize: 13, color: '#888' }}>USD</span>
-            <span style={{ fontSize: 22, fontWeight: 800, color: '#1a1a1a' }}>
-              {isDemoCart ? '$0.00' : fmtUSD(successData ? successData.totalAmount : totalUSD)}
-            </span>
-          </div>
-        </div>
-        {discountApplied && !isDemoCart && !successData && (
-          <div style={{ fontSize: 13, color: '#166534', marginTop: 10 }}>
-            🏷️ <strong>TOTAL SAVINGS {fmtUSD(discountAmount)}</strong>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  // ── Shared page shell ─────────────────────────────────────────────────────
-  const Shell = ({ children }: { children: React.ReactNode }) => (
-    <div style={{ minHeight: '100vh', background: '#fff', fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif' }}>
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        input:focus, select:focus { border-color: #1a1a1a !important; outline: none; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
-        input::placeholder, select::placeholder { color: #aaa; }
-        * { box-sizing: border-box; }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
-        @media (max-width: 768px) { .checkout-layout { flex-direction: column !important; } .checkout-right { width: 100% !important; height: auto !important; position: relative !important; border-left: none !important; border-top: 1px solid #e5e7eb !important; } .checkout-left { padding: 24px 20px 40px !important; } }
-      `}</style>
-      {activePolicyKey && <PolicyModal policyKey={activePolicyKey} onClose={() => setActivePolicyKey(null)} />}
-      {/* Header — minimal, no nav, no footer */}
-      <header style={{ borderBottom: '1px solid #e5e7eb', padding: '0 40px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff', position: 'sticky', top: 0, zIndex: 100 }}>
-        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-          <img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" style={{ height: 30 }} />
-        </Link>
-        <Link to="/" style={{ fontSize: 13, color: '#555', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 500 }}>
-          Return to store <ChevronRight size={13} />
-        </Link>
-      </header>
-      {children}
-    </div>
-  );
-
   // ── ORDER CONFIRMATION VIEW ───────────────────────────────────────────────
   if (successData) {
     return (
-      <Shell>
+      <CheckoutShell activePolicyKey={activePolicyKey} onClosePolicy={() => setActivePolicyKey(null)}>
         <div className="checkout-layout" style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
-          {/* LEFT — confirmation, scrollable */}
           <div className="checkout-left" style={{ flex: 1, overflowY: 'auto', padding: '52px 56px' }}>
             <OrderConfirmation data={successData} cartItems={successData.cartItems} onContinue={() => { setSuccessData(null); navigate('/'); }} openPolicy={openPolicy} />
           </div>
-          {/* RIGHT — static */}
-          <RightPanel />
+          <CheckoutRightPanel
+            displayItems={displayItems} successData={successData} isDemoCart={isDemoCart}
+            fmtUSD={fmtUSD} discountApplied={discountApplied} discountCode={discountCode}
+            setDiscountCode={setDiscountCode} discountError={discountError} setDiscountError={setDiscountError}
+            subtotalUSD={subtotalUSD} discountAmount={discountAmount} totalUSD={totalUSD}
+            handleApplyDiscount={handleApplyDiscount} setDiscountApplied={setDiscountApplied}
+          />
         </div>
-      </Shell>
+      </CheckoutShell>
     );
   }
 
   // ── CHECKOUT FORM VIEW ─────────────────────────────────────────────────────
   return (
-    <Shell>
+    <CheckoutShell activePolicyKey={activePolicyKey} onClosePolicy={() => setActivePolicyKey(null)}>
       <div className="checkout-layout" style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
 
         {/* LEFT — scrollable form */}
@@ -675,13 +712,13 @@ export default function Checkout() {
               : stripeError
                 ? <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}><strong>Payment Error:</strong> {stripeError}</div>
                 : stripePublishableKey && clientSecret
-                  ? <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#1a1a1a', borderRadius: '6px', fontFamily: 'inherit' }, rules: { '.Input': { boxShadow: 'none', border: '1px solid #d1d5db' }, '.Input:focus': { border: '1px solid #1a1a1a', boxShadow: 'none' } } } }}>
-                    <StripePaymentForm isSubmitting={isSubmitting} setIsSubmitting={setIsSubmitting} onSuccess={handleOrderComplete} validateForm={validateForm} />
-                  </Elements>
+                  ? <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#1a1a1a', borderRadius: '6px', fontFamily: 'inherit' }, rules: { '.Input': { boxShadow: 'none', border: '1px solid #d1d5db' }, '.Input:focus': { border: '1px solid #1a1a1a', boxShadow: 'none' } } } }}>
+                      <StripePaymentForm isSubmitting={isSubmitting} setIsSubmitting={setIsSubmitting} onSuccess={handleOrderComplete} validateForm={validateForm} />
+                    </Elements>
                   : <div style={{ padding: 32, background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                    <span style={{ width: 24, height: 24, border: '2px solid #e5e7eb', borderTopColor: '#1a1a1a', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
-                    <span style={{ fontSize: 13, color: '#888' }}>Loading payment...</span>
-                  </div>
+                      <span style={{ width: 24, height: 24, border: '2px solid #e5e7eb', borderTopColor: '#1a1a1a', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                      <span style={{ fontSize: 13, color: '#888' }}>Loading payment...</span>
+                    </div>
             }
           </section>
 
@@ -714,8 +751,14 @@ export default function Checkout() {
         </div>
 
         {/* RIGHT — static sticky panel */}
-        <RightPanel />
+        <CheckoutRightPanel
+          displayItems={displayItems} successData={successData} isDemoCart={isDemoCart}
+          fmtUSD={fmtUSD} discountApplied={discountApplied} discountCode={discountCode}
+          setDiscountCode={setDiscountCode} discountError={discountError} setDiscountError={setDiscountError}
+          subtotalUSD={subtotalUSD} discountAmount={discountAmount} totalUSD={totalUSD}
+          handleApplyDiscount={handleApplyDiscount} setDiscountApplied={setDiscountApplied}
+        />
       </div>
-    </Shell>
+    </CheckoutShell>
   );
 }
