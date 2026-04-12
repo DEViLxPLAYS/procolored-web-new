@@ -282,7 +282,7 @@ function App() {
               <Route path="showroom" element={<Showroom />} />
               <Route path="repair" element={<Repair />} />
               <Route path="warranty" element={<Warranty />} />
-              <Route path="checkout" element={<Checkout />} />
+
               <Route path="pages/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="pages/shipping-policy" element={<ShippingPolicy />} />
               <Route path="pages/refund-policy" element={<RefundPolicy />} />
@@ -294,6 +294,10 @@ function App() {
             {/* Admin panel — standalone, no public link, no layout wrapper */}
             <Route path="/AdminDashboard" element={<AdminDashboard />} />
             <Route path="/AdminDashboard/*" element={<AdminDashboard />} />
+          </Routes>
+          {/* Checkout — standalone, no nav/footer */}
+          <Routes>
+            <Route path="/checkout" element={<Checkout />} />
           </Routes>
         </Router>
       </CartProvider>
