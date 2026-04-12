@@ -114,7 +114,7 @@ export default function F13ProProduct() {
           {/* Right — Buy Box */}
           <div className="w-full lg:w-1/2 flex flex-col gap-4">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-snug">
-              Procolored F13 Pro Panda DTF Printer 13&quot; A3 Dual XP600 &amp; Complete Bundle Premium
+              Procolored F13 Pro Panda DTF Printer 13&quot; A3 Dual XP600
             </h1>
 
             {/* Stars */}
@@ -134,14 +134,6 @@ export default function F13ProProduct() {
               </p>
             </div>
 
-            {/* Extra Member Deal banner */}
-            <div className="rounded-xl border-2 border-pink-500 p-3 flex items-center justify-between gap-3 bg-white">
-              <span className="text-pink-600 font-extrabold text-xl">$400 OFF</span>
-              <div className="text-xs text-gray-600 text-right">
-                <strong>Extra Member Deal</strong> — <a href="#" className="text-red-500 underline">Log in</a><br />
-                Log in to unlock up to $400 Off (Extra deal apply at checkout)
-              </div>
-            </div>
 
             {/* Siphon Circulation */}
             <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">

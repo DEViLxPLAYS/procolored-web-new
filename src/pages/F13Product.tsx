@@ -230,7 +230,7 @@ export default function F13Product() {
 
       {/* ── Breadcrumb ─────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500 border-b border-gray-100">
-        <a href="/" className="hover:underline">Home</a> / Procolored F13 Panda DTF Printer 13&quot; A3 L1800 &amp; Oven
+        <a href="/" className="hover:underline">Home</a> / Procolored F13 Panda DTF Printer
       </div>
 
       {/* ══════════════════════════════════════════════════════════════
@@ -267,6 +267,7 @@ export default function F13Product() {
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-snug">
               Procolored F13 Panda DTF Printer 13&quot; A3 L1800 &amp; Oven
             </h1>
+            <title>Procolored F13 Panda DTF Printer — Procolored US</title>
 
             {/* Stars */}
             <div className="flex items-center gap-2">

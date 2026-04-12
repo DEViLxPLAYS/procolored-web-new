@@ -108,7 +108,7 @@ export default function F13ProStandProduct() {
             </div>
             {/* Main image */}
             <div className="flex-1 relative rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 aspect-square group">
-              <img src={galleryImgs[activeImg]} alt={variant.name} className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
+              <img src={galleryImgs[activeImg]} alt={variant.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
               <button onClick={() => setActiveImg(p => (p === 0 ? galleryImgs.length - 1 : p - 1))}
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200">
                 <ChevronLeft className="w-5 h-5" />
@@ -143,14 +143,6 @@ export default function F13ProStandProduct() {
               </p>
             </div>
 
-            {/* Extra Member Deal banner */}
-            <div className="rounded-xl border-2 border-pink-500 p-3 flex items-center justify-between gap-3 bg-white">
-              <span className="text-pink-600 font-extrabold text-xl">$400 OFF</span>
-              <div className="text-xs text-gray-600 text-right">
-                <strong>Extra Member Deal</strong> — <a href="#" className="text-red-500 underline">Log in</a><br />
-                Log in to unlock up to $400 Off (Extra deal apply at checkout)
-              </div>
-            </div>
 
             {/* Siphon Circulation */}
             <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">

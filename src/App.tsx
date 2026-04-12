@@ -125,7 +125,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="f13" element={<F13Product />} />
+              <Route path="f13" element={<Navigate to="/procolored-f13-panda-dtf-printer" replace />} />
+              <Route path="procolored-f13-panda-dtf-printer" element={<F13Product />} />
               <Route path="/products/f13-pro" element={<F13ProProduct />} />
               <Route path="/f13-pro" element={<F13ProProduct />} />
               <Route path="/products/f13-pro-stand" element={<F13ProStandProduct />} />
