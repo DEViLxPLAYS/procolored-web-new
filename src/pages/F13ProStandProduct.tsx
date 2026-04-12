@@ -55,7 +55,7 @@ const LOCKED_IMAGES: string[] = [
   'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_4_d8d7ed01-6f5b-4443-a06b-d83c6189339e_1220x_crop_center.png?v=1773743412',
   'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_3_c6cf14eb-0b07-4fe9-a1e6-ab1362148d99_1220x_crop_center.png?v=1773743412',
   'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_5_8a9254cf-ad8b-48ea-9392-7c7b6fcb3d36_1220x_crop_center.png?v=1773743412',
-  'https://www.procolored.com/cdn/shop/files/F13_Pro_A3_01_1220x_crop_center.jpg?v=1773742870',
+  'https://www.procolored.com/cdn/shop/files/F13_Pro_A3_01_1220x_crop_center.jpg?v=1773742870'
 ];
 
 // ─── Main Page ───────────────────────────────────────────────────────────────
@@ -72,7 +72,8 @@ export default function F13ProStandProduct() {
   const { addToCart } = useCart();
 
   const variant = STAND_VARIANTS[selectedVar];
-  const galleryImgs = [variant.img, ...LOCKED_IMAGES];
+  // Use LOCKED_IMAGES as the gallery (shared across all variants)
+  const galleryImgs = LOCKED_IMAGES;
 
   // When variant changes, reset to first image
   useEffect(() => { setActiveImg(0); }, [selectedVar]);
@@ -96,32 +97,34 @@ export default function F13ProStandProduct() {
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="flex flex-col lg:flex-row gap-10">
 
-          {/* Left — Gallery (only shown when images exist) */}
-          {galleryImgs.some(img => img) && (
-          <div className="w-full lg:w-1/2 flex gap-3">
-            {/* Thumbnails */}
-            <div className="flex flex-col gap-2">
-              {galleryImgs.filter(img => img).map((img, i) => (
-                <button key={i} onClick={() => setActiveImg(i)}
-                  className={`w-16 h-16 rounded-xl border-2 overflow-hidden flex-shrink-0 transition-all bg-white ${activeImg === i ? 'border-orange-500' : 'border-gray-200 hover:border-gray-400'}`}>
-                  <img src={img} className="w-full h-full object-contain p-1" alt="" />
-                </button>
-              ))}
-            </div>
+          {/* Left — Gallery: main image + horizontal thumbnails below */}
+          {galleryImgs.length > 0 && (
+          <div className="w-full lg:w-1/2 flex flex-col gap-3">
             {/* Main image */}
-            <div className="relative rounded-2xl overflow-hidden bg-white shadow-sm aspect-square group" style={{background:'#f9f9f9'}}>
+            <div className="relative rounded-2xl overflow-hidden shadow-sm aspect-square group" style={{background:'#f9f9f9'}}>
               <img src={galleryImgs[activeImg]} alt={variant.name}
                 className="w-full h-full object-contain p-6 transition-transform duration-300 group-hover:scale-105"
                 style={{background:'#f9f9f9'}}
               />
               <button onClick={() => setActiveImg(p => (p === 0 ? galleryImgs.length - 1 : p - 1))}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200">
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button onClick={() => setActiveImg(p => (p === galleryImgs.length - 1 ? 0 : p + 1))}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200">
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <ChevronRight className="w-5 h-5" />
               </button>
+            </div>
+            {/* Horizontal thumbnails below */}
+            <div className="flex flex-row gap-2 flex-wrap">
+              {galleryImgs.map((img, i) => (
+                <button key={i} onClick={() => setActiveImg(i)}
+                  className={`w-[72px] h-[72px] rounded-xl border-2 overflow-hidden flex-shrink-0 transition-all bg-white ${
+                    activeImg === i ? 'border-orange-500' : 'border-gray-200 hover:border-gray-400'
+                  }`}>
+                  <img src={img} className="w-full h-full object-contain p-1" alt="" />
+                </button>
+              ))}
             </div>
           </div>
           )}
