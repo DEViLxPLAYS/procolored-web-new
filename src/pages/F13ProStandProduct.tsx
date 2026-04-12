@@ -101,14 +101,17 @@ export default function F13ProStandProduct() {
             <div className="flex flex-col gap-2">
               {galleryImgs.map((img, i) => (
                 <button key={i} onClick={() => setActiveImg(i)}
-                  className={`w-16 h-16 rounded-xl border-2 overflow-hidden flex-shrink-0 transition-all ${activeImg === i ? 'border-orange-500' : 'border-gray-200 hover:border-gray-400'}`}>
-                  <img src={img} className="w-full h-full object-cover" alt="" />
+                  className={`w-16 h-16 rounded-xl border-2 overflow-hidden flex-shrink-0 transition-all bg-white ${activeImg === i ? 'border-orange-500' : 'border-gray-200 hover:border-gray-400'}`}>
+                  <img src={img} className="w-full h-full object-contain p-1" alt="" />
                 </button>
               ))}
             </div>
             {/* Main image */}
-            <div className="flex-1 relative rounded-2xl overflow-hidden border border-gray-200 bg-white aspect-square group">
-              <img src={galleryImgs[activeImg]} alt={variant.name} className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105" />
+            <div className="relative rounded-2xl overflow-hidden bg-white shadow-sm aspect-square group" style={{background:'#f9f9f9'}}>
+              <img src={galleryImgs[activeImg]} alt={variant.name}
+                className="w-full h-full object-contain p-6 transition-transform duration-300 group-hover:scale-105"
+                style={{background:'#f9f9f9'}}
+              />
               <button onClick={() => setActiveImg(p => (p === 0 ? galleryImgs.length - 1 : p - 1))}
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200">
                 <ChevronLeft className="w-5 h-5" />
