@@ -179,7 +179,7 @@ export default function F13ProProduct() {
                   className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-orange-500 text-orange-600 bg-orange-50 cursor-default">
                   Without Stand
                 </button>
-                <button onClick={() => navigate('/products/f13-pro-stand')}
+                <button onClick={() => navigate('/procolored-f13-pro-stand-panda-dtf-printer')}
                   className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-gray-200 text-gray-700 hover:border-gray-300">
                   Stand
                 </button>

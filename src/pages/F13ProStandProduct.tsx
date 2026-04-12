@@ -107,8 +107,8 @@ export default function F13ProStandProduct() {
               ))}
             </div>
             {/* Main image */}
-            <div className="flex-1 relative rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 aspect-square group">
-              <img src={galleryImgs[activeImg]} alt={variant.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <div className="flex-1 relative rounded-2xl overflow-hidden border border-gray-200 bg-[#f2f2f2] aspect-square group">
+              <img src={galleryImgs[activeImg]} alt={variant.name} className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105" />
               <button onClick={() => setActiveImg(p => (p === 0 ? galleryImgs.length - 1 : p - 1))}
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200">
                 <ChevronLeft className="w-5 h-5" />
@@ -157,7 +157,7 @@ export default function F13ProStandProduct() {
             {/* Stand Toggle */}
             <div className="mb-2">
               <div className="grid grid-cols-2 gap-3">
-                <button onClick={() => navigate('/products/f13-pro')}
+                <button onClick={() => navigate('/procolored-f13-pro-panda-dtf-printer')}
                   className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-gray-200 text-gray-700 hover:border-gray-300">
                   Without Stand
                 </button>

@@ -127,10 +127,12 @@ function App() {
               <Route index element={<Home />} />
               <Route path="f13" element={<Navigate to="/procolored-f13-panda-dtf-printer" replace />} />
               <Route path="procolored-f13-panda-dtf-printer" element={<F13Product />} />
-              <Route path="/products/f13-pro" element={<F13ProProduct />} />
-              <Route path="/f13-pro" element={<F13ProProduct />} />
-              <Route path="/products/f13-pro-stand" element={<F13ProStandProduct />} />
-              <Route path="/f13-pro-stand" element={<F13ProStandProduct />} />
+              <Route path="/products/f13-pro" element={<Navigate to="/procolored-f13-pro-panda-dtf-printer" replace />} />
+              <Route path="/f13-pro" element={<Navigate to="/procolored-f13-pro-panda-dtf-printer" replace />} />
+              <Route path="procolored-f13-pro-panda-dtf-printer" element={<F13ProProduct />} />
+              <Route path="/products/f13-pro-stand" element={<Navigate to="/procolored-f13-pro-stand-panda-dtf-printer" replace />} />
+              <Route path="/f13-pro-stand" element={<Navigate to="/procolored-f13-pro-stand-panda-dtf-printer" replace />} />
+              <Route path="procolored-f13-pro-stand-panda-dtf-printer" element={<F13ProStandProduct />} />
               <Route path="f8-panda" element={<F8PandaProduct />} />
               <Route path="f8-panda-dtf-printer" element={<F8PandaProduct />} />
               <Route path="k13-lite" element={<K13LitePage />} />
