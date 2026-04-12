@@ -364,23 +364,11 @@ export default function P13Product() {
               ))}
             </div>
 
-            {/* Book a Demo */}
-            <div className="bg-orange-500 rounded-2xl p-4 text-white">
-              <div className="flex items-start gap-3">
-                <span className="text-2xl flex-shrink-0">📅</span>
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-sm">Procolored Product Demo | Free Reserve Now</p>
-                  <p className="text-xs text-orange-100 mt-1 leading-relaxed">Try before you buy! Experience Printer features and solve your Startup questions.</p>
-                  <button className="mt-2 border border-white text-white font-semibold px-3 py-1.5 rounded-lg text-xs hover:bg-white hover:text-orange-500 transition-colors">
-                    Book it now
-                  </button>
-                </div>
-              </div>
-              <div className="mt-3 pt-3 border-t border-orange-400 flex flex-wrap gap-3 text-[11px] text-orange-100">
-                <span>📋 Resources</span>
-                <span>📦 14–17 Business Days Delivery</span>
-                <span>📖 Instruction Manual</span>
-              </div>
+            {/* Delivery & Resources */}
+            <div className="flex flex-wrap gap-3 text-[11px] text-gray-500 font-medium border-t border-gray-100 pt-4">
+              <span>📋 Resources</span>
+              <span>📦 14–17 Business Days Delivery</span>
+              <span>📖 Instruction Manual</span>
             </div>
 
             {/* Share */}

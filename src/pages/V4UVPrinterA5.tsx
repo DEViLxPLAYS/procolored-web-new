@@ -122,9 +122,8 @@ export default function V4UVPrinterA5() {
               <div className="p-4 bg-gray-50 rounded-xl mb-6">
                 <h3 className="font-bold text-sm mb-2 uppercase tracking-wide text-gray-500">Overview</h3>
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  Procolored A5 <span className="text-blue-600 font-bold underline">UV printer</span> is designed for printing phone cases.
-                  This UV printing machine will smoothly help you start a small...
-                  <button className="text-blue-600 font-bold ml-1 hover:underline">View More <ChevronDown className="inline w-3 h-3" /></button>
+                  Procolored A5 UV printer is designed for printing phone cases.
+                  This UV printing machine will smoothly help you start a small business with its compact size and high-precision UV printing capability on a variety of materials.
                 </p>
               </div>
             </div>

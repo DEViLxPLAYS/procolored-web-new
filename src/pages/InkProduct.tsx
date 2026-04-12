@@ -209,9 +209,7 @@ export default function InkProduct() {
               </div>
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-4 font-bold flex gap-2 items-center text-sm">
-              <span className="text-gray-400">🎁</span> Earn 229 Points when you buy this item.
-            </div>
+
           </div>
         </div>
       </div>

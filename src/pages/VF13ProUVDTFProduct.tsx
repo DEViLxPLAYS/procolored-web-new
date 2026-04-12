@@ -157,9 +157,7 @@ export default function VF13ProUVDTFProduct() {
               <ul className="text-sm text-gray-600 space-y-1 list-disc pl-4">
                 <li>VF13 Pro Panda UV DTF Printer</li>
                 <li>Full Set of Initial UV DTF Ink (CMYKW 5*250ml)*2</li>
-                <li><a href="#" className="text-blue-600 hover:underline">Buy More</a></li>
               </ul>
-              <button className="text-gray-400 text-xs mt-2 flex items-center gap-1 hover:text-black">View More <ChevronDown className="w-3 h-3" /></button>
             </div>
 
             <div className="mb-8">
@@ -201,10 +199,6 @@ export default function VF13ProUVDTFProduct() {
                   <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider font-semibold">Worry-Free Purchase by <span className="text-blue-500 font-bold lowercase">seel</span></p>
                 </div>
               </div>
-              <div className="bg-gray-50 p-3 rounded flex items-center gap-2 text-sm font-medium border border-gray-100">
-                <span className="bg-black text-white px-2 py-0.5 text-xs rounded-full">P</span>
-                Earn {price.toLocaleString()} Points when you buy this item.
-              </div>
             </div>
 
             {/* Payment Icons */}
@@ -217,19 +211,7 @@ export default function VF13ProUVDTFProduct() {
                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" className="h-6 object-contain" alt="Apple Pay" />
             </div>
 
-            {/* Book a Demo */}
-            <div className="border border-orange-200 bg-orange-50 rounded p-4 mb-6 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-[#E85A24] rounded-lg shrink-0 flex items-center justify-center mt-1">
-                   <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                </div>
-                <div>
-                  <h4 className="font-bold text-[#E85A24] mb-1">Procolored Product Demo | Free Reserve Now</h4>
-                  <p className="text-xs text-gray-600 mb-3">Try before you buy | Experience Printer features and solve your Startup questions.</p>
-                </div>
-              </div>
-              <button className="border border-[#E85A24] text-[#E85A24] text-xs font-bold px-4 py-2 rounded whitespace-nowrap hover:bg-[#E85A24] hover:text-white transition">Book it now</button>
-            </div>
+
 
             {/* Badges Row */}
             <div className="flex items-center gap-6 border-t border-gray-100 pt-6 text-sm flex-wrap font-medium">

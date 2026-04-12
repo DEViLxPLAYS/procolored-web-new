@@ -173,9 +173,7 @@ export default function WhiteInkProduct() {
               </div>
             </div>
 
-            <div className="bg-gray-50/50 rounded-lg p-4 font-bold flex gap-2 items-center text-sm border border-gray-100">
-              <span className="text-gray-400">🎁</span> Earn {activeVariantIdx === 0 ? '49' : '59'} Points when you buy this item.
-            </div>
+
 
             <div className="mt-8 pt-6 border-t border-gray-100 text-sm font-medium text-gray-500 flex gap-4">
               <span>Share:</span>

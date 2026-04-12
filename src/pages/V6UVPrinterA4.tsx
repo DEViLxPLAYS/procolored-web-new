@@ -126,8 +126,7 @@ export default function V6UVPrinterA4() {
               <div className="p-4 bg-gray-50 rounded-xl mb-6">
                 <h3 className="font-bold text-sm mb-2 uppercase tracking-wide text-gray-500">Overview</h3>
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  A4 UV printer applies the typical Panda design of Procolored and is upgraded with sleeker and more seamless appearance. It's capable of printing quick-dried...
-                  <button className="text-blue-600 font-bold ml-1 hover:underline">View More <ChevronDown className="inline w-3 h-3" /></button>
+                  A4 UV printer applies the typical Panda design of Procolored and is upgraded with sleeker and more seamless appearance. It's capable of printing quick-dried UV ink on a wide range of materials with high precision.
                 </p>
               </div>
             </div>
@@ -179,9 +178,7 @@ export default function V6UVPrinterA4() {
               </div>
             </div>
 
-            <div className="bg-gray-50 text-gray-800 text-sm font-bold p-3 rounded mb-8 flex gap-2">
-               Earn {price.toString()} Points when you buy this item.
-            </div>
+
 
             <div className="flex items-center gap-6 border-t border-gray-100 pt-6 text-sm flex-wrap font-medium">
               <div className="flex items-center gap-2 text-gray-600 cursor-pointer hover:text-black">📄 Resources</div>

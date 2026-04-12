@@ -359,7 +359,7 @@ export default function Home() {
           <div className="flex flex-wrap justify-center gap-8 md:gap-10">
             {categoryItems.map((cat, index) => (
               <Link key={index} to={cat.link} className="flex flex-col items-center gap-3 group">
-                <div className="bg-white rounded-xl shadow-sm flex items-center justify-center group-hover:shadow-md transition-shadow overflow-hidden" style={{width: '100px', height: '100px'}}>
+                <div className="bg-white rounded-xl shadow-sm flex items-center justify-center group-hover:shadow-md transition-shadow overflow-hidden" style={{width: '150px', height: '150px'}}>
                   <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="text-center">

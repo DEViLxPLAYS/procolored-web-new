@@ -273,7 +273,7 @@ export default function Layout() {
                 </div>
 
                 <Link to="/f13" className="flex items-center gap-1 text-[15px] font-semibold text-black nav-link">
-                  <span className="text-yellow-500">🔔</span> F13 Appreciation Deals
+                  <span className="text-yellow-500">🔔</span> F13 Deals
                 </Link>
                 
                 <div 
@@ -480,9 +480,9 @@ export default function Layout() {
                   <Link
                     to="/f13"
                     onClick={closeMenu}
-                    className="flex items-center py-4 border-b border-gray-100 text-[15px] font-medium text-black" // Text color changed from #E85A24 to match reference, bell kept
+                    className="flex items-center py-4 border-b border-gray-100 text-[15px] font-medium text-black"
                   >
-                    <span className="mr-2">🔔</span> F13 Appreciation Deals
+                    <span className="mr-2">🔔</span> F13 Deals
                   </Link>
 
                   {/* Support */}

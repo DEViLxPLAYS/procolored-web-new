@@ -243,7 +243,7 @@ export default function V11UVPrinter() {
                   className="text-[#0073e6] font-semibold hover:underline"
                   onClick={() => setOverviewExpanded(!overviewExpanded)}
                 >
-                  {overviewExpanded ? 'View Less ↑' : 'View More →'}
+                  {overviewExpanded ? 'View Less ↑' : 'Read More →'}
                 </button>
               </p>
             </div>
@@ -297,11 +297,7 @@ export default function V11UVPrinter() {
               </div>
             </div>
 
-            {/* Earn points */}
-            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-5">
-              <span>🎁</span>
-              <span>Earn <strong>{price.toLocaleString()}</strong> Points when you buy this item.</span>
-            </div>
+
 
             {/* Payment icons row */}
             <div className="flex items-center gap-2 flex-wrap mb-5">
@@ -326,19 +322,7 @@ export default function V11UVPrinter() {
               ))}
             </div>
 
-            {/* Book a Demo */}
-            <div className="bg-[#E85A24] rounded-xl p-4 mb-5">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center text-white text-xl shrink-0">🖨</div>
-                <div className="text-white text-xs leading-relaxed flex-1">
-                  <p className="font-bold text-sm">Procolored Product Demo | <span className="underline">Free Reserve Now</span></p>
-                  <p className="opacity-80 mt-0.5">Try before you buy | Experience Printer features and solve your Startup questions.</p>
-                  <button className="mt-2 bg-white text-[#E85A24] font-bold text-xs px-4 py-1.5 rounded-full hover:bg-orange-50 transition">
-                    Book it now
-                  </button>
-                </div>
-              </div>
-            </div>
+
 
             {/* Bottom badges */}
             <div className="flex items-center gap-6 pt-4 border-t border-gray-100 text-xs font-medium text-gray-600 flex-wrap">
