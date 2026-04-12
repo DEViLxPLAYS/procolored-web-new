@@ -41,13 +41,13 @@ function Accordion({ q, a, open, onClick }: { q: string; a: string; open: boolea
 
 // ─── Stand Data ─────────────────────────────────────────────────────────────
 const STAND_VARIANTS = [
-  { id: 'f13-stand-1', name: 'F13 Pro & Bracket', sale: 5199, original: 5599, saving: 400, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_4_d8d7ed01-6f5b-4443-a06b-d83c6189339e_1220x_crop_center.png?v=1773743412' },
-  { id: 'f13-stand-2', name: 'F13 Pro + Stand + Oven', sale: 5599, original: 6099, saving: 500, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/2_7d6ae33d-8a69-486b-bc77-c2f159bc6295_1220x_crop_center.jpg?v=1773742872' },
-  { id: 'f13-stand-3', name: 'F13 Pro + Stand & Complete Bundle', sale: 5799, original: 6449, saving: 650, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/3_652c9538-ddb3-4741-8693-eb73d5f6812b_1220x_crop_center.jpg?v=1773742872' },
-  { id: 'f13-stand-4', name: 'F13 Pro + Stand + Oven Premium', sale: 5999, original: 6599, saving: 600, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/4_cb2a255c-c662-484d-a4bd-8f2939ec16b1_1220x_crop_center.jpg?v=1773742872' },
-  { id: 'f13-stand-5', name: 'F13 Pro + Stand & Complete Bundle Premium', sale: 6199, original: 6899, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/5_93da3690-2fdc-4884-82f9-71909bb82c09_1220x_crop_center.jpg?v=1773742872' },
-  { id: 'f13-stand-6', name: 'F13 Pro + Stand + Shaker Oven', sale: 6599, original: 7299, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/6_6d30298c-a2b0-4dbc-b8dc-5ad6bb9e91e4_1220x_crop_center.jpg?v=1773742873' },
-  { id: 'f13-stand-7', name: 'F13 Pro & Stand Ultimate Bundle', sale: 6799, original: 7649, saving: 850, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/ProcoloredF13ProPandaDTFPrinter13A3DualXP600_3_c6cf14eb-0b07-4fe9-a1e6-ab1362148d99_1220x_crop_center.png?v=1773743412' }
+  { id: 'f13-stand-1', name: 'F13 Pro & Bracket', sale: 5199, original: 5599, saving: 400, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/1_51f5ec44-cce2-4464-a9ca-4ac0786e79ec_1220x_crop_center.jpg?v=1773742870' },
+  { id: 'f13-stand-2', name: 'F13 Pro + Stand + Oven', sale: 5599, original: 6099, saving: 500, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/2_84b225f2-17e1-4a54-ae70-99b9d6fc31e3_1220x_crop_center.jpg?v=1773742871' },
+  { id: 'f13-stand-3', name: 'F13 Pro + Stand & Complete Bundle', sale: 5799, original: 6449, saving: 650, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/3_e2abdf88-0e5e-4ea2-a1e9-0ba27ed7481b_1220x_crop_center.jpg?v=1773742870' },
+  { id: 'f13-stand-4', name: 'F13 Pro + Stand + Oven Premium', sale: 5999, original: 6599, saving: 600, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/4_3aebd596-738b-4e01-85ca-4d0992279502_1220x_crop_center.jpg?v=1773742871' },
+  { id: 'f13-stand-5', name: 'F13 Pro + Stand & Complete Bundle Premium', sale: 6199, original: 6899, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/5_f34e58a9-454a-4f85-b9d1-84416f3f7cb3_1220x_crop_center.jpg?v=1773742870' },
+  { id: 'f13-stand-6', name: 'F13 Pro + Stand + Shaker Oven', sale: 6599, original: 7299, saving: 700, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/6_fc3cfef8-24d7-4726-a449-bc38e64f7058_1220x_crop_center.jpg?v=1773742870' },
+  { id: 'f13-stand-7', name: 'F13 Pro & Stand Ultimate Bundle', sale: 6799, original: 7649, saving: 850, badge: 'F13 Pro Spring Sale 🟠', badgeClass: 'bg-orange-500', img: 'https://www.procolored.com/cdn/shop/files/7_3a38569b-ecc1-4ce5-88d8-1c9cc42b1b51_1220x_crop_center.jpg?v=1773742871' }
 ];
 
 const LOCKED_IMAGES = [
@@ -107,8 +107,8 @@ export default function F13ProStandProduct() {
               ))}
             </div>
             {/* Main image */}
-            <div className="flex-1 relative rounded-2xl overflow-hidden border border-gray-200 bg-[#f2f2f2] aspect-square group">
-              <img src={galleryImgs[activeImg]} alt={variant.name} className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105" />
+            <div className="flex-1 relative rounded-2xl overflow-hidden border border-gray-200 bg-white aspect-square group">
+              <img src={galleryImgs[activeImg]} alt={variant.name} className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105" />
               <button onClick={() => setActiveImg(p => (p === 0 ? galleryImgs.length - 1 : p - 1))}
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200">
                 <ChevronLeft className="w-5 h-5" />
