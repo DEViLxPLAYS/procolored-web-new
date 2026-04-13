@@ -144,7 +144,7 @@ app.use('/api/contact', contactRoutes);
 // Tests SMTP live from Railway — shows exact error if failing
 // ================================
 app.get('/api/email-test', async (req, res) => {
-  const { sendMail } = require('./src/config/nodemailer');
+  const { sendMail } = require('./config/nodemailer');
   const toEmail = req.query.to || process.env.NOTIFY_EMAIL || process.env.SMTP_USER;
 
   const config = {
