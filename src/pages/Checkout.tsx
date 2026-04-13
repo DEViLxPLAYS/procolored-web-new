@@ -75,9 +75,10 @@ function PolicyModal({ policyKey, onClose }: { policyKey: string; onClose: () =>
 }
 
 // ── Stripe Payment Form ───────────────────────────────────────────────────────
-function StripePaymentForm({ isSubmitting, setIsSubmitting, onSuccess, validateForm }: {
+function StripePaymentForm({ isSubmitting, setIsSubmitting, onSuccess, validateForm, customerName, customerEmail }: {
   isSubmitting: boolean; setIsSubmitting: (v: boolean) => void;
   onSuccess: (txId: string) => void; validateForm: () => boolean;
+  customerName?: string; customerEmail?: string;
 }) {
   const stripe = useStripe(); const elements = useElements();
   const [errorMsg, setErrorMsg] = useState('');
@@ -89,7 +90,10 @@ function StripePaymentForm({ isSubmitting, setIsSubmitting, onSuccess, validateF
     setIsSubmitting(true); setErrorMsg('');
     try {
       const { error, paymentIntent } = await stripe.confirmPayment({
-        elements, redirect: 'if_required', confirmParams: { return_url: window.location.href },
+        elements, redirect: 'if_required', confirmParams: {
+          return_url: window.location.href,
+          payment_method_data: { billing_details: { name: customerName || 'Customer', email: customerEmail || undefined } }
+        },
       });
       if (error) throw new Error(error.message || 'Payment failed.');
       if (paymentIntent?.status === 'succeeded') onSuccess(paymentIntent.id);
@@ -713,7 +717,7 @@ export default function Checkout() {
                 ? <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}><strong>Payment Error:</strong> {stripeError}</div>
                 : stripePublishableKey && clientSecret
                   ? <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#1a1a1a', borderRadius: '6px', fontFamily: 'inherit' }, rules: { '.Input': { boxShadow: 'none', border: '1px solid #d1d5db' }, '.Input:focus': { border: '1px solid #1a1a1a', boxShadow: 'none' } } } }}>
-                      <StripePaymentForm isSubmitting={isSubmitting} setIsSubmitting={setIsSubmitting} onSuccess={handleOrderComplete} validateForm={validateForm} />
+                      <StripePaymentForm isSubmitting={isSubmitting} setIsSubmitting={setIsSubmitting} onSuccess={handleOrderComplete} validateForm={validateForm} customerName={`${firstName} ${lastName}`.trim()} customerEmail={email} />
                     </Elements>
                   : <div style={{ padding: 32, background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
                       <span style={{ width: 24, height: 24, border: '2px solid #e5e7eb', borderTopColor: '#1a1a1a', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
