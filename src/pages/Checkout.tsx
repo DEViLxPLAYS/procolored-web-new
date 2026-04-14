@@ -1,14 +1,11 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCart } from '../context/CartContext';
 import { useCurrency, convertPrice } from '../context/CurrencyContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle, CreditCard, Lock, ShieldCheck, AlertCircle, X, Tag, ChevronRight } from 'lucide-react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CheckCircle, ShieldCheck, AlertCircle, X, Tag, ChevronRight } from 'lucide-react';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-const STRIPE_PK = 'pk_live_51TCQKWIXB0IPPK5N9scYtqgos5k2N7etZtTPgP5lO9cBVa4xA34KrqnzkVRPdwWAMuzv3gcuRJh7isn5JpUtY3kF00WCs32dcA';
-const DEMO_PRODUCT_ID = 'procolored-demo-order-test';
 
 function getSessionId(): string {
   let id = localStorage.getItem('procolored_session');
@@ -74,67 +71,7 @@ function PolicyModal({ policyKey, onClose }: { policyKey: string; onClose: () =>
   );
 }
 
-// ── Stripe Payment Form ───────────────────────────────────────────────────────
-function StripePaymentForm({ isSubmitting, setIsSubmitting, onSuccess, validateForm, customerName, customerEmail }: {
-  isSubmitting: boolean; setIsSubmitting: (v: boolean) => void;
-  onSuccess: (txId: string) => void; validateForm: () => boolean;
-  customerName?: string; customerEmail?: string;
-}) {
-  const stripe = useStripe(); const elements = useElements();
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const handlePay = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    if (!stripe || !elements) return;
-    setIsSubmitting(true); setErrorMsg('');
-    try {
-      const { error, paymentIntent } = await stripe.confirmPayment({
-        elements, redirect: 'if_required', confirmParams: {
-          return_url: window.location.href,
-          payment_method_data: { billing_details: { name: customerName || 'Customer', email: customerEmail || undefined } }
-        },
-      });
-      if (error) throw new Error(error.message || 'Payment failed.');
-      if (paymentIntent?.status === 'succeeded') onSuccess(paymentIntent.id);
-      else throw new Error('Payment not completed. Try again.');
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Payment failed.');
-    } finally { setIsSubmitting(false); }
-  };
-
-  return (
-    <form onSubmit={handlePay}>
-      <div style={{ border: '1px solid #d1d5db', borderRadius: 8, overflow: 'hidden', marginBottom: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', borderBottom: '1px solid #f3f4f6', background: '#fafafa' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, color: '#555' }}>
-            <Lock size={12} color="#5469d4" /> All transactions are secure and encrypted.
-          </div>
-          <div style={{ display: 'flex', gap: 4 }}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" style={{ height: 10, opacity: 0.6 }} />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="MC" style={{ height: 14, opacity: 0.6 }} />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="Amex" style={{ height: 14, opacity: 0.6 }} />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/1/16/Former_Unionpay_logo.svg" alt="UP" style={{ height: 14, opacity: 0.6 }} />
-          </div>
-        </div>
-        <div style={{ padding: 16 }}>
-          <PaymentElement options={{ layout: 'tabs', wallets: { applePay: 'never', googlePay: 'never' }, fields: { billingDetails: 'never' } }} />
-        </div>
-      </div>
-      {errorMsg && (
-        <div style={{ padding: '10px 14px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, color: '#dc2626', fontSize: 13, marginBottom: 12, display: 'flex', gap: 8 }}>
-          <X size={13} style={{ flexShrink: 0, marginTop: 2 }} /> {errorMsg}
-        </div>
-      )}
-      <button type="submit" disabled={isSubmitting || !stripe}
-        style={{ width: '100%', background: '#1a1a1a', color: '#fff', border: 'none', padding: 15, borderRadius: 6, fontSize: 15, fontWeight: 700, cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        {isSubmitting
-          ? <><span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />Processing...</>
-          : <><CreditCard size={16} /> Pay now</>}
-      </button>
-    </form>
-  );
-}
+// (Stripe removed — PayPal only)
 
 function DemoOrderButton({ isSubmitting, onSubmit }: { isSubmitting: boolean; onSubmit: () => void }) {
   return (
@@ -273,12 +210,12 @@ function CheckoutShell({ activePolicyKey, onClosePolicy, children }: ShellProps)
         @media (max-width: 768px) { .checkout-layout { flex-direction: column !important; } .checkout-right { width: 100% !important; height: auto !important; position: relative !important; border-left: none !important; border-top: 1px solid #e5e7eb !important; } .checkout-left { padding: 24px 20px 40px !important; } }
       `}</style>
       {activePolicyKey && <PolicyModal policyKey={activePolicyKey} onClose={onClosePolicy} />}
-      <header style={{ borderBottom: '1px solid #e5e7eb', padding: '0 40px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff', position: 'sticky', top: 0, zIndex: 100 }}>
+      <header style={{ borderBottom: '1px solid #e5e7eb', padding: '0 40px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff', position: 'sticky', top: 0, zIndex: 100 }}>
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-          <img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" style={{ height: 30 }} />
+          <img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" style={{ height: 70 }} />
         </Link>
-        <Link to="/" style={{ fontSize: 13, color: '#555', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 500 }}>
-          Return to store <ChevronRight size={13} />
+        <Link to="/" style={{ fontSize: 16, color: '#555', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700 }}>
+          Return to store <ChevronRight size={16} />
         </Link>
       </header>
       {children}
@@ -391,7 +328,7 @@ function CheckoutRightPanel({
             Estimated taxes
             <span title="No taxes applied" style={{ width: 14, height: 14, border: '1px solid #bbb', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#888', cursor: 'help', flexShrink: 0 }}>?</span>
           </span>
-          <span style={{ color: '#1a1a1a', fontWeight: 500 }}>$0.00</span>
+          <span style={{ fontWeight: 700, color: '#22c55e' }}>Free</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #d5d5d5', paddingTop: 14 }}>
           <span style={{ fontSize: 17, fontWeight: 700, color: '#1a1a1a' }}>Total</span>
@@ -431,6 +368,14 @@ export default function Checkout() {
   const [country, setCountry] = useState('United States');
   const [phone, setPhone] = useState('');
   const [billingSame, setBillingSame] = useState(true);
+  const [billFirstName, setBillFirstName] = useState('');
+  const [billLastName, setBillLastName] = useState('');
+  const [billAddress, setBillAddress] = useState('');
+  const [billApartment, setBillApartment] = useState('');
+  const [billCity, setBillCity] = useState('');
+  const [billState, setBillState] = useState('');
+  const [billPostal, setBillPostal] = useState('');
+  const [billCountry, setBillCountry] = useState('United States');
 
   // App state
   const [discountCode, setDiscountCode] = useState('');
@@ -440,25 +385,17 @@ export default function Checkout() {
   const [successData, setSuccessData] = useState<OrderSuccessData | null>(null);
   const [activePolicyKey, setActivePolicyKey] = useState<string | null>(null);
 
-  // Stripe
-  const [stripePublishableKey, setStripePublishableKey] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [isFreeOrder, setIsFreeOrder] = useState(false);
-  const [stripeError, setStripeError] = useState<string | null>(null);
-
-  // Memoize stripePromise — only recreated when the publishable key changes.
-  const stripePromise = useMemo(
-    () => stripePublishableKey
-      ? loadStripe(stripePublishableKey, { advancedFraudSignals: false } as any)
-      : null,
-    [stripePublishableKey]
-  );
+  // PayPal
+  const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
+  const [paypalLoading, setPaypalLoading] = useState(true);
+  const [paypalError, setPaypalError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Pricing — always in USD
   const subtotalUSD = items.reduce((sum, item) => sum + (convertPrice(item.price, 278) * item.quantity), 0);
   const discountAmount = discountApplied ? subtotalUSD * 0.05 : 0;
   const totalUSD = subtotalUSD - discountAmount;
-  const isDemoCart = items.some(i => i.id === DEMO_PRODUCT_ID) && totalUSD <= 1;
+  const isDemoCart = false;
 
   const fmtUSD = (n: number) => `$${n.toFixed(2)}`;
 
@@ -470,36 +407,24 @@ export default function Checkout() {
   const latestCityRef = useRef('');
   const latestCountryRef = useRef('United States');
   const emailRef = useRef<HTMLInputElement>(null);
+  const paymentSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { latestEmailRef.current = email; }, [email]);
   useEffect(() => { latestNameRef.current = [firstName, lastName].filter(Boolean).join(' '); }, [firstName, lastName]);
   useEffect(() => { latestCityRef.current = city; }, [city]);
   useEffect(() => { latestCountryRef.current = country; }, [country]);
 
+  // Load PayPal client ID from backend (reads from admin dashboard / Supabase)
   useEffect(() => {
-    fetch(`${API_BASE}/api/stripe/config`)
-      .then(r => r.json()).then(d => setStripePublishableKey(d?.publishableKey || STRIPE_PK))
-      .catch(() => setStripePublishableKey(STRIPE_PK));
+    fetch(`${API_BASE}/api/paypal/config`)
+      .then(r => r.json())
+      .then(d => {
+        if (d.clientId) setPaypalClientId(d.clientId);
+        else setPaypalError('PayPal is not configured yet. Contact support.');
+      })
+      .catch(() => setPaypalError('Could not load payment options. Check your connection.'))
+      .finally(() => setPaypalLoading(false));
   }, []);
-
-  useEffect(() => {
-    if (isDemoCart || totalUSD === 0) { setIsFreeOrder(true); setClientSecret(null); return; }
-    if (totalUSD > 0 && stripePublishableKey && !clientSecret) {
-      fetch(`${API_BASE}/api/stripe/create-payment-intent`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: Math.round(totalUSD * 100), currency: 'usd' }),
-      }).then(r => r.json()).then(d => {
-        if (d.isFreeOrder) setIsFreeOrder(true);
-        else if (d.clientSecret) { setClientSecret(d.clientSecret); setIsFreeOrder(false); }
-        else setStripeError(d.error || 'Could not initialize payment.');
-      }).catch(() => setStripeError('Network error. Could not initialize Stripe.'));
-    }
-  }, [totalUSD, stripePublishableKey, clientSecret, isDemoCart]);
-
-  useEffect(() => {
-    if (totalUSD > 0 && stripePublishableKey && !isDemoCart) setClientSecret(null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [discountApplied]);
 
   // Note: IP geolocation removed — caused CORS/403 errors on production.
   // Users can manually select their country from the dropdown.
@@ -538,23 +463,30 @@ export default function Checkout() {
   const validateForm = () => {
     const err = validateEmail(email);
     if (err) { setEmailError(err); emailRef.current?.focus(); emailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
-    if (!firstName || !lastName) { alert('Please enter your first and last name.'); return false; }
-    if (!address) { alert('Please enter your address.'); return false; }
-    if (!city) { alert('Please enter your city.'); return false; }
-    if (!postal) { alert('Please enter your postal code.'); return false; }
+    if (!firstName || !lastName) { setFormError('Kindly fill in your first and last name to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
+    if (!address) { setFormError('Kindly fill in your street address to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
+    if (!city) { setFormError('Kindly fill in your city to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
+    if (!postal) { setFormError('Kindly fill in your postal / ZIP code to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
+    if (!country) { setFormError('Kindly select your country to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
+    setFormError(null);
     return true;
   };
 
   const buildShipping = () => ({ street: address, apartment, city, state: stateVal, postalCode: postal, country });
 
+  const buildBilling = () => billingSame
+    ? buildShipping()
+    : { street: billAddress, apartment: billApartment, city: billCity, state: billState, postalCode: billPostal, country: billCountry };
+
   const buildPayload = (txId: string | null, isDemo = false) => ({
     customerName: `${firstName} ${lastName}`.trim() || 'Customer',
     customerEmail: email, customerPhone: phone || null,
-    shippingAddress: buildShipping(), billingAddress: buildShipping(),
+    shippingAddress: buildShipping(), billingAddress: buildBilling(),
+    billingName: billingSame ? `${firstName} ${lastName}`.trim() : `${billFirstName} ${billLastName}`.trim(),
     items: items.map(i => ({ id: i.id, name: i.name, price: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })),
     subtotal: subtotalUSD, shippingCost: 0, discountAmount, discountCode: discountApplied ? 'PROCOLORED5' : null,
     totalAmount: isDemo ? 0 : totalUSD, currency: 'USD', country, city,
-    paymentMethod: isDemo ? 'Demo (No Payment)' : 'Stripe', paymentStatus: 'paid', transactionId: txId,
+    paymentMethod: isDemo ? 'Demo (No Payment)' : 'PayPal', paymentStatus: 'paid', transactionId: txId,
   });
 
   const handleOrderComplete = async (txId: string) => {
@@ -564,7 +496,7 @@ export default function Checkout() {
       const data = await res.json();
       if (res.ok && data.orderNumber) {
         clearCart();
-        setSuccessData({ orderNumber: data.orderNumber, customerName: `${firstName} ${lastName}`.trim(), customerEmail: email, totalAmount: totalUSD, paymentMethod: 'Stripe', cartItems: items.map(i => ({ name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })), shippingAddress: buildShipping(), isDemoOrder: false });
+        setSuccessData({ orderNumber: data.orderNumber, customerName: `${firstName} ${lastName}`.trim(), customerEmail: email, totalAmount: totalUSD, paymentMethod: 'PayPal', cartItems: items.map(i => ({ name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })), shippingAddress: buildShipping(), isDemoOrder: false });
       } else { alert(data.error || 'Order could not be saved.'); orderCompletedRef.current = false; }
     } catch { alert('Network error. Contact support.'); orderCompletedRef.current = false; }
     finally { setIsSubmitting(false); }
@@ -584,7 +516,7 @@ export default function Checkout() {
     finally { setIsSubmitting(false); }
   };
 
-  const allCountries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Belgium","Bolivia","Brazil","Bulgaria","Cambodia","Canada","Chile","China","Colombia","Croatia","Cuba","Cyprus","Czechia","Denmark","Ecuador","Egypt","Estonia","Ethiopia","Fiji","Finland","France","Germany","Ghana","Greece","Guatemala","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kuwait","Kyrgyzstan","Latvia","Lebanon","Libya","Lithuania","Luxembourg","Malaysia","Maldives","Malta","Mexico","Moldova","Monaco","Mongolia","Morocco","Myanmar","Nepal","Netherlands","New Zealand","Nicaragua","Nigeria","North Korea","Norway","Oman","Pakistan","Panama","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saudi Arabia","Senegal","Serbia","Singapore","Slovakia","Slovenia","Somalia","South Africa","South Korea","Spain","Sri Lanka","Sudan","Sweden","Switzerland","Syria","Tajikistan","Tanzania","Thailand","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
+  const allCountries = ["United States","Canada","United Kingdom","Australia","Germany"];
 
   const inp = { width: '100%', border: '1px solid #d1d5db', borderRadius: 6, padding: '12px 14px', fontSize: 14, outline: 'none', background: '#fff', boxSizing: 'border-box' as const, color: '#1a1a1a', fontFamily: 'inherit' };
   const openPolicy = (k: string) => setActivePolicyKey(k);
@@ -599,8 +531,8 @@ export default function Checkout() {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#fff', fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif' }}>
         <header style={{ borderBottom: '1px solid #e5e7eb', padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link to="/"><img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" style={{ height: 30 }} /></Link>
-          <Link to="/" style={{ fontSize: 13, color: '#555', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>Return to store <ChevronRight size={13} /></Link>
+          <Link to="/"><img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" style={{ height: 70 }} /></Link>
+          <Link to="/" style={{ fontSize: 16, color: '#555', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700 }}>Return to store <ChevronRight size={16} /></Link>
         </header>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 12 }}>Your cart is empty</h2>
@@ -703,7 +635,7 @@ export default function Checkout() {
           <div style={{ borderTop: '1px solid #e5e7eb', marginBottom: 36 }} />
 
           {/* Payment */}
-          <section style={{ marginBottom: 36 }}>
+          <section ref={paymentSectionRef} style={{ marginBottom: 36 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
               <h2 style={{ fontSize: 18, fontWeight: 800, color: '#1a1a1a', margin: 0 }}>Payment</h2>
               <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#666', marginLeft: 'auto' }}>
@@ -711,18 +643,73 @@ export default function Checkout() {
               </span>
             </div>
 
-            {(isDemoCart || isFreeOrder)
+            {isDemoCart
               ? <DemoOrderButton isSubmitting={isSubmitting} onSubmit={handleDemoOrder} />
-              : stripeError
-                ? <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}><strong>Payment Error:</strong> {stripeError}</div>
-                : stripePublishableKey && clientSecret
-                  ? <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#1a1a1a', borderRadius: '6px', fontFamily: 'inherit' }, rules: { '.Input': { boxShadow: 'none', border: '1px solid #d1d5db' }, '.Input:focus': { border: '1px solid #1a1a1a', boxShadow: 'none' } } } }}>
-                      <StripePaymentForm isSubmitting={isSubmitting} setIsSubmitting={setIsSubmitting} onSuccess={handleOrderComplete} validateForm={validateForm} customerName={`${firstName} ${lastName}`.trim()} customerEmail={email} />
-                    </Elements>
-                  : <div style={{ padding: 32, background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                      <span style={{ width: 24, height: 24, border: '2px solid #e5e7eb', borderTopColor: '#1a1a1a', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
-                      <span style={{ fontSize: 13, color: '#888' }}>Loading payment...</span>
-                    </div>
+              : paypalLoading
+                ? <div style={{ padding: 32, background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                    <span style={{ width: 24, height: 24, border: '2px solid #e5e7eb', borderTopColor: '#003087', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                    <span style={{ fontSize: 13, color: '#888' }}>Loading PayPal...</span>
+                  </div>
+                : paypalError
+                  ? <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}><strong>Payment Error:</strong> {paypalError}</div>
+                  : paypalClientId
+                    ? <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
+                        <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden', padding: 16 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#555', marginBottom: 14 }}>
+                            <ShieldCheck size={13} color="#009cde" /> Secured by PayPal — pay safely with any card or PayPal balance
+                          </div>
+                          {formError && (
+                            <div style={{ marginBottom: 14, padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, fontSize: 13, color: '#dc2626', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                              <span style={{ fontSize: 16, lineHeight: 1 }}>⚠️</span>
+                              <span><strong>Please fill in all required details to continue:</strong><br />{formError}</span>
+                            </div>
+                          )}
+                          <PayPalButtons
+                            style={{ layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal', height: 48 }}
+                            disabled={isSubmitting}
+                            createOrder={async () => {
+                              if (!validateForm()) {
+                                throw new Error('form_invalid');
+                              }
+                              const res = await fetch(`${API_BASE}/api/paypal/create-order`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ cartTotal: totalUSD.toFixed(2), currency: 'USD' }),
+                              });
+                              const data = await res.json();
+                              if (!data.id) throw new Error(data.error || 'Could not create PayPal order.');
+                              return data.id;
+                            }}
+                            onApprove={async (data) => {
+                              setIsSubmitting(true);
+                              try {
+                                const res = await fetch(`${API_BASE}/api/paypal/capture-order`, {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ orderID: data.orderID }),
+                                });
+                                const capture = await res.json();
+                                if (capture.success) {
+                                  await handleOrderComplete(data.orderID);
+                                } else {
+                                  alert(capture.error || 'Payment capture failed. Contact support.');
+                                  setIsSubmitting(false);
+                                }
+                              } catch {
+                                alert('Network error during payment capture. Contact support.');
+                                setIsSubmitting(false);
+                              }
+                            }}
+                            onError={(err: any) => {
+                              console.error('PayPal error:', err);
+                              if (err?.message === 'form_invalid') return; // already shown via formError
+                              setPaypalError('Payment could not be completed. Please check your details and try again.');
+                            }}
+                            onCancel={() => { setIsSubmitting(false); }}
+                          />
+                        </div>
+                      </PayPalScriptProvider>
+                    : null
             }
           </section>
 
@@ -732,15 +719,42 @@ export default function Checkout() {
           <section style={{ marginBottom: 36 }}>
             <h2 style={{ fontSize: 18, fontWeight: 800, color: '#1a1a1a', margin: '0 0 16px' }}>Billing address</h2>
             <div style={{ border: '1px solid #d1d5db', borderRadius: 8, overflow: 'hidden' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: billingSame ? '#f9fafb' : '#fff', borderBottom: billingSame ? 'none' : '1px solid #e5e7eb' }}>
-                <div style={{ width: 18, height: 18, borderRadius: '50%', border: billingSame ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} onClick={() => setBillingSame(true)} />
+              <label style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: billingSame ? '#f9fafb' : '#fff', borderBottom: '1px solid #e5e7eb' }}
+                onClick={() => setBillingSame(true)}>
+                <div style={{ width: 18, height: 18, borderRadius: '50%', border: billingSame ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} />
                 <span style={{ fontSize: 14, fontWeight: 500, color: '#1a1a1a' }}>Same as shipping address</span>
               </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: !billingSame ? '#f9fafb' : '#fff' }}>
-                <div style={{ width: 18, height: 18, borderRadius: '50%', border: !billingSame ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} onClick={() => setBillingSame(false)} />
+              <label style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: !billingSame ? '#f9fafb' : '#fff' }}
+                onClick={() => setBillingSame(false)}>
+                <div style={{ width: 18, height: 18, borderRadius: '50%', border: !billingSame ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} />
                 <span style={{ fontSize: 14, color: '#1a1a1a' }}>Use a different billing address</span>
               </label>
             </div>
+
+            {/* Billing address form — shown when different billing selected */}
+            {!billingSame && (
+              <div style={{ border: '1px solid #d1d5db', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 10, background: '#fafafa' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: 12, color: '#777', marginBottom: 4 }}>Country/Region</label>
+                    <select value={billCountry} onChange={e => setBillCountry(e.target.value)} style={{ ...inp, cursor: 'pointer' }}>
+                      {allCountries.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <input type="text" placeholder="First name" value={billFirstName} onChange={e => setBillFirstName(e.target.value)} style={inp} />
+                    <input type="text" placeholder="Last name" value={billLastName} onChange={e => setBillLastName(e.target.value)} style={inp} />
+                  </div>
+                  <input type="text" placeholder="Address" value={billAddress} onChange={e => setBillAddress(e.target.value)} style={inp} />
+                  <input type="text" placeholder="Apartment, suite, etc. (optional)" value={billApartment} onChange={e => setBillApartment(e.target.value)} style={inp} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10 }}>
+                    <input type="text" placeholder="City" value={billCity} onChange={e => setBillCity(e.target.value)} style={inp} />
+                    <input type="text" placeholder="State" value={billState} onChange={e => setBillState(e.target.value)} style={inp} />
+                    <input type="text" placeholder="ZIP code" value={billPostal} onChange={e => setBillPostal(e.target.value)} style={inp} />
+                  </div>
+                </div>
+              </div>
+            )}
           </section>
 
           {/* Policy links at bottom of left */}

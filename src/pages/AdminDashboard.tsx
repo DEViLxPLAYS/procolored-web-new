@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '../services/api';
 import type { AdminUser } from './AdminShared';
 import {
   C, fmtDate, fmtDateTime, genPassword, pwStrength,
   useToast, ToastContainer, Modal, inp, lbl,
-  StatCard, Spinner,
+  StatCard, Spinner, useLivePoll,
   OrdersTab, NewsletterTab, AbandonmentsTab, PaymentGatewaysTab
 } from './AdminShared';
 
@@ -276,10 +276,31 @@ const AdminsTab = ({ currentAdmin, toast }: { currentAdmin: AdminUser; toast:(ms
 const DashboardOverview = ({ admin }: { admin: AdminUser }) => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [newOrderBanner, setNewOrderBanner] = useState<string | null>(null);
+  const prevOrderCountRef = useRef<number>(0);
 
-  useEffect(() => {
-    api.admin.dashboard().then(d => { setData(d); setLoading(false); });
+  const load = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
+    const d = await api.admin.dashboard();
+    if (d && !d.error) {
+      const newCount = d.stats?.totalOrders || 0;
+      if (prevOrderCountRef.current > 0 && newCount > prevOrderCountRef.current) {
+        const diff = newCount - prevOrderCountRef.current;
+        const newest = d.recentOrders?.[0];
+        const msg = newest
+          ? `🔔 New order from ${newest.customer_name} — $${parseFloat(newest.total_amount || 0).toFixed(2)}`
+          : `🔔 ${diff} new order${diff > 1 ? 's' : ''} received!`;
+        setNewOrderBanner(msg);
+        setTimeout(() => setNewOrderBanner(null), 8000);
+      }
+      prevOrderCountRef.current = newCount;
+      setData(d);
+    }
+    if (!silent) setLoading(false);
   }, []);
+
+  useEffect(() => { load(); }, [load]);
+  useLivePoll(() => load(true), 10000); // refresh every 10s
 
   if (loading) return <Spinner />;
   if (!data || data.error) return <div style={{ color:C.muted, textAlign:'center', padding:40 }}>{data?.error || 'Failed to load dashboard'}</div>;
@@ -291,6 +312,27 @@ const DashboardOverview = ({ admin }: { admin: AdminUser }) => {
 
   return (
     <div>
+      {/* 🔔 New Order Banner */}
+      {newOrderBanner && (
+        <div style={{
+          background: 'linear-gradient(135deg, #10B981, #059669)',
+          color: '#fff',
+          padding: '14px 20px',
+          borderRadius: 10,
+          marginBottom: 20,
+          fontSize: 15,
+          fontWeight: 700,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          boxShadow: '0 4px 16px rgba(16,185,129,0.35)',
+          animation: 'slideIn 0.4s ease',
+        }}>
+          <span style={{ fontSize: 22 }}>🛒</span>
+          {newOrderBanner}
+        </div>
+      )}
+
       <h1 style={{ fontSize:22, fontWeight:800, color:C.text, marginBottom:20 }}>
         Good {new Date().getHours()<12?'morning':'afternoon'}, {admin.username} 👋
       </h1>
@@ -317,23 +359,35 @@ const DashboardOverview = ({ admin }: { admin: AdminUser }) => {
         </div>
       </div>
       <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:10, padding:20 }}>
-        <h3 style={{ fontSize:15, fontWeight:700, color:C.text, marginBottom:16 }}>📦 Recent Orders</h3>
+        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:16 }}>
+          <h3 style={{ fontSize:15, fontWeight:700, color:C.text, margin:0 }}>📦 Recent Orders</h3>
+          <span title="Live — updates every 10 seconds" style={{ display:'inline-flex', alignItems:'center', gap:5, fontSize:11, color:C.success, fontWeight:600 }}>
+            <span style={{ width:7, height:7, borderRadius:'50%', background:C.success, display:'inline-block', animation:'pulse 1.5s ease-in-out infinite' }} />
+            LIVE
+          </span>
+        </div>
         <div style={{ overflowX:'auto' }}>
           <table style={{ width:'100%', borderCollapse:'collapse', fontSize:14 }}>
             <thead><tr style={{ background:C.surface }}>
-              {['Order #','Customer','Total','Status','Date'].map(h=>(
+              {['Order #','Customer','Total','Status','Payment','Date'].map(h=>(
                 <th key={h} style={{ padding:'8px 12px', textAlign:'left', fontSize:12, fontWeight:700, color:C.muted, borderBottom:`1px solid ${C.border}` }}>{h}</th>
               ))}
             </tr></thead>
             <tbody>
-              {!recentOrders.length ? <tr><td colSpan={5} style={{ textAlign:'center', padding:30, color:C.muted }}>No orders yet</td></tr>
+              {!recentOrders.length ? <tr><td colSpan={6} style={{ textAlign:'center', padding:30, color:C.muted }}>No orders yet</td></tr>
               : recentOrders.map((o: any) => (
                 <tr key={o.id} style={{ borderBottom:`1px solid ${C.border}` }}>
                   <td style={{ padding:'8px 12px' }}><code style={{ background:C.surface, padding:'2px 6px', borderRadius:4, fontSize:12 }}>{o.order_number}</code></td>
-                  <td style={{ padding:'8px 12px', fontWeight:500 }}>{o.customer_name}</td>
+                  <td style={{ padding:'8px 12px', fontWeight:500 }}>
+                    <div>{o.customer_name}</div>
+                    <div style={{ fontSize:11, color:C.muted }}>{o.customer_email}</div>
+                  </td>
                   <td style={{ padding:'8px 12px', fontWeight:700 }}>{o.currency} {parseFloat(o.total_amount||0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
                   <td style={{ padding:'8px 12px' }}>
-                    <span style={{ background:'#FEF3C7', color:'#D97706', borderRadius:20, padding:'3px 10px', fontSize:11, fontWeight:700 }}>{o.status}</span>
+                    <span style={{ background:'#DBEAFE', color:'#1D4ED8', borderRadius:20, padding:'3px 10px', fontSize:11, fontWeight:700 }}>{o.status}</span>
+                  </td>
+                  <td style={{ padding:'8px 12px' }}>
+                    <span style={{ background: o.payment_status==='paid'?'#D1FAE5':'#FEF3C7', color: o.payment_status==='paid'?'#065F46':'#D97706', borderRadius:20, padding:'3px 10px', fontSize:11, fontWeight:700 }}>{o.payment_status}</span>
                   </td>
                   <td style={{ padding:'8px 12px', color:C.muted, fontSize:12 }}>{fmtDate(o.created_at)}</td>
                 </tr>

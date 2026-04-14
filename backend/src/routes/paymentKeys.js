@@ -23,6 +23,7 @@ router.get('/', async (req, res) => {
 
     res.json(data);
   } catch (err) {
+    console.error('[payment-keys GET] Error:', err.message);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
@@ -69,11 +70,13 @@ router.post('/', async (req, res) => {
       }]);
 
     if (insertError) {
+      console.error('[payment-keys POST] Supabase insert error:', insertError.message);
       return res.status(500).json({ error: 'Something went wrong' });
     }
 
     res.json({ success: true });
   } catch (err) {
+    console.error('[payment-keys POST] Error:', err.message, err.stack);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
@@ -158,6 +161,7 @@ router.delete('/:id', async (req, res) => {
     res.json({ success: true });
 
   } catch (err) {
+    console.error('[payment-keys DELETE] Error:', err.message);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });

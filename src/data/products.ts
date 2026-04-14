@@ -28,6 +28,31 @@ export interface Product {
 
 export const products: Product[] = [
   {
+    "id": "47",
+    "title": "Procolored Direct to Transfer Film Ink 500ml",
+    "price": "$229.00 USD",
+    "originalPrice": null,
+    "image": "https://www.procolored.com/cdn/shop/files/CMYKWW_16_1220x_crop_center.png?v=1762338853",
+    "hoverImage": "https://www.procolored.com/cdn/shop/files/CMYKWW_16_1220x_crop_center.png?v=1762338853",
+    "badge": null,
+    "buttonStyle": "outline",
+    "buttonText": "Select Opts",
+    "link": "/products/procolored-direct-to-transfer-film-ink",
+    "filters": {
+      "collection": "Consumables",
+      "availability": "in-stock",
+      "printType": null,
+      "printSize": null,
+      "resolution": null,
+      "printSpeed": null,
+      "printerHead": null,
+      "substrateThickness": null,
+      "consumablesType": "Ink",
+      "machineCategory": null,
+      "consumablesCategory": "DTF Consumables"
+    }
+  },
+  {
     "id": "9",
     "title": "Procolored F13 Panda DTF Printer 13\" A3 L1800 & Oven",
     "price": "$3,071.94 USD",
@@ -650,31 +675,6 @@ export const products: Product[] = [
       "consumablesType": null,
       "machineCategory": null,
       "consumablesCategory": null
-    }
-  },
-  {
-    "id": "47",
-    "title": "Procolored Direct to Transfer Film Ink 500ml",
-    "price": "$234.89 USD",
-    "originalPrice": null,
-    "image": "https://www.procolored.com/cdn/shop/files/CMYKWW_16_1220x_crop_center.png?v=1762338853",
-    "hoverImage": "https://www.procolored.com/cdn/shop/files/CMYKWW_16_1220x_crop_center.png?v=1762338853",
-    "badge": null,
-    "buttonStyle": "outline",
-    "buttonText": "Select Opts",
-    "link": "#",
-    "filters": {
-      "collection": "Consumables",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": "Ink",
-      "machineCategory": null,
-      "consumablesCategory": "DTF Consumables"
     }
   },
   {
@@ -1330,8 +1330,8 @@ export const products: Product[] = [
   {
     "id": "white-ink-dtf",
     "title": "Procolored White Ink for DTF Printing",
-    "price": "$1.00 USD",
-    "originalPrice": "$49.00 USD",
+    "price": "$49.00 USD",
+    "originalPrice": null,
     "image": "https://www.procolored.com/cdn/shop/files/250ml_cdfd861c-62b6-4d98-9331-934d56bfe03e_1220x_crop_center.png?v=1762339048",
     "hoverImage": "https://www.procolored.com/cdn/shop/files/250ml_cdfd861c-62b6-4d98-9331-934d56bfe03e_1220x_crop_center.png?v=1762339048",
     "badge": "New",
@@ -1437,7 +1437,7 @@ export const products: Product[] = [
     "badge": null,
     "buttonStyle": "outline",
     "buttonText": "Select Opts",
-    "link": "/products/dtf-ink-250ml",
+    "link": "/products/procolored-direct-to-transfer-film-ink",
     "filters": {
       "collection": "Consumables",
       "availability": "in-stock",
@@ -2767,7 +2767,7 @@ export const products: Product[] = [
   {
     "id": "panda-doll",
     "title": "Procolored Panda Doll",
-    "price": "$29.99 USD",
+    "price": "$1.00 USD",
     "originalPrice": null,
     "image": "https://www.procolored.com/cdn/shop/files/xm_deae226a-30b3-44d3-8604-e1b5b67aeaf7_1220x_crop_center.png?v=1725963688",
     "hoverImage": "https://www.procolored.com/cdn/shop/files/xm_deae226a-30b3-44d3-8604-e1b5b67aeaf7_1220x_crop_center.png?v=1725963688",
@@ -2777,31 +2777,6 @@ export const products: Product[] = [
     "link": "/products/panda-doll",
     "filters": {
       "collection": "Equipment",
-      "availability": "in-stock",
-      "printType": null,
-      "printSize": null,
-      "resolution": null,
-      "printSpeed": null,
-      "printerHead": null,
-      "substrateThickness": null,
-      "consumablesType": null,
-      "machineCategory": null,
-      "consumablesCategory": null
-    }
-  },
-  {
-    "id": "procolored-demo-order-test",
-    "title": "Procolored Demo Order (Testing Only)",
-    "price": "$0.00 USD",
-    "originalPrice": null,
-    "image": "https://i.postimg.cc/Y9M7TqxR/logo.webp",
-    "hoverImage": "https://i.postimg.cc/Y9M7TqxR/logo.webp",
-    "badge": "TEST",
-    "buttonStyle": "default",
-    "buttonText": "Add to cart",
-    "link": "/products/procolored-demo-order-test",
-    "filters": {
-      "collection": "Extended Warranty",
       "availability": "in-stock",
       "printType": null,
       "printSize": null,

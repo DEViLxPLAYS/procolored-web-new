@@ -145,6 +145,21 @@ export default function F13ProProduct() {
               </ul>
             </div>
 
+            {/* Stand Toggle */}
+            <div className="mb-2">
+              <p className="font-bold text-gray-900 mb-2">Option</p>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-orange-500 text-orange-600 bg-orange-50 cursor-default">
+                  Without Stand
+                </button>
+                <button onClick={() => navigate('/procolored-f13-pro-stand-panda-dtf-printer')}
+                  className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-gray-200 text-gray-700 hover:border-gray-300">
+                  Stand
+                </button>
+              </div>
+            </div>
+
             {/* Options */}
             <div>
               <div className="flex items-center justify-between mb-3">
@@ -168,21 +183,6 @@ export default function F13ProProduct() {
                     </div>
                   </button>
                 ))}
-              </div>
-            </div>
-
-            {/* Stand Toggle */}
-            <div className="mb-2">
-              <p className="font-bold text-gray-900 mb-2">Option</p>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-orange-500 text-orange-600 bg-orange-50 cursor-default">
-                  Without Stand
-                </button>
-                <button onClick={() => navigate('/procolored-f13-pro-stand-panda-dtf-printer')}
-                  className="py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all border-gray-200 text-gray-700 hover:border-gray-300">
-                  Stand
-                </button>
               </div>
             </div>
 

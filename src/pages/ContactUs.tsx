@@ -182,7 +182,6 @@ function ContactForm({ type, submitLabel }: { type: 'presales' | 'aftersales' | 
           <option>United States</option>
           <option>Canada</option>
           <option>United Kingdom</option>
-          <option>Pakistan</option>
           <option>Australia</option>
           <option>Germany</option>
         </select>

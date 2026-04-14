@@ -58,7 +58,8 @@ export default function Feedback() {
                   <option value="us">United States</option>
                   <option value="ca">Canada</option>
                   <option value="uk">United Kingdom</option>
-                  <option value="pk">Pakistan</option>
+                  <option value="au">Australia</option>
+                  <option value="de">Germany</option>
                 </select>
               </div>
 

@@ -17,7 +17,7 @@ const authenticateAdmin = async (req, res, next) => {
     // Verify admin still exists and is active in database
     const { data: admin, error } = await supabaseAdmin
       .from('admin_users')
-      .select('id, username, email, role, is_active')
+      .select('id, username, email, role, is_active, can_manage_keys')
       .eq('id', decoded.adminId)
       .eq('is_active', true)
       .single();

@@ -35,7 +35,7 @@ const sendOrderEmailsHandler = async (orderData) => {
     subtotal = 0,
     totalAmount = 0,
     currency = 'USD',
-    paymentMethod = 'Stripe',
+    paymentMethod = 'PayPal',
     shippingAddress = {},
     billingAddress = {},
     customerCountry,

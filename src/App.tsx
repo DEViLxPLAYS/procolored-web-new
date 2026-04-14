@@ -108,7 +108,6 @@ import DepositF8WithOven from './pages/DepositF8WithOven';
 import PrinterLeaseF8NoOven from './pages/PrinterLeaseF8NoOven';
 import DepositF8NoOven from './pages/DepositF8NoOven';
 import PandaDoll from './pages/PandaDoll';
-import DemoOrderProduct from './pages/DemoOrderProduct';
 
 import NewsletterPopup from './components/NewsletterPopup';
 import AdminDashboard from './pages/AdminDashboard';
@@ -203,6 +202,8 @@ function App() {
               <Route path="dtf-powder" element={<DTFPowder />} />
               <Route path="products/dtf-ink-250ml" element={<DTFInk250ml />} />
               <Route path="dtf-ink-250ml" element={<DTFInk250ml />} />
+              <Route path="products/procolored-direct-to-transfer-film-ink" element={<DTFInk250ml />} />
+              <Route path="procolored-direct-to-transfer-film-ink" element={<DTFInk250ml />} />
               <Route path="products/uv-white-ink-500ml" element={<UVWhiteInk500ml />} />
               <Route path="uv-white-ink-500ml" element={<UVWhiteInk500ml />} />
               <Route path="products/uvdtf-white-ink-500ml" element={<UVDTFWhiteInk500ml />} />
@@ -270,8 +271,6 @@ function App() {
               <Route path="products/printer-lease-f8-no-oven" element={<PrinterLeaseF8NoOven />} />
               <Route path="products/deposit-f8-no-oven" element={<DepositF8NoOven />} />
               <Route path="products/panda-doll" element={<PandaDoll />} />
-              <Route path="products/procolored-demo-order-test" element={<DemoOrderProduct />} />
-              <Route path="procolored-demo-order-test" element={<DemoOrderProduct />} />
               <Route path="uv-printer-ink-500ml" element={<UVPrinterInk500ml />} />
               <Route path="products/:slug" element={<ProductDetails />} />
               {/* Support pages - with /pages/ prefix */}

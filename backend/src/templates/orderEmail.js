@@ -21,7 +21,7 @@ function buildOrderEmailHtml(order) {
     items = [],
     subtotal = 0,
     totalAmount = 0,
-    paymentMethod = 'Stripe',
+    paymentMethod = 'PayPal',
     shippingAddress = {},
     billingAddress = {},
   } = order;
