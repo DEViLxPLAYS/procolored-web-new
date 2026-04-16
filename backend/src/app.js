@@ -30,20 +30,36 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
+      scriptSrc: [
+        "'self'",
+        "https://www.paypal.com",
+        "https://www.paypalobjects.com",
+        "https://js.stripe.com",
+      ],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
-      frameSrc: ["'none'"],
+      connectSrc: [
+        "'self'",
+        "https://api-m.paypal.com",
+        "https://api-m.sandbox.paypal.com",
+        "https://www.paypal.com",
+        "https://api.stripe.com",
+        "https://js.stripe.com",
+      ],
+      frameSrc: [
+        "https://www.paypal.com",
+        "https://www.sandbox.paypal.com",
+        "https://js.stripe.com",
+      ],
       objectSrc: ["'none'"],
       upgradeInsecureRequests: [],
     },
   },
-  crossOriginEmbedderPolicy: true,
-  crossOriginOpenerPolicy: true,
-  crossOriginResourcePolicy: { policy: "same-origin" },
+  crossOriginEmbedderPolicy: false, // PayPal requires this to be false
+  crossOriginOpenerPolicy: false,   // PayPal requires this to be false
+  crossOriginResourcePolicy: false,
   dnsPrefetchControl: { allow: false },
-  frameguard: { action: "deny" },
+  frameguard: false, // PayPal uses iframes, can't deny all frames
   hsts: {
     maxAge: 31536000,
     includeSubDomains: true,
