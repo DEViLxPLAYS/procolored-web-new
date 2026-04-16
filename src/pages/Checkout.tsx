@@ -278,17 +278,22 @@ function CheckoutShell({ activePolicyKey, onClosePolicy, children }: { activePol
         * { box-sizing: border-box; }
         ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
         @media (max-width: 768px) {
-          .checkout-layout { flex-direction: column !important; }
-          .checkout-right { width: 100% !important; height: auto !important; position: relative !important; border-left: none !important; border-top: 1px solid #e5e7eb !important; }
-          .checkout-left { padding: 24px 20px 40px !important; }
+          .checkout-layout { flex-direction: column-reverse !important; }
+          .checkout-right { width: 100% !important; height: auto !important; position: relative !important; border-left: none !important; border-top: none !important; border-bottom: 8px solid #f0f0f0 !important; padding: 24px 20px 10px !important; }
+          .checkout-left { padding: 30px 20px 40px !important; }
+          
+          .checkout-header { height: 60px !important; padding: 0 20px !important; }
+          .checkout-logo { height: 38px !important; }
+          .checkout-return { font-size: 13px !important; }
+          .checkout-return svg { width: 14px; height: 14px; }
         }
       `}</style>
       {activePolicyKey && <PolicyModal policyKey={activePolicyKey} onClose={onClosePolicy} />}
-      <header style={{ borderBottom: '1px solid #e5e7eb', padding: '0 40px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff', position: 'sticky', top: 0, zIndex: 100 }}>
+      <header className="checkout-header" style={{ borderBottom: '1px solid #e5e7eb', padding: '0 40px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff', position: 'sticky', top: 0, zIndex: 100 }}>
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-          <img src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" style={{ height: 70 }} />
+          <img className="checkout-logo" src="https://i.postimg.cc/fTQtLtrH/procolored-logo-4k-transparent1.png" alt="Procolored" style={{ height: 70, transition: 'height 0.2s' }} />
         </Link>
-        <Link to="/" style={{ fontSize: 16, color: '#555', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700 }}>
+        <Link to="/" className="checkout-return" style={{ fontSize: 16, color: '#555', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 700, transition: 'font-size 0.2s' }}>
           Return to store <ChevronRight size={16} />
         </Link>
       </header>
