@@ -839,7 +839,7 @@ export default function Checkout() {
               <div style={{ border: '1px solid #d1d5db', borderRadius: 8, overflow: 'hidden' }}>
 
                 {/* ── Stripe option ── */}
-                <div
+                {/* <div
                   onClick={() => setPaymentMethod('stripe')}
                   style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: paymentMethod === 'stripe' ? '#f9fafb' : '#fff', borderBottom: '1px solid #e5e7eb' }}
                 >
@@ -850,68 +850,24 @@ export default function Checkout() {
                       <span key={card} style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: 3, padding: '2px 6px', fontSize: 10, fontWeight: 700, color: '#555' }}>{card}</span>
                     ))}
                   </div>
-                </div>
-
-                {paymentMethod === 'stripe' && (
-                  <div style={{ padding: 20, background: '#fafafa', borderBottom: '1px solid #e5e7eb' }}>
-                    {stripeError ? (
-                      <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}>
-                        <strong>Payment Error:</strong> {stripeError}
-                      </div>
-                    ) : !stripePromise || !clientSecret ? (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 20, color: '#888', fontSize: 13 }}>
-                        <span style={{ width: 20, height: 20, border: '2px solid #e5e7eb', borderTopColor: '#635bff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
-                        Loading secure payment form...
-                      </div>
-                    ) : (
-                      <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
-                        <div style={{ marginBottom: 14 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#555', marginBottom: 14 }}>
-                            <ShieldCheck size={13} color="#635bff" /> Secured by Stripe — bank-level encryption
-                          </div>
-                          {formError && (
-                            <div style={{ marginBottom: 14, padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, fontSize: 13, color: '#dc2626', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                              <span style={{ fontSize: 16, lineHeight: 1 }}>⚠️</span>
-                              <span><strong>Please fill in all required details:</strong><br />{formError}</span>
-                            </div>
-                          )}
-                        </div>
-                        <StripePaymentForm
-                          totalUSD={totalUSD}
-                          validateForm={validateForm}
-                          handleOrderComplete={handleOrderComplete}
-                          setIsSubmitting={setIsSubmitting}
-                        />
-                      </Elements>
-                    )}
-                  </div>
-                )}
-
-                {/* ── PayPal option ── */}
-                {/* <div
-                  onClick={() => setPaymentMethod('paypal')}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: paymentMethod === 'paypal' ? '#f9fafb' : '#fff', borderBottom: paymentMethod === 'paypal' ? '1px solid #e5e7eb' : 'none' }}
-                >
-                  <div style={{ width: 18, height: 18, borderRadius: '50%', border: paymentMethod === 'paypal' ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} />
-                  <span style={{ fontSize: 14, fontWeight: 500, color: '#1a1a1a' }}>PayPal</span>
                 </div> */}
 
-                {paymentMethod === 'paypal' && (
-                  // <div style={{ padding: 16, background: '#fafafa' }}>
-                  //   {paypalLoading ? (
-                  //     <div style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                  //       <span style={{ width: 24, height: 24, border: '2px solid #e5e7eb', borderTopColor: '#003087', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
-                  //       <span style={{ fontSize: 13, color: '#888' }}>Loading PayPal...</span>
-                  //     </div>
-                  //   ) : paypalError ? (
+                {paymentMethod === 'stripe' && (
+                  // <div style={{ padding: 20, background: '#fafafa', borderBottom: '1px solid #e5e7eb' }}>
+                  //   {stripeError ? (
                   //     <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}>
-                  //       <strong>Payment Error:</strong> {paypalError}
+                  //       <strong>Payment Error:</strong> {stripeError}
                   //     </div>
-                  //   ) : paypalClientId ? (
-                  //     <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
-                  //       <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16, background: '#fff' }}>
+                  //   ) : !stripePromise || !clientSecret ? (
+                  //     <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 20, color: '#888', fontSize: 13 }}>
+                  //       <span style={{ width: 20, height: 20, border: '2px solid #e5e7eb', borderTopColor: '#635bff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                  //       Loading secure payment form...
+                  //     </div>
+                  //   ) : (
+                  //     <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                  //       <div style={{ marginBottom: 14 }}>
                   //         <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#555', marginBottom: 14 }}>
-                  //           <ShieldCheck size={13} color="#009cde" /> Secured by PayPal — pay safely with any card or PayPal balance
+                  //           <ShieldCheck size={13} color="#635bff" /> Secured by Stripe — bank-level encryption
                   //         </div>
                   //         {formError && (
                   //           <div style={{ marginBottom: 14, padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, fontSize: 13, color: '#dc2626', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
@@ -919,53 +875,98 @@ export default function Checkout() {
                   //             <span><strong>Please fill in all required details:</strong><br />{formError}</span>
                   //           </div>
                   //         )}
-                  //         <PayPalButtons
-                  //           style={{ layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal', height: 48 }}
-                  //           disabled={isSubmitting}
-                  //           createOrder={async () => {
-                  //             if (!validateForm()) throw new Error('form_invalid');
-                  //             const res = await fetch(`${API_BASE}/api/paypal/create-order`, {
-                  //               method: 'POST',
-                  //               headers: { 'Content-Type': 'application/json' },
-                  //               body: JSON.stringify({ cartTotal: totalUSD.toFixed(2), currency: 'USD' }),
-                  //             });
-                  //             const data = await res.json();
-                  //             if (!data.id) throw new Error(data.error || 'Could not create PayPal order.');
-                  //             return data.id;
-                  //           }}
-                  //           onApprove={async (data) => {
-                  //             setIsSubmitting(true);
-                  //             try {
-                  //               const res = await fetch(`${API_BASE}/api/paypal/capture-order`, {
-                  //                 method: 'POST',
-                  //                 headers: { 'Content-Type': 'application/json' },
-                  //                 body: JSON.stringify({ orderID: data.orderID }),
-                  //               });
-                  //               const capture = await res.json();
-                  //               if (capture.success) {
-                  //                 await handleOrderComplete(data.orderID, 'PayPal');
-                  //               } else {
-                  //                 alert(capture.error || 'Payment capture failed. Contact support.');
-                  //                 setIsSubmitting(false);
-                  //               }
-                  //             } catch {
-                  //               alert('Network error during payment capture. Contact support.');
-                  //               setIsSubmitting(false);
-                  //             }
-                  //           }}
-                  //           onError={(err: any) => {
-                  //             console.error('PayPal error:', err);
-                  //             if (err?.message === 'form_invalid') return;
-                  //             setPaypalError('Payment could not be completed. Please check your details and try again.');
-                  //           }}
-                  //           onCancel={() => setIsSubmitting(false)}
-                  //         />
                   //       </div>
-                  //     </PayPalScriptProvider>
-                  //   ) : null}
+                  //       <StripePaymentForm
+                  //         totalUSD={totalUSD}
+                  //         validateForm={validateForm}
+                  //         handleOrderComplete={handleOrderComplete}
+                  //         setIsSubmitting={setIsSubmitting}
+                  //       />
+                  //     </Elements>
+                  //   )}
                   // </div>
                   <div></div>
                 )}
+
+                {/* ── PayPal option ── */}
+                <div
+                  onClick={() => setPaymentMethod('paypal')}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: paymentMethod === 'paypal' ? '#f9fafb' : '#fff', borderBottom: paymentMethod === 'paypal' ? '1px solid #e5e7eb' : 'none' }}
+                >
+                  <div style={{ width: 18, height: 18, borderRadius: '50%', border: paymentMethod === 'paypal' ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} />
+                  <span style={{ fontSize: 14, fontWeight: 500, color: '#1a1a1a' }}>PayPal</span>
+                </div>
+
+                {/* {paymentMethod === 'paypal' && ( */}
+                <div style={{ padding: 16, background: '#fafafa' }}>
+                  {paypalLoading ? (
+                    <div style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                      <span style={{ width: 24, height: 24, border: '2px solid #e5e7eb', borderTopColor: '#003087', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                      <span style={{ fontSize: 13, color: '#888' }}>Loading PayPal...</span>
+                    </div>
+                  ) : paypalError ? (
+                    <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}>
+                      <strong>Payment Error:</strong> {paypalError}
+                    </div>
+                  ) : paypalClientId ? (
+                    <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
+                      <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16, background: '#fff' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#555', marginBottom: 14 }}>
+                          <ShieldCheck size={13} color="#009cde" /> Secured by PayPal — pay safely with any card or PayPal balance
+                        </div>
+                        {formError && (
+                          <div style={{ marginBottom: 14, padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, fontSize: 13, color: '#dc2626', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                            <span style={{ fontSize: 16, lineHeight: 1 }}>⚠️</span>
+                            <span><strong>Please fill in all required details:</strong><br />{formError}</span>
+                          </div>
+                        )}
+                        <PayPalButtons
+                          style={{ layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal', height: 48 }}
+                          disabled={isSubmitting}
+                          createOrder={async () => {
+                            if (!validateForm()) throw new Error('form_invalid');
+                            const res = await fetch(`${API_BASE}/api/paypal/create-order`, {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ cartTotal: totalUSD.toFixed(2), currency: 'USD' }),
+                            });
+                            const data = await res.json();
+                            if (!data.id) throw new Error(data.error || 'Could not create PayPal order.');
+                            return data.id;
+                          }}
+                          onApprove={async (data) => {
+                            setIsSubmitting(true);
+                            try {
+                              const res = await fetch(`${API_BASE}/api/paypal/capture-order`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ orderID: data.orderID }),
+                              });
+                              const capture = await res.json();
+                              if (capture.success) {
+                                await handleOrderComplete(data.orderID, 'PayPal');
+                              } else {
+                                alert(capture.error || 'Payment capture failed. Contact support.');
+                                setIsSubmitting(false);
+                              }
+                            } catch {
+                              alert('Network error during payment capture. Contact support.');
+                              setIsSubmitting(false);
+                            }
+                          }}
+                          onError={(err: any) => {
+                            console.error('PayPal error:', err);
+                            if (err?.message === 'form_invalid') return;
+                            setPaypalError('Payment could not be completed. Please check your details and try again.');
+                          }}
+                          onCancel={() => setIsSubmitting(false)}
+                        />
+                      </div>
+                    </PayPalScriptProvider>
+                  ) : null}
+                </div>
+
+                {/* )} */}
 
               </div>
             )}
