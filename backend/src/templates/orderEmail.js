@@ -26,12 +26,9 @@ function buildOrderEmailHtml(order) {
     billingAddress = {},
   } = order;
 
-  const fmt = (cents) => {
-    const amount = typeof cents === 'number' ? cents : parseFloat(cents) || 0;
-    // If value looks like it's already in dollars (< 1000 and has decimals)
-    // treat as dollars, otherwise treat as cents
-    const dollars = amount > 500 ? (amount / 100).toFixed(2) : amount.toFixed(2);
-    return `$${dollars}`;
+  const fmt = (amount) => {
+    const val = typeof amount === 'number' ? amount : parseFloat(amount) || 0;
+    return `$${val.toFixed(2)}`;
   };
 
   const fmtAddr = (addr) => {
@@ -47,9 +44,7 @@ function buildOrderEmailHtml(order) {
   };
 
   const itemsHtml = items.map(item => {
-    const price = typeof item.price === 'number'
-      ? (item.price > 500 ? item.price / 100 : item.price).toFixed(2)
-      : parseFloat(item.price || 0).toFixed(2);
+    const price = parseFloat(item.price || 0).toFixed(2);
     return `
       <tr>
         <td style="padding:16px 0;border-bottom:1px solid #e5e5e5;">
@@ -75,8 +70,8 @@ function buildOrderEmailHtml(order) {
     `;
   }).join('');
 
-  const subDollars = totalAmount > 500 ? (totalAmount / 100).toFixed(2) : parseFloat(totalAmount || 0).toFixed(2);
-  const totalDollars = subDollars;
+  const subDollars = parseFloat(subtotal || 0).toFixed(2);
+  const totalDollars = parseFloat(totalAmount || 0).toFixed(2);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -97,7 +92,7 @@ function buildOrderEmailHtml(order) {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td>
-                    <img src="https://i.postimg.cc/Y9M7TqxR/logo.webp" alt="Procolored" height="36" style="display:block;"/>
+                    <img src="https://i.postimg.cc/SKh71Rmm/logo.webp" alt="Procolored" height="36" style="display:block;"/>
                   </td>
                   <td align="right" style="font-size:13px;color:#888;font-weight:500;">
                     ORDER #${orderNumber}
@@ -157,11 +152,11 @@ function buildOrderEmailHtml(order) {
                 </tr>
                 <tr>
                   <td style="padding:6px 0;font-size:14px;color:#555;">Shipping</td>
-                  <td style="padding:6px 0;font-size:14px;color:#1a1a1a;text-align:right;font-weight:500;">FREE</td>
+                  <td style="padding:6px 0;font-size:14px;color:#22c55e;text-align:right;font-weight:700;">FREE</td>
                 </tr>
                 <tr>
                   <td style="padding:6px 0;font-size:14px;color:#555;">Taxes</td>
-                  <td style="padding:6px 0;font-size:14px;color:#1a1a1a;text-align:right;font-weight:500;">$0.00</td>
+                  <td style="padding:6px 0;font-size:14px;color:#22c55e;text-align:right;font-weight:700;">FREE</td>
                 </tr>
                 <tr>
                   <td colspan="2" style="padding:8px 0;">

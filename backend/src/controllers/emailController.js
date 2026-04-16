@@ -2,8 +2,8 @@
  * Email Controller
  *
  * sendOrderEmailsHandler  — fires when an order is placed (demo or real)
- *   → Customer: Shopify-style order confirmation with full order details
- *   → Admin: Identical email (ditto copy) with same template
+ *   → Customer: Warm branded "Thank You" confirmation (orderConfirmationCustomer.js)
+ *   → Admin:    Detailed order alert with full item breakdown (newOrderAdmin.js)
  *
  * sendContactEmailHandler — fires on contact/warranty form submissions
  * sendAbandonmentEmailHandler — fires on checkout abandonment
@@ -11,17 +11,18 @@
  */
 
 const { sendMail } = require('../config/nodemailer');
-const { buildOrderEmailHtml } = require('../templates/orderEmail');
+const { orderConfirmationCustomer } = require('../templates/orderConfirmationCustomer');
+const { newOrderAdmin } = require('../templates/newOrderAdmin');
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const getFrom = () =>
   process.env.SMTP_FROM ||
-  `"Procolored Store" <${process.env.SMTP_USER || 'support@procollored.com'}>`;
+  `"Procolored Store" <${process.env.SMTP_USER || 'support@procolored-us.com'}>`;
 
 const getAdminTo = () =>
   process.env.NOTIFY_EMAIL ||
   process.env.ADMIN_EMAIL ||
-  'Support@procollored.com';
+  'support@procolored-us.com';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ORDER EMAILS — called after every successful order (real or demo)
@@ -31,8 +32,12 @@ const sendOrderEmailsHandler = async (orderData) => {
     customerEmail,
     customerName,
     orderNumber,
+    customerPhone,
     items = [],
     subtotal = 0,
+    shippingCost = 0,
+    discountAmount = 0,
+    discountCode = null,
     totalAmount = 0,
     currency = 'USD',
     paymentMethod = 'PayPal',
@@ -40,7 +45,9 @@ const sendOrderEmailsHandler = async (orderData) => {
     billingAddress = {},
     customerCountry,
     customerCity,
+    customerIp,
     isDemoOrder = false,
+    createdAt,
   } = orderData;
 
   const FROM = getFrom();
@@ -49,56 +56,64 @@ const sendOrderEmailsHandler = async (orderData) => {
 
   console.log(`[Email] Processing order emails for ${orderNumber} — customer: ${customerEmail}, admin: ${ADMIN}`);
 
-  // Build the shared Shopify-style template data
-  const templateData = {
-    orderNumber,
-    customerName: customerName || 'Valued Customer',
-    customerEmail: customerEmail || '',
-    items,
-    subtotal: subtotal || totalAmount,
-    totalAmount,
-    currency,
-    paymentMethod: isDemoOrder ? 'Demo / Test Order' : paymentMethod,
-    shippingAddress,
-    billingAddress: billingAddress && Object.keys(billingAddress).length > 0
-      ? billingAddress
-      : shippingAddress, // fall back to shipping if billing not provided
-  };
-
-  // Build HTML once — same for both customer and admin
-  let html;
-  try {
-    html = buildOrderEmailHtml(templateData);
-  } catch (tplErr) {
-    console.error('[Email] Template build error:', tplErr.message);
-    html = `<div style="font-family:sans-serif;padding:32px;">
-      <h2>Order ${orderNumber} Confirmed</h2>
-      <p>Hi ${customerName}, thank you for your order!</p>
-      <p>Questions? <a href="mailto:support@procollored.com">support@procollored.com</a></p>
-    </div>`;
-  }
-
-  const subjectCustomer = isDemoOrder
-    ? `[Demo] Order ${orderNumber} confirmed — Procolored`
-    : `Order ${orderNumber} confirmed — Procolored`;
-
-  const subjectAdmin = isDemoOrder
-    ? `🧪 Demo Order ${orderNumber} — ${customerEmail || 'no email'}`
-    : `🔔 New Order ${orderNumber} — ${customerName} — $${parseFloat(totalAmount).toFixed(2)}`;
-
-  // ── 1. Customer email ──────────────────────────────────────────────────────
+  // ── 1. Customer email — warm branded "Thank You" ───────────────────────────
   if (customerEmail) {
-    const resp = await sendMail({ from: FROM, to: customerEmail, subject: subjectCustomer, html });
-    if (resp.success) results.customerSent = true;
-    else results.errors.push(`Customer email: ${resp.error}`);
+    try {
+      const customerHtml = orderConfirmationCustomer({
+        customerName: customerName || 'Valued Customer',
+        orderNumber,
+        isDemoOrder,
+      });
+
+      const subjectCustomer = isDemoOrder
+        ? `[Demo] Order ${orderNumber} confirmed — Procolored`
+        : `Order ${orderNumber} confirmed — Thank you, ${(customerName || '').split(' ')[0] || 'Valued Customer'}!`;
+
+      const resp = await sendMail({ from: FROM, to: customerEmail, subject: subjectCustomer, html: customerHtml });
+      if (resp.success) results.customerSent = true;
+      else results.errors.push(`Customer email: ${resp.error}`);
+    } catch (err) {
+      console.error('[Email] Customer template error:', err.message);
+      results.errors.push(`Customer template error: ${err.message}`);
+    }
   } else {
     console.warn('[Email] No customer email address — skipping customer email.');
   }
 
-  // ── 2. Admin email (identical template) ───────────────────────────────────
-  const adminResp = await sendMail({ from: FROM, to: ADMIN, subject: subjectAdmin, html });
-  if (adminResp.success) results.adminSent = true;
-  else results.errors.push(`Admin email: ${adminResp.error}`);
+  // ── 2. Admin email — detailed new order alert ─────────────────────────────
+  try {
+    const adminHtml = newOrderAdmin({
+      orderNumber,
+      customerName: customerName || 'Valued Customer',
+      customerEmail: customerEmail || '',
+      customerPhone: customerPhone || null,
+      items,
+      subtotal,
+      shippingCost,
+      discountAmount,
+      discountCode,
+      totalAmount,
+      currency,
+      shippingAddress,
+      paymentMethod: isDemoOrder ? 'Demo / Test Order' : paymentMethod,
+      customerCountry: customerCountry || null,
+      customerCity: customerCity || null,
+      customerIp: customerIp || null,
+      isDemoOrder,
+      createdAt: createdAt || new Date().toISOString(),
+    });
+
+    const subjectAdmin = isDemoOrder
+      ? `🧪 Demo Order ${orderNumber} — ${customerEmail || 'no email'}`
+      : `🔔 New Order Received — ${orderNumber} — ${customerName} — $${parseFloat(totalAmount).toFixed(2)} USD`;
+
+    const adminResp = await sendMail({ from: FROM, to: ADMIN, subject: subjectAdmin, html: adminHtml });
+    if (adminResp.success) results.adminSent = true;
+    else results.errors.push(`Admin email: ${adminResp.error}`);
+  } catch (err) {
+    console.error('[Email] Admin template error:', err.message);
+    results.errors.push(`Admin template error: ${err.message}`);
+  }
 
   console.log(`[Email] Results — customer: ${results.customerSent}, admin: ${results.adminSent}`, results.errors);
   return { success: results.customerSent || results.adminSent, ...results };

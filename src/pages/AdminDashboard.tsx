@@ -420,7 +420,7 @@ const LoginScreen = ({ onLogin }: { onLogin: (a: AdminUser) => void }) => {
     <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:C.surface, padding:24 }}>
       <div style={{ background:C.white, borderRadius:14, padding:'48px 40px', width:'100%', maxWidth:420, boxShadow:'0 10px 40px rgba(0,0,0,0.1)', border:`1px solid ${C.border}` }}>
         <div style={{ textAlign:'center', marginBottom:32 }}>
-          <img src="https://i.postimg.cc/Y9M7TqxR/logo.webp" alt="Procolored" style={{ height:48, objectFit:'contain', marginBottom:8 }} />
+          <img src="https://i.postimg.cc/SKh71Rmm/logo.webp" alt="Procolored" style={{ height:48, objectFit:'contain', marginBottom:8 }} />
           <h1 style={{ fontSize:20, fontWeight:700, color:C.text, margin:'8px 0 4px' }}>Admin Panel</h1>
           <p style={{ color:C.muted, fontSize:13 }}>Sign in to your account</p>
         </div>
@@ -505,7 +505,7 @@ const AdminDashboard = () => {
       {/* Sidebar */}
       <aside style={{ width:220, background:C.white, borderRight:`1px solid ${C.border}`, display:'flex', flexDirection:'column', position:'sticky', top:0, height:'100vh', flexShrink:0 }}>
         <div style={{ padding:'20px 16px', borderBottom:`1px solid ${C.border}` }}>
-          <img src="https://i.postimg.cc/Y9M7TqxR/logo.webp" alt="Procolored" style={{ height:36, objectFit:'contain' }} />
+          <img src="https://i.postimg.cc/SKh71Rmm/logo.webp" alt="Procolored" style={{ height:36, objectFit:'contain' }} />
           <div style={{ fontSize:11, color:C.muted, marginTop:4, fontWeight:500 }}>Admin Dashboard</div>
         </div>
         <nav style={{ padding:'12px 8px', flex:1 }}>

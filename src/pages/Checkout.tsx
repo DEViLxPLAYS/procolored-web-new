@@ -4,12 +4,17 @@ import { useCurrency, convertPrice } from '../context/CurrencyContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle, ShieldCheck, AlertCircle, X, Tag, ChevronRight } from 'lucide-react';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 function getSessionId(): string {
   let id = localStorage.getItem('procolored_session');
-  if (!id) { id = `sess_${Date.now()}_${Math.random().toString(36).slice(2)}`; localStorage.setItem('procolored_session', id); }
+  if (!id) {
+    id = `sess_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    localStorage.setItem('procolored_session', id);
+  }
   return id;
 }
 
@@ -20,11 +25,18 @@ interface OrderSuccessData {
   totalAmount: number;
   paymentMethod: string;
   cartItems: any[];
-  shippingAddress: { street: string; apartment?: string; city: string; state?: string; postalCode: string; country: string };
+  shippingAddress: {
+    street: string;
+    apartment?: string;
+    city: string;
+    state?: string;
+    postalCode: string;
+    country: string;
+  };
   isDemoOrder?: boolean;
 }
 
-// ── Policy content for inline modals ───────────────────────────────────────
+// ── Policy content ────────────────────────────────────────────────────────────
 const POLICIES: Record<string, { title: string; content: string }> = {
   refund: {
     title: 'Refund Policy',
@@ -48,15 +60,19 @@ const POLICIES: Record<string, { title: string; content: string }> = {
   },
 };
 
-// ── Policy Modal ─────────────────────────────────────────────────────────────
+// ── Policy Modal ──────────────────────────────────────────────────────────────
 function PolicyModal({ policyKey, onClose }: { policyKey: string; onClose: () => void }) {
   const policy = POLICIES[policyKey];
   if (!policy) return null;
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}
-      onClick={onClose}>
-      <div style={{ background: '#fff', borderRadius: 8, maxWidth: 560, width: '100%', maxHeight: '80vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}
-        onClick={e => e.stopPropagation()}>
+    <div
+      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}
+      onClick={onClose}
+    >
+      <div
+        style={{ background: '#fff', borderRadius: 8, maxWidth: 560, width: '100%', maxHeight: '80vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}
+        onClick={e => e.stopPropagation()}
+      >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 24px', borderBottom: '1px solid #e5e7eb' }}>
           <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: '#1a1a1a' }}>{policy.title}</h2>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, borderRadius: 4, display: 'flex', alignItems: 'center' }}>
@@ -71,16 +87,84 @@ function PolicyModal({ policyKey, onClose }: { policyKey: string; onClose: () =>
   );
 }
 
-// (Stripe removed — PayPal only)
+// ── Stripe Payment Form ───────────────────────────────────────────────────────
+function StripePaymentForm({
+  totalUSD,
+  validateForm,
+  handleOrderComplete,
+  setIsSubmitting,
+}: {
+  totalUSD: number;
+  validateForm: () => boolean;
+  handleOrderComplete: (txId: string, meth: string) => Promise<void>;
+  setIsSubmitting: (b: boolean) => void;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [error, setError] = useState('');
+  const [processing, setProcessing] = useState(false);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm() || !stripe || !elements) return;
+
+    setProcessing(true);
+    setIsSubmitting(true);
+    setError('');
+
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      setError(submitError.message || 'An error occurred.');
+      setProcessing(false);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      redirect: 'if_required',
+    });
+
+    if (confirmError) {
+      setError(confirmError.message || 'Payment failed. Please try again.');
+      setProcessing(false);
+      setIsSubmitting(false);
+    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      await handleOrderComplete(paymentIntent.id, 'Credit Card (Stripe)');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+      <PaymentElement options={{ layout: 'tabs' }} />
+      {error && <div style={{ color: '#dc2626', fontSize: 13, marginTop: 12 }}>{error}</div>}
+      <button
+        type="submit"
+        disabled={!stripe || processing}
+        style={{
+          width: '100%', background: '#1a1a1a', color: '#fff', border: 'none',
+          padding: 15, borderRadius: 6, fontSize: 15, fontWeight: 700,
+          cursor: !stripe || processing ? 'not-allowed' : 'pointer', marginTop: 20,
+        }}
+      >
+        {processing ? 'Processing...' : `Pay $${totalUSD.toFixed(2)}`}
+      </button>
+    </form>
+  );
+}
+
+// ── Demo Order Button ─────────────────────────────────────────────────────────
 function DemoOrderButton({ isSubmitting, onSubmit }: { isSubmitting: boolean; onSubmit: () => void }) {
   return (
     <div>
       <div style={{ padding: '12px 16px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, marginBottom: 12, fontSize: 13, color: '#92400e' }}>
         🧪 <strong>Demo Order</strong> — No payment required. This is a $0–$1 test order.
       </div>
-      <button onClick={onSubmit} disabled={isSubmitting}
-        style={{ width: '100%', background: '#1a1a1a', color: '#fff', border: 'none', padding: 15, borderRadius: 6, fontSize: 15, fontWeight: 700, cursor: isSubmitting ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+      <button
+        onClick={onSubmit}
+        disabled={isSubmitting}
+        style={{ width: '100%', background: '#1a1a1a', color: '#fff', border: 'none', padding: 15, borderRadius: 6, fontSize: 15, fontWeight: 700, cursor: isSubmitting ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+      >
         {isSubmitting
           ? <><span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />Processing...</>
           : <><CheckCircle size={16} /> Place order</>}
@@ -89,9 +173,9 @@ function DemoOrderButton({ isSubmitting, onSubmit }: { isSubmitting: boolean; on
   );
 }
 
-// ── Order Confirmed Screen ────────────────────────────────────────────────────
+// ── Order Confirmation ────────────────────────────────────────────────────────
 function OrderConfirmation({
-  data, cartItems, onContinue, openPolicy,
+  data, onContinue, openPolicy,
 }: {
   data: OrderSuccessData;
   cartItems: any[];
@@ -104,7 +188,6 @@ function OrderConfirmation({
 
   return (
     <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif', maxWidth: 540 }}>
-      {/* Confirmation header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 28 }}>
         <div style={{ width: 48, height: 48, borderRadius: '50%', border: '2px solid #1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 4 }}>
           <CheckCircle size={24} color="#1a1a1a" />
@@ -115,7 +198,6 @@ function OrderConfirmation({
         </div>
       </div>
 
-      {/* Order confirmed banner */}
       <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: '20px 24px', marginBottom: 16 }}>
         <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 6px', color: '#1a1a1a' }}>Your order is confirmed</h2>
         <p style={{ margin: '0 0 16px', fontSize: 14, color: '#666' }}>You'll receive a confirmation email soon</p>
@@ -125,7 +207,6 @@ function OrderConfirmation({
         </label>
       </div>
 
-      {/* Order details */}
       <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: '20px 24px', marginBottom: 24 }}>
         <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 20px', color: '#1a1a1a' }}>Order details</h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px 32px' }}>
@@ -165,23 +246,19 @@ function OrderConfirmation({
         </div>
       </div>
 
-      {/* Footer actions */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 28 }}>
         <div style={{ fontSize: 14, color: '#666' }}>
           Need help?{' '}
           <button onClick={() => openPolicy('contact')} style={{ background: 'none', border: 'none', color: '#1a1a1a', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>Contact us</button>
         </div>
-        <button onClick={onContinue}
-          style={{ background: '#1a1a1a', color: '#fff', border: 'none', padding: '14px 28px', borderRadius: 6, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
+        <button onClick={onContinue} style={{ background: '#1a1a1a', color: '#fff', border: 'none', padding: '14px 28px', borderRadius: 6, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
           Continue shopping
         </button>
       </div>
 
-      {/* Policy links */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 18px', borderTop: '1px solid #e5e7eb', paddingTop: 18 }}>
-        {[['Refund policy','refund'],['Shipping','shipping'],['Privacy policy','privacy'],['Terms of service','tos'],['Contact','contact']].map(([label,key]) => (
-          <button key={key} onClick={() => openPolicy(key)}
-            style={{ background: 'none', border: 'none', padding: 0, fontSize: 12, color: '#888', textDecoration: 'underline', cursor: 'pointer' }}>
+        {[['Refund policy', 'refund'], ['Shipping', 'shipping'], ['Privacy policy', 'privacy'], ['Terms of service', 'tos'], ['Contact', 'contact']].map(([label, key]) => (
+          <button key={key} onClick={() => openPolicy(key)} style={{ background: 'none', border: 'none', padding: 0, fontSize: 12, color: '#888', textDecoration: 'underline', cursor: 'pointer' }}>
             {label}
           </button>
         ))}
@@ -190,15 +267,8 @@ function OrderConfirmation({
   );
 }
 
-// ── Shell — TOP-LEVEL component (NOT nested inside Checkout) ──────────────────
-// IMPORTANT: defining this outside Checkout prevents React from remounting it on
-// every state change, which would cause all inputs to lose focus after each keystroke.
-interface ShellProps {
-  activePolicyKey: string | null;
-  onClosePolicy: () => void;
-  children: React.ReactNode;
-}
-function CheckoutShell({ activePolicyKey, onClosePolicy, children }: ShellProps) {
+// ── Shell ─────────────────────────────────────────────────────────────────────
+function CheckoutShell({ activePolicyKey, onClosePolicy, children }: { activePolicyKey: string | null; onClosePolicy: () => void; children: React.ReactNode }) {
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif' }}>
       <style>{`
@@ -207,7 +277,11 @@ function CheckoutShell({ activePolicyKey, onClosePolicy, children }: ShellProps)
         input::placeholder, select::placeholder { color: #aaa; }
         * { box-sizing: border-box; }
         ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
-        @media (max-width: 768px) { .checkout-layout { flex-direction: column !important; } .checkout-right { width: 100% !important; height: auto !important; position: relative !important; border-left: none !important; border-top: 1px solid #e5e7eb !important; } .checkout-left { padding: 24px 20px 40px !important; } }
+        @media (max-width: 768px) {
+          .checkout-layout { flex-direction: column !important; }
+          .checkout-right { width: 100% !important; height: auto !important; position: relative !important; border-left: none !important; border-top: 1px solid #e5e7eb !important; }
+          .checkout-left { padding: 24px 20px 40px !important; }
+        }
       `}</style>
       {activePolicyKey && <PolicyModal policyKey={activePolicyKey} onClose={onClosePolicy} />}
       <header style={{ borderBottom: '1px solid #e5e7eb', padding: '0 40px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff', position: 'sticky', top: 0, zIndex: 100 }}>
@@ -223,9 +297,12 @@ function CheckoutShell({ activePolicyKey, onClosePolicy, children }: ShellProps)
   );
 }
 
-// ── Right Order Summary Panel — TOP-LEVEL component (NOT nested inside Checkout) ──
-// Same reason: must be outside Checkout to avoid remounting on every keystroke.
-interface RightPanelProps {
+// ── Right Panel ───────────────────────────────────────────────────────────────
+function CheckoutRightPanel({
+  displayItems, successData, isDemoCart, fmtUSD, discountApplied, discountCode,
+  setDiscountCode, discountError, setDiscountError, subtotalUSD, discountAmount,
+  totalUSD, handleApplyDiscount, setDiscountApplied,
+}: {
   displayItems: any[];
   successData: OrderSuccessData | null;
   isDemoCart: boolean;
@@ -240,20 +317,12 @@ interface RightPanelProps {
   totalUSD: number;
   handleApplyDiscount: (e: React.FormEvent) => void;
   setDiscountApplied: (v: boolean) => void;
-}
-function CheckoutRightPanel({
-  displayItems, successData, isDemoCart, fmtUSD, discountApplied, discountCode,
-  setDiscountCode, discountError, setDiscountError, subtotalUSD, discountAmount,
-  totalUSD, handleApplyDiscount, setDiscountApplied,
-}: RightPanelProps) {
+}) {
   const inp = { width: '100%', border: '1px solid #d1d5db', borderRadius: 6, padding: '12px 14px', fontSize: 14, outline: 'none', background: '#fff', boxSizing: 'border-box' as const, color: '#1a1a1a', fontFamily: 'inherit' };
+
   return (
-    <div style={{
-      width: '44%', minWidth: 320, maxWidth: 520, background: '#f5f5f5', borderLeft: '1px solid #e5e7eb',
-      position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', padding: '40px 36px',
-      boxSizing: 'border-box', flexShrink: 0,
-    }}>
-      {/* Items list */}
+    <div className="checkout-right" style={{ width: '44%', minWidth: 320, maxWidth: 520, background: '#f5f5f5', borderLeft: '1px solid #e5e7eb', position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', padding: '40px 36px', boxSizing: 'border-box', flexShrink: 0 }}>
+      {/* Items */}
       <div style={{ marginBottom: 20 }}>
         {displayItems.map((item: any, idx: number) => {
           const price = item.priceUSD ?? 0;
@@ -279,7 +348,7 @@ function CheckoutRightPanel({
         })}
       </div>
 
-      {/* Discount input — only during checkout (not on confirmation) */}
+      {/* Discount */}
       {!successData && !isDemoCart && (
         <div style={{ marginBottom: 16 }}>
           <form onSubmit={handleApplyDiscount} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
@@ -328,7 +397,7 @@ function CheckoutRightPanel({
             Estimated taxes
             <span title="No taxes applied" style={{ width: 14, height: 14, border: '1px solid #bbb', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#888', cursor: 'help', flexShrink: 0 }}>?</span>
           </span>
-          <span style={{ fontWeight: 700, color: '#22c55e' }}>Free</span>
+          <span style={{ fontWeight: 700, color: '#22c55e' }}>FREE</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #d5d5d5', paddingTop: 14 }}>
           <span style={{ fontSize: 17, fontWeight: 700, color: '#1a1a1a' }}>Total</span>
@@ -382,39 +451,74 @@ export default function Checkout() {
   const [discountApplied, setDiscountApplied] = useState(false);
   const [discountError, setDiscountError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [successData, setSuccessData] = useState<OrderSuccessData | null>(null);
   const [activePolicyKey, setActivePolicyKey] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'stripe'>('stripe');
 
-  // PayPal
+  // Stripe state
+  const [stripePromise, setStripePromise] = useState<any>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [stripeError, setStripeError] = useState<string | null>(null);
+
+  // PayPal state
   const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
-  const [paypalLoading, setPaypalLoading] = useState(true);
   const [paypalError, setPaypalError] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [paypalLoading, setPaypalLoading] = useState(true);
 
-  // Pricing — always in USD
-  const subtotalUSD = items.reduce((sum, item) => sum + (convertPrice(item.price, 278) * item.quantity), 0);
-  const discountAmount = discountApplied ? subtotalUSD * 0.05 : 0;
-  const totalUSD = subtotalUSD - discountAmount;
-  const isDemoCart = false;
-
-  const fmtUSD = (n: number) => `$${n.toFixed(2)}`;
-
-  // Abandonment tracking refs
+  // Refs
+  const emailRef = useRef<HTMLInputElement>(null);
+  const paymentSectionRef = useRef<HTMLDivElement>(null);
   const orderCompletedRef = useRef(false);
   const abandonmentFiredRef = useRef(false);
   const latestEmailRef = useRef('');
   const latestNameRef = useRef('');
   const latestCityRef = useRef('');
-  const latestCountryRef = useRef('United States');
-  const emailRef = useRef<HTMLInputElement>(null);
-  const paymentSectionRef = useRef<HTMLDivElement>(null);
+  const latestCountryRef = useRef('');
 
+  // Pricing
+  const subtotalUSD = items.reduce((sum, i) => sum + convertPrice(i.price, 278) * i.quantity, 0);
+  const discountAmount = discountApplied ? subtotalUSD * 0.05 : 0;
+  const totalUSD = subtotalUSD - discountAmount;
+  const isDemoCart = totalUSD <= 1;
+  const fmtUSD = (n: number) => `$${n.toFixed(2)}`;
+
+  // Sync latest refs
   useEffect(() => { latestEmailRef.current = email; }, [email]);
   useEffect(() => { latestNameRef.current = [firstName, lastName].filter(Boolean).join(' '); }, [firstName, lastName]);
   useEffect(() => { latestCityRef.current = city; }, [city]);
   useEffect(() => { latestCountryRef.current = country; }, [country]);
 
-  // Load PayPal client ID from backend (reads from admin dashboard / Supabase)
+  // Load Stripe config
+  useEffect(() => {
+    fetch(`${API_BASE}/api/stripe/config`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.publishableKey) setStripePromise(loadStripe(data.publishableKey));
+      })
+      .catch(console.error);
+  }, []);
+
+  // Create Stripe Payment Intent when total or method changes
+  useEffect(() => {
+    if (totalUSD > 0 && paymentMethod === 'stripe' && stripePromise) {
+      setClientSecret(null);
+      setStripeError(null);
+      fetch(`${API_BASE}/api/stripe/create-payment-intent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: Math.round(totalUSD * 100), currency: 'usd' }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.clientSecret) setClientSecret(data.clientSecret);
+          else if (data.error) setStripeError(data.error);
+        })
+        .catch(() => setStripeError('Could not initialize secure payment connection.'));
+    }
+  }, [totalUSD, paymentMethod, stripePromise]);
+
+  // Load PayPal config
   useEffect(() => {
     fetch(`${API_BASE}/api/paypal/config`)
       .then(r => r.json())
@@ -426,30 +530,47 @@ export default function Checkout() {
       .finally(() => setPaypalLoading(false));
   }, []);
 
-  // Note: IP geolocation removed — caused CORS/403 errors on production.
-  // Users can manually select their country from the dropdown.
-
+  // Abandonment tracking
   const fireAbandonment = useCallback((stepName = 'checkout') => {
     if (orderCompletedRef.current || abandonmentFiredRef.current || items.length === 0) return;
     abandonmentFiredRef.current = true;
-    const payload = { sessionId: getSessionId(), customerEmail: latestEmailRef.current || null, customerName: latestNameRef.current || null, cartItems: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price })), cartTotal: subtotalUSD.toFixed(2), stepAbandoned: stepName, country: latestCountryRef.current, city: latestCityRef.current, deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop' };
+    const payload = {
+      sessionId: getSessionId(),
+      customerEmail: latestEmailRef.current || null,
+      customerName: latestNameRef.current || null,
+      cartItems: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price })),
+      cartTotal: subtotalUSD.toFixed(2),
+      stepAbandoned: stepName,
+      country: latestCountryRef.current,
+      city: latestCityRef.current,
+      deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+    };
     const jsonStr = JSON.stringify(payload);
     const url = `${API_BASE}/api/checkout/abandon`;
-    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: jsonStr, keepalive: true }).catch(() => { try { navigator.sendBeacon(url + '?_beacon=1', jsonStr); } catch (_) {} });
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: jsonStr, keepalive: true })
+      .catch(() => { try { navigator.sendBeacon(url + '?_beacon=1', jsonStr); } catch (_) { } });
   }, [items, subtotalUSD]);
 
   useEffect(() => {
     if (items.length === 0) return;
     let t = setTimeout(() => fireAbandonment('idle_10min'), 600000);
     const reset = () => { clearTimeout(t); t = setTimeout(() => fireAbandonment('idle_10min'), 600000); };
-    window.addEventListener('mousemove', reset); window.addEventListener('keydown', reset);
+    window.addEventListener('mousemove', reset);
+    window.addEventListener('keydown', reset);
     const onUnload = () => fireAbandonment('left_page');
     window.addEventListener('beforeunload', onUnload);
-    return () => { clearTimeout(t); window.removeEventListener('mousemove', reset); window.removeEventListener('keydown', reset); window.removeEventListener('beforeunload', onUnload); if (!orderCompletedRef.current) fireAbandonment('navigated_away'); };
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('mousemove', reset);
+      window.removeEventListener('keydown', reset);
+      window.removeEventListener('beforeunload', onUnload);
+      if (!orderCompletedRef.current) fireAbandonment('navigated_away');
+    };
   }, [fireAbandonment]);
 
   const handleApplyDiscount = (e: React.FormEvent) => {
-    e.preventDefault(); setDiscountError('');
+    e.preventDefault();
+    setDiscountError('');
     if (discountCode.trim().toUpperCase() === 'PROCOLORED5') setDiscountApplied(true);
     else setDiscountError('Invalid discount code.');
   };
@@ -462,7 +583,12 @@ export default function Checkout() {
 
   const validateForm = () => {
     const err = validateEmail(email);
-    if (err) { setEmailError(err); emailRef.current?.focus(); emailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
+    if (err) {
+      setEmailError(err);
+      emailRef.current?.focus();
+      emailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return false;
+    }
     if (!firstName || !lastName) { setFormError('Kindly fill in your first and last name to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
     if (!address) { setFormError('Kindly fill in your street address to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
     if (!city) { setFormError('Kindly fill in your city to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
@@ -473,58 +599,113 @@ export default function Checkout() {
   };
 
   const buildShipping = () => ({ street: address, apartment, city, state: stateVal, postalCode: postal, country });
-
   const buildBilling = () => billingSame
     ? buildShipping()
     : { street: billAddress, apartment: billApartment, city: billCity, state: billState, postalCode: billPostal, country: billCountry };
 
-  const buildPayload = (txId: string | null, isDemo = false) => ({
+  const buildPayload = (txId: string | null, isDemo = false, method = 'PayPal') => ({
     customerName: `${firstName} ${lastName}`.trim() || 'Customer',
-    customerEmail: email, customerPhone: phone || null,
-    shippingAddress: buildShipping(), billingAddress: buildBilling(),
+    customerEmail: email,
+    customerPhone: phone || null,
+    shippingAddress: buildShipping(),
+    billingAddress: buildBilling(),
     billingName: billingSame ? `${firstName} ${lastName}`.trim() : `${billFirstName} ${billLastName}`.trim(),
     items: items.map(i => ({ id: i.id, name: i.name, price: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })),
-    subtotal: subtotalUSD, shippingCost: 0, discountAmount, discountCode: discountApplied ? 'PROCOLORED5' : null,
-    totalAmount: isDemo ? 0 : totalUSD, currency: 'USD', country, city,
-    paymentMethod: isDemo ? 'Demo (No Payment)' : 'PayPal', paymentStatus: 'paid', transactionId: txId,
+    subtotal: subtotalUSD,
+    shippingCost: 0,
+    discountAmount,
+    discountCode: discountApplied ? 'PROCOLORED5' : null,
+    totalAmount: isDemo ? 0 : totalUSD,
+    currency: 'USD',
+    country,
+    city,
+    paymentMethod: isDemo ? 'Demo (No Payment)' : method,
+    paymentStatus: 'paid',
+    transactionId: txId,
   });
 
-  const handleOrderComplete = async (txId: string) => {
-    setIsSubmitting(true); orderCompletedRef.current = true;
+  const handleOrderComplete = async (txId: string, method = 'PayPal') => {
+    setIsSubmitting(true);
+    orderCompletedRef.current = true;
     try {
-      const res = await fetch(`${API_BASE}/api/checkout/order`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(buildPayload(txId, false)) });
+      const res = await fetch(`${API_BASE}/api/checkout/order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildPayload(txId, false, method)),
+      });
       const data = await res.json();
       if (res.ok && data.orderNumber) {
         clearCart();
-        setSuccessData({ orderNumber: data.orderNumber, customerName: `${firstName} ${lastName}`.trim(), customerEmail: email, totalAmount: totalUSD, paymentMethod: 'PayPal', cartItems: items.map(i => ({ name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })), shippingAddress: buildShipping(), isDemoOrder: false });
-      } else { alert(data.error || 'Order could not be saved.'); orderCompletedRef.current = false; }
-    } catch { alert('Network error. Contact support.'); orderCompletedRef.current = false; }
-    finally { setIsSubmitting(false); }
+        setSuccessData({
+          orderNumber: data.orderNumber,
+          customerName: `${firstName} ${lastName}`.trim(),
+          customerEmail: email,
+          totalAmount: totalUSD,
+          paymentMethod: method,
+          cartItems: items.map(i => ({ name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })),
+          shippingAddress: buildShipping(),
+          isDemoOrder: false,
+        });
+      } else {
+        alert(data.error || 'Order could not be saved.');
+        orderCompletedRef.current = false;
+      }
+    } catch {
+      alert('Network error. Contact support.');
+      orderCompletedRef.current = false;
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDemoOrder = async () => {
     if (!validateForm()) return;
-    setIsSubmitting(true); orderCompletedRef.current = true;
+    setIsSubmitting(true);
+    orderCompletedRef.current = true;
     try {
-      const res = await fetch(`${API_BASE}/api/checkout/demo-order`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ customerName: `${firstName} ${lastName}`.trim() || 'Demo Customer', customerEmail: email, shippingAddress: buildShipping(), country, city }) });
+      const res = await fetch(`${API_BASE}/api/checkout/demo-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customerName: `${firstName} ${lastName}`.trim() || 'Demo Customer', customerEmail: email, shippingAddress: buildShipping(), country, city }),
+      });
       const data = await res.json();
       if (res.ok && data.orderNumber) {
         clearCart();
-        setSuccessData({ orderNumber: data.orderNumber, customerName: `${firstName} ${lastName}`.trim(), customerEmail: email, totalAmount: 0, paymentMethod: 'Demo / Free', cartItems: items.map(i => ({ name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })), shippingAddress: buildShipping(), isDemoOrder: true });
-      } else { alert(data.error || 'Failed to create demo order.'); orderCompletedRef.current = false; }
-    } catch { alert('Network error.'); orderCompletedRef.current = false; }
-    finally { setIsSubmitting(false); }
+        setSuccessData({
+          orderNumber: data.orderNumber,
+          customerName: `${firstName} ${lastName}`.trim(),
+          customerEmail: email,
+          totalAmount: 0,
+          paymentMethod: 'Demo / Free',
+          cartItems: items.map(i => ({ name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })),
+          shippingAddress: buildShipping(),
+          isDemoOrder: true,
+        });
+      } else {
+        alert(data.error || 'Failed to create demo order.');
+        orderCompletedRef.current = false;
+      }
+    } catch {
+      alert('Network error.');
+      orderCompletedRef.current = false;
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const allCountries = ["United States","Canada","United Kingdom","Australia","Germany"];
+  const allCountries = [
+    'United States', 'Canada', 'United Kingdom', 'Australia', 'Germany',
+    'France', 'Italy', 'Spain', 'Netherlands', 'Sweden', 'Norway', 'Denmark',
+    'Japan', 'South Korea', 'Singapore', 'India', 'Pakistan', 'UAE',
+    'Saudi Arabia', 'Brazil', 'Mexico', 'South Africa', 'New Zealand',
+  ];
 
   const inp = { width: '100%', border: '1px solid #d1d5db', borderRadius: 6, padding: '12px 14px', fontSize: 14, outline: 'none', background: '#fff', boxSizing: 'border-box' as const, color: '#1a1a1a', fontFamily: 'inherit' };
   const openPolicy = (k: string) => setActivePolicyKey(k);
 
-  // Items for right panel — use saved cartItems after success
-  const displayItems = successData ? successData.cartItems : items.map(i => ({
-    name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image,
-  }));
+  const displayItems = successData
+    ? successData.cartItems
+    : items.map(i => ({ name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image }));
 
   // ── Empty cart ──────────────────────────────────────────────────────────────
   if (items.length === 0 && !successData) {
@@ -543,13 +724,18 @@ export default function Checkout() {
     );
   }
 
-  // ── ORDER CONFIRMATION VIEW ───────────────────────────────────────────────
+  // ── Order Confirmation ──────────────────────────────────────────────────────
   if (successData) {
     return (
       <CheckoutShell activePolicyKey={activePolicyKey} onClosePolicy={() => setActivePolicyKey(null)}>
-        <div className="checkout-layout" style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
+        <div className="checkout-layout" style={{ display: 'flex', minHeight: 'calc(100vh - 80px)' }}>
           <div className="checkout-left" style={{ flex: 1, overflowY: 'auto', padding: '52px 56px' }}>
-            <OrderConfirmation data={successData} cartItems={successData.cartItems} onContinue={() => { setSuccessData(null); navigate('/'); }} openPolicy={openPolicy} />
+            <OrderConfirmation
+              data={successData}
+              cartItems={successData.cartItems}
+              onContinue={() => { setSuccessData(null); navigate('/'); }}
+              openPolicy={openPolicy}
+            />
           </div>
           <CheckoutRightPanel
             displayItems={displayItems} successData={successData} isDemoCart={isDemoCart}
@@ -563,22 +749,26 @@ export default function Checkout() {
     );
   }
 
-  // ── CHECKOUT FORM VIEW ─────────────────────────────────────────────────────
+  // ── Checkout Form ───────────────────────────────────────────────────────────
   return (
     <CheckoutShell activePolicyKey={activePolicyKey} onClosePolicy={() => setActivePolicyKey(null)}>
-      <div className="checkout-layout" style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
+      <div className="checkout-layout" style={{ display: 'flex', minHeight: 'calc(100vh - 80px)' }}>
 
-        {/* LEFT — scrollable form */}
+        {/* LEFT */}
         <div className="checkout-left" style={{ flex: 1, overflowY: 'auto', padding: '40px 56px 60px' }}>
 
           {/* Contact */}
           <section style={{ marginBottom: 36 }}>
             <h2 style={{ fontSize: 18, fontWeight: 800, color: '#1a1a1a', margin: '0 0 16px' }}>Contact</h2>
-            <input ref={emailRef} id="checkout-email" type="email" placeholder="Email or mobile phone number" value={email}
+            <input ref={emailRef} type="email" placeholder="Email or mobile phone number" value={email}
               onChange={e => { setEmail(e.target.value); if (emailError) setEmailError(validateEmail(e.target.value)); }}
               onBlur={e => setEmailError(validateEmail(e.target.value))}
               style={{ ...inp, borderColor: emailError ? '#dc2626' : '#d1d5db', marginBottom: 4 }} />
-            {emailError && <div style={{ fontSize: 12, color: '#dc2626', display: 'flex', alignItems: 'center', gap: 4, marginBottom: 4 }}><AlertCircle size={12} />{emailError}</div>}
+            {emailError && (
+              <div style={{ fontSize: 12, color: '#dc2626', display: 'flex', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+                <AlertCircle size={12} />{emailError}
+              </div>
+            )}
             <label style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 10, fontSize: 13, color: '#555', cursor: 'pointer' }}>
               <input type="checkbox" defaultChecked style={{ width: 14, height: 14, cursor: 'pointer' }} />
               Email me with news and exclusive offers
@@ -598,15 +788,15 @@ export default function Checkout() {
                 </select>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                <input id="checkout-first-name" type="text" placeholder="First name" value={firstName} onChange={e => setFirstName(e.target.value)} style={inp} />
-                <input id="checkout-last-name" type="text" placeholder="Last name" value={lastName} onChange={e => setLastName(e.target.value)} style={inp} />
+                <input type="text" placeholder="First name" value={firstName} onChange={e => setFirstName(e.target.value)} style={inp} />
+                <input type="text" placeholder="Last name" value={lastName} onChange={e => setLastName(e.target.value)} style={inp} />
               </div>
-              <input id="checkout-address" type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} style={inp} />
+              <input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} style={inp} />
               <input type="text" placeholder="Apartment, suite, etc. (optional)" value={apartment} onChange={e => setApartment(e.target.value)} style={inp} />
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10 }}>
-                <input id="checkout-city" type="text" placeholder="City" value={city} onChange={e => setCity(e.target.value)} style={inp} />
+                <input type="text" placeholder="City" value={city} onChange={e => setCity(e.target.value)} style={inp} />
                 <input type="text" placeholder="State" value={stateVal} onChange={e => setStateVal(e.target.value)} style={inp} />
-                <input id="checkout-postal" type="text" placeholder="ZIP code" value={postal} onChange={e => setPostal(e.target.value)} style={inp} />
+                <input type="text" placeholder="ZIP code" value={postal} onChange={e => setPostal(e.target.value)} style={inp} />
               </div>
               <input type="tel" placeholder="Phone (optional)" value={phone} onChange={e => setPhone(e.target.value)} style={inp} />
               <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#555', cursor: 'pointer' }}>
@@ -636,81 +826,149 @@ export default function Checkout() {
 
           {/* Payment */}
           <section ref={paymentSectionRef} style={{ marginBottom: 36 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
               <h2 style={{ fontSize: 18, fontWeight: 800, color: '#1a1a1a', margin: 0 }}>Payment</h2>
               <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#666', marginLeft: 'auto' }}>
                 <ShieldCheck size={13} color="#22c55e" /> All transactions are secure and encrypted.
               </span>
             </div>
 
-            {isDemoCart
-              ? <DemoOrderButton isSubmitting={isSubmitting} onSubmit={handleDemoOrder} />
-              : paypalLoading
-                ? <div style={{ padding: 32, background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                    <span style={{ width: 24, height: 24, border: '2px solid #e5e7eb', borderTopColor: '#003087', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
-                    <span style={{ fontSize: 13, color: '#888' }}>Loading PayPal...</span>
+            {isDemoCart ? (
+              <DemoOrderButton isSubmitting={isSubmitting} onSubmit={handleDemoOrder} />
+            ) : (
+              <div style={{ border: '1px solid #d1d5db', borderRadius: 8, overflow: 'hidden' }}>
+
+                {/* ── Stripe option ── */}
+                <div
+                  onClick={() => setPaymentMethod('stripe')}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: paymentMethod === 'stripe' ? '#f9fafb' : '#fff', borderBottom: '1px solid #e5e7eb' }}
+                >
+                  <div style={{ width: 18, height: 18, borderRadius: '50%', border: paymentMethod === 'stripe' ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} />
+                  <span style={{ fontSize: 14, fontWeight: 500, color: '#1a1a1a' }}>Credit / Debit Card</span>
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
+                    {['VISA', 'MC', 'AMEX'].map(card => (
+                      <span key={card} style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: 3, padding: '2px 6px', fontSize: 10, fontWeight: 700, color: '#555' }}>{card}</span>
+                    ))}
                   </div>
-                : paypalError
-                  ? <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}><strong>Payment Error:</strong> {paypalError}</div>
-                  : paypalClientId
-                    ? <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
-                        <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden', padding: 16 }}>
+                </div>
+
+                {paymentMethod === 'stripe' && (
+                  <div style={{ padding: 20, background: '#fafafa', borderBottom: '1px solid #e5e7eb' }}>
+                    {stripeError ? (
+                      <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}>
+                        <strong>Payment Error:</strong> {stripeError}
+                      </div>
+                    ) : !stripePromise || !clientSecret ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 20, color: '#888', fontSize: 13 }}>
+                        <span style={{ width: 20, height: 20, border: '2px solid #e5e7eb', borderTopColor: '#635bff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                        Loading secure payment form...
+                      </div>
+                    ) : (
+                      <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                        <div style={{ marginBottom: 14 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#555', marginBottom: 14 }}>
-                            <ShieldCheck size={13} color="#009cde" /> Secured by PayPal — pay safely with any card or PayPal balance
+                            <ShieldCheck size={13} color="#635bff" /> Secured by Stripe — bank-level encryption
                           </div>
                           {formError && (
                             <div style={{ marginBottom: 14, padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, fontSize: 13, color: '#dc2626', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                               <span style={{ fontSize: 16, lineHeight: 1 }}>⚠️</span>
-                              <span><strong>Please fill in all required details to continue:</strong><br />{formError}</span>
+                              <span><strong>Please fill in all required details:</strong><br />{formError}</span>
                             </div>
                           )}
-                          <PayPalButtons
-                            style={{ layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal', height: 48 }}
-                            disabled={isSubmitting}
-                            createOrder={async () => {
-                              if (!validateForm()) {
-                                throw new Error('form_invalid');
-                              }
-                              const res = await fetch(`${API_BASE}/api/paypal/create-order`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ cartTotal: totalUSD.toFixed(2), currency: 'USD' }),
-                              });
-                              const data = await res.json();
-                              if (!data.id) throw new Error(data.error || 'Could not create PayPal order.');
-                              return data.id;
-                            }}
-                            onApprove={async (data) => {
-                              setIsSubmitting(true);
-                              try {
-                                const res = await fetch(`${API_BASE}/api/paypal/capture-order`, {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({ orderID: data.orderID }),
-                                });
-                                const capture = await res.json();
-                                if (capture.success) {
-                                  await handleOrderComplete(data.orderID);
-                                } else {
-                                  alert(capture.error || 'Payment capture failed. Contact support.');
-                                  setIsSubmitting(false);
-                                }
-                              } catch {
-                                alert('Network error during payment capture. Contact support.');
-                                setIsSubmitting(false);
-                              }
-                            }}
-                            onError={(err: any) => {
-                              console.error('PayPal error:', err);
-                              if (err?.message === 'form_invalid') return; // already shown via formError
-                              setPaypalError('Payment could not be completed. Please check your details and try again.');
-                            }}
-                            onCancel={() => { setIsSubmitting(false); }}
-                          />
                         </div>
-                      </PayPalScriptProvider>
-                    : null
-            }
+                        <StripePaymentForm
+                          totalUSD={totalUSD}
+                          validateForm={validateForm}
+                          handleOrderComplete={handleOrderComplete}
+                          setIsSubmitting={setIsSubmitting}
+                        />
+                      </Elements>
+                    )}
+                  </div>
+                )}
+
+                {/* ── PayPal option ── */}
+                {/* <div
+                  onClick={() => setPaymentMethod('paypal')}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: paymentMethod === 'paypal' ? '#f9fafb' : '#fff', borderBottom: paymentMethod === 'paypal' ? '1px solid #e5e7eb' : 'none' }}
+                >
+                  <div style={{ width: 18, height: 18, borderRadius: '50%', border: paymentMethod === 'paypal' ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} />
+                  <span style={{ fontSize: 14, fontWeight: 500, color: '#1a1a1a' }}>PayPal</span>
+                </div> */}
+
+                {paymentMethod === 'paypal' && (
+                  // <div style={{ padding: 16, background: '#fafafa' }}>
+                  //   {paypalLoading ? (
+                  //     <div style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                  //       <span style={{ width: 24, height: 24, border: '2px solid #e5e7eb', borderTopColor: '#003087', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                  //       <span style={{ fontSize: 13, color: '#888' }}>Loading PayPal...</span>
+                  //     </div>
+                  //   ) : paypalError ? (
+                  //     <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}>
+                  //       <strong>Payment Error:</strong> {paypalError}
+                  //     </div>
+                  //   ) : paypalClientId ? (
+                  //     <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
+                  //       <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16, background: '#fff' }}>
+                  //         <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#555', marginBottom: 14 }}>
+                  //           <ShieldCheck size={13} color="#009cde" /> Secured by PayPal — pay safely with any card or PayPal balance
+                  //         </div>
+                  //         {formError && (
+                  //           <div style={{ marginBottom: 14, padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, fontSize: 13, color: '#dc2626', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                  //             <span style={{ fontSize: 16, lineHeight: 1 }}>⚠️</span>
+                  //             <span><strong>Please fill in all required details:</strong><br />{formError}</span>
+                  //           </div>
+                  //         )}
+                  //         <PayPalButtons
+                  //           style={{ layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal', height: 48 }}
+                  //           disabled={isSubmitting}
+                  //           createOrder={async () => {
+                  //             if (!validateForm()) throw new Error('form_invalid');
+                  //             const res = await fetch(`${API_BASE}/api/paypal/create-order`, {
+                  //               method: 'POST',
+                  //               headers: { 'Content-Type': 'application/json' },
+                  //               body: JSON.stringify({ cartTotal: totalUSD.toFixed(2), currency: 'USD' }),
+                  //             });
+                  //             const data = await res.json();
+                  //             if (!data.id) throw new Error(data.error || 'Could not create PayPal order.');
+                  //             return data.id;
+                  //           }}
+                  //           onApprove={async (data) => {
+                  //             setIsSubmitting(true);
+                  //             try {
+                  //               const res = await fetch(`${API_BASE}/api/paypal/capture-order`, {
+                  //                 method: 'POST',
+                  //                 headers: { 'Content-Type': 'application/json' },
+                  //                 body: JSON.stringify({ orderID: data.orderID }),
+                  //               });
+                  //               const capture = await res.json();
+                  //               if (capture.success) {
+                  //                 await handleOrderComplete(data.orderID, 'PayPal');
+                  //               } else {
+                  //                 alert(capture.error || 'Payment capture failed. Contact support.');
+                  //                 setIsSubmitting(false);
+                  //               }
+                  //             } catch {
+                  //               alert('Network error during payment capture. Contact support.');
+                  //               setIsSubmitting(false);
+                  //             }
+                  //           }}
+                  //           onError={(err: any) => {
+                  //             console.error('PayPal error:', err);
+                  //             if (err?.message === 'form_invalid') return;
+                  //             setPaypalError('Payment could not be completed. Please check your details and try again.');
+                  //           }}
+                  //           onCancel={() => setIsSubmitting(false)}
+                  //         />
+                  //       </div>
+                  //     </PayPalScriptProvider>
+                  //   ) : null}
+                  // </div>
+                  <div></div>
+                )}
+
+              </div>
+            )}
           </section>
 
           <div style={{ borderTop: '1px solid #e5e7eb', marginBottom: 36 }} />
@@ -719,56 +977,51 @@ export default function Checkout() {
           <section style={{ marginBottom: 36 }}>
             <h2 style={{ fontSize: 18, fontWeight: 800, color: '#1a1a1a', margin: '0 0 16px' }}>Billing address</h2>
             <div style={{ border: '1px solid #d1d5db', borderRadius: 8, overflow: 'hidden' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: billingSame ? '#f9fafb' : '#fff', borderBottom: '1px solid #e5e7eb' }}
-                onClick={() => setBillingSame(true)}>
+              <div onClick={() => setBillingSame(true)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: billingSame ? '#f9fafb' : '#fff', borderBottom: '1px solid #e5e7eb' }}>
                 <div style={{ width: 18, height: 18, borderRadius: '50%', border: billingSame ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} />
                 <span style={{ fontSize: 14, fontWeight: 500, color: '#1a1a1a' }}>Same as shipping address</span>
-              </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: !billingSame ? '#f9fafb' : '#fff' }}
-                onClick={() => setBillingSame(false)}>
+              </div>
+              <div onClick={() => setBillingSame(false)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: !billingSame ? '#f9fafb' : '#fff' }}>
                 <div style={{ width: 18, height: 18, borderRadius: '50%', border: !billingSame ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} />
                 <span style={{ fontSize: 14, color: '#1a1a1a' }}>Use a different billing address</span>
-              </label>
+              </div>
             </div>
 
-            {/* Billing address form — shown when different billing selected */}
             {!billingSame && (
               <div style={{ border: '1px solid #d1d5db', borderTop: 'none', borderRadius: '0 0 8px 8px', padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 10, background: '#fafafa' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  <div>
-                    <label style={{ display: 'block', fontSize: 12, color: '#777', marginBottom: 4 }}>Country/Region</label>
-                    <select value={billCountry} onChange={e => setBillCountry(e.target.value)} style={{ ...inp, cursor: 'pointer' }}>
-                      {allCountries.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <input type="text" placeholder="First name" value={billFirstName} onChange={e => setBillFirstName(e.target.value)} style={inp} />
-                    <input type="text" placeholder="Last name" value={billLastName} onChange={e => setBillLastName(e.target.value)} style={inp} />
-                  </div>
-                  <input type="text" placeholder="Address" value={billAddress} onChange={e => setBillAddress(e.target.value)} style={inp} />
-                  <input type="text" placeholder="Apartment, suite, etc. (optional)" value={billApartment} onChange={e => setBillApartment(e.target.value)} style={inp} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10 }}>
-                    <input type="text" placeholder="City" value={billCity} onChange={e => setBillCity(e.target.value)} style={inp} />
-                    <input type="text" placeholder="State" value={billState} onChange={e => setBillState(e.target.value)} style={inp} />
-                    <input type="text" placeholder="ZIP code" value={billPostal} onChange={e => setBillPostal(e.target.value)} style={inp} />
-                  </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, color: '#777', marginBottom: 4 }}>Country/Region</label>
+                  <select value={billCountry} onChange={e => setBillCountry(e.target.value)} style={{ ...inp, cursor: 'pointer' }}>
+                    {allCountries.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <input type="text" placeholder="First name" value={billFirstName} onChange={e => setBillFirstName(e.target.value)} style={inp} />
+                  <input type="text" placeholder="Last name" value={billLastName} onChange={e => setBillLastName(e.target.value)} style={inp} />
+                </div>
+                <input type="text" placeholder="Address" value={billAddress} onChange={e => setBillAddress(e.target.value)} style={inp} />
+                <input type="text" placeholder="Apartment, suite, etc. (optional)" value={billApartment} onChange={e => setBillApartment(e.target.value)} style={inp} />
+                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10 }}>
+                  <input type="text" placeholder="City" value={billCity} onChange={e => setBillCity(e.target.value)} style={inp} />
+                  <input type="text" placeholder="State" value={billState} onChange={e => setBillState(e.target.value)} style={inp} />
+                  <input type="text" placeholder="ZIP code" value={billPostal} onChange={e => setBillPostal(e.target.value)} style={inp} />
                 </div>
               </div>
             )}
           </section>
 
-          {/* Policy links at bottom of left */}
+          {/* Policy links */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 18px', paddingTop: 8 }}>
-            {[['Refund policy','refund'],['Shipping','shipping'],['Privacy policy','privacy'],['Terms of service','tos'],['Contact','contact']].map(([label, key]) => (
-              <button key={key} onClick={() => openPolicy(key)}
-                style={{ background: 'none', border: 'none', padding: 0, fontSize: 12, color: '#888', textDecoration: 'underline', cursor: 'pointer' }}>
+            {[['Refund policy', 'refund'], ['Shipping', 'shipping'], ['Privacy policy', 'privacy'], ['Terms of service', 'tos'], ['Contact', 'contact']].map(([label, key]) => (
+              <button key={key} onClick={() => openPolicy(key)} style={{ background: 'none', border: 'none', padding: 0, fontSize: 12, color: '#888', textDecoration: 'underline', cursor: 'pointer' }}>
                 {label}
               </button>
             ))}
           </div>
+
         </div>
 
-        {/* RIGHT — static sticky panel */}
+        {/* RIGHT */}
         <CheckoutRightPanel
           displayItems={displayItems} successData={successData} isDemoCart={isDemoCart}
           fmtUSD={fmtUSD} discountApplied={discountApplied} discountCode={discountCode}
@@ -776,6 +1029,7 @@ export default function Checkout() {
           subtotalUSD={subtotalUSD} discountAmount={discountAmount} totalUSD={totalUSD}
           handleApplyDiscount={handleApplyDiscount} setDiscountApplied={setDiscountApplied}
         />
+
       </div>
     </CheckoutShell>
   );

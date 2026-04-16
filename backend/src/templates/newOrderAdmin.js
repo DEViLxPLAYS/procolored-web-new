@@ -18,7 +18,7 @@ const newOrderAdmin = ({
   isDemoOrder,
   createdAt
 }) => {
-  const LOGO = 'https://i.postimg.cc/Y9M7TqxR/logo.webp';
+  const LOGO = 'https://i.postimg.cc/SKh71Rmm/logo.webp';
   const RED = '#E8302A';
   const DARK = '#1a1a1a';
 
@@ -220,10 +220,14 @@ const newOrderAdmin = ({
           </tr>
           <tr>
             <td style="padding:6px 0; font-size:14px; color:#555555;">Shipping</td>
-            <td align="right" style="padding:6px 0; font-size:14px; color:#555555;">
+            <td align="right" style="padding:6px 0; font-size:14px; font-weight:700; color:#22c55e;">
               ${parseFloat(shippingCost || 0) === 0 ? 'FREE' : 
                 `${currency === 'PKR' ? 'Rs.' : '$'}${parseFloat(shippingCost).toLocaleString()}`}
             </td>
+          </tr>
+          <tr>
+            <td style="padding:6px 0; font-size:14px; color:#555555;">Taxes</td>
+            <td align="right" style="padding:6px 0; font-size:14px; font-weight:700; color:#22c55e;">FREE</td>
           </tr>
           ${discountAmount && parseFloat(discountAmount) > 0 ? `
           <tr>

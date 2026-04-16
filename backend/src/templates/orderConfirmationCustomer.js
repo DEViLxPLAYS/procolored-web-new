@@ -22,7 +22,7 @@ const orderConfirmationCustomer = ({
 
     <!-- HEADER -->
     <div style="background:#111111;padding:32px;text-align:center;">
-      <img src="https://i.postimg.cc/Y9M7TqxR/logo.webp" alt="Procolored" style="height:44px;width:auto;display:block;margin:0 auto;"/>
+      <img src="https://i.postimg.cc/SKh71Rmm/logo.webp" alt="Procolored" style="height:44px;width:auto;display:block;margin:0 auto;"/>
     </div>
 
     <!-- GREEN BANNER -->

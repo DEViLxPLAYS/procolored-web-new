@@ -58,7 +58,7 @@ const customerEmail = {
     
     <!-- Header -->
     <div style="background:#1a1a1a;padding:32px;text-align:center;">
-      <img src="https://i.postimg.cc/Y9M7TqxR/logo.webp" alt="Procolored" style="height:44px;width:auto;"/>
+      <img src="https://i.postimg.cc/SKh71Rmm/logo.webp" alt="Procolored" style="height:44px;width:auto;"/>
     </div>
     
     <!-- Body -->
@@ -117,7 +117,7 @@ const adminEmail = {
     
     <!-- Header -->
     <div style="background:#1a1a1a;padding:28px;text-align:center;">
-      <img src="https://i.postimg.cc/Y9M7TqxR/logo.webp" alt="Procolored" style="height:36px;width:auto;margin-bottom:12px;"/>
+      <img src="https://i.postimg.cc/SKh71Rmm/logo.webp" alt="Procolored" style="height:36px;width:auto;margin-bottom:12px;"/>
       <br/>
       <span style="background:#22c55e;color:white;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:1px;">🔔 NEW ORDER</span>
     </div>
