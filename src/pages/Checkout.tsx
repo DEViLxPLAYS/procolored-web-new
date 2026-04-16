@@ -33,7 +33,7 @@ interface OrderSuccessData {
     postalCode: string;
     country: string;
   };
-  isDemoOrder?: boolean;
+
 }
 
 // ── Policy content ────────────────────────────────────────────────────────────
@@ -153,25 +153,6 @@ function StripePaymentForm({
   );
 }
 
-// ── Demo Order Button ─────────────────────────────────────────────────────────
-function DemoOrderButton({ isSubmitting, onSubmit }: { isSubmitting: boolean; onSubmit: () => void }) {
-  return (
-    <div>
-      <div style={{ padding: '12px 16px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, marginBottom: 12, fontSize: 13, color: '#92400e' }}>
-        🧪 <strong>Demo Order</strong> — No payment required. This is a $0–$1 test order.
-      </div>
-      <button
-        onClick={onSubmit}
-        disabled={isSubmitting}
-        style={{ width: '100%', background: '#1a1a1a', color: '#fff', border: 'none', padding: 15, borderRadius: 6, fontSize: 15, fontWeight: 700, cursor: isSubmitting ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
-      >
-        {isSubmitting
-          ? <><span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />Processing...</>
-          : <><CheckCircle size={16} /> Place order</>}
-      </button>
-    </div>
-  );
-}
 
 // ── Order Confirmation ────────────────────────────────────────────────────────
 function OrderConfirmation({
@@ -304,13 +285,12 @@ function CheckoutShell({ activePolicyKey, onClosePolicy, children }: { activePol
 
 // ── Right Panel ───────────────────────────────────────────────────────────────
 function CheckoutRightPanel({
-  displayItems, successData, isDemoCart, fmtUSD, discountApplied, discountCode,
+  displayItems, successData, fmtUSD, discountApplied, discountCode,
   setDiscountCode, discountError, setDiscountError, subtotalUSD, discountAmount,
   totalUSD, handleApplyDiscount, setDiscountApplied,
 }: {
   displayItems: any[];
   successData: OrderSuccessData | null;
-  isDemoCart: boolean;
   fmtUSD: (n: number) => string;
   discountApplied: boolean;
   discountCode: string;
@@ -354,7 +334,7 @@ function CheckoutRightPanel({
       </div>
 
       {/* Discount */}
-      {!successData && !isDemoCart && (
+      {!successData && (
         <div style={{ marginBottom: 16 }}>
           <form onSubmit={handleApplyDiscount} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
             <div style={{ position: 'relative', flex: 1 }}>
@@ -382,9 +362,9 @@ function CheckoutRightPanel({
       <div style={{ borderTop: '1px solid #d5d5d5', paddingTop: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 10 }}>
           <span>Subtotal</span>
-          <span style={{ color: '#1a1a1a', fontWeight: 500 }}>{isDemoCart ? 'FREE' : fmtUSD(subtotalUSD)}</span>
+          <span style={{ color: '#1a1a1a', fontWeight: 500 }}>{fmtUSD(subtotalUSD)}</span>
         </div>
-        {discountApplied && !isDemoCart && !successData && (
+        {discountApplied && !successData && (
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555', marginBottom: 10 }}>
             <span>Order discount <span style={{ fontSize: 12, color: '#166534', fontWeight: 600 }}>(PROCOLORED5)</span></span>
             <span style={{ color: '#166534', fontWeight: 600 }}>−{fmtUSD(discountAmount)}</span>
@@ -409,11 +389,11 @@ function CheckoutRightPanel({
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
             <span style={{ fontSize: 13, color: '#888' }}>USD</span>
             <span style={{ fontSize: 22, fontWeight: 800, color: '#1a1a1a' }}>
-              {isDemoCart ? '$0.00' : fmtUSD(successData ? successData.totalAmount : totalUSD)}
+              {fmtUSD(successData ? successData.totalAmount : totalUSD)}
             </span>
           </div>
         </div>
-        {discountApplied && !isDemoCart && !successData && (
+        {discountApplied && !successData && (
           <div style={{ fontSize: 13, color: '#166534', marginTop: 10 }}>
             🏷️ <strong>TOTAL SAVINGS {fmtUSD(discountAmount)}</strong>
           </div>
@@ -485,7 +465,7 @@ export default function Checkout() {
   const subtotalUSD = items.reduce((sum, i) => sum + convertPrice(i.price, 278) * i.quantity, 0);
   const discountAmount = discountApplied ? subtotalUSD * 0.05 : 0;
   const totalUSD = subtotalUSD - discountAmount;
-  const isDemoCart = totalUSD <= 1;
+
   const fmtUSD = (n: number) => `$${n.toFixed(2)}`;
 
   // Sync latest refs
@@ -608,7 +588,7 @@ export default function Checkout() {
     ? buildShipping()
     : { street: billAddress, apartment: billApartment, city: billCity, state: billState, postalCode: billPostal, country: billCountry };
 
-  const buildPayload = (txId: string | null, isDemo = false, method = 'PayPal') => ({
+  const buildPayload = (txId: string | null, method = 'PayPal') => ({
     customerName: `${firstName} ${lastName}`.trim() || 'Customer',
     customerEmail: email,
     customerPhone: phone || null,
@@ -620,11 +600,11 @@ export default function Checkout() {
     shippingCost: 0,
     discountAmount,
     discountCode: discountApplied ? 'PROCOLORED5' : null,
-    totalAmount: isDemo ? 0 : totalUSD,
+    totalAmount: totalUSD,
     currency: 'USD',
     country,
     city,
-    paymentMethod: isDemo ? 'Demo (No Payment)' : method,
+    paymentMethod: method,
     paymentStatus: 'paid',
     transactionId: txId,
   });
@@ -636,7 +616,7 @@ export default function Checkout() {
       const res = await fetch(`${API_BASE}/api/checkout/order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(buildPayload(txId, false, method)),
+        body: JSON.stringify(buildPayload(txId, method)),
       });
       const data = await res.json();
       if (res.ok && data.orderNumber) {
@@ -649,7 +629,6 @@ export default function Checkout() {
           paymentMethod: method,
           cartItems: items.map(i => ({ name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })),
           shippingAddress: buildShipping(),
-          isDemoOrder: false,
         });
       } else {
         alert(data.error || 'Order could not be saved.');
@@ -663,40 +642,7 @@ export default function Checkout() {
     }
   };
 
-  const handleDemoOrder = async () => {
-    if (!validateForm()) return;
-    setIsSubmitting(true);
-    orderCompletedRef.current = true;
-    try {
-      const res = await fetch(`${API_BASE}/api/checkout/demo-order`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ customerName: `${firstName} ${lastName}`.trim() || 'Demo Customer', customerEmail: email, shippingAddress: buildShipping(), country, city }),
-      });
-      const data = await res.json();
-      if (res.ok && data.orderNumber) {
-        clearCart();
-        setSuccessData({
-          orderNumber: data.orderNumber,
-          customerName: `${firstName} ${lastName}`.trim(),
-          customerEmail: email,
-          totalAmount: 0,
-          paymentMethod: 'Demo / Free',
-          cartItems: items.map(i => ({ name: i.name, priceUSD: convertPrice(i.price, 278), quantity: i.quantity, image: i.image })),
-          shippingAddress: buildShipping(),
-          isDemoOrder: true,
-        });
-      } else {
-        alert(data.error || 'Failed to create demo order.');
-        orderCompletedRef.current = false;
-      }
-    } catch {
-      alert('Network error.');
-      orderCompletedRef.current = false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+
 
   const allCountries = [
     'United States', 'Canada', 'United Kingdom', 'Australia', 'Germany',
@@ -743,7 +689,7 @@ export default function Checkout() {
             />
           </div>
           <CheckoutRightPanel
-            displayItems={displayItems} successData={successData} isDemoCart={isDemoCart}
+            displayItems={displayItems} successData={successData}
             fmtUSD={fmtUSD} discountApplied={discountApplied} discountCode={discountCode}
             setDiscountCode={setDiscountCode} discountError={discountError} setDiscountError={setDiscountError}
             subtotalUSD={subtotalUSD} discountAmount={discountAmount} totalUSD={totalUSD}
@@ -838,13 +784,10 @@ export default function Checkout() {
               </span>
             </div>
 
-            {isDemoCart ? (
-              <DemoOrderButton isSubmitting={isSubmitting} onSubmit={handleDemoOrder} />
-            ) : (
-              <div style={{ border: '1px solid #d1d5db', borderRadius: 8, overflow: 'hidden' }}>
+            <div style={{ border: '1px solid #d1d5db', borderRadius: 8, overflow: 'hidden' }}>
 
-                {/* ── Stripe option ── */}
-                {/* <div
+                {/* ── Stripe / Credit Card option ── */}
+                <div
                   onClick={() => setPaymentMethod('stripe')}
                   style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: paymentMethod === 'stripe' ? '#f9fafb' : '#fff', borderBottom: '1px solid #e5e7eb' }}
                 >
@@ -855,43 +798,43 @@ export default function Checkout() {
                       <span key={card} style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: 3, padding: '2px 6px', fontSize: 10, fontWeight: 700, color: '#555' }}>{card}</span>
                     ))}
                   </div>
-                </div> */}
+                </div>
 
                 {paymentMethod === 'stripe' && (
-                  // <div style={{ padding: 20, background: '#fafafa', borderBottom: '1px solid #e5e7eb' }}>
-                  //   {stripeError ? (
-                  //     <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}>
-                  //       <strong>Payment Error:</strong> {stripeError}
-                  //     </div>
-                  //   ) : !stripePromise || !clientSecret ? (
-                  //     <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 20, color: '#888', fontSize: 13 }}>
-                  //       <span style={{ width: 20, height: 20, border: '2px solid #e5e7eb', borderTopColor: '#635bff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
-                  //       Loading secure payment form...
-                  //     </div>
-                  //   ) : (
-                  //     <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
-                  //       <div style={{ marginBottom: 14 }}>
-                  //         <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#555', marginBottom: 14 }}>
-                  //           <ShieldCheck size={13} color="#635bff" /> Secured by Stripe — bank-level encryption
-                  //         </div>
-                  //         {formError && (
-                  //           <div style={{ marginBottom: 14, padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, fontSize: 13, color: '#dc2626', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                  //             <span style={{ fontSize: 16, lineHeight: 1 }}>⚠️</span>
-                  //             <span><strong>Please fill in all required details:</strong><br />{formError}</span>
-                  //           </div>
-                  //         )}
-                  //       </div>
-                  //       <StripePaymentForm
-                  //         totalUSD={totalUSD}
-                  //         validateForm={validateForm}
-                  //         handleOrderComplete={handleOrderComplete}
-                  //         setIsSubmitting={setIsSubmitting}
-                  //       />
-                  //     </Elements>
-                  //   )}
-                  // </div>
-                  <div></div>
+                  <div style={{ padding: 20, background: '#fafafa', borderBottom: '1px solid #e5e7eb' }}>
+                    {stripeError ? (
+                      <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}>
+                        <strong>Payment Error:</strong> {stripeError}
+                      </div>
+                    ) : !stripePromise || !clientSecret ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 20, color: '#888', fontSize: 13 }}>
+                        <span style={{ width: 20, height: 20, border: '2px solid #e5e7eb', borderTopColor: '#635bff', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                        Loading secure payment form...
+                      </div>
+                    ) : (
+                      <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                        <div style={{ marginBottom: 14 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#555', marginBottom: 14 }}>
+                            <ShieldCheck size={13} color="#635bff" /> Secured by Stripe — bank-level encryption
+                          </div>
+                          {formError && (
+                            <div style={{ marginBottom: 14, padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, fontSize: 13, color: '#dc2626', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                              <span style={{ fontSize: 16, lineHeight: 1 }}>⚠️</span>
+                              <span><strong>Please fill in all required details:</strong><br />{formError}</span>
+                            </div>
+                          )}
+                        </div>
+                        <StripePaymentForm
+                          totalUSD={totalUSD}
+                          validateForm={validateForm}
+                          handleOrderComplete={handleOrderComplete}
+                          setIsSubmitting={setIsSubmitting}
+                        />
+                      </Elements>
+                    )}
+                  </div>
                 )}
+
 
                 {/* ── PayPal option ── */}
                 <div
@@ -980,8 +923,8 @@ export default function Checkout() {
                 </div>
                 )}
 
-              </div>
-            )}
+            </div>
+
           </section>
 
           <div style={{ borderTop: '1px solid #e5e7eb', marginBottom: 36 }} />
@@ -1036,7 +979,7 @@ export default function Checkout() {
 
         {/* RIGHT */}
         <CheckoutRightPanel
-          displayItems={displayItems} successData={successData} isDemoCart={isDemoCart}
+          displayItems={displayItems} successData={successData}
           fmtUSD={fmtUSD} discountApplied={discountApplied} discountCode={discountCode}
           setDiscountCode={setDiscountCode} discountError={discountError} setDiscountError={setDiscountError}
           subtotalUSD={subtotalUSD} discountAmount={discountAmount} totalUSD={totalUSD}
