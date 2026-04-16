@@ -459,7 +459,7 @@ export default function Checkout() {
   const [formError, setFormError] = useState<string | null>(null);
   const [successData, setSuccessData] = useState<OrderSuccessData | null>(null);
   const [activePolicyKey, setActivePolicyKey] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'stripe'>('stripe');
+  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'stripe'>('paypal');
 
   // Stripe state
   const [stripePromise, setStripePromise] = useState<any>(null);
@@ -900,9 +900,10 @@ export default function Checkout() {
                 >
                   <div style={{ width: 18, height: 18, borderRadius: '50%', border: paymentMethod === 'paypal' ? '6px solid #1a1a1a' : '2px solid #d1d5db', flexShrink: 0, transition: 'border 0.15s' }} />
                   <span style={{ fontSize: 14, fontWeight: 500, color: '#1a1a1a' }}>PayPal</span>
+                  <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" alt="PayPal" style={{ height: 20, marginLeft: 'auto', objectFit: 'contain' }} />
                 </div>
 
-                {/* {paymentMethod === 'paypal' && ( */}
+                {paymentMethod === 'paypal' && (
                 <div style={{ padding: 16, background: '#fafafa' }}>
                   {paypalLoading ? (
                     <div style={{ padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
@@ -911,7 +912,14 @@ export default function Checkout() {
                     </div>
                   ) : paypalError ? (
                     <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13 }}>
-                      <strong>Payment Error:</strong> {paypalError}
+                      <strong>PayPal Unavailable:</strong> {paypalError}
+                      <br />
+                      <button
+                        onClick={() => { setPaypalError(null); setPaypalLoading(true); fetch(`${API_BASE}/api/paypal/config`).then(r => r.json()).then(d => { if (d.clientId) setPaypalClientId(d.clientId); else setPaypalError('PayPal is not configured. Contact support.'); }).catch(() => setPaypalError('Could not connect to payment server.')).finally(() => setPaypalLoading(false)); }}
+                        style={{ marginTop: 8, background: 'none', border: '1px solid #dc2626', color: '#dc2626', borderRadius: 4, padding: '4px 12px', fontSize: 12, cursor: 'pointer' }}
+                      >
+                        Retry
+                      </button>
                     </div>
                   ) : paypalClientId ? (
                     <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
@@ -962,7 +970,7 @@ export default function Checkout() {
                           onError={(err: any) => {
                             console.error('PayPal error:', err);
                             if (err?.message === 'form_invalid') return;
-                            setPaypalError('Payment could not be completed. Please check your details and try again.');
+                            // Don't set permanent error — just log it; user can retry clicking PayPal button
                           }}
                           onCancel={() => setIsSubmitting(false)}
                         />
@@ -970,8 +978,7 @@ export default function Checkout() {
                     </PayPalScriptProvider>
                   ) : null}
                 </div>
-
-                {/* )} */}
+                )}
 
               </div>
             )}
