@@ -75,8 +75,8 @@ async function getPayPalUiEnabled() {
       return decrypt(data.encrypted_value, data.iv) === 'true';
     }
   } catch (_) {}
-  // Default: enabled if paypal keys exist in env
-  return !!(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_SECRET_KEY);
+  // Default: HIDDEN unless admin explicitly enables via toggle
+  return false;
 }
 
 

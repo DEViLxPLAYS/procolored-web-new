@@ -67,8 +67,8 @@ async function getStripeUiEnabled() {
       return decrypt(data.encrypted_value, data.iv) === 'true';
     }
   } catch (_) {}
-  // Default: enabled if stripe keys exist in env
-  return !!(process.env.STRIPE_PUBLISHABLE_KEY && process.env.STRIPE_SECRET_KEY);
+  // Default: HIDDEN unless admin explicitly enables via toggle
+  return false;
 }
 
 // GET /api/stripe/config — returns publishable key + ui visibility to frontend

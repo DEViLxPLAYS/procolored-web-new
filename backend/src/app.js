@@ -144,8 +144,8 @@ app.disable('x-powered-by');
 // ================================
 // Routes
 // ================================
+app.use('/api/admin/payment-keys', paymentKeysRouter); // ← must be BEFORE /api/admin
 app.use('/api/admin', adminRoutes);
-app.use('/api/admin/payment-keys', paymentKeysRouter);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/checkout', checkoutRoutes);

@@ -482,7 +482,7 @@ export default function Checkout() {
       .then(res => res.json())
       .then(data => {
         if (data.publishableKey) setStripePromise(loadStripe(data.publishableKey));
-        const stripeOn = data.uiEnabled !== false;
+        const stripeOn = data.uiEnabled === true;
         setShowStripe(stripeOn);
         // If stripe is enabled and paypal not yet decided, set stripe as default
         if (stripeOn) setPaymentMethod('stripe');
@@ -514,7 +514,7 @@ export default function Checkout() {
     fetch(`${API_BASE}/api/paypal/config`)
       .then(r => r.json())
       .then(d => {
-        const paypalOn = d.uiEnabled !== false;
+        const paypalOn = d.uiEnabled === true;
         setShowPaypal(paypalOn);
         if (d.clientId) setPaypalClientId(d.clientId);
         else if (paypalOn) setPaypalError('PayPal is not configured yet. Contact support.');
