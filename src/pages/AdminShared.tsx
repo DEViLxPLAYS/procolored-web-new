@@ -648,6 +648,8 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
 
   // Toggle state
   const [pendingToggle, setPendingToggle] = useState<{ gateway: string; enabled: boolean } | null>(null);
+  // Optimistic UI: track locally what we *think* the current state is
+  const [optimisticUi, setOptimisticUi] = useState<Record<string, boolean>>({});
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -727,31 +729,74 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
     });
     if (d.success) {
       toast(`${pendingToggle.gateway} checkout ${pendingToggle.enabled ? 'enabled ✅' : 'hidden 🚫'}`);
+      // Lock in the optimistic state
+      setOptimisticUi(prev => ({ ...prev, [pendingToggle.gateway]: pendingToggle.enabled }));
       setModal(null); setAdminPassword(''); setPendingToggle(null);
       load();
     } else {
+      // Revert optimistic update on failure
+      setOptimisticUi(prev => ({ ...prev, [pendingToggle.gateway]: !pendingToggle.enabled }));
       toast(d.error || 'Failed to update', 'error');
+      setModal(null); setAdminPassword(''); setPendingToggle(null);
     }
     setLoading(false);
   };
 
   // ── Toggle Switch ────────────────────────────────────────────────────────
-  const ToggleSwitch = ({ gateway, enabled, hasKeys }: { gateway: string; enabled: boolean; hasKeys: boolean }) => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-      <span style={{ fontSize: 12, color: C.muted, fontWeight: 500 }}>Show on Checkout</span>
-      <button
-        disabled={!hasKeys}
-        title={!hasKeys ? 'Add keys first' : (enabled ? 'Click to hide from checkout' : 'Click to enable on checkout')}
-        onClick={() => { if (!hasKeys) return; setPendingToggle({ gateway, enabled: !enabled }); setAdminPassword(''); setModal('toggle'); }}
-        style={{ position: 'relative', width: 44, height: 24, borderRadius: 12, border: 'none', background: !hasKeys ? C.border : enabled ? C.success : '#D1D5DB', cursor: !hasKeys ? 'not-allowed' : 'pointer', transition: 'background 0.2s', padding: 0, flexShrink: 0 }}
-      >
-        <span style={{ position: 'absolute', top: 3, left: enabled ? 23 : 3, width: 18, height: 18, borderRadius: '50%', background: '#fff', transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }} />
-      </button>
-      <span style={{ fontSize: 11, fontWeight: 700, color: !hasKeys ? C.border : enabled ? C.success : C.muted }}>
-        {!hasKeys ? 'No keys' : enabled ? 'ON' : 'OFF'}
-      </span>
-    </div>
-  );
+  const ToggleSwitch = ({ gateway, enabled, hasKeys }: { gateway: string; enabled: boolean; hasKeys: boolean }) => {
+    // Use optimistic state if we have it, otherwise use server state
+    const displayEnabled = gateway in optimisticUi ? optimisticUi[gateway] : enabled;
+    const handleClick = () => {
+      if (!hasKeys) {
+        toast(`Add ${gateway} API keys first before toggling visibility.`, 'error');
+        return;
+      }
+      const next = !displayEnabled;
+      // Flip optimistically
+      setOptimisticUi(prev => ({ ...prev, [gateway]: next }));
+      setPendingToggle({ gateway, enabled: next });
+      setAdminPassword('');
+      setModal('toggle');
+    };
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ fontSize: 12, color: C.muted, fontWeight: 500 }}>Show on Checkout</span>
+        <button
+          onClick={handleClick}
+          title={!hasKeys ? 'Add keys first to enable' : (displayEnabled ? 'Click to hide from checkout' : 'Click to show on checkout')}
+          style={{
+            position: 'relative',
+            width: 46,
+            height: 26,
+            borderRadius: 13,
+            border: 'none',
+            background: !hasKeys ? '#D1D5DB' : displayEnabled ? '#10B981' : '#D1D5DB',
+            cursor: 'pointer',
+            transition: 'background 0.3s ease',
+            padding: 0,
+            flexShrink: 0,
+            outline: 'none',
+            boxShadow: displayEnabled && hasKeys ? '0 0 0 3px rgba(16,185,129,0.25)' : 'none',
+          }}
+        >
+          <span style={{
+            position: 'absolute',
+            top: 4,
+            left: displayEnabled ? 24 : 4,
+            width: 18,
+            height: 18,
+            borderRadius: '50%',
+            background: '#fff',
+            transition: 'left 0.25s cubic-bezier(0.4,0,0.2,1)',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
+          }} />
+        </button>
+        <span style={{ fontSize: 11, fontWeight: 700, color: !hasKeys ? C.muted : displayEnabled ? '#10B981' : C.muted, transition: 'color 0.3s ease' }}>
+          {!hasKeys ? 'No keys' : displayEnabled ? 'ON' : 'OFF'}
+        </span>
+      </div>
+    );
+  };
 
   const GatewayCard = ({ name, data, icon, color, uiOn }: { name: string; data: any[]; icon: string; color: string; uiOn: boolean }) => (
     <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 10, padding: 20, flex: 1, minWidth: 300 }}>
@@ -914,7 +959,14 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
 
       {/* Toggle UI Modal */}
       {modal === 'toggle' && pendingToggle && (
-        <Modal title={`${pendingToggle.enabled ? 'Enable' : 'Disable'} ${pendingToggle.gateway.charAt(0).toUpperCase() + pendingToggle.gateway.slice(1)} on Checkout`} onClose={() => { setModal(null); setPendingToggle(null); }}>
+        <Modal
+          title={`${pendingToggle.enabled ? '✅ Enable' : '🚫 Disable'} ${pendingToggle.gateway.charAt(0).toUpperCase() + pendingToggle.gateway.slice(1)} on Checkout`}
+          onClose={() => {
+            // Revert optimistic update when modal is cancelled
+            setOptimisticUi(prev => ({ ...prev, [pendingToggle.gateway]: !pendingToggle.enabled }));
+            setModal(null); setPendingToggle(null);
+          }}
+        >
           <div style={{ background: pendingToggle.enabled ? '#D1FAE5' : '#FEF3C7', color: pendingToggle.enabled ? '#065F46' : '#D97706', padding: 12, borderRadius: 6, fontSize: 13, fontWeight: 600, marginBottom: 16 }}>
             {pendingToggle.enabled
               ? `✅ This will make ${pendingToggle.gateway} visible on the checkout page.`
@@ -926,9 +978,16 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
               <input type="password" style={inp} value={adminPassword} onChange={e => setAdminPassword(e.target.value)} required autoFocus placeholder="Enter admin password..." />
             </div>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 8 }}>
-              <button type="button" onClick={() => { setModal(null); setPendingToggle(null); }} style={{ border: `1px solid ${C.border}`, background: C.white, color: C.text, borderRadius: 6, padding: '10px 20px', cursor: 'pointer', fontWeight: 500 }}>Cancel</button>
+              <button
+                type="button"
+                onClick={() => {
+                  setOptimisticUi(prev => ({ ...prev, [pendingToggle.gateway]: !pendingToggle.enabled }));
+                  setModal(null); setPendingToggle(null);
+                }}
+                style={{ border: `1px solid ${C.border}`, background: C.white, color: C.text, borderRadius: 6, padding: '10px 20px', cursor: 'pointer', fontWeight: 500 }}
+              >Cancel</button>
               <button type="submit" disabled={loading} style={{ background: pendingToggle.enabled ? C.success : C.red, color: '#fff', border: 'none', borderRadius: 6, padding: '10px 24px', cursor: 'pointer', fontWeight: 700, opacity: loading ? 0.7 : 1 }}>
-                {loading ? 'Saving...' : pendingToggle.enabled ? '✅ Enable on Checkout' : '🚫 Hide from Checkout'}
+                {loading ? 'Saving...' : pendingToggle.enabled ? '✅ Confirm Enable' : '🚫 Confirm Disable'}
               </button>
             </div>
           </form>

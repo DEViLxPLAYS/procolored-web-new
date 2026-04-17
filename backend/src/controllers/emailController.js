@@ -126,28 +126,50 @@ const sendOrderEmailsHandler = async (orderData) => {
 // ─────────────────────────────────────────────────────────────────────────────
 const sendContactEmailHandler = async (req, res) => {
   try {
-    const { firstName, lastName, email, message, country, productLink } = req.body;
+    const { firstName, lastName, email, message, country, productLink, orderNumber, rating, formType } = req.body;
     if (!firstName || !email || !message) {
       return res.status(400).json({ error: 'First name, email, and message are required.' });
     }
+
+    // Friendly label for the form type
+    const formLabel = formType || 'General Inquiry';
 
     const FROM = getFrom();
     const resp = await sendMail({
       from: FROM,
       to: getAdminTo(),
       replyTo: email,
-      subject: `📩 Contact Form: ${firstName} ${lastName || ''}`.trim(),
+      subject: `📩 [${formLabel}] Contact Form: ${firstName} ${lastName || ''}`.trim(),
       html: `
-        <div style="font-family:sans-serif;max-width:580px;margin:32px auto;padding:32px;background:#fff;border-radius:12px;border:1px solid #eee;">
-          <h2 style="color:#E8302A;">New Contact Form Submission</h2>
-          <table style="width:100%;border-collapse:collapse;">
-            <tr><td style="padding:8px 0;font-weight:700;width:120px;">Name:</td><td>${firstName} ${lastName || ''}</td></tr>
-            <tr><td style="padding:8px 0;font-weight:700;">Email:</td><td><a href="mailto:${email}">${email}</a></td></tr>
-            <tr><td style="padding:8px 0;font-weight:700;">Country:</td><td>${country || 'N/A'}</td></tr>
-            ${productLink ? `<tr><td style="padding:8px 0;font-weight:700;">Product:</td><td><a href="${productLink}">${productLink}</a></td></tr>` : ''}
-          </table>
-          <hr style="margin:20px 0;border:none;border-top:1px solid #eee;"/>
-          <div style="font-size:15px;color:#333;line-height:1.7;">${message.replace(/\n/g, '<br/>')}</div>
+        <div style="font-family:sans-serif;max-width:600px;margin:32px auto;padding:0;background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden;">
+          <!-- Header -->
+          <div style="background:#E8302A;padding:20px 32px;display:flex;align-items:center;gap:12px;">
+            <img src="https://i.postimg.cc/SKh71Rmm/logo.webp" alt="Procolored" style="height:36px;object-fit:contain;vertical-align:middle;" />
+            <h2 style="color:#fff;margin:0;font-size:18px;font-weight:700;">New ${formLabel} Submission</h2>
+          </div>
+
+          <!-- Source badge -->
+          <div style="background:#FEF3C7;border-left:4px solid #F59E0B;padding:12px 32px;font-size:13px;font-weight:600;color:#92400E;">
+            📋 Form Source: <strong>${formLabel}</strong>
+          </div>
+
+          <!-- Details table -->
+          <div style="padding:24px 32px;">
+            <table style="width:100%;border-collapse:collapse;font-size:14px;">
+              <tr><td style="padding:8px 0;font-weight:700;width:160px;color:#555;">Name:</td><td style="color:#1a1a1a;">${firstName} ${lastName || ''}</td></tr>
+              <tr><td style="padding:8px 0;font-weight:700;color:#555;">Email:</td><td><a href="mailto:${email}" style="color:#0066cc;">${email}</a></td></tr>
+              <tr><td style="padding:8px 0;font-weight:700;color:#555;">Country:</td><td style="color:#1a1a1a;">${country || 'N/A'}</td></tr>
+              ${productLink ? `<tr><td style="padding:8px 0;font-weight:700;color:#555;">Product Interested In:</td><td style="color:#1a1a1a;">${productLink}</td></tr>` : ''}
+              ${orderNumber ? `<tr><td style="padding:8px 0;font-weight:700;color:#555;">Order Number:</td><td style="color:#1a1a1a;font-weight:700;">${orderNumber}</td></tr>` : ''}
+              ${rating ? `<tr><td style="padding:8px 0;font-weight:700;color:#555;">Rating Given:</td><td style="color:#1a1a1a;">${'⭐'.repeat(parseInt(rating))} (${rating}/5)</td></tr>` : ''}
+            </table>
+            <hr style="margin:20px 0;border:none;border-top:1px solid #eee;"/>
+            <div style="font-size:15px;color:#333;line-height:1.7;white-space:pre-wrap;">${message.replace(/\n/g, '<br/>')}</div>
+          </div>
+
+          <div style="padding:16px 32px;background:#f9f9f9;font-size:12px;color:#999;text-align:center;">
+            Submitted via procolored-us.com — ${formLabel} Form
+          </div>
         </div>
       `,
     });
