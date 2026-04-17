@@ -60,6 +60,26 @@ async function getPayPalConfig() {
   return { mode, clientId, secretKey, baseUrl: PAYPAL_API[mode] };
 }
 
+// ── Helper: read paypal_ui_enabled from DB ─────────────────────────────────
+async function getPayPalUiEnabled() {
+  try {
+    const { data } = await supabaseAdmin
+      .from('payment_gateway_keys')
+      .select('encrypted_value, iv')
+      .eq('gateway', 'paypal')
+      .eq('key_name', 'paypal_ui_enabled')
+      .eq('is_active', true)
+      .single();
+
+    if (data) {
+      return decrypt(data.encrypted_value, data.iv) === 'true';
+    }
+  } catch (_) {}
+  // Default: enabled if paypal keys exist in env
+  return !!(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_SECRET_KEY);
+}
+
+
 async function generateAccessToken() {
   const { clientId, secretKey, baseUrl } = await getPayPalConfig();
   const auth = Buffer.from(`${clientId}:${secretKey}`).toString('base64');
@@ -78,12 +98,17 @@ async function generateAccessToken() {
 // GET /api/paypal/config
 router.get('/config', async (req, res) => {
   try {
-    const { clientId, mode } = await getPayPalConfig();
-    res.json({ clientId, mode });
+    const [{ clientId, mode }, uiEnabled] = await Promise.all([
+      getPayPalConfig(),
+      getPayPalUiEnabled(),
+    ]);
+    res.json({ clientId, mode, uiEnabled });
   } catch (err) {
-    res.status(500).json({ error: err.message || 'PayPal is not configured' });
+    const uiEnabled = await getPayPalUiEnabled().catch(() => false);
+    res.status(500).json({ error: err.message || 'PayPal is not configured', uiEnabled });
   }
 });
+
 
 // POST /api/paypal/create-order
 router.post('/create-order', async (req, res) => {

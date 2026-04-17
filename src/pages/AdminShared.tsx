@@ -428,18 +428,21 @@ export const AbandonmentsTab = () => {
 export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: (msg: string, type?: 'success' | 'error') => void }) => {
   const [keys, setKeys] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [modal, setModal] = useState<'add' | 'reveal' | 'delete' | null>(null);
+  const [modal, setModal] = useState<'add' | 'reveal' | 'delete' | 'toggle' | null>(null);
   const [selectedKey, setSelectedKey] = useState<any | null>(null);
   const [gatewayFilter, setGatewayFilter] = useState('');
 
   // Add state
-  const [keyName, setKeyName] = useState('publishable_key');
+  const [keyName, setKeyName] = useState('stripe_live_client_id');
   const [keyValue, setKeyValue] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
 
   // Reveal state
   const [revealedValue, setRevealedValue] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(0);
+
+  // Toggle state
+  const [pendingToggle, setPendingToggle] = useState<{ gateway: string; enabled: boolean } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -450,7 +453,6 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
 
   useEffect(() => { load(); }, [load]);
 
-  // Handle countdown
   useEffect(() => {
     let t: any;
     if (countdown > 0) {
@@ -462,12 +464,18 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
     return () => clearInterval(t);
   }, [countdown, revealedValue]);
 
+  // ── Derived UI state ─────────────────────────────────────────────────────
+  const stripeKeys = keys.filter(k => k.gateway === 'stripe' && !k.key_name.endsWith('_ui_enabled'));
+  const paypalKeys = keys.filter(k => k.gateway === 'paypal' && !k.key_name.endsWith('_ui_enabled'));
+  const stripeUiEnabled = !!keys.find(k => k.gateway === 'stripe' && k.key_name === 'stripe_ui_enabled');
+  const paypalUiEnabled = !!keys.find(k => k.gateway === 'paypal' && k.key_name === 'paypal_ui_enabled');
+
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     const d = await api.admin.paymentKeys.add({ gateway: gatewayFilter, key_name: keyName, key_value: keyValue, admin_password: adminPassword });
     if (d.success) {
-      toast('Key added successfully');
+      toast('Key saved — checkout UI automatically enabled for this gateway');
       setModal(null); setKeyValue(''); setAdminPassword('');
       load();
     } else {
@@ -494,7 +502,7 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
     setLoading(true);
     const d = await api.admin.paymentKeys.delete(selectedKey.id);
     if (d.success) {
-      toast('Key deleted successfully');
+      toast('Key deleted. If no keys remain, checkout UI was automatically hidden.');
       setModal(null);
       load();
     } else {
@@ -503,18 +511,59 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
     setLoading(false);
   };
 
-  const stripeKeys = keys.filter(k => k.gateway === 'stripe');
-  const paypalKeys = keys.filter(k => k.gateway === 'paypal');
+  const handleToggleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pendingToggle) return;
+    setLoading(true);
+    const d = await api.admin.paymentKeys.toggleUi({
+      gateway: pendingToggle.gateway,
+      enabled: pendingToggle.enabled,
+      admin_password: adminPassword,
+    });
+    if (d.success) {
+      toast(`${pendingToggle.gateway} checkout ${pendingToggle.enabled ? 'enabled ✅' : 'hidden 🚫'}`);
+      setModal(null); setAdminPassword(''); setPendingToggle(null);
+      load();
+    } else {
+      toast(d.error || 'Failed to update', 'error');
+    }
+    setLoading(false);
+  };
 
-  const GatewayCard = ({ name, data, icon, color }: { name: string, data: any[], icon: string, color: string }) => (
-    <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 10, padding: 20, flex: 1 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+  // ── Toggle Switch ────────────────────────────────────────────────────────
+  const ToggleSwitch = ({ gateway, enabled, hasKeys }: { gateway: string; enabled: boolean; hasKeys: boolean }) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <span style={{ fontSize: 12, color: C.muted, fontWeight: 500 }}>Show on Checkout</span>
+      <button
+        disabled={!hasKeys}
+        title={!hasKeys ? 'Add keys first' : (enabled ? 'Click to hide from checkout' : 'Click to enable on checkout')}
+        onClick={() => { if (!hasKeys) return; setPendingToggle({ gateway, enabled: !enabled }); setAdminPassword(''); setModal('toggle'); }}
+        style={{ position: 'relative', width: 44, height: 24, borderRadius: 12, border: 'none', background: !hasKeys ? C.border : enabled ? C.success : '#D1D5DB', cursor: !hasKeys ? 'not-allowed' : 'pointer', transition: 'background 0.2s', padding: 0, flexShrink: 0 }}
+      >
+        <span style={{ position: 'absolute', top: 3, left: enabled ? 23 : 3, width: 18, height: 18, borderRadius: '50%', background: '#fff', transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }} />
+      </button>
+      <span style={{ fontSize: 11, fontWeight: 700, color: !hasKeys ? C.border : enabled ? C.success : C.muted }}>
+        {!hasKeys ? 'No keys' : enabled ? 'ON' : 'OFF'}
+      </span>
+    </div>
+  );
+
+  const GatewayCard = ({ name, data, icon, color, uiOn }: { name: string; data: any[]; icon: string; color: string; uiOn: boolean }) => (
+    <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 10, padding: 20, flex: 1, minWidth: 300 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, color: C.text, display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 20 }}>{icon}</span> {name}
         </h3>
-        <button onClick={() => { setGatewayFilter(name.toLowerCase()); setKeyName(name.toLowerCase() === 'stripe' ? 'stripe_test_client_id' : 'paypal_sandbox_client_id'); setModal('add'); }} style={{ background: color, color: '#fff', border: 'none', borderRadius: 6, padding: '6px 14px', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>
+        <button onClick={() => { setGatewayFilter(name.toLowerCase()); setKeyName(name.toLowerCase() === 'stripe' ? 'stripe_live_client_id' : 'paypal_live_client_id'); setModal('add'); }}
+          style={{ background: color, color: '#fff', border: 'none', borderRadius: 6, padding: '6px 14px', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>
           + Add Key
         </button>
+      </div>
+
+      {/* Visibility Toggle Row */}
+      <div style={{ marginBottom: 16, padding: '10px 12px', background: C.surface, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 13, color: C.text, fontWeight: 500 }}>Checkout Page Visibility</span>
+        <ToggleSwitch gateway={name.toLowerCase()} enabled={uiOn} hasKeys={data.length > 0} />
       </div>
 
       {data.length === 0 ? (
@@ -533,13 +582,13 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
             {data.map(k => (
               <tr key={k.id} style={{ borderBottom: `1px solid ${C.border}` }}>
                 <td style={{ padding: '10px 8px', fontWeight: 600, color: C.text }}>{k.key_name}</td>
-                <td style={{ padding: '10px 8px', color: C.muted, fontFamily: 'monospace' }}>sk_live_••••••••••••••••</td>
+                <td style={{ padding: '10px 8px', color: C.muted, fontFamily: 'monospace' }}>••••••••••••••••</td>
                 <td style={{ padding: '10px 8px', color: C.muted, fontSize: 11 }}>{fmtDate(k.updated_at)}</td>
                 <td style={{ padding: '10px 8px', textAlign: 'right' }}>
                   <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
                     <button onClick={() => { setSelectedKey(k); setModal('reveal'); }} style={{ background: '#DBEAFE', color: '#1D4ED8', border: 'none', borderRadius: 6, padding: '4px 8px', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>👁 Reveal</button>
                     {admin.role === 'super_admin' && (
-                      <button onClick={() => { setSelectedKey(k); setModal('delete'); }} style={{ background: '#FEE2E2', color: C.red, border: 'none', borderRadius: 6, padding: '4px 8px', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>Trash</button>
+                      <button onClick={() => { setSelectedKey(k); setModal('delete'); }} style={{ background: '#FEE2E2', color: C.red, border: 'none', borderRadius: 6, padding: '4px 8px', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>🗑 Delete</button>
                     )}
                   </div>
                 </td>
@@ -556,15 +605,16 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
       <h2 style={{ fontSize: 20, fontWeight: 700, color: C.text, marginBottom: 20 }}>Payment Gateways</h2>
       {loading && keys.length === 0 ? <Spinner /> : (
         <div style={{ display: 'flex', gap: 20, flexDirection: 'row', flexWrap: 'wrap' }}>
-          <GatewayCard name="Stripe" data={stripeKeys} icon="💳" color="#6366F1" />
-          <GatewayCard name="PayPal" data={paypalKeys} icon="🅿️" color="#0079C1" />
+          <GatewayCard name="Stripe" data={stripeKeys} icon="💳" color="#6366F1" uiOn={stripeUiEnabled} />
+          <GatewayCard name="PayPal" data={paypalKeys} icon="🅿️" color="#0079C1" uiOn={paypalUiEnabled} />
         </div>
       )}
 
+      {/* Add Key Modal */}
       {modal === 'add' && (
         <Modal title={`Add New ${gatewayFilter === 'stripe' ? 'Stripe' : 'PayPal'} Key`} onClose={() => setModal(null)}>
           <div style={{ background: '#FEE2E2', color: C.red, padding: 12, borderRadius: 6, fontSize: 13, fontWeight: 600, marginBottom: 16, border: `1px solid ${C.red}30` }}>
-            ⚠️ Changing live keys will immediately affect payments
+            ⚠️ Changing live keys will immediately affect payments. Adding a key with the same name replaces the old one.
           </div>
           <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div>
@@ -580,10 +630,10 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
                   </>
                 ) : (
                   <>
-                    <option value="stripe_test_client_id">Test Client ID (Publishable Key)</option>
-                    <option value="stripe_test_secret_key">Test Secret Key</option>
-                    <option value="stripe_live_client_id">Live Client ID (Publishable Key)</option>
+                    <option value="stripe_live_client_id">Live Publishable Key</option>
                     <option value="stripe_live_secret_key">Live Secret Key</option>
+                    <option value="stripe_test_client_id">Test Publishable Key</option>
+                    <option value="stripe_test_secret_key">Test Secret Key</option>
                     <option value="stripe_webhook_secret">Webhook Secret</option>
                     <option value="stripe_mode">Active Mode ('test' or 'live')</option>
                   </>
@@ -594,11 +644,8 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
               <label style={lbl}>Key Value</label>
               <input
                 type={(keyName === 'paypal_mode' || keyName === 'stripe_mode') ? 'text' : 'password'}
-                style={inp}
-                value={keyValue}
-                onChange={e => setKeyValue(e.target.value)}
-                required
-                placeholder={keyName === 'paypal_mode' ? '"sandbox" or "live"' : keyName === 'stripe_mode' ? '"test" or "live"' : "key value..."}
+                style={inp} value={keyValue} onChange={e => setKeyValue(e.target.value)} required
+                placeholder={keyName === 'paypal_mode' ? '"sandbox" or "live"' : keyName === 'stripe_mode' ? '"test" or "live"' : 'Paste key value...'}
               />
             </div>
             <div style={{ marginTop: 8, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
@@ -615,6 +662,7 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
         </Modal>
       )}
 
+      {/* Reveal Modal */}
       {modal === 'reveal' && selectedKey && (
         <Modal title={`Reveal ${selectedKey.key_name}`} onClose={() => { setModal(null); setRevealedValue(null); }}>
           {!revealedValue ? (
@@ -633,24 +681,22 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
             </form>
           ) : (
             <div style={{ textAlign: 'center' }}>
-              <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 8, padding: '16px', fontFamily: 'monospace', fontSize: 14, wordBreak: 'break-all', color: C.text, marginBottom: 16 }}>
-                {revealedValue}
-              </div>
-              <button onClick={() => { navigator.clipboard.writeText(revealedValue); toast('Copied to clipboard'); }} style={{ background: C.success, color: '#fff', border: 'none', borderRadius: 6, padding: '10px 20px', cursor: 'pointer', fontWeight: 700, width: '100%', marginBottom: 16 }}>
-                📋 Copy Key
-              </button>
+              <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 8, padding: '16px', fontFamily: 'monospace', fontSize: 14, wordBreak: 'break-all', color: C.text, marginBottom: 16 }}>{revealedValue}</div>
+              <button onClick={() => { navigator.clipboard.writeText(revealedValue); toast('Copied to clipboard'); }} style={{ background: C.success, color: '#fff', border: 'none', borderRadius: 6, padding: '10px 20px', cursor: 'pointer', fontWeight: 700, width: '100%', marginBottom: 16 }}>📋 Copy Key</button>
               <p style={{ fontSize: 13, color: C.danger, fontWeight: 600 }}>Hiding automatically in {countdown} seconds...</p>
             </div>
           )}
         </Modal>
       )}
 
+      {/* Delete Modal */}
       {modal === 'delete' && selectedKey && (
         <Modal title="Confirm Delete" onClose={() => setModal(null)}>
           <div style={{ textAlign: 'center', padding: '8px 0 20px' }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>🗑️</div>
             <p style={{ fontSize: 15, color: C.text, marginBottom: 8 }}>Are you sure you want to delete this key?</p>
-            <p style={{ fontSize: 13, color: C.muted }}>Gateway: {selectedKey.gateway} <br /> Name: {selectedKey.key_name}</p>
+            <p style={{ fontSize: 13, color: C.muted }}>Gateway: {selectedKey.gateway} — {selectedKey.key_name}</p>
+            <p style={{ fontSize: 12, color: C.orange, marginTop: 8, fontWeight: 600 }}>⚠️ If this is the last key for this gateway, the checkout UI will be automatically hidden.</p>
           </div>
           <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
             <button onClick={() => setModal(null)} style={{ border: `1px solid ${C.border}`, background: C.white, color: C.text, borderRadius: 6, padding: '10px 24px', cursor: 'pointer', fontWeight: 500 }}>Cancel</button>
@@ -660,9 +706,36 @@ export const PaymentGatewaysTab = ({ admin, toast }: { admin: AdminUser; toast: 
           </div>
         </Modal>
       )}
+
+      {/* Toggle UI Modal */}
+      {modal === 'toggle' && pendingToggle && (
+        <Modal title={`${pendingToggle.enabled ? 'Enable' : 'Disable'} ${pendingToggle.gateway.charAt(0).toUpperCase() + pendingToggle.gateway.slice(1)} on Checkout`} onClose={() => { setModal(null); setPendingToggle(null); }}>
+          <div style={{ background: pendingToggle.enabled ? '#D1FAE5' : '#FEF3C7', color: pendingToggle.enabled ? '#065F46' : '#D97706', padding: 12, borderRadius: 6, fontSize: 13, fontWeight: 600, marginBottom: 16 }}>
+            {pendingToggle.enabled
+              ? `✅ This will make ${pendingToggle.gateway} visible on the checkout page.`
+              : `⚠️ This will hide ${pendingToggle.gateway} from the checkout page. Customers won't be able to pay with it.`}
+          </div>
+          <form onSubmit={handleToggleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div>
+              <label style={lbl}>Your Admin Password <span style={{ color: C.muted, fontWeight: 400 }}>(required to confirm)</span></label>
+              <input type="password" style={inp} value={adminPassword} onChange={e => setAdminPassword(e.target.value)} required autoFocus placeholder="Enter admin password..." />
+            </div>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 8 }}>
+              <button type="button" onClick={() => { setModal(null); setPendingToggle(null); }} style={{ border: `1px solid ${C.border}`, background: C.white, color: C.text, borderRadius: 6, padding: '10px 20px', cursor: 'pointer', fontWeight: 500 }}>Cancel</button>
+              <button type="submit" disabled={loading} style={{ background: pendingToggle.enabled ? C.success : C.red, color: '#fff', border: 'none', borderRadius: 6, padding: '10px 24px', cursor: 'pointer', fontWeight: 700, opacity: loading ? 0.7 : 1 }}>
+                {loading ? 'Saving...' : pendingToggle.enabled ? '✅ Enable on Checkout' : '🚫 Hide from Checkout'}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 };
+
+
+
+
 
 // inject global styles
 const _style = document.createElement('style');

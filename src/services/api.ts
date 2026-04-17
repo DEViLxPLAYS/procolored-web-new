@@ -201,6 +201,15 @@ export const api = {
           credentials: 'include'
         });
         return res.json();
+      },
+      toggleUi: async (data: { gateway: string; enabled: boolean; admin_password: string }) => {
+        const res = await fetch(`${API_BASE}/api/admin/payment-keys/toggle-ui`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(data)
+        });
+        return res.json();
       }
     }
   }

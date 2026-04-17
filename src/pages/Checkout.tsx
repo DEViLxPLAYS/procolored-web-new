@@ -445,11 +445,13 @@ export default function Checkout() {
   const [stripePromise, setStripePromise] = useState<any>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stripeError, setStripeError] = useState<string | null>(null);
+  const [showStripe, setShowStripe] = useState(false);
 
   // PayPal state
   const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
   const [paypalError, setPaypalError] = useState<string | null>(null);
   const [paypalLoading, setPaypalLoading] = useState(true);
+  const [showPaypal, setShowPaypal] = useState(false);
 
   // Refs
   const emailRef = useRef<HTMLInputElement>(null);
@@ -480,6 +482,10 @@ export default function Checkout() {
       .then(res => res.json())
       .then(data => {
         if (data.publishableKey) setStripePromise(loadStripe(data.publishableKey));
+        const stripeOn = data.uiEnabled !== false;
+        setShowStripe(stripeOn);
+        // If stripe is enabled and paypal not yet decided, set stripe as default
+        if (stripeOn) setPaymentMethod('stripe');
       })
       .catch(console.error);
   }, []);
@@ -508,8 +514,12 @@ export default function Checkout() {
     fetch(`${API_BASE}/api/paypal/config`)
       .then(r => r.json())
       .then(d => {
+        const paypalOn = d.uiEnabled !== false;
+        setShowPaypal(paypalOn);
         if (d.clientId) setPaypalClientId(d.clientId);
-        else setPaypalError('PayPal is not configured yet. Contact support.');
+        else if (paypalOn) setPaypalError('PayPal is not configured yet. Contact support.');
+        // If paypal is on but stripe is off, switch default
+        if (paypalOn && !d.stripeOn) setPaymentMethod(prev => prev === 'stripe' && !showStripe ? 'paypal' : prev);
       })
       .catch(() => setPaypalError('Could not load payment options. Check your connection.'))
       .finally(() => setPaypalLoading(false));
@@ -786,7 +796,17 @@ export default function Checkout() {
 
             <div style={{ border: '1px solid #d1d5db', borderRadius: 8, overflow: 'hidden' }}>
 
+                {/* Both gateways off fallback */}
+                {!showStripe && !showPaypal && (
+                  <div style={{ padding: 28, textAlign: 'center', color: '#6b7280', fontSize: 14 }}>
+                    <div style={{ fontSize: 32, marginBottom: 8 }}>🚫</div>
+                    Payment gateway not available. Please contact support.
+                  </div>
+                )}
+
                 {/* ── Stripe / Credit Card option ── */}
+                {showStripe && (
+                <>
                 <div
                   onClick={() => setPaymentMethod('stripe')}
                   style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: paymentMethod === 'stripe' ? '#f9fafb' : '#fff', borderBottom: '1px solid #e5e7eb' }}
@@ -834,12 +854,13 @@ export default function Checkout() {
                     )}
                   </div>
                 )}
+                </>
+                )}
 
 
-                {/* HIDDEN FOR NOW: PayPal Option */}
-                {false && (
+                {/* ── PayPal option (controlled by Admin Dashboard toggle) ── */}
+                {showPaypal && (
                   <>
-                    {/* ── PayPal option ── */}
                     <div
                       onClick={() => setPaymentMethod('paypal')}
                       style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer', background: paymentMethod === 'paypal' ? '#f9fafb' : '#fff', borderBottom: paymentMethod === 'paypal' ? '1px solid #e5e7eb' : 'none' }}
@@ -916,7 +937,6 @@ export default function Checkout() {
                               onError={(err: any) => {
                                 console.error('PayPal error:', err);
                                 if (err?.message === 'form_invalid') return;
-                                // Don't set permanent error — just log it; user can retry clicking PayPal button
                               }}
                               onCancel={() => setIsSubmitting(false)}
                             />
