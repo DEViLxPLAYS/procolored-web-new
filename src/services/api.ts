@@ -125,6 +125,16 @@ export const api = {
       return res.json();
     },
 
+    deleteAbandonments: async (ids: string[]) => {
+      const res = await fetch(`${API_BASE}/api/admin/abandonments`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ ids }),
+      });
+      return res.json();
+    },
+
     createAdmin: async (data: { username: string; email: string; password: string; role: string }) => {
       const res = await fetch(`${API_BASE}/api/admin/create-admin`, {
         method: 'POST',

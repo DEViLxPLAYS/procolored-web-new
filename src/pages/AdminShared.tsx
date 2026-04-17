@@ -136,6 +136,139 @@ const LiveDot = () => (
 );
 
 // ── Orders section ─────────────────────────────────────────
+// ── Invoice Modal ─────────────────────────────────────────
+const InvoiceModal = ({ order, onClose }: { order: any; onClose: () => void }) => {
+  const addr = (a: any) => {
+    if (!a) return 'N/A';
+    if (typeof a === 'string') return a;
+    const { street = a.address || '', apartment = '', city = '', state = '', postalCode = a.postal || '', country = '' } = a;
+    return [street, apartment, [city, state, postalCode].filter(Boolean).join(', '), country].filter(Boolean).join('\n');
+  };
+
+  const items: any[] = Array.isArray(order.items) ? order.items : [];
+  const subtotal = items.reduce((s: number, i: any) => s + parseFloat(i.price || 0) * (i.quantity || 1), 0);
+  const discount = parseFloat(order.discount_amount || 0);
+  const total = parseFloat(order.total_amount || 0);
+
+  return (
+    <div
+      onClick={onClose}
+      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{ background: '#fff', borderRadius: 12, width: '100%', maxWidth: 680, maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}
+      >
+        {/* Invoice content */}
+        <div id="invoice-print-area" style={{ padding: '40px 48px', fontFamily: 'Inter,system-ui,sans-serif' }}>
+          {/* Header */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 36 }}>
+            <div>
+              <img src="https://i.postimg.cc/SKh71Rmm/logo.webp" alt="Procolored" style={{ height: 44, objectFit: 'contain', marginBottom: 8 }} />
+              <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.6 }}>procolored-us.com<br />support@procollored.com</div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: 30, fontWeight: 800, color: '#1a1a1a', letterSpacing: -1 }}>INVOICE</div>
+              <div style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>
+                <strong style={{ color: '#1a1a1a' }}>#{order.order_number}</strong>
+              </div>
+              <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>{fmtDate(order.created_at)}</div>
+              <div style={{ marginTop: 8 }}>
+                <span style={{ background: order.payment_status === 'paid' ? '#D1FAE5' : '#FEF3C7', color: order.payment_status === 'paid' ? '#065F46' : '#D97706', borderRadius: 20, padding: '3px 12px', fontSize: 11, fontWeight: 700 }}>
+                  {(order.payment_status || 'PENDING').toUpperCase()}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Bill To / Ship To */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 32 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Bill To</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a' }}>{order.customer_name}</div>
+              <div style={{ fontSize: 13, color: '#6b7280' }}>{order.customer_email}</div>
+              {order.customer_phone && <div style={{ fontSize: 13, color: '#6b7280' }}>{order.customer_phone}</div>}
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Ship To</div>
+              <pre style={{ fontFamily: 'inherit', fontSize: 13, color: '#1a1a1a', margin: 0, whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{addr(order.shipping_address)}</pre>
+            </div>
+          </div>
+
+          {/* Payment Info */}
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 6 }}>Payment Method</div>
+            <div style={{ fontSize: 13, color: '#1a1a1a' }}>{order.payment_method || 'N/A'}</div>
+          </div>
+
+          {/* Items table */}
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 24 }}>
+            <thead>
+              <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb' }}>
+                {['Product', 'Qty', 'Unit Price', 'Total'].map(h => (
+                  <th key={h} style={{ padding: '10px 12px', textAlign: h === 'Product' ? 'left' : 'right', fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 0.5 }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {items.length ? items.map((item: any, i: number) => (
+                <tr key={i} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                  <td style={{ padding: '12px 12px', fontSize: 13, color: '#1a1a1a', fontWeight: 500 }}>{item.name}</td>
+                  <td style={{ padding: '12px 12px', fontSize: 13, color: '#6b7280', textAlign: 'right' }}>{item.quantity || 1}</td>
+                  <td style={{ padding: '12px 12px', fontSize: 13, color: '#6b7280', textAlign: 'right' }}>${parseFloat(item.price || 0).toFixed(2)}</td>
+                  <td style={{ padding: '12px 12px', fontSize: 13, fontWeight: 700, color: '#1a1a1a', textAlign: 'right' }}>${(parseFloat(item.price || 0) * (item.quantity || 1)).toFixed(2)}</td>
+                </tr>
+              )) : (
+                <tr><td colSpan={4} style={{ padding: 16, textAlign: 'center', color: '#6b7280' }}>No items</td></tr>
+              )}
+            </tbody>
+          </table>
+
+          {/* Totals */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ width: 260 }}>
+              {[
+                { label: 'Subtotal', val: `$${subtotal.toFixed(2)}` },
+                { label: 'Shipping', val: 'FREE', green: true },
+                ...(discount > 0 ? [{ label: `Discount${order.discount_code ? ` (${order.discount_code})` : ''}`, val: `-$${discount.toFixed(2)}`, red: true }] : []),
+              ].map(row => (
+                <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', fontSize: 13, color: '#6b7280' }}>
+                  <span>{row.label}</span>
+                  <span style={{ fontWeight: 600, color: (row as any).green ? '#10b981' : (row as any).red ? '#dc2626' : '#1a1a1a' }}>{row.val}</span>
+                </div>
+              ))}
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0 0', borderTop: '2px solid #1a1a1a', fontSize: 16, fontWeight: 800, color: '#1a1a1a', marginTop: 6 }}>
+                <span>Total</span>
+                <span>{order.currency || 'USD'} {total.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div style={{ marginTop: 40, paddingTop: 20, borderTop: '1px solid #e5e7eb', textAlign: 'center', fontSize: 12, color: '#6b7280', lineHeight: 1.8 }}>
+            Thank you for your order! Questions? Contact us at <strong>support@procollored.com</strong>
+          </div>
+        </div>
+
+        {/* Modal actions */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, padding: '16px 48px 24px', borderTop: '1px solid #e5e7eb' }}>
+          <button onClick={onClose} style={{ border: `1px solid ${C.border}`, background: '#fff', color: C.text, borderRadius: 6, padding: '10px 20px', cursor: 'pointer', fontWeight: 500 }}>Close</button>
+          <button
+            onClick={() => {
+              const w = window.open('', '_blank', 'width=800,height=900');
+              if (!w) return;
+              const area = document.getElementById('invoice-print-area');
+              w.document.write(`<html><head><title>Invoice #${order.order_number}</title><style>body{font-family:Inter,system-ui,sans-serif;margin:0;padding:32px}table{border-collapse:collapse;width:100%}th,td{padding:10px 12px}@media print{button{display:none}}</style></head><body>${area?.innerHTML || ''}<script>window.print();window.onafterprint=()=>window.close();</script></body></html>`);
+              w.document.close();
+            }}
+            style={{ background: C.red, color: '#fff', border: 'none', borderRadius: 6, padding: '10px 24px', cursor: 'pointer', fontWeight: 700 }}
+          >🖨 Print / Save PDF</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const OrdersTab = ({ toast }: { toast: (msg: string, type?: 'success' | 'error') => void }) => {
   const [orders, setOrders] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
@@ -146,6 +279,7 @@ export const OrdersTab = ({ toast }: { toast: (msg: string, type?: 'success' | '
   const [updating, setUpdating] = useState<string | null>(null);
   const [newIds, setNewIds] = useState<Set<string>>(new Set());
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [invoiceOrder, setInvoiceOrder] = useState<any>(null);
   const prevTotalRef = useRef<number>(0);
 
   const load = useCallback(async (silent = false) => {
@@ -235,10 +369,16 @@ export const OrdersTab = ({ toast }: { toast: (msg: string, type?: 'success' | '
                         </select>
                       </td>
                       <td style={{ padding: '10px 12px' }}>
+                        <div style={{ display: 'flex', gap: 6 }}>
                         <button
                           onClick={() => setExpandedId(expandedId === o.id ? null : o.id)}
                           style={{ background: expandedId === o.id ? C.red : '#DBEAFE', color: expandedId === o.id ? '#fff' : '#1D4ED8', border: 'none', borderRadius: 6, padding: '5px 10px', fontSize: 12, cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap' }}
                         >{expandedId === o.id ? '▲ Hide' : '▼ View'}</button>
+                        <button
+                          onClick={() => setInvoiceOrder(o)}
+                          style={{ background: '#FEF3C7', color: '#92400E', border: 'none', borderRadius: 6, padding: '5px 10px', fontSize: 12, cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap' }}
+                        >🖨 Invoice</button>
+                        </div>
                       </td>
                     </tr>
                     {expandedId === o.id && (
@@ -288,6 +428,7 @@ export const OrdersTab = ({ toast }: { toast: (msg: string, type?: 'success' | '
         </div>
       )}
       <Pagination page={page} totalPages={totalPages} onPage={setPage} />
+      {invoiceOrder && <InvoiceModal order={invoiceOrder} onClose={() => setInvoiceOrder(null)} />}
     </div>
   );
 };
@@ -368,6 +509,9 @@ export const AbandonmentsTab = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [newIds, setNewIds] = useState<Set<string>>(new Set());
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [deleting, setDeleting] = useState(false);
+  const { toast } = useToast();
 
   const load = useCallback(async (silent = false) => {
     if (!silent) setLoading(true);
@@ -390,21 +534,82 @@ export const AbandonmentsTab = () => {
   useEffect(() => { load(); }, [load]);
   useLivePoll(() => load(true)); // 5s background refresh
 
+  const allSelected = items.length > 0 && items.every(a => selected.has(a.id));
+  const toggleAll = () => {
+    if (allSelected) setSelected(new Set());
+    else setSelected(new Set(items.map(a => a.id)));
+  };
+  const toggleOne = (id: string) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const handleDeleteSelected = async () => {
+    if (!selected.size) return;
+    if (!window.confirm(`Delete ${selected.size} abandonment(s)? This cannot be undone.`)) return;
+    setDeleting(true);
+    const d = await (api.admin as any).deleteAbandonments(Array.from(selected));
+    if (d.message) {
+      toast(`Deleted ${selected.size} abandonment(s)`);
+      setSelected(new Set());
+      load();
+    } else {
+      toast(d.error || 'Delete failed', 'error');
+    }
+    setDeleting(false);
+  };
+
   return (
     <div>
-      <h2 style={{ fontSize: 20, fontWeight: 700, color: C.text, marginBottom: 20 }}>Checkout Abandonments <span style={{ background: `${C.red}15`, color: C.red, borderRadius: 20, padding: '2px 10px', fontSize: 13 }}>{total}</span><LiveDot /></h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: C.text }}>
+          Checkout Abandonments <span style={{ background: `${C.red}15`, color: C.red, borderRadius: 20, padding: '2px 10px', fontSize: 13 }}>{total}</span><LiveDot />
+        </h2>
+        {selected.size > 0 && (
+          <button
+            onClick={handleDeleteSelected}
+            disabled={deleting}
+            style={{ background: C.red, color: '#fff', border: 'none', borderRadius: 6, padding: '9px 18px', cursor: 'pointer', fontWeight: 700, fontSize: 13, opacity: deleting ? 0.7 : 1 }}
+          >
+            {deleting ? 'Deleting...' : `🗑 Delete Selected (${selected.size})`}
+          </button>
+        )}
+      </div>
       {loading ? <Spinner /> : (
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
             <thead><tr style={{ background: C.surface }}>
+              <th style={{ padding: '10px 12px', width: 40, borderBottom: `1px solid ${C.border}` }}>
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={toggleAll}
+                  style={{ width: 15, height: 15, cursor: 'pointer', accentColor: C.red }}
+                  title={allSelected ? 'Deselect all' : 'Select all'}
+                />
+              </th>
               {['Email', 'Name', 'Cart Items', 'Cart Total', 'Step', 'Country', 'Device', 'Date'].map(h => (
                 <th key={h} style={{ padding: '10px 12px', textAlign: 'left', fontSize: 12, fontWeight: 700, color: C.muted, borderBottom: `1px solid ${C.border}` }}>{h}</th>
               ))}
             </tr></thead>
             <tbody>
-              {!items.length ? <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: C.muted }}>No abandonments recorded</td></tr>
+              {!items.length ? <tr><td colSpan={9} style={{ textAlign: 'center', padding: 40, color: C.muted }}>No abandonments recorded</td></tr>
                 : items.map((a, i) => (
-                  <tr key={i} style={{ borderBottom: `1px solid ${C.border}`, background: newIds.has(a.id) ? '#FEF3C7' : 'transparent', transition: 'background 1s ease' }}>
+                  <tr
+                    key={i}
+                    style={{ borderBottom: `1px solid ${C.border}`, background: selected.has(a.id) ? '#FEE2E2' : newIds.has(a.id) ? '#FEF3C7' : 'transparent', transition: 'background 0.2s ease' }}
+                  >
+                    <td style={{ padding: '10px 12px' }}>
+                      <input
+                        type="checkbox"
+                        checked={selected.has(a.id)}
+                        onChange={() => toggleOne(a.id)}
+                        style={{ width: 15, height: 15, cursor: 'pointer', accentColor: C.red }}
+                      />
+                    </td>
                     <td style={{ padding: '10px 12px' }}>{a.customer_email || '—'}</td>
                     <td style={{ padding: '10px 12px' }}>{a.customer_name || '—'}</td>
                     <td style={{ padding: '10px 12px', color: C.muted }}>{Array.isArray(a.cart_items) ? a.cart_items.length : 0} item(s)</td>

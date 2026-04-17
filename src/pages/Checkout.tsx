@@ -413,12 +413,17 @@ export default function Checkout() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [firstName, setFirstName] = useState('');
+  const [firstNameErr, setFirstNameErr] = useState('');
   const [lastName, setLastName] = useState('');
+  const [lastNameErr, setLastNameErr] = useState('');
   const [address, setAddress] = useState('');
+  const [addressErr, setAddressErr] = useState('');
   const [apartment, setApartment] = useState('');
   const [city, setCity] = useState('');
+  const [cityErr, setCityErr] = useState('');
   const [stateVal, setStateVal] = useState('');
   const [postal, setPostal] = useState('');
+  const [postalErr, setPostalErr] = useState('');
   const [country, setCountry] = useState('United States');
   const [phone, setPhone] = useState('');
   const [billingSame, setBillingSame] = useState(true);
@@ -577,20 +582,26 @@ export default function Checkout() {
   };
 
   const validateForm = () => {
-    const err = validateEmail(email);
-    if (err) {
-      setEmailError(err);
-      emailRef.current?.focus();
+    let valid = true;
+    const emailErr = validateEmail(email);
+    if (emailErr) {
+      setEmailError(emailErr);
       emailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return false;
+      emailRef.current?.focus();
+      valid = false;
     }
-    if (!firstName || !lastName) { setFormError('Kindly fill in your first and last name to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
-    if (!address) { setFormError('Kindly fill in your street address to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
-    if (!city) { setFormError('Kindly fill in your city to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
-    if (!postal) { setFormError('Kindly fill in your postal / ZIP code to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
-    if (!country) { setFormError('Kindly select your country to continue.'); paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
-    setFormError(null);
-    return true;
+    if (!firstName.trim()) { setFirstNameErr('First name is required'); valid = false; }
+    if (!lastName.trim()) { setLastNameErr('Last name is required'); valid = false; }
+    if (!address.trim()) { setAddressErr('Street address is required'); valid = false; }
+    if (!city.trim()) { setCityErr('City is required'); valid = false; }
+    if (!postal.trim()) { setPostalErr('Postal / ZIP code is required'); valid = false; }
+    if (!valid) {
+      setFormError('Please fill in all required fields below.');
+      paymentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      setFormError(null);
+    }
+    return valid;
   };
 
   const buildShipping = () => ({ street: address, apartment, city, state: stateVal, postalCode: postal, country });
@@ -748,17 +759,85 @@ export default function Checkout() {
                   {allCountries.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
+
+              {/* First / Last Name */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                <input type="text" placeholder="First name" value={firstName} onChange={e => setFirstName(e.target.value)} style={inp} />
-                <input type="text" placeholder="Last name" value={lastName} onChange={e => setLastName(e.target.value)} style={inp} />
+                <div>
+                  <input
+                    type="text" placeholder="First name *" value={firstName}
+                    onChange={e => { setFirstName(e.target.value); if (firstNameErr) setFirstNameErr(''); }}
+                    onBlur={e => { if (!e.target.value.trim()) setFirstNameErr('First name is required'); }}
+                    style={{ ...inp, borderColor: firstNameErr ? '#dc2626' : '#d1d5db' }}
+                  />
+                  {firstNameErr && (
+                    <div style={{ fontSize: 11, color: '#dc2626', display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                      <AlertCircle size={11} />{firstNameErr}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="text" placeholder="Last name *" value={lastName}
+                    onChange={e => { setLastName(e.target.value); if (lastNameErr) setLastNameErr(''); }}
+                    onBlur={e => { if (!e.target.value.trim()) setLastNameErr('Last name is required'); }}
+                    style={{ ...inp, borderColor: lastNameErr ? '#dc2626' : '#d1d5db' }}
+                  />
+                  {lastNameErr && (
+                    <div style={{ fontSize: 11, color: '#dc2626', display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                      <AlertCircle size={11} />{lastNameErr}
+                    </div>
+                  )}
+                </div>
               </div>
-              <input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} style={inp} />
+
+              {/* Address */}
+              <div>
+                <input
+                  type="text" placeholder="Address *" value={address}
+                  onChange={e => { setAddress(e.target.value); if (addressErr) setAddressErr(''); }}
+                  onBlur={e => { if (!e.target.value.trim()) setAddressErr('Street address is required'); }}
+                  style={{ ...inp, borderColor: addressErr ? '#dc2626' : '#d1d5db' }}
+                />
+                {addressErr && (
+                  <div style={{ fontSize: 11, color: '#dc2626', display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                    <AlertCircle size={11} />{addressErr}
+                  </div>
+                )}
+              </div>
+
               <input type="text" placeholder="Apartment, suite, etc. (optional)" value={apartment} onChange={e => setApartment(e.target.value)} style={inp} />
+
+              {/* City / State / ZIP */}
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10 }}>
-                <input type="text" placeholder="City" value={city} onChange={e => setCity(e.target.value)} style={inp} />
+                <div>
+                  <input
+                    type="text" placeholder="City *" value={city}
+                    onChange={e => { setCity(e.target.value); if (cityErr) setCityErr(''); }}
+                    onBlur={e => { if (!e.target.value.trim()) setCityErr('City is required'); }}
+                    style={{ ...inp, borderColor: cityErr ? '#dc2626' : '#d1d5db' }}
+                  />
+                  {cityErr && (
+                    <div style={{ fontSize: 11, color: '#dc2626', display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                      <AlertCircle size={11} />{cityErr}
+                    </div>
+                  )}
+                </div>
                 <input type="text" placeholder="State" value={stateVal} onChange={e => setStateVal(e.target.value)} style={inp} />
-                <input type="text" placeholder="ZIP code" value={postal} onChange={e => setPostal(e.target.value)} style={inp} />
+                <div>
+                  <input
+                    type="text" placeholder="ZIP code *" value={postal}
+                    onChange={e => { setPostal(e.target.value); if (postalErr) setPostalErr(''); }}
+                    onBlur={e => { if (!e.target.value.trim()) setPostalErr('ZIP code is required'); }}
+                    style={{ ...inp, borderColor: postalErr ? '#dc2626' : '#d1d5db' }}
+                  />
+                  {postalErr && (
+                    <div style={{ fontSize: 11, color: '#dc2626', display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                      <AlertCircle size={11} />{postalErr}
+                    </div>
+                  )}
+                </div>
               </div>
+
               <input type="tel" placeholder="Phone (optional)" value={phone} onChange={e => setPhone(e.target.value)} style={inp} />
               <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#555', cursor: 'pointer' }}>
                 <input type="checkbox" defaultChecked style={{ width: 14, height: 14 }} />

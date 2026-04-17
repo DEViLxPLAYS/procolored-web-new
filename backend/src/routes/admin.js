@@ -745,6 +745,28 @@ router.get('/abandonments', authenticateAdmin, async (req, res) => {
 });
 
 // ================================
+// DELETE /api/admin/abandonments
+// Bulk delete selected abandonment records
+// ================================
+router.delete('/abandonments', authenticateAdmin, async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'No IDs provided' });
+    }
+    const { error } = await supabaseAdmin
+      .from('checkout_abandonments')
+      .delete()
+      .in('id', ids);
+
+    if (error) throw error;
+    return res.status(200).json({ message: `Deleted ${ids.length} abandonment(s)` });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to delete abandonments' });
+  }
+});
+
+// ================================
 // GET /api/admin/verify
 // Lightweight session check — used by dashboard on load
 // ================================
